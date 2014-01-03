@@ -22,7 +22,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import se.remind.rmtest.selenium.framework.AbMobileNav;
+import se.aftonbladet.abtest.navigation.AbMobileNav;
 import se.remind.rmtest.selenium.framework.HTMLPage;
 import se.remind.rmtest.selenium.framework.TestParams;
 import se.remind.rmtest.selenium.grid.DriverNamingWrapper;

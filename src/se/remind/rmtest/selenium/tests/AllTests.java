@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.BeforeClass;
 
+import se.aftonbladet.abtest.tests.mobile.menu.AbMobileNavTest;
 import se.remind.rmtest.selenium.grid.DriverProvider;
-import se.remind.rmtest.selenium.tests.mobile.menu.AbMobileNavTest;
 
 
 
