@@ -1,0 +1,29 @@
+{
+  "capabilities":
+      [
+
+    {
+          "browserName": "",
+          "maxInstances": 1,
+          "platform":"PLATFORM",
+          "device":"DEVICE_NAME",
+          "version":"DEVICE_VERSION",
+          "app":"/Users/petost/workspaces/ADTWS/ABTest/apps/Sportbladet-Fotboll-2.1-SNAPSHOT.apk",
+          "app-package":"se.aftonbladet.sportbladet.fotboll",
+          "app-activity":".StartActivity"
+    }
+   
+      ],
+  "configuration":
+  {
+    "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+    "maxSession": MAX_SESSIONS,
+    "port": APPIUM_PORT,
+    "host": "APPIUM_HOST",
+    "url":"http://APPIUM_HOST:APPIUM_PORT/wd/hub",
+    "register": true,
+    "registerCycle": 5000,
+    "hubPort": HUB_PORT,
+    "hubHost": "HUB_HOST"
+  }
+}
