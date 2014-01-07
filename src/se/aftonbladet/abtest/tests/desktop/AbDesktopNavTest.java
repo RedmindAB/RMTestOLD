@@ -9,8 +9,8 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 
 import se.aftonbladet.abtest.navigation.AbBasicNav;
-import se.remind.rmtest.selenium.grid.DriverNamingWrapper;
-import se.remind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.selenium.grid.DriverProvider;
 
 /**
  * Created with IntelliJ IDEA.

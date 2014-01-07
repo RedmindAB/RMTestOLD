@@ -23,12 +23,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import se.aftonbladet.abtest.navigation.AbMobileNav;
-import se.remind.rmtest.selenium.framework.HTMLPage;
-import se.remind.rmtest.selenium.framework.TestParams;
-import se.remind.rmtest.selenium.grid.DriverNamingWrapper;
-import se.remind.rmtest.selenium.grid.DriverProvider;
-import se.remind.rmtest.selenium.grid.Parallelized;
-import se.remind.rmtest.selenium.grid.SwipeableWebDriver;
+import se.redmind.rmtest.selenium.framework.HTMLPage;
+import se.redmind.rmtest.selenium.framework.TestParams;
+import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.grid.Parallelized;
+import se.redmind.rmtest.selenium.grid.SwipeableWebDriver;
 
 
 @RunWith(Parallelized.class)

@@ -7,8 +7,8 @@ import org.junit.runners.Suite;
 
 import se.aftonbladet.abtest.tests.mobile.menu.AbMobileFrontPageTest;
 import se.aftonbladet.abtest.tests.mobile.menu.AbMobileNavTest;
-import se.remind.rmtest.selenium.framework.TestParams;
-import se.remind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.framework.TestParams;
+import se.redmind.rmtest.selenium.grid.DriverProvider;
                // AbMobileFrontPageTest.class, AbMobileNavTest.class,
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {AbMobileNavTest.class, AbMobileFrontPageTest.class})

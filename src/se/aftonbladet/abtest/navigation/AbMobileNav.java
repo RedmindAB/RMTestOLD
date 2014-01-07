@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import se.remind.rmtest.selenium.framework.HTMLPage;
+import se.redmind.rmtest.selenium.framework.HTMLPage;
 
 import java.util.List;
 
