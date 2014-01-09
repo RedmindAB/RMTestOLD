@@ -55,7 +55,7 @@
 	<classpathentry kind="lib" path="lib/selenium-2.35.0/libs/xercesImpl-2.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-2.35.0/libs/xml-apis-1.4.01.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-2.35.0/selenium-server-2.35.0-srcs.jar"/>
-	<classpathentry kind="lib" path="lib/selenium-2.35.0/selenium-server-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-2.35.0/selenium-server-2.35.0.jar" sourcepath="lib/selenium-2.35.0/selenium-server-2.35.0-srcs.jar"/>
 	<classpathentry kind="lib" path="lib/selenium-2.35.0/selenium-server-standalone-2.35.0.jar"/>
 	<classpathentry kind="lib" path="lib/selenium/libs/apache-mime4j-0.6.jar"/>
 	<classpathentry kind="lib" path="lib/selenium/libs/bcpkix-jdk15on-1.48.jar"/>
