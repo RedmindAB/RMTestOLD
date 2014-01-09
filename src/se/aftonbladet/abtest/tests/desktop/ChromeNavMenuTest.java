@@ -8,7 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
-import se.aftonbladet.abtest.navigation.AbBasicNav;
+import se.aftonbladet.abtest.navigation.mobil.AbBasicNav;
 
 /**
  * Created with IntelliJ IDEA.

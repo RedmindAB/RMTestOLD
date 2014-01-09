@@ -12,7 +12,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import se.aftonbladet.abtest.navigation.AbMobileNav;
+import se.aftonbladet.abtest.navigation.mobil.AbMobileNav;
 import se.redmind.rmtest.selenium.framework.TestParams;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;

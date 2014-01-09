@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,8 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import se.aftonbladet.abtest.navigation.AbMobileNav;
+import se.aftonbladet.abtest.navigation.fotboll.FotbollNav;
+import se.aftonbladet.abtest.navigation.mobil.AbMobileNav;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.TestParams;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
@@ -34,7 +36,7 @@ import se.redmind.rmtest.selenium.grid.SwipeableWebDriver;
 @RunWith(Parallelized.class)
 public class TestFotbollsAppExample {
     private WebDriver tDriver;
-    private AbMobileNav tNavPage;
+    private FotbollNav appNav;
     private String startUrl = TestParams.getBaseUrl();
 
     private final DriverNamingWrapper driverWrapper;
@@ -60,6 +62,7 @@ public class TestFotbollsAppExample {
         }
         return returnList;
     }
+
     
     @Test
     public void testFotboll() throws Exception {
@@ -76,40 +79,43 @@ public class TestFotbollsAppExample {
 //        capabilities.setCapability("app-activity", "MainActivity");
         
         WebDriver driver = driverWrapper.getDriver();
-        HTMLPage app = new HTMLPage(driver);
-        app.driverWaitElementPresent(By.tagName("Button"), 10);
-        
-        WebElement el = driver.findElement(By.tagName("Button"));
-        el.click();
-        app.driverWaitElementPresent(By.id("nextButton"),10);
-        el = driver.findElement(By.id("nextButton"));
-        el.click();
-        app.driverWaitElementPresent(By.id("nextButton"),10);
-        el = driver.findElement(By.id("nextButton"));
-        el.click();
-        app.driverWaitElementPresent(By.id("nextButton"),10);
-        el = driver.findElement(By.id("nextButton"));
-        el.click();
-        app.driverWaitElementPresent(By.tagName("LinearLayout"),10);
-        el = driver.findElement(By.id("nextButton"));
-        el.click();
-        app.driverWaitElementPresent(By.tagName("LinearLayout"),10);
-        el = driver.findElement(By.id("nextButton"));
-        el.click();
-//        app = new HTMLPage(driver);app.driverWaitElementPresent(By.tagName("ViewFlipper"), 10);
-        el = driver.findElement(By.tagName("ViewFlipper"));
-        el.click();
-        app.driverWaitElementPresent(By.id("action_bar_title"), 10);
-        el = driver.findElement(By.name("action_bar_title"));
-        assertEquals(el.getText(), "Matcher");
-        el.click();
-        app.driverWaitElementPresent(By.name("leftDrawer"), 10);
-        el = driver.findElement(By.tagName("text"));
-        assertEquals(el.getText(), "API Demos");
-        el = driver.findElement(By.name("App"));
-        el.click();
-        List<WebElement> els = driver.findElements(By.tagName("text"));
-        assertEquals(els.get(2).getText(), "Activity");
+        appNav = new FotbollNav(driver);
+        appNav.initialStartNoAction();
+//        HTMLPage app = new HTMLPage(driver);
+//        app.driverWaitElementPresent(By.tagName("Button"), 10);
+//        
+//        WebElement el = driver.findElement(By.tagName("Button"));
+//        el.click();
+//        app.driverWaitElementPresent(By.id("nextButton"),10);
+//        el = driver.findElement(By.id("nextButton"));
+//        el.click();
+//        app.driverWaitElementPresent(By.id("nextButton"),10);
+//        el = driver.findElement(By.id("nextButton"));
+//        el.click();
+//        app.driverWaitElementPresent(By.id("nextButton"),10);
+//        el = driver.findElement(By.id("nextButton"));
+//        el.click();
+//        app.driverWaitElementPresent(By.tagName("LinearLayout"),10);
+//        el = driver.findElement(By.id("nextButton"));
+//        el.click();
+//        app.driverWaitElementPresent(By.tagName("LinearLayout"),10);
+//        el = driver.findElement(By.id("nextButton"));
+//        el.click();
+////        app = new HTMLPage(driver);app.driverWaitElementPresent(By.tagName("ViewFlipper"), 10);
+//        el = driver.findElement(By.tagName("ViewFlipper"));
+//        el.click();
+//        app.driverWaitElementPresent(By.id("action_bar_title"), 10);
+//        el = driver.findElement(By.name("action_bar_title"));
+//        assertEquals(el.getText(), "Matcher");
+//        el.click();
+//        app.driverWaitElementPresent(By.name("leftDrawer"), 10);
+//        el = driver.findElement(By.tagName("text"));
+//        assertEquals(el.getText(), "API Demos");
+//        el = driver.findElement(By.name("App"));
+//        el.click();
+//        List<WebElement> els = driver.findElements(By.tagName("text"));
+//        assertEquals(els.get(2).getText(), "Activity");
+        driver.quit();
     }
 
 

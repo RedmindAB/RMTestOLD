@@ -15,7 +15,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import se.aftonbladet.abtest.navigation.AbMobileNav;
+import se.aftonbladet.abtest.navigation.mobil.AbMobileNav;
 import se.redmind.rmtest.selenium.framework.TestParams;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
@@ -55,6 +55,7 @@ public class TestGoogleExampleAndroidParallel {
     @Ignore
     public void testGoogle() throws Exception {
         WebDriver driver = driverWrapper.getDriver();
+        
         Capabilities capability = driverWrapper.getCapabilities();
         
         // And now use this to visit Google

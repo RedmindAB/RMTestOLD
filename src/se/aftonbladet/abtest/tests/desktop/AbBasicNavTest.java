@@ -14,7 +14,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import se.aftonbladet.abtest.navigation.AbBasicNav;
+import se.aftonbladet.abtest.navigation.mobil.AbBasicNav;
 
 
 /**

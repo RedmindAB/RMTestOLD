@@ -3,6 +3,7 @@ package se.redmind.rmtest.selenium.framework;
 import static org.junit.Assert.assertTrue;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,13 +15,13 @@ import com.google.common.base.Function;
  *
  */
 public class HTMLPage {
-    private WebDriver driver;
+    protected WebDriver driver;
     
     /**
      * @param driver WebDriver
      */
-    public HTMLPage(final WebDriver driver) {
-        this.driver = driver;
+    public HTMLPage(final WebDriver pDriver) {
+        this.driver = pDriver;
     }
     
     /**
@@ -34,7 +35,7 @@ public class HTMLPage {
      * @param timeoutInSeconds int
      * @return
      */
-    public WebDriverWait driverWait(int timeoutInSeconds) {
+    private WebDriverWait driverWait(int timeoutInSeconds) {
         return new WebDriverWait(driver, timeoutInSeconds);
     }
     
@@ -46,6 +47,7 @@ public class HTMLPage {
             try {
                 fw = new FluentWait(driver)
                 .ignoring(WebDriverException.class, ClassCastException.class);
+                fw.ignoring(NoSuchElementException.class);
 
                 return fw;
             }
@@ -80,7 +82,24 @@ public class HTMLPage {
         }
 
     }
-    
+    /**
+     * @param locator
+     * @param timeoutInSeconds
+     */
+    public void driverFluentWaitForCondition(ExpectedCondition condition, int timeoutInSeconds){
+        int i = 0;
+        while (i < 10) {
+            try {
+                driverFluentWait(timeoutInSeconds).until(condition);   // changed to driverFluentWait to ignore WebDriverExceptions braking the wait
+                break;
+            }
+            catch (Exception e) {
+                System.out.println(e);
+                i++;
+            }
+        }
+
+    }
     /**
      * @param pBy
      * @param timeoutInSeconds

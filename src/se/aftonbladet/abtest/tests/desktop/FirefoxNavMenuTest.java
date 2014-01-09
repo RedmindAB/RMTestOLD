@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import se.aftonbladet.abtest.navigation.AbBasicNav;
+import se.aftonbladet.abtest.navigation.mobil.AbBasicNav;
 
 /**
  * Created with IntelliJ IDEA.

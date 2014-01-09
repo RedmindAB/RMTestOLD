@@ -8,7 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 
-import se.aftonbladet.abtest.navigation.AbBasicNav;
+import se.aftonbladet.abtest.navigation.mobil.AbBasicNav;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 
