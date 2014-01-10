@@ -20,8 +20,10 @@ import java.util.List;
  */
 public class FotbollNav extends AnApp {
 	
-	private By mTopBtnLink = By.id("abNavBarTopBtnLink");
-
+	private By mTopBtnLink = By.id("se.aftonbladet.sportbladet.fotboll:id/up");
+	private int mLongTimeout = 30;
+	private int mShortTimeout = 10;
+	
 	/**
 	 * @param pDriver
 	 */
@@ -31,48 +33,54 @@ public class FotbollNav extends AnApp {
 	}
 	
 	public void initialStartNoAction() {
-		driverWaitElementPresent(By.tagName("Button"), 10);
+		driverWaitElementPresent(By.tagName("Button"), mShortTimeout);
       
       WebElement el = driver.findElement(By.tagName("Button"));
       el.click();
-      driverWaitClickable(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),10);
+      driverWaitClickable(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),mShortTimeout);
       el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"));
       el.click();
-      driverWaitElementPresent(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),10);
+      driverWaitClickable(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),mShortTimeout);
       el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"));
       el.click();
-      driverWaitElementPresent(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),10);
+      driverWaitClickable(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),mShortTimeout);
       el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"));
       el.click();
       
-//      try {
-//		Thread.sleep(10000);
-//	} catch (InterruptedException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-      
-      driverWaitClickable(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"),10);
+      driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper")),mLongTimeout);
       el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"));
       el.click();
-      driverWaitElementPresent(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"),10);
+      driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper")),mLongTimeout);
       el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"));
       el.click();
       
-      driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView")), 10);
-//      driverWaitElementPresent(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView"), 10);
-//      el = driver.findElement(By.name("action_bar_title"));
-//      assertEquals(el.getText(), "Matcher");
-//      el.click();
-//      driverWaitElementPresent(By.name("leftDrawer"), 10);
-//      el = driver.findElement(By.tagName("text"));
-//      assertEquals(el.getText(), "API Demos");
-//      el = driver.findElement(By.name("App"));
-//      el.click();
-//      List<WebElement> els = driver.findElements(By.tagName("text"));
-//      assertEquals(els.get(2).getText(), "Activity");
+      //Condition for app to be loaded, might need more?
+      driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView")), mLongTimeout);
+
 	}
 
+	
+	public void openMenu() throws Exception {
+		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(mTopBtnLink), mShortTimeout);
+		WebElement topLeftBtn;
+		int i = 0;
+		while (i < 10) {
+			try {
+				topLeftBtn = driver.findElement(mTopBtnLink);
+				
+				topLeftBtn.click();
+				driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/leftDrawer")), mShortTimeout);
+				break;
+			}
+			catch (Exception e) {
+				System.out.println(i + " openMenu exception: " + e);
+				i = i + 1;
+				Thread.sleep(500);
+			}
+		}
+		//driverFluentWait(1).until(ExpectedConditions.visibilityOfElementLocated(By.id("abMenuClose")));
+	}
+	
 	public void clickLeftMenuItem(String pMenuText) throws Exception {
 		System.out.println("clickLeftMenuItem pMenuText: " + pMenuText);
 		openMenu();
@@ -150,28 +158,9 @@ public class FotbollNav extends AnApp {
 		return "";
 	}
 
-	private void openMenu() throws Exception {
-		driverFluentWait(26).until(ExpectedConditions.presenceOfElementLocated(mTopBtnLink));
-		WebElement topLeftBtn;
-		int i = 0;
-		while (i < 10) {
-			try {
-				topLeftBtn = driver.findElement(mTopBtnLink);
-				topLeftBtn.getLocation();
-				driverFluentWait(1).until(ExpectedConditions.visibilityOf(topLeftBtn));
-				topLeftBtn.click();
-				driverFluentWait(1).until(ExpectedConditions.visibilityOfElementLocated(By.id("abMenuClose")));
-				break;
-			}
-			catch (Exception e) {
-				System.out.println(i + " openMenu exception: " + e);
-				i = i + 1;
-				Thread.sleep(500);
-			}
-		}
-		//driverFluentWait(1).until(ExpectedConditions.visibilityOfElementLocated(By.id("abMenuClose")));
-	}
+
 	
+		
 	public void clickTopBarItem(String pMenuText) throws Exception {
 		By tMenuItemPath = By.xpath("//*[@id='abTopBar']/nav/ul/li/a[text()='" + pMenuText + "' and not(@disabled)]");
 		driverWaitClickable(tMenuItemPath, 25);
