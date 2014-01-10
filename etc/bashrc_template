@@ -1,0 +1,11 @@
+export PATH=$PATH:/usr/local/git/bin/:$HOME/workspaces/adt-bundle-mac-x86_64/sdk/platform-tools/:$HOME/iosCmdline/
+export JAVA_HOME="/usr/"
+export testHome="$HOME/rmauto/RMTest/"
+
+export ANDROID_HOME="$HOME/workspaces/adt-bundle-mac-x86_64/sdk/"
+export DYLD_LIBRARY_PATH=$HOME/iosCmdline/:$DYLD_LIBRARY_PATH
+export ADB_PATH="$ANDROID_HOME/platform-tools/"
+export PATH=$PATH:$ADB_PATH
+source $testHome/etc/RMTest.conf
+
+alias stage="ssh wwwadm@stage.mobil.aftonbladet.se" 
