@@ -2,6 +2,9 @@ package se.redmind.rmtest.selenium.framework;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -40,19 +43,20 @@ public class HTMLPage {
     }
     
     public FluentWait<WebDriver> driverFluentWait(int timeoutInSeconds) {
-    	FluentWait fw = null;
+    	FluentWait<WebDriver> fw = null;
         int i = 0;
-
+        
         while (i<10) {
             try {
-                fw = new FluentWait(driver)
-                .ignoring(WebDriverException.class, ClassCastException.class);
+                fw = new FluentWait<WebDriver>(driver)
+                .withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
+                fw.ignoring(WebDriverException.class,ClassCastException.class);
                 fw.ignoring(NoSuchElementException.class);
 
                 return fw;
             }
             catch(Exception e){
-                System.out.println("driverFluentWait: " + e);
+                System.out.println("driverFluentWait Failed attempt : " + i + "/n" + e);
                 i++;
             }
         }
@@ -93,8 +97,12 @@ public class HTMLPage {
                 driverFluentWait(timeoutInSeconds).until(condition);   // changed to driverFluentWait to ignore WebDriverExceptions braking the wait
                 break;
             }
+            catch (WebDriverException e) {
+                System.out.println("Caught a webdriveresception on driverFluentWaitForCondition try: " + i);
+                i++;
+            }
             catch (Exception e) {
-                System.out.println(e);
+                System.out.println("This is another exception?" + e);
                 i++;
             }
         }

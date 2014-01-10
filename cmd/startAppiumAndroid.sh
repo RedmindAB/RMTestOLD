@@ -19,12 +19,14 @@ rm -f $androidNodeFile
 adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
 do
 	modelName=`adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
-	androidVersion=`adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`	
+	androidVersion=`adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
+	description="$modelName  $androidVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
 	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s:APP_PATH:$APK_PATH:g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_NAME/$modelName/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$androidVersion/g" $testHome/etc/Appium_TEMP.json

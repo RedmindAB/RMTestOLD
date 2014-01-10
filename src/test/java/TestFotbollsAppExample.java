@@ -70,7 +70,8 @@ public class TestFotbollsAppExample {
         WebDriver driver = driverWrapper.getDriver();
         appNav = new FotbollNav(driver);
         appNav.initialStartNoAction();
-//        appNav.openMenu();
+        appNav.openMenu();
+        appNav.closeMenu();
 //        driver.quit();
     }
 
