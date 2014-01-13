@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class FotbollNav extends AnApp {
 
 	private By mTopBtnLink = By.id("android:id/up");
+	private String mLeftMenuBox = "se.aftonbladet.sportbladet.fotboll:id/leftDrawer";
+	private String mRightMenuBox = "se.aftonbladet.sportbladet.fotboll:id/rightDrawer";
 	private int mLongTimeout = 30;
 	private int mShortTimeout = 10;
 
@@ -85,6 +87,7 @@ public class FotbollNav extends AnApp {
 //		topLeftBtn.click();
 	}
 	
+	
 	public void humanClick(WebElement clickableElement){
 		try {
 			TimeUnit.MILLISECONDS.sleep(500);
@@ -95,12 +98,13 @@ public class FotbollNav extends AnApp {
 		clickableElement.click();
 	}
 
+	
 	public void clickLeftMenuItem(String pMenuText) throws Exception {
 		System.out.println("clickLeftMenuItem pMenuText: " + pMenuText);
 		openMenu();
 		clickMenuItem(pMenuText);
 		//waitUntilDomReady();
-		driverFluentWait(31).until(ExpectedConditions.presenceOfElementLocated(mTopBtnLink));
+		driverFluentWaitForCondition(ExpectedConditions.presenceOfElementLocated(mTopBtnLink), mShortTimeout);
 	}
 
 	public void clickLeftMenuItemExternal(String pMenuText) throws Exception {
@@ -146,7 +150,7 @@ public class FotbollNav extends AnApp {
 
 	private void clickMenuItem(String menuItemInnerText) throws Exception {
 		//System.out.println("menuItemInnerText: " + menuItemInnerText);
-		By tMenuItemPath = By.xpath("//*[@id='abTopMenuDynamic']/li/a[text()='" + menuItemInnerText + "' and not(@disabled)]");
+		By tMenuItemPath = By.xpath("//*[@id='" + mLeftMenuBox + "']/RelativeLayout/*/Button[@text='" + menuItemInnerText + "' and not(@disabled)]");
 		//		driverWaitClickable(By.xpath(tMenuItemPath), 8);
 		spinnerClickBy(tMenuItemPath);
 	}

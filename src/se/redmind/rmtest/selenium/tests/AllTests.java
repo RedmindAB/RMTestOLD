@@ -21,6 +21,6 @@ public class AllTests {
     
     @AfterClass
     public static void afterAllTests(){
-//        DriverProvider.stopDrivers();
+        DriverProvider.stopDrivers();
     }
 }

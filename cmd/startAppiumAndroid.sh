@@ -36,7 +36,7 @@ do
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json	
-	appium -U $currDevId -a $RMTestLocalNodeIp -p $basePort --full-reset --nodeconfig $testHome/etc/Appium_TEMP.json &
+	appium -U $currDevId -a $RMTestLocalNodeIp -p $basePort --session-override --nodeconfig $testHome/etc/Appium_TEMP.json &
 #	isInstalled=`adb -s $currDevId shell pm list packages  org.openqa.selenium.android.app`
 
 done

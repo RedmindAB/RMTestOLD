@@ -49,6 +49,7 @@ public class GoogleExampleIOS {
     
 
     @Test
+    @Ignore
     public void testGoogle() throws Exception {
         tDriver = driverWrapper.getDriver();
         tDriver.get("http://stage.play.aftonbladet.se:8080");
@@ -73,16 +74,10 @@ public class GoogleExampleIOS {
     }
 
     @Test
-    @Ignore
     public void testAOS() throws Exception {
         tDriver = driverWrapper.getDriver();
         // And now use this to visit Google
-        tDriver.get("http://www.aos.se");
-
-        // Find the text input element by its name
-//        WebElement element = driver.findElement(By.name("q"));
-        System.out.println("Page title is: " + tDriver.getTitle());
-        assertTrue(tDriver.getTitle().startsWith("Allt om Stockholm"));
+        System.out.println(driverWrapper.getCapabilities().toString());
     }
     
 
