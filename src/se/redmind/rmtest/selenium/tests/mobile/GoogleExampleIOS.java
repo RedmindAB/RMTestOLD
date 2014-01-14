@@ -77,6 +77,7 @@ public class GoogleExampleIOS {
     public void testAOS() throws Exception {
         tDriver = driverWrapper.getDriver();
         // And now use this to visit Google
+        tDriver.get("google.com");
         System.out.println(driverWrapper.getCapabilities().toString());
     }
     
