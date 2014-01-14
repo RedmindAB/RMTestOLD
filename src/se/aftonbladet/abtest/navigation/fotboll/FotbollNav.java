@@ -42,6 +42,8 @@ public class FotbollNav extends AnApp {
 //		el.click();
 		humanClick(el);
 		driverWaitClickable(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"),mShortTimeout);
+//		driverWaitClickable(By.xpath("//*[@id='nextButton']"),mShortTimeout);
+		
 		el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/nextButton"));
 //		el.click();
 		humanClick(el);
@@ -73,6 +75,7 @@ public class FotbollNav extends AnApp {
 		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(mTopBtnLink), mShortTimeout);
 		WebElement topLeftBtn;
 		topLeftBtn = driver.findElement(mTopBtnLink);
+		
 		humanClick(topLeftBtn);
 //		topLeftBtn.click();
 		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/leftDrawer")), mShortTimeout);
@@ -150,7 +153,7 @@ public class FotbollNav extends AnApp {
 
 	private void clickMenuItem(String menuItemInnerText) throws Exception {
 		//System.out.println("menuItemInnerText: " + menuItemInnerText);
-		By tMenuItemPath = By.xpath("//*[@id='" + mLeftMenuBox + "']/RelativeLayout/*/Button[@text='" + menuItemInnerText + "' and not(@disabled)]");
+		By tMenuItemPath = By.xpath("//ExpandableListView[@id='" + mLeftMenuBox + "']/*/Button[@text='" + menuItemInnerText + "']");
 		//		driverWaitClickable(By.xpath(tMenuItemPath), 8);
 		spinnerClickBy(tMenuItemPath);
 	}

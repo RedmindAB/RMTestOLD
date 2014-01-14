@@ -2,8 +2,12 @@ package se.redmind.rmtest.selenium.framework;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -45,14 +49,19 @@ public class HTMLPage {
     public FluentWait<WebDriver> driverFluentWait(int timeoutInSeconds) {
     	FluentWait<WebDriver> fw = null;
         int i = 0;
-        
+        PrintStream quietErr;
         while (i<10) {
-            try {
-                fw = new FluentWait<WebDriver>(driver)
+            try {           	
+            	/*
+            	 * Stops prinouts of ExpectedConditions.findElement() 
+            	 * This can be removed when printouts are removed
+            	 */
+            	Logger.getLogger("org.openqa.selenium.support.ui.ExpectedConditions").setLevel(Level.SEVERE);
+                
+            	fw = new FluentWait<WebDriver>(driver)
                 .withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
                 fw.ignoring(WebDriverException.class,ClassCastException.class);
                 fw.ignoring(NoSuchElementException.class);
-
                 return fw;
             }
             catch(Exception e){
