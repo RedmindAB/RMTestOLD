@@ -199,7 +199,7 @@ public class AbMobileNavTest {    //
 		//Jan Helin
         tNavPage.navigateStartUrl();
 		tNavPage.clickLeftSubMenuItemExternal("Bloggar", "Jan Helin");
-		tNavPage.assertPageTitle("Jan Helin | Aftonbladets publisher skriver inifrån om sveriges största tidning och sajt");
+		tNavPage.assertPageTitle("Jan Helin");
 		tNavPage.navigateBack();
 		tNavPage.assertPageTitle("Aftonbladet: Sveriges nyhetskälla och mötesplats");
 		
