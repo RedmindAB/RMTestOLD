@@ -4,7 +4,7 @@
 
     {
           "browserName": "",
-          "osname": "ANDROID",
+          "osname": "OS_NAME",
           "description": "DESCR_STRING",
           "maxInstances": 1,
           "platform":"PLATFORM",
