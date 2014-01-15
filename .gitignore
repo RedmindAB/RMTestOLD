@@ -1,0 +1,5 @@
+log/*
+bin/
+target/
+etc/RMTestLocal.conf
+etc/Appium_TEMP.json
