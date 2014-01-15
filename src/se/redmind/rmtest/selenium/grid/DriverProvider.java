@@ -151,5 +151,28 @@ public class DriverProvider {
         return filteredDriverList.toArray();
     }
     
-
+  
+    /**
+     * get drivers that match capability key,value pair
+     * @param capKey
+     * @param capValue
+     * @return
+     */
+    public synchronized static Object[] getDrivers(String capKey, String capValue) {
+        startDrivers();
+        ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
+        String currCap;
+        for (int i = 0; i < driverList.size(); i++) {
+        	currCap = (String) driverList.get(i).getCapabilities().getCapability(capKey);
+        	if (currCap == null) {
+				currCap = "";
+			}
+            if (currCap.equalsIgnoreCase(capValue)) {
+                filteredDriverList.add(driverList.get(i));
+            }
+        }
+        return filteredDriverList.toArray();
+    }
+    
+    
 }

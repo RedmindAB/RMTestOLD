@@ -30,7 +30,8 @@ public class GoogleExampleAndroid {
     }
     
     private static Object[] getDrivers() {
-        return DriverProvider.getDrivers(Platform.ANDROID);
+        return DriverProvider.getDrivers("osname", "ANDROID");
+//    	return DriverProvider.getDrivers("deviceId", "SH35GW901373");
 
     }
 
@@ -47,6 +48,7 @@ public class GoogleExampleAndroid {
     
 
     @Test
+    @Ignore
     public void testGoogle() throws Exception {
         tDriver = driverWrapper.getDriver();
         tDriver.get("http://stage.play.aftonbladet.se:8080");
@@ -70,8 +72,7 @@ public class GoogleExampleAndroid {
         
     }
 
-    @Test
-    @Ignore
+    @Test 
     public void testAOS() throws Exception {
         tDriver = driverWrapper.getDriver();
         // And now use this to visit Google

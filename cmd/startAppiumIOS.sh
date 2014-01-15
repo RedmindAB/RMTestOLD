@@ -1,8 +1,8 @@
 #!/bin/bash -x
 #. ../etc/RMTest.conf
-./killAppiums.sh
-export APK_PATH=$1
-if [ -z "$APK_PATH" ]; then
+#./killAppiums.sh
+export IPA_PATH=$1
+if [ -z "$IPA_PATH" ]; then
 	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
 	exit 1
 fi
@@ -15,11 +15,13 @@ export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
 export idevicePath="$testHome/lib/libimobiledevice-macosx"
+export PKG_NAME=`unzip -p $IPA_PATH  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`
+
 
 $idevicePath/idevice_id -l | while read currDevId
 do
-	modelName=`$idevicePath/ideviceinfo -u $currDevId | grep DeviceName`
-	iosVersion=`$idevicePath/ideviceinfo -u $currDevId | grep ProductVersion`
+	modelName=`$idevicePath/ideviceinfo -u $currDevId | grep DeviceName | sed "s/DeviceName: //g"`
+	iosVersion=`$idevicePath/ideviceinfo -u $currDevId | grep ProductVersion | sed "s/ProductVersion: //g"`
 	description="$modelName  $iosVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
@@ -27,9 +29,11 @@ do
 	
 	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
-	sed -i '' "s:APP_PATH:$APK_PATH:g" $testHome/etc/Appium_TEMP.json
-	sed -i '' "s/DEVICE_NAME/$modelName/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s:APP_PATH:$IPA_PATH:g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s:APP_PKG:$PKG_NAME:g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/DEVICE_NAME/iphone/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$iosVersion/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/APPIUM_PORT/$basePort/g" $testHome/etc/Appium_TEMP.json
@@ -37,9 +41,8 @@ do
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json	
-#	appium -U $currDevId -a $RMTestLocalNodeIp -p $basePort --session-override --nodeconfig $testHome/etc/Appium_TEMP.json &
-$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json 
-#	isInstalled=`adb -s $currDevId shell pm list packages  org.openqa.selenium.android.app`
-
+	
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
+	sleep 5
 done
 

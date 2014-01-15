@@ -3,16 +3,17 @@
       [
 
     {
-          "browserName": "",
           "osname": "OS_NAME",
+          "deviceId": "DEVICE_ID",
           "description": "DESCR_STRING",
           "maxInstances": 1,
           "platform":"PLATFORM",
           "device":"DEVICE_NAME",
           "version":"DEVICE_VERSION",
           "app":"APP_PATH",
-          "app-package":"se.aftonbladet.sportbladet.fotboll",
-          "app-activity":".StartActivity"
+          "app-package":"APP_PKG",
+          "app-activity":".StartActivity",
+          "browserName": ""
     }
    
       ],

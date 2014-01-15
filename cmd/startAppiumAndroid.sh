@@ -1,6 +1,6 @@
 #!/bin/bash -x
-. ../etc/RMTest.conf
-./killAppiums.sh
+#. ../etc/RMTest.conf
+#./killAppiums.sh
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]; then
 	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
@@ -15,6 +15,8 @@ export modelName=""
 export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
+export APK_PACKAGE=`$ADB_PATH/../build-tools/android-$AndroidBuildToolVersion/aapt dump badging $APK_PATH | grep package: | cut -d " " -f 2 | cut -d "'" -f 2`
+
 
 adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
 do
@@ -26,9 +28,18 @@ do
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
 	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/OS_NAME/ANDROID/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s:APP_PATH:$APK_PATH:g" $testHome/etc/Appium_TEMP.json
-	sed -i '' "s/DEVICE_NAME/$modelName/g" $testHome/etc/Appium_TEMP.json
+	if [ $APK_PATH == ""chrome ]
+		then
+		sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json	
+		sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
+	else	
+		sed -i '' "s:APP_PKG:$APK_PACKAGE:g" $testHome/etc/Appium_TEMP.json
+	fi
+	sed -i '' "s/DEVICE_NAME/android/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$androidVersion/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/APPIUM_PORT/$basePort/g" $testHome/etc/Appium_TEMP.json
@@ -36,8 +47,8 @@ do
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json	
-	appium -U $currDevId -a $RMTestLocalNodeIp -p $basePort --session-override --nodeconfig $testHome/etc/Appium_TEMP.json &
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $testHome/log/appium_android_$currDevId.log &
 #	isInstalled=`adb -s $currDevId shell pm list packages  org.openqa.selenium.android.app`
-
+	sleep 10
 done
 
