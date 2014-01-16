@@ -32,7 +32,13 @@ do
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s:APP_PATH:$IPA_PATH:g" $testHome/etc/Appium_TEMP.json
-	sed -i '' "s:APP_PKG:$PKG_NAME:g" $testHome/etc/Appium_TEMP.json
+        if [ $IPA_PATH == "safari" ]
+                then
+                sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json
+                sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
+        else
+		sed -i '' "s:APP_PKG:$PKG_NAME:g" $testHome/etc/Appium_TEMP.json
+        fi
 	sed -i '' "s/DEVICE_NAME/iphone/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$iosVersion/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
@@ -42,7 +48,21 @@ do
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json	
 	
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
-	sleep 5
+#	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
+#	sleep 5
+	logfile="$testHome/log/appium_ios_$currDevId.log"
+        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+        appiumStarted=true
+        while $appiumStarted
+                do
+                connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" $logfile`
+                if [ $connectedCount -gt 0  ]
+                then
+                        echo "Connected to HUB"
+                        appiumStarted=false
+                fi
+                echo "Not yet connected to HUB"
+                sleep 1
+        done
 done
 

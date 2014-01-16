@@ -30,7 +30,8 @@ public class GoogleExampleAndroid {
     }
     
     private static Object[] getDrivers() {
-        return DriverProvider.getDrivers("osname", "ANDROID");
+//        return DriverProvider.getDrivers("osname", "ANDROID");
+      return DriverProvider.getDrivers("platform", "MAC");
 //    	return DriverProvider.getDrivers("deviceId", "SH35GW901373");
 
     }

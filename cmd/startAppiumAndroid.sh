@@ -46,9 +46,20 @@ do
 	sed -i '' "s/APPIUM_HOST/$RMTestLocalNodeIp/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
-	cat $testHome/etc/Appium_TEMP.json	
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $testHome/log/appium_android_$currDevId.log &
-#	isInstalled=`adb -s $currDevId shell pm list packages  org.openqa.selenium.android.app`
-	sleep 10
+	cat $testHome/etc/Appium_TEMP.json
+	logfile="$testHome/log/appium_android_$currDevId.log"	
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+	appiumStarted=true	
+	while $appiumStarted
+		do
+		connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" $logfile`
+		if [ $connectedCount -gt 0  ]
+		then
+			echo "Connected to HUB"
+			appiumStarted=false
+		fi
+		echo "Not yet connected to HUB"
+		sleep 1
+	done
 done
 
