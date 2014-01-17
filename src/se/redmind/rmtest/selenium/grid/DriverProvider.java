@@ -25,19 +25,22 @@ public class DriverProvider {
         } else {
             RegistrationRequest nodeReq;
             String description;
-             
+            
             for (int j = 0; j < nodeList.size(); j++) { 
                 nodeReq = nodeList.get(j); 
                 for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
                     DesiredCapabilities capability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
 //                    System.out.println("DESCRIPTION OF DEVICE: " + capability.getCapability("description") + nodeReq.getDescription());
-                    if (capability.getCapability("description") == null) {
-                        description = capability.getPlatform() + " " + capability.getBrowserName();
-//                        nodeReq.setDescription(capability.getPlatform() + " " + capability.getBrowserName());
+                    if (capability.getCapability("description") != null) { 
+                    	description = (String) capability.getCapability("description");
+                    } else if (nodeReq.getDescription() != null) {
+                    	description = nodeReq.getDescription();
                     } else {
-                        description = (String) capability.getCapability("description");
+                    	description = capability.getPlatform() + " " + capability.getBrowserName();
                     }
+                    
                     System.out.println("Description of driver is: " + description);
+                    
                     try {
                         URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
                         WebDriver driver;
