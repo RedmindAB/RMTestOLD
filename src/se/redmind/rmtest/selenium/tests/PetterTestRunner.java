@@ -12,7 +12,7 @@ public class PetterTestRunner {
         // TODO Auto-generated method stub
 //        AbTestConfig.main();
         JUnitCore junit = new JUnitCore();
-        Result result = junit.run(AllTests.class);   
+        Result result = junit.run(RMdemoSuite.class);   
         System.out.println(result.getFailureCount());
         }
 
