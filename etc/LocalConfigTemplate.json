@@ -1,0 +1,10 @@
+{
+  "configuration":
+  {
+    "testHome": "PATH/TO/RMTest",
+    "androidHome": "PATH/TO/ANDROIDHOME",
+    "localIp": "127.0.0.1",
+    "hubIp": "127.0.0.1",
+    "seleniumVersion": "2.39.0"
+  }
+}
