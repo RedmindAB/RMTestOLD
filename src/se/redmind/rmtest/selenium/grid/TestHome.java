@@ -57,6 +57,7 @@ public class TestHome {
 
 	 public static boolean isWindows()
 	 {
+		 System.out.println(getOsName());
 		 return getOsName().startsWith("Windows");
 	 }
 
