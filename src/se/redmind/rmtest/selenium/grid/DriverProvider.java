@@ -31,22 +31,14 @@ public class DriverProvider {
                 for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
                     DesiredCapabilities capability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
 //                    System.out.println("DESCRIPTION OF DEVICE: " + capability.getCapability("description") + nodeReq.getDescription());
-<<<<<<< HEAD
-//                    if (capability.getCapability("description") == null) {
-                  if (nodeReq.getDescription() == null) {
-                        description = capability.getPlatform() + " " + capability.getBrowserName();
-//                        nodeReq.setDescription(capability.getPlatform() + " " + capability.getBrowserName());
-                    } else {
-//                        description = (String) capability.getCapability("description");
-                    	description = nodeReq.getDescription();
-=======
+
                     if (capability.getCapability("description") != null) { 
                     	description = (String) capability.getCapability("description");
                     } else if (nodeReq.getDescription() != null) {
                     	description = nodeReq.getDescription();
                     } else {
                     	description = capability.getPlatform() + " " + capability.getBrowserName();
->>>>>>> 9cad541fbc9211b8d675500b7381b40025de9bc4
+
                     }
                     
                     System.out.println("Description of driver is: " + description);
