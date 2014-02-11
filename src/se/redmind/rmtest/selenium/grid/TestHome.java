@@ -42,6 +42,11 @@ public class TestHome {
 				 e.printStackTrace();
 			 }
 		 }
+		if (testHome == null) {
+			System.out.println("ERROR: We where not able to find a testhome folder");
+			System.out.println("On windows, set your TESTHOME system variable");
+			System.out.println("On Unixy systems, create your .RmTest file in your home folder");
+		}
 		return testHome;
 
 	 }
