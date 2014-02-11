@@ -11,7 +11,8 @@ public class RegisterNode {
  
     public static void main(String[] args)  {
         String nodeHost = "10.12.11.225";
-        String hubHost = RMTestConfig.getHubHost();
+        RmConfig config = new RmConfig();
+        String hubHost = config.getHubIp();
         
         for (int i = 0; i < args.length; i++) {
             if (args[i].contains("-hub")) {

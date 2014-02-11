@@ -17,7 +17,8 @@ public class DriverProvider {
     private static ArrayList <DriverNamingWrapper> driverList = new ArrayList<DriverNamingWrapper>();
     private static Boolean isInitialized = false;
     public static void startDrivers(){
-        HubNodesStatus nodeInfo = new HubNodesStatus(RMTestConfig.getHubHost(), GridConstatants.hubPort);
+    	RmConfig config = new RmConfig();
+        HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
         ArrayList <RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
 
         if (isInitialized) {
