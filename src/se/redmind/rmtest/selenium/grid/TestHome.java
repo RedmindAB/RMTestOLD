@@ -16,8 +16,10 @@ public class TestHome {
 		// TODO Auto-generated method stub
 		 String testHome = null;
 		 if (isWindows()) {
+			 System.out.println("We're on windows");
 			 testHome = System.getenv("TESTHOME");
 		 } else {
+			 System.out.println("We're on a unixy system");
 			 InputStream fis;
 			 try {
 				 fis = new FileInputStream(System.getenv("HOME") + "/.RmTest");
