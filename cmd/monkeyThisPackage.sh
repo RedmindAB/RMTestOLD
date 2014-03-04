@@ -3,7 +3,9 @@
 export APK_PATH=$1
 export INSTALLFIRST=$2
 if [ -z "$APK_PATH" ]; then
-	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
+	echo "usage: ${0##*/} <arg1> (<arg2>) "
+	echo "arg1: Full or relative path to the apk to installed should be supplied as an argument"
+	echo "arg2: If set the APK will not be reinstalled. The value can be any string, like NODONTINSTALLTHISAGAIN"
 	exit 1
 fi
 monkeyIterations="10000"
