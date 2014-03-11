@@ -1,0 +1,2285 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ThoughtWorks.Selenium.Core.2.40.0.0.Fakes</name>
+    </assembly>
+    <members>
+        <member name="T:Selenium.Fakes.ShimDefaultRemoteCommand">
+            <summary>Shim type of Selenium.DefaultRemoteCommand</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultRemoteCommand.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultRemoteCommand.#ctor(Selenium.DefaultRemoteCommand)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultRemoteCommand.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultRemoteCommand.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultRemoteCommand.Bind(Selenium.IRemoteCommand)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.ArgsGet">
+            <summary>Sets the shim of DefaultRemoteCommand.get_Args()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.CommandGet">
+            <summary>Sets the shim of DefaultRemoteCommand.get_Command()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.CommandStringGet">
+            <summary>Sets the shim of DefaultRemoteCommand.get_CommandString()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.ConstructorStringStringArray">
+            <summary>Sets the shim of DefaultRemoteCommand.DefaultRemoteCommand(String command, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.ParseString">
+            <summary>Sets the shim of DefaultRemoteCommand.Parse(String commandString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.StaticConstructor">
+            <summary>Sets the shim of DefaultRemoteCommand.DefaultRemoteCommand()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimDefaultRemoteCommand.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.AllInstances.ArgsGet">
+            <summary>Sets the shim of DefaultRemoteCommand.get_Args()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.AllInstances.CommandGet">
+            <summary>Sets the shim of DefaultRemoteCommand.get_Command()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultRemoteCommand.AllInstances.CommandStringGet">
+            <summary>Sets the shim of DefaultRemoteCommand.get_CommandString()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimDefaultSelenium">
+            <summary>Shim type of Selenium.DefaultSelenium</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultSelenium.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultSelenium.#ctor(Selenium.DefaultSelenium)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultSelenium.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultSelenium.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimDefaultSelenium.Bind(Selenium.ISelenium)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AddLocationStrategyStringString">
+            <summary>Sets the shim of DefaultSelenium.AddLocationStrategy(String strategyName, String functionDefinition)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AddScriptStringString">
+            <summary>Sets the shim of DefaultSelenium.AddScript(String scriptContent, String scriptTagId)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AddSelectionStringString">
+            <summary>Sets the shim of DefaultSelenium.AddSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllowNativeXpathString">
+            <summary>Sets the shim of DefaultSelenium.AllowNativeXpath(String allow)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AltKeyDown">
+            <summary>Sets the shim of DefaultSelenium.AltKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AltKeyUp">
+            <summary>Sets the shim of DefaultSelenium.AltKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AnswerOnNextPromptString">
+            <summary>Sets the shim of DefaultSelenium.AnswerOnNextPrompt(String answer)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AssignIdStringString">
+            <summary>Sets the shim of DefaultSelenium.AssignId(String locator, String identifier)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AttachFileStringString">
+            <summary>Sets the shim of DefaultSelenium.AttachFile(String fieldLocator, String fileLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CaptureEntirePageScreenshotStringString">
+            <summary>Sets the shim of DefaultSelenium.CaptureEntirePageScreenshot(String filename, String kwargs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CaptureEntirePageScreenshotToStringString">
+            <summary>Sets the shim of DefaultSelenium.CaptureEntirePageScreenshotToString(String kwargs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CaptureNetworkTrafficString">
+            <summary>Sets the shim of DefaultSelenium.CaptureNetworkTraffic(String type)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CaptureScreenshotString">
+            <summary>Sets the shim of DefaultSelenium.CaptureScreenshot(String filename)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CaptureScreenshotToString">
+            <summary>Sets the shim of DefaultSelenium.CaptureScreenshotToString()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CheckString">
+            <summary>Sets the shim of DefaultSelenium.Check(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ChooseCancelOnNextConfirmation">
+            <summary>Sets the shim of DefaultSelenium.ChooseCancelOnNextConfirmation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ChooseOkOnNextConfirmation">
+            <summary>Sets the shim of DefaultSelenium.ChooseOkOnNextConfirmation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ClickAtStringString">
+            <summary>Sets the shim of DefaultSelenium.ClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ClickString">
+            <summary>Sets the shim of DefaultSelenium.Click(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.Close">
+            <summary>Sets the shim of DefaultSelenium.Close()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ConstructorICommandProcessor">
+            <summary>Sets the shim of DefaultSelenium.DefaultSelenium(ICommandProcessor processor)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ConstructorStringInt32StringString">
+            <summary>Sets the shim of DefaultSelenium.DefaultSelenium(String serverHost, Int32 serverPort, String browserString, String browserURL)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ContextMenuAtStringString">
+            <summary>Sets the shim of DefaultSelenium.ContextMenuAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ContextMenuString">
+            <summary>Sets the shim of DefaultSelenium.ContextMenu(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ControlKeyDown">
+            <summary>Sets the shim of DefaultSelenium.ControlKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ControlKeyUp">
+            <summary>Sets the shim of DefaultSelenium.ControlKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.CreateCookieStringString">
+            <summary>Sets the shim of DefaultSelenium.CreateCookie(String nameValuePair, String optionsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DeleteAllVisibleCookies">
+            <summary>Sets the shim of DefaultSelenium.DeleteAllVisibleCookies()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DeleteCookieStringString">
+            <summary>Sets the shim of DefaultSelenium.DeleteCookie(String name, String optionsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DeselectPopUp">
+            <summary>Sets the shim of DefaultSelenium.DeselectPopUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DoubleClickAtStringString">
+            <summary>Sets the shim of DefaultSelenium.DoubleClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DoubleClickString">
+            <summary>Sets the shim of DefaultSelenium.DoubleClick(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DragAndDropStringString">
+            <summary>Sets the shim of DefaultSelenium.DragAndDrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DragAndDropToObjectStringString">
+            <summary>Sets the shim of DefaultSelenium.DragAndDropToObject(String locatorOfObjectToBeDragged, String locatorOfDragDestinationObject)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.DragdropStringString">
+            <summary>Sets the shim of DefaultSelenium.Dragdrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.FireEventStringString">
+            <summary>Sets the shim of DefaultSelenium.FireEvent(String locator, String eventName)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.FocusString">
+            <summary>Sets the shim of DefaultSelenium.Focus(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAlert">
+            <summary>Sets the shim of DefaultSelenium.GetAlert()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAllButtons">
+            <summary>Sets the shim of DefaultSelenium.GetAllButtons()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAllFields">
+            <summary>Sets the shim of DefaultSelenium.GetAllFields()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAllLinks">
+            <summary>Sets the shim of DefaultSelenium.GetAllLinks()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAllWindowIds">
+            <summary>Sets the shim of DefaultSelenium.GetAllWindowIds()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAllWindowNames">
+            <summary>Sets the shim of DefaultSelenium.GetAllWindowNames()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAllWindowTitles">
+            <summary>Sets the shim of DefaultSelenium.GetAllWindowTitles()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAttributeFromAllWindowsString">
+            <summary>Sets the shim of DefaultSelenium.GetAttributeFromAllWindows(String attributeName)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetAttributeString">
+            <summary>Sets the shim of DefaultSelenium.GetAttribute(String attributeLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetBodyText">
+            <summary>Sets the shim of DefaultSelenium.GetBodyText()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetCSSCountString">
+            <summary>Sets the shim of DefaultSelenium.GetCSSCount(String cssLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetConfirmation">
+            <summary>Sets the shim of DefaultSelenium.GetConfirmation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetCookie">
+            <summary>Sets the shim of DefaultSelenium.GetCookie()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetCookieByNameString">
+            <summary>Sets the shim of DefaultSelenium.GetCookieByName(String name)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetCursorPositionString">
+            <summary>Sets the shim of DefaultSelenium.GetCursorPosition(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetElementHeightString">
+            <summary>Sets the shim of DefaultSelenium.GetElementHeight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetElementIndexString">
+            <summary>Sets the shim of DefaultSelenium.GetElementIndex(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetElementPositionLeftString">
+            <summary>Sets the shim of DefaultSelenium.GetElementPositionLeft(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetElementPositionTopString">
+            <summary>Sets the shim of DefaultSelenium.GetElementPositionTop(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetElementWidthString">
+            <summary>Sets the shim of DefaultSelenium.GetElementWidth(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetEvalString">
+            <summary>Sets the shim of DefaultSelenium.GetEval(String script)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetExpressionString">
+            <summary>Sets the shim of DefaultSelenium.GetExpression(String expression)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetHtmlSource">
+            <summary>Sets the shim of DefaultSelenium.GetHtmlSource()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetLocation">
+            <summary>Sets the shim of DefaultSelenium.GetLocation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetMouseSpeed">
+            <summary>Sets the shim of DefaultSelenium.GetMouseSpeed()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetPrompt">
+            <summary>Sets the shim of DefaultSelenium.GetPrompt()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectOptionsString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectOptions(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedIdString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedId(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedIdsString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedIds(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedIndexString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedIndex(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedIndexesString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedIndexes(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedLabelString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedLabel(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedLabelsString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedLabels(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedValueString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedValue(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSelectedValuesString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedValues(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetSpeed">
+            <summary>Sets the shim of DefaultSelenium.GetSpeed()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetTableString">
+            <summary>Sets the shim of DefaultSelenium.GetTable(String tableCellAddress)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetTextString">
+            <summary>Sets the shim of DefaultSelenium.GetText(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetTitle">
+            <summary>Sets the shim of DefaultSelenium.GetTitle()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetValueString">
+            <summary>Sets the shim of DefaultSelenium.GetValue(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetWhetherThisFrameMatchFrameExpressionStringString">
+            <summary>Sets the shim of DefaultSelenium.GetWhetherThisFrameMatchFrameExpression(String currentFrameString, String target)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetWhetherThisWindowMatchWindowExpressionStringString">
+            <summary>Sets the shim of DefaultSelenium.GetWhetherThisWindowMatchWindowExpression(String currentWindowString, String target)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GetXpathCountString">
+            <summary>Sets the shim of DefaultSelenium.GetXpathCount(String xpath)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.GoBack">
+            <summary>Sets the shim of DefaultSelenium.GoBack()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.HighlightString">
+            <summary>Sets the shim of DefaultSelenium.Highlight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IgnoreAttributesWithoutValueString">
+            <summary>Sets the shim of DefaultSelenium.IgnoreAttributesWithoutValue(String ignore)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsAlertPresent">
+            <summary>Sets the shim of DefaultSelenium.IsAlertPresent()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsCheckedString">
+            <summary>Sets the shim of DefaultSelenium.IsChecked(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsConfirmationPresent">
+            <summary>Sets the shim of DefaultSelenium.IsConfirmationPresent()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsCookiePresentString">
+            <summary>Sets the shim of DefaultSelenium.IsCookiePresent(String name)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsEditableString">
+            <summary>Sets the shim of DefaultSelenium.IsEditable(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsElementPresentString">
+            <summary>Sets the shim of DefaultSelenium.IsElementPresent(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsOrderedStringString">
+            <summary>Sets the shim of DefaultSelenium.IsOrdered(String locator1, String locator2)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsPromptPresent">
+            <summary>Sets the shim of DefaultSelenium.IsPromptPresent()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsSomethingSelectedString">
+            <summary>Sets the shim of DefaultSelenium.IsSomethingSelected(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsTextPresentString">
+            <summary>Sets the shim of DefaultSelenium.IsTextPresent(String pattern)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.IsVisibleString">
+            <summary>Sets the shim of DefaultSelenium.IsVisible(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.KeyDownNativeString">
+            <summary>Sets the shim of DefaultSelenium.KeyDownNative(String keycode)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.KeyDownStringString">
+            <summary>Sets the shim of DefaultSelenium.KeyDown(String locator, String keySequence)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.KeyPressNativeString">
+            <summary>Sets the shim of DefaultSelenium.KeyPressNative(String keycode)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.KeyPressStringString">
+            <summary>Sets the shim of DefaultSelenium.KeyPress(String locator, String keySequence)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.KeyUpNativeString">
+            <summary>Sets the shim of DefaultSelenium.KeyUpNative(String keycode)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.KeyUpStringString">
+            <summary>Sets the shim of DefaultSelenium.KeyUp(String locator, String keySequence)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MetaKeyDown">
+            <summary>Sets the shim of DefaultSelenium.MetaKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MetaKeyUp">
+            <summary>Sets the shim of DefaultSelenium.MetaKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseDownAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseDownAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseDownRightAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseDownRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseDownRightString">
+            <summary>Sets the shim of DefaultSelenium.MouseDownRight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseDownString">
+            <summary>Sets the shim of DefaultSelenium.MouseDown(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseMoveAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseMoveAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseMoveString">
+            <summary>Sets the shim of DefaultSelenium.MouseMove(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseOutString">
+            <summary>Sets the shim of DefaultSelenium.MouseOut(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseOverString">
+            <summary>Sets the shim of DefaultSelenium.MouseOver(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseUpAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseUpAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseUpRightAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseUpRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseUpRightString">
+            <summary>Sets the shim of DefaultSelenium.MouseUpRight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.MouseUpString">
+            <summary>Sets the shim of DefaultSelenium.MouseUp(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.OpenString">
+            <summary>Sets the shim of DefaultSelenium.Open(String url)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.OpenWindowStringString">
+            <summary>Sets the shim of DefaultSelenium.OpenWindow(String url, String windowID)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ProcessorGet">
+            <summary>Sets the shim of DefaultSelenium.get_Processor()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.Refresh">
+            <summary>Sets the shim of DefaultSelenium.Refresh()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.RemoveAllSelectionsString">
+            <summary>Sets the shim of DefaultSelenium.RemoveAllSelections(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.RemoveScriptString">
+            <summary>Sets the shim of DefaultSelenium.RemoveScript(String scriptTagId)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.RemoveSelectionStringString">
+            <summary>Sets the shim of DefaultSelenium.RemoveSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.RetrieveLastRemoteControlLogs">
+            <summary>Sets the shim of DefaultSelenium.RetrieveLastRemoteControlLogs()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.RollupStringString">
+            <summary>Sets the shim of DefaultSelenium.Rollup(String rollupName, String kwargs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.RunScriptString">
+            <summary>Sets the shim of DefaultSelenium.RunScript(String script)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SelectFrameString">
+            <summary>Sets the shim of DefaultSelenium.SelectFrame(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SelectPopUpString">
+            <summary>Sets the shim of DefaultSelenium.SelectPopUp(String windowID)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SelectStringString">
+            <summary>Sets the shim of DefaultSelenium.Select(String selectLocator, String optionLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SelectWindowString">
+            <summary>Sets the shim of DefaultSelenium.SelectWindow(String windowID)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetBrowserLogLevelString">
+            <summary>Sets the shim of DefaultSelenium.SetBrowserLogLevel(String logLevel)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetContextString">
+            <summary>Sets the shim of DefaultSelenium.SetContext(String context)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetCursorPositionStringString">
+            <summary>Sets the shim of DefaultSelenium.SetCursorPosition(String locator, String position)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetExtensionJsString">
+            <summary>Sets the shim of DefaultSelenium.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetMouseSpeedString">
+            <summary>Sets the shim of DefaultSelenium.SetMouseSpeed(String pixels)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetSpeedString">
+            <summary>Sets the shim of DefaultSelenium.SetSpeed(String value)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SetTimeoutString">
+            <summary>Sets the shim of DefaultSelenium.SetTimeout(String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ShiftKeyDown">
+            <summary>Sets the shim of DefaultSelenium.ShiftKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ShiftKeyUp">
+            <summary>Sets the shim of DefaultSelenium.ShiftKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.ShutDownSeleniumServer">
+            <summary>Sets the shim of DefaultSelenium.ShutDownSeleniumServer()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.Start">
+            <summary>Sets the shim of DefaultSelenium.Start()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.StartString">
+            <summary>Sets the shim of DefaultSelenium.Start(String optionsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.Stop">
+            <summary>Sets the shim of DefaultSelenium.Stop()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.SubmitString">
+            <summary>Sets the shim of DefaultSelenium.Submit(String formLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.TypeKeysStringString">
+            <summary>Sets the shim of DefaultSelenium.TypeKeys(String locator, String value)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.TypeStringString">
+            <summary>Sets the shim of DefaultSelenium.Type(String locator, String value)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.UncheckString">
+            <summary>Sets the shim of DefaultSelenium.Uncheck(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.UseXpathLibraryString">
+            <summary>Sets the shim of DefaultSelenium.UseXpathLibrary(String libraryName)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.WaitForConditionStringString">
+            <summary>Sets the shim of DefaultSelenium.WaitForCondition(String script, String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.WaitForFrameToLoadStringString">
+            <summary>Sets the shim of DefaultSelenium.WaitForFrameToLoad(String frameAddress, String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.WaitForPageToLoadString">
+            <summary>Sets the shim of DefaultSelenium.WaitForPageToLoad(String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.WaitForPopUpStringString">
+            <summary>Sets the shim of DefaultSelenium.WaitForPopUp(String windowID, String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.WindowFocus">
+            <summary>Sets the shim of DefaultSelenium.WindowFocus()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.WindowMaximize">
+            <summary>Sets the shim of DefaultSelenium.WindowMaximize()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimDefaultSelenium.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AddLocationStrategyStringString">
+            <summary>Sets the shim of DefaultSelenium.AddLocationStrategy(String strategyName, String functionDefinition)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AddScriptStringString">
+            <summary>Sets the shim of DefaultSelenium.AddScript(String scriptContent, String scriptTagId)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AddSelectionStringString">
+            <summary>Sets the shim of DefaultSelenium.AddSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AllowNativeXpathString">
+            <summary>Sets the shim of DefaultSelenium.AllowNativeXpath(String allow)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AltKeyDown">
+            <summary>Sets the shim of DefaultSelenium.AltKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AltKeyUp">
+            <summary>Sets the shim of DefaultSelenium.AltKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AnswerOnNextPromptString">
+            <summary>Sets the shim of DefaultSelenium.AnswerOnNextPrompt(String answer)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AssignIdStringString">
+            <summary>Sets the shim of DefaultSelenium.AssignId(String locator, String identifier)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.AttachFileStringString">
+            <summary>Sets the shim of DefaultSelenium.AttachFile(String fieldLocator, String fileLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CaptureEntirePageScreenshotStringString">
+            <summary>Sets the shim of DefaultSelenium.CaptureEntirePageScreenshot(String filename, String kwargs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CaptureEntirePageScreenshotToStringString">
+            <summary>Sets the shim of DefaultSelenium.CaptureEntirePageScreenshotToString(String kwargs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CaptureNetworkTrafficString">
+            <summary>Sets the shim of DefaultSelenium.CaptureNetworkTraffic(String type)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CaptureScreenshotString">
+            <summary>Sets the shim of DefaultSelenium.CaptureScreenshot(String filename)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CaptureScreenshotToString">
+            <summary>Sets the shim of DefaultSelenium.CaptureScreenshotToString()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CheckString">
+            <summary>Sets the shim of DefaultSelenium.Check(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ChooseCancelOnNextConfirmation">
+            <summary>Sets the shim of DefaultSelenium.ChooseCancelOnNextConfirmation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ChooseOkOnNextConfirmation">
+            <summary>Sets the shim of DefaultSelenium.ChooseOkOnNextConfirmation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ClickAtStringString">
+            <summary>Sets the shim of DefaultSelenium.ClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ClickString">
+            <summary>Sets the shim of DefaultSelenium.Click(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.Close">
+            <summary>Sets the shim of DefaultSelenium.Close()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ContextMenuAtStringString">
+            <summary>Sets the shim of DefaultSelenium.ContextMenuAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ContextMenuString">
+            <summary>Sets the shim of DefaultSelenium.ContextMenu(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ControlKeyDown">
+            <summary>Sets the shim of DefaultSelenium.ControlKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ControlKeyUp">
+            <summary>Sets the shim of DefaultSelenium.ControlKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.CreateCookieStringString">
+            <summary>Sets the shim of DefaultSelenium.CreateCookie(String nameValuePair, String optionsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DeleteAllVisibleCookies">
+            <summary>Sets the shim of DefaultSelenium.DeleteAllVisibleCookies()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DeleteCookieStringString">
+            <summary>Sets the shim of DefaultSelenium.DeleteCookie(String name, String optionsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DeselectPopUp">
+            <summary>Sets the shim of DefaultSelenium.DeselectPopUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DoubleClickAtStringString">
+            <summary>Sets the shim of DefaultSelenium.DoubleClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DoubleClickString">
+            <summary>Sets the shim of DefaultSelenium.DoubleClick(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DragAndDropStringString">
+            <summary>Sets the shim of DefaultSelenium.DragAndDrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DragAndDropToObjectStringString">
+            <summary>Sets the shim of DefaultSelenium.DragAndDropToObject(String locatorOfObjectToBeDragged, String locatorOfDragDestinationObject)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.DragdropStringString">
+            <summary>Sets the shim of DefaultSelenium.Dragdrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.FireEventStringString">
+            <summary>Sets the shim of DefaultSelenium.FireEvent(String locator, String eventName)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.FocusString">
+            <summary>Sets the shim of DefaultSelenium.Focus(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAlert">
+            <summary>Sets the shim of DefaultSelenium.GetAlert()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAllButtons">
+            <summary>Sets the shim of DefaultSelenium.GetAllButtons()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAllFields">
+            <summary>Sets the shim of DefaultSelenium.GetAllFields()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAllLinks">
+            <summary>Sets the shim of DefaultSelenium.GetAllLinks()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAllWindowIds">
+            <summary>Sets the shim of DefaultSelenium.GetAllWindowIds()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAllWindowNames">
+            <summary>Sets the shim of DefaultSelenium.GetAllWindowNames()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAllWindowTitles">
+            <summary>Sets the shim of DefaultSelenium.GetAllWindowTitles()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAttributeFromAllWindowsString">
+            <summary>Sets the shim of DefaultSelenium.GetAttributeFromAllWindows(String attributeName)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetAttributeString">
+            <summary>Sets the shim of DefaultSelenium.GetAttribute(String attributeLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetBodyText">
+            <summary>Sets the shim of DefaultSelenium.GetBodyText()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetCSSCountString">
+            <summary>Sets the shim of DefaultSelenium.GetCSSCount(String cssLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetConfirmation">
+            <summary>Sets the shim of DefaultSelenium.GetConfirmation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetCookie">
+            <summary>Sets the shim of DefaultSelenium.GetCookie()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetCookieByNameString">
+            <summary>Sets the shim of DefaultSelenium.GetCookieByName(String name)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetCursorPositionString">
+            <summary>Sets the shim of DefaultSelenium.GetCursorPosition(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetElementHeightString">
+            <summary>Sets the shim of DefaultSelenium.GetElementHeight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetElementIndexString">
+            <summary>Sets the shim of DefaultSelenium.GetElementIndex(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetElementPositionLeftString">
+            <summary>Sets the shim of DefaultSelenium.GetElementPositionLeft(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetElementPositionTopString">
+            <summary>Sets the shim of DefaultSelenium.GetElementPositionTop(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetElementWidthString">
+            <summary>Sets the shim of DefaultSelenium.GetElementWidth(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetEvalString">
+            <summary>Sets the shim of DefaultSelenium.GetEval(String script)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetExpressionString">
+            <summary>Sets the shim of DefaultSelenium.GetExpression(String expression)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetHtmlSource">
+            <summary>Sets the shim of DefaultSelenium.GetHtmlSource()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetLocation">
+            <summary>Sets the shim of DefaultSelenium.GetLocation()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetMouseSpeed">
+            <summary>Sets the shim of DefaultSelenium.GetMouseSpeed()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetPrompt">
+            <summary>Sets the shim of DefaultSelenium.GetPrompt()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectOptionsString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectOptions(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedIdString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedId(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedIdsString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedIds(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedIndexString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedIndex(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedIndexesString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedIndexes(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedLabelString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedLabel(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedLabelsString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedLabels(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedValueString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedValue(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSelectedValuesString">
+            <summary>Sets the shim of DefaultSelenium.GetSelectedValues(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetSpeed">
+            <summary>Sets the shim of DefaultSelenium.GetSpeed()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetTableString">
+            <summary>Sets the shim of DefaultSelenium.GetTable(String tableCellAddress)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetTextString">
+            <summary>Sets the shim of DefaultSelenium.GetText(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetTitle">
+            <summary>Sets the shim of DefaultSelenium.GetTitle()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetValueString">
+            <summary>Sets the shim of DefaultSelenium.GetValue(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetWhetherThisFrameMatchFrameExpressionStringString">
+            <summary>Sets the shim of DefaultSelenium.GetWhetherThisFrameMatchFrameExpression(String currentFrameString, String target)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetWhetherThisWindowMatchWindowExpressionStringString">
+            <summary>Sets the shim of DefaultSelenium.GetWhetherThisWindowMatchWindowExpression(String currentWindowString, String target)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GetXpathCountString">
+            <summary>Sets the shim of DefaultSelenium.GetXpathCount(String xpath)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.GoBack">
+            <summary>Sets the shim of DefaultSelenium.GoBack()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.HighlightString">
+            <summary>Sets the shim of DefaultSelenium.Highlight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IgnoreAttributesWithoutValueString">
+            <summary>Sets the shim of DefaultSelenium.IgnoreAttributesWithoutValue(String ignore)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsAlertPresent">
+            <summary>Sets the shim of DefaultSelenium.IsAlertPresent()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsCheckedString">
+            <summary>Sets the shim of DefaultSelenium.IsChecked(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsConfirmationPresent">
+            <summary>Sets the shim of DefaultSelenium.IsConfirmationPresent()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsCookiePresentString">
+            <summary>Sets the shim of DefaultSelenium.IsCookiePresent(String name)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsEditableString">
+            <summary>Sets the shim of DefaultSelenium.IsEditable(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsElementPresentString">
+            <summary>Sets the shim of DefaultSelenium.IsElementPresent(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsOrderedStringString">
+            <summary>Sets the shim of DefaultSelenium.IsOrdered(String locator1, String locator2)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsPromptPresent">
+            <summary>Sets the shim of DefaultSelenium.IsPromptPresent()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsSomethingSelectedString">
+            <summary>Sets the shim of DefaultSelenium.IsSomethingSelected(String selectLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsTextPresentString">
+            <summary>Sets the shim of DefaultSelenium.IsTextPresent(String pattern)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.IsVisibleString">
+            <summary>Sets the shim of DefaultSelenium.IsVisible(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.KeyDownNativeString">
+            <summary>Sets the shim of DefaultSelenium.KeyDownNative(String keycode)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.KeyDownStringString">
+            <summary>Sets the shim of DefaultSelenium.KeyDown(String locator, String keySequence)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.KeyPressNativeString">
+            <summary>Sets the shim of DefaultSelenium.KeyPressNative(String keycode)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.KeyPressStringString">
+            <summary>Sets the shim of DefaultSelenium.KeyPress(String locator, String keySequence)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.KeyUpNativeString">
+            <summary>Sets the shim of DefaultSelenium.KeyUpNative(String keycode)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.KeyUpStringString">
+            <summary>Sets the shim of DefaultSelenium.KeyUp(String locator, String keySequence)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MetaKeyDown">
+            <summary>Sets the shim of DefaultSelenium.MetaKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MetaKeyUp">
+            <summary>Sets the shim of DefaultSelenium.MetaKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseDownAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseDownAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseDownRightAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseDownRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseDownRightString">
+            <summary>Sets the shim of DefaultSelenium.MouseDownRight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseDownString">
+            <summary>Sets the shim of DefaultSelenium.MouseDown(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseMoveAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseMoveAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseMoveString">
+            <summary>Sets the shim of DefaultSelenium.MouseMove(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseOutString">
+            <summary>Sets the shim of DefaultSelenium.MouseOut(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseOverString">
+            <summary>Sets the shim of DefaultSelenium.MouseOver(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseUpAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseUpAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseUpRightAtStringString">
+            <summary>Sets the shim of DefaultSelenium.MouseUpRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseUpRightString">
+            <summary>Sets the shim of DefaultSelenium.MouseUpRight(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.MouseUpString">
+            <summary>Sets the shim of DefaultSelenium.MouseUp(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.OpenString">
+            <summary>Sets the shim of DefaultSelenium.Open(String url)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.OpenWindowStringString">
+            <summary>Sets the shim of DefaultSelenium.OpenWindow(String url, String windowID)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ProcessorGet">
+            <summary>Sets the shim of DefaultSelenium.get_Processor()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.Refresh">
+            <summary>Sets the shim of DefaultSelenium.Refresh()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.RemoveAllSelectionsString">
+            <summary>Sets the shim of DefaultSelenium.RemoveAllSelections(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.RemoveScriptString">
+            <summary>Sets the shim of DefaultSelenium.RemoveScript(String scriptTagId)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.RemoveSelectionStringString">
+            <summary>Sets the shim of DefaultSelenium.RemoveSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.RetrieveLastRemoteControlLogs">
+            <summary>Sets the shim of DefaultSelenium.RetrieveLastRemoteControlLogs()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.RollupStringString">
+            <summary>Sets the shim of DefaultSelenium.Rollup(String rollupName, String kwargs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.RunScriptString">
+            <summary>Sets the shim of DefaultSelenium.RunScript(String script)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SelectFrameString">
+            <summary>Sets the shim of DefaultSelenium.SelectFrame(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SelectPopUpString">
+            <summary>Sets the shim of DefaultSelenium.SelectPopUp(String windowID)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SelectStringString">
+            <summary>Sets the shim of DefaultSelenium.Select(String selectLocator, String optionLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SelectWindowString">
+            <summary>Sets the shim of DefaultSelenium.SelectWindow(String windowID)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetBrowserLogLevelString">
+            <summary>Sets the shim of DefaultSelenium.SetBrowserLogLevel(String logLevel)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetContextString">
+            <summary>Sets the shim of DefaultSelenium.SetContext(String context)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetCursorPositionStringString">
+            <summary>Sets the shim of DefaultSelenium.SetCursorPosition(String locator, String position)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetExtensionJsString">
+            <summary>Sets the shim of DefaultSelenium.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetMouseSpeedString">
+            <summary>Sets the shim of DefaultSelenium.SetMouseSpeed(String pixels)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetSpeedString">
+            <summary>Sets the shim of DefaultSelenium.SetSpeed(String value)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SetTimeoutString">
+            <summary>Sets the shim of DefaultSelenium.SetTimeout(String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ShiftKeyDown">
+            <summary>Sets the shim of DefaultSelenium.ShiftKeyDown()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ShiftKeyUp">
+            <summary>Sets the shim of DefaultSelenium.ShiftKeyUp()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.ShutDownSeleniumServer">
+            <summary>Sets the shim of DefaultSelenium.ShutDownSeleniumServer()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.Start">
+            <summary>Sets the shim of DefaultSelenium.Start()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.StartString">
+            <summary>Sets the shim of DefaultSelenium.Start(String optionsString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.Stop">
+            <summary>Sets the shim of DefaultSelenium.Stop()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.SubmitString">
+            <summary>Sets the shim of DefaultSelenium.Submit(String formLocator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.TypeKeysStringString">
+            <summary>Sets the shim of DefaultSelenium.TypeKeys(String locator, String value)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.TypeStringString">
+            <summary>Sets the shim of DefaultSelenium.Type(String locator, String value)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.UncheckString">
+            <summary>Sets the shim of DefaultSelenium.Uncheck(String locator)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.UseXpathLibraryString">
+            <summary>Sets the shim of DefaultSelenium.UseXpathLibrary(String libraryName)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.WaitForConditionStringString">
+            <summary>Sets the shim of DefaultSelenium.WaitForCondition(String script, String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.WaitForFrameToLoadStringString">
+            <summary>Sets the shim of DefaultSelenium.WaitForFrameToLoad(String frameAddress, String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.WaitForPageToLoadString">
+            <summary>Sets the shim of DefaultSelenium.WaitForPageToLoad(String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.WaitForPopUpStringString">
+            <summary>Sets the shim of DefaultSelenium.WaitForPopUp(String windowID, String timeout)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.WindowFocus">
+            <summary>Sets the shim of DefaultSelenium.WindowFocus()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimDefaultSelenium.AllInstances.WindowMaximize">
+            <summary>Sets the shim of DefaultSelenium.WindowMaximize()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimHttpCommandProcessor">
+            <summary>Shim type of Selenium.HttpCommandProcessor</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimHttpCommandProcessor.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimHttpCommandProcessor.#ctor(Selenium.HttpCommandProcessor)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimHttpCommandProcessor.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimHttpCommandProcessor.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimHttpCommandProcessor.Bind(Selenium.ICommandProcessor)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.BuildCommandPostDataString">
+            <summary>Sets the shim of HttpCommandProcessor.BuildCommandPostData(String commandString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.ConstructorStringInt32StringString">
+            <summary>Sets the shim of HttpCommandProcessor.HttpCommandProcessor(String serverHost, Int32 serverPort, String browserStartCommand, String browserURL)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.ConstructorStringStringString">
+            <summary>Sets the shim of HttpCommandProcessor.HttpCommandProcessor(String serverURL, String browserStartCommand, String browserURL)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.CreateWebRequestIRemoteCommand">
+            <summary>Sets the shim of HttpCommandProcessor.CreateWebRequest(IRemoteCommand command)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.DoCommandStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.DoCommand(String command, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.GetBooleanArrayStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetBooleanArray(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.GetBooleanStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetBoolean(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.GetNumberArrayStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetNumberArray(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.GetNumberStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetNumber(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.GetStringArrayStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetStringArray(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.GetStringStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetString(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.ReadResponseHttpWebResponse">
+            <summary>Sets the shim of HttpCommandProcessor.ReadResponse(HttpWebResponse response)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.SetExtensionJsString">
+            <summary>Sets the shim of HttpCommandProcessor.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.Start">
+            <summary>Sets the shim of HttpCommandProcessor.Start()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.StartObject">
+            <summary>Sets the shim of HttpCommandProcessor.Start(Object optionsObject)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.StartString">
+            <summary>Sets the shim of HttpCommandProcessor.Start(String optionString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.Stop">
+            <summary>Sets the shim of HttpCommandProcessor.Stop()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.UrlGet">
+            <summary>Sets the shim of HttpCommandProcessor.get_Url()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.parseCSVString">
+            <summary>Sets the shim of HttpCommandProcessor.parseCSV(String input)</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.BuildCommandPostDataString">
+            <summary>Sets the shim of HttpCommandProcessor.BuildCommandPostData(String commandString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.CreateWebRequestIRemoteCommand">
+            <summary>Sets the shim of HttpCommandProcessor.CreateWebRequest(IRemoteCommand command)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.DoCommandStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.DoCommand(String command, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.GetBooleanArrayStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetBooleanArray(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.GetBooleanStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetBoolean(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.GetNumberArrayStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetNumberArray(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.GetNumberStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetNumber(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.GetStringArrayStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetStringArray(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.GetStringStringStringArray">
+            <summary>Sets the shim of HttpCommandProcessor.GetString(String commandName, String[] args)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.ReadResponseHttpWebResponse">
+            <summary>Sets the shim of HttpCommandProcessor.ReadResponse(HttpWebResponse response)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.SetExtensionJsString">
+            <summary>Sets the shim of HttpCommandProcessor.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.Start">
+            <summary>Sets the shim of HttpCommandProcessor.Start()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.StartObject">
+            <summary>Sets the shim of HttpCommandProcessor.Start(Object optionsObject)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.StartString">
+            <summary>Sets the shim of HttpCommandProcessor.Start(String optionString)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.Stop">
+            <summary>Sets the shim of HttpCommandProcessor.Stop()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimHttpCommandProcessor.AllInstances.UrlGet">
+            <summary>Sets the shim of HttpCommandProcessor.get_Url()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimSeleniumException">
+            <summary>Shim type of Selenium.SeleniumException</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimSeleniumException.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimSeleniumException.#ctor(Selenium.SeleniumException)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimSeleniumException.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimSeleniumException.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:Selenium.Fakes.ShimSeleniumException.Bind(System.Runtime.Serialization.ISerializable)">
+            <summary>Binds the members of the interface to the shim.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimSeleniumException.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimSeleniumException.Constructor">
+            <summary>Sets the shim of SeleniumException.SeleniumException()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimSeleniumException.ConstructorString">
+            <summary>Sets the shim of SeleniumException.SeleniumException(String message)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.ShimSeleniumException.ConstructorStringException">
+            <summary>Sets the shim of SeleniumException.SeleniumException(String message, Exception innerException)</summary>
+        </member>
+        <member name="T:Selenium.Fakes.ShimSeleniumException.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubDefaultRemoteCommand">
+            <summary>Stub type of Selenium.DefaultRemoteCommand</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubDefaultRemoteCommand.#ctor(System.String,System.String[])">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubDefaultRemoteCommand.InitializeStub">
+            <summary>Initializes a new instance of type StubDefaultRemoteCommand</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubDefaultRemoteCommand.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubDefaultRemoteCommand.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubDefaultRemoteCommand.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubDefaultSelenium">
+            <summary>Stub type of Selenium.DefaultSelenium</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubDefaultSelenium.#ctor(Selenium.ICommandProcessor)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubDefaultSelenium.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubDefaultSelenium.InitializeStub">
+            <summary>Initializes a new instance of type StubDefaultSelenium</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubDefaultSelenium.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubDefaultSelenium.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubDefaultSelenium.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubHttpCommandProcessor">
+            <summary>Stub type of Selenium.HttpCommandProcessor</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubHttpCommandProcessor.#ctor(System.String,System.String,System.String)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubHttpCommandProcessor.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubHttpCommandProcessor.CreateWebRequest(Selenium.IRemoteCommand)">
+            <summary>Sets the stub of HttpCommandProcessor.CreateWebRequest(IRemoteCommand command)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubHttpCommandProcessor.CreateWebRequestIRemoteCommand">
+            <summary>Sets the stub of HttpCommandProcessor.CreateWebRequest(IRemoteCommand command)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubHttpCommandProcessor.InitializeStub">
+            <summary>Initializes a new instance of type StubHttpCommandProcessor</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubHttpCommandProcessor.ReadResponse(System.Net.HttpWebResponse)">
+            <summary>Sets the stub of HttpCommandProcessor.ReadResponse(HttpWebResponse response)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubHttpCommandProcessor.ReadResponseHttpWebResponse">
+            <summary>Sets the stub of HttpCommandProcessor.ReadResponse(HttpWebResponse response)</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubHttpCommandProcessor.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubHttpCommandProcessor.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubHttpCommandProcessor.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubICommandProcessor">
+            <summary>Stub type of Selenium.ICommandProcessor</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.#ctor">
+            <summary>Initializes a new instance of type StubICommandProcessor</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.DoCommandStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.DoCommand(String command, String[] args)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.GetBooleanArrayStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.GetBooleanArray(String command, String[] args)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.GetBooleanStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.GetBoolean(String command, String[] args)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.GetNumberArrayStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.GetNumberArray(String command, String[] args)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.GetNumberStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.GetNumber(String command, String[] args)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.GetStringArrayStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.GetStringArray(String command, String[] args)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.GetStringStringStringArray">
+            <summary>Sets the stub of ICommandProcessor.GetString(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#DoCommand(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.DoCommand(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#GetBoolean(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.GetBoolean(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#GetBooleanArray(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.GetBooleanArray(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#GetNumber(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.GetNumber(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#GetNumberArray(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.GetNumberArray(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#GetString(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.GetString(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#GetStringArray(System.String,System.String[])">
+            <summary>Sets the stub of ICommandProcessor.GetStringArray(String command, String[] args)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#SetExtensionJs(System.String)">
+            <summary>Sets the stub of ICommandProcessor.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#Start">
+            <summary>Sets the stub of ICommandProcessor.Start()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#Start(System.Object)">
+            <summary>Sets the stub of ICommandProcessor.Start(Object optionsObject)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#Start(System.String)">
+            <summary>Sets the stub of ICommandProcessor.Start(String optionsString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubICommandProcessor.twsc::Selenium#ICommandProcessor#Stop">
+            <summary>Sets the stub of ICommandProcessor.Stop()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.SetExtensionJsString">
+            <summary>Sets the stub of ICommandProcessor.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.Start">
+            <summary>Sets the stub of ICommandProcessor.Start()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.StartObject">
+            <summary>Sets the stub of ICommandProcessor.Start(Object optionsObject)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.StartString">
+            <summary>Sets the stub of ICommandProcessor.Start(String optionsString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubICommandProcessor.Stop">
+            <summary>Sets the stub of ICommandProcessor.Stop()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubIRemoteCommand">
+            <summary>Stub type of Selenium.IRemoteCommand</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubIRemoteCommand.#ctor">
+            <summary>Initializes a new instance of type StubIRemoteCommand</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubIRemoteCommand.CommandStringGet">
+            <summary>Sets the stub of IRemoteCommand.get_CommandString()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubIRemoteCommand.twsc::Selenium#IRemoteCommand#CommandString">
+            <summary>Sets the stub of IRemoteCommand.get_CommandString()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubISelenium">
+            <summary>Stub type of Selenium.ISelenium</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.#ctor">
+            <summary>Initializes a new instance of type StubISelenium</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AddLocationStrategyStringString">
+            <summary>Sets the stub of ISelenium.AddLocationStrategy(String strategyName, String functionDefinition)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AddScriptStringString">
+            <summary>Sets the stub of ISelenium.AddScript(String scriptContent, String scriptTagId)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AddSelectionStringString">
+            <summary>Sets the stub of ISelenium.AddSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AllowNativeXpathString">
+            <summary>Sets the stub of ISelenium.AllowNativeXpath(String allow)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AltKeyDown">
+            <summary>Sets the stub of ISelenium.AltKeyDown()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AltKeyUp">
+            <summary>Sets the stub of ISelenium.AltKeyUp()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AnswerOnNextPromptString">
+            <summary>Sets the stub of ISelenium.AnswerOnNextPrompt(String answer)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AssignIdStringString">
+            <summary>Sets the stub of ISelenium.AssignId(String locator, String identifier)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.AttachFileStringString">
+            <summary>Sets the stub of ISelenium.AttachFile(String fieldLocator, String fileLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.CaptureEntirePageScreenshotStringString">
+            <summary>Sets the stub of ISelenium.CaptureEntirePageScreenshot(String filename, String kwargs)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.CaptureEntirePageScreenshotToStringString">
+            <summary>Sets the stub of ISelenium.CaptureEntirePageScreenshotToString(String kwargs)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.CaptureScreenshotString">
+            <summary>Sets the stub of ISelenium.CaptureScreenshot(String filename)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.CaptureScreenshotToString">
+            <summary>Sets the stub of ISelenium.CaptureScreenshotToString()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.CheckString">
+            <summary>Sets the stub of ISelenium.Check(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ChooseCancelOnNextConfirmation">
+            <summary>Sets the stub of ISelenium.ChooseCancelOnNextConfirmation()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ChooseOkOnNextConfirmation">
+            <summary>Sets the stub of ISelenium.ChooseOkOnNextConfirmation()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ClickAtStringString">
+            <summary>Sets the stub of ISelenium.ClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ClickString">
+            <summary>Sets the stub of ISelenium.Click(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.Close">
+            <summary>Sets the stub of ISelenium.Close()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ContextMenuAtStringString">
+            <summary>Sets the stub of ISelenium.ContextMenuAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ContextMenuString">
+            <summary>Sets the stub of ISelenium.ContextMenu(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ControlKeyDown">
+            <summary>Sets the stub of ISelenium.ControlKeyDown()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ControlKeyUp">
+            <summary>Sets the stub of ISelenium.ControlKeyUp()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.CreateCookieStringString">
+            <summary>Sets the stub of ISelenium.CreateCookie(String nameValuePair, String optionsString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DeleteAllVisibleCookies">
+            <summary>Sets the stub of ISelenium.DeleteAllVisibleCookies()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DeleteCookieStringString">
+            <summary>Sets the stub of ISelenium.DeleteCookie(String name, String optionsString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DeselectPopUp">
+            <summary>Sets the stub of ISelenium.DeselectPopUp()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DoubleClickAtStringString">
+            <summary>Sets the stub of ISelenium.DoubleClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DoubleClickString">
+            <summary>Sets the stub of ISelenium.DoubleClick(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DragAndDropStringString">
+            <summary>Sets the stub of ISelenium.DragAndDrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DragAndDropToObjectStringString">
+            <summary>Sets the stub of ISelenium.DragAndDropToObject(String locatorOfObjectToBeDragged, String locatorOfDragDestinationObject)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.DragdropStringString">
+            <summary>Sets the stub of ISelenium.Dragdrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.FireEventStringString">
+            <summary>Sets the stub of ISelenium.FireEvent(String locator, String eventName)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.FocusString">
+            <summary>Sets the stub of ISelenium.Focus(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAlert">
+            <summary>Sets the stub of ISelenium.GetAlert()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAllButtons">
+            <summary>Sets the stub of ISelenium.GetAllButtons()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAllFields">
+            <summary>Sets the stub of ISelenium.GetAllFields()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAllLinks">
+            <summary>Sets the stub of ISelenium.GetAllLinks()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAllWindowIds">
+            <summary>Sets the stub of ISelenium.GetAllWindowIds()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAllWindowNames">
+            <summary>Sets the stub of ISelenium.GetAllWindowNames()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAllWindowTitles">
+            <summary>Sets the stub of ISelenium.GetAllWindowTitles()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAttributeFromAllWindowsString">
+            <summary>Sets the stub of ISelenium.GetAttributeFromAllWindows(String attributeName)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetAttributeString">
+            <summary>Sets the stub of ISelenium.GetAttribute(String attributeLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetBodyText">
+            <summary>Sets the stub of ISelenium.GetBodyText()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetCSSCountString">
+            <summary>Sets the stub of ISelenium.GetCSSCount(String cssLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetConfirmation">
+            <summary>Sets the stub of ISelenium.GetConfirmation()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetCookie">
+            <summary>Sets the stub of ISelenium.GetCookie()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetCookieByNameString">
+            <summary>Sets the stub of ISelenium.GetCookieByName(String name)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetCursorPositionString">
+            <summary>Sets the stub of ISelenium.GetCursorPosition(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetElementHeightString">
+            <summary>Sets the stub of ISelenium.GetElementHeight(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetElementIndexString">
+            <summary>Sets the stub of ISelenium.GetElementIndex(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetElementPositionLeftString">
+            <summary>Sets the stub of ISelenium.GetElementPositionLeft(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetElementPositionTopString">
+            <summary>Sets the stub of ISelenium.GetElementPositionTop(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetElementWidthString">
+            <summary>Sets the stub of ISelenium.GetElementWidth(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetEvalString">
+            <summary>Sets the stub of ISelenium.GetEval(String script)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetExpressionString">
+            <summary>Sets the stub of ISelenium.GetExpression(String expression)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetHtmlSource">
+            <summary>Sets the stub of ISelenium.GetHtmlSource()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetLocation">
+            <summary>Sets the stub of ISelenium.GetLocation()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetMouseSpeed">
+            <summary>Sets the stub of ISelenium.GetMouseSpeed()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetPrompt">
+            <summary>Sets the stub of ISelenium.GetPrompt()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectOptionsString">
+            <summary>Sets the stub of ISelenium.GetSelectOptions(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedIdString">
+            <summary>Sets the stub of ISelenium.GetSelectedId(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedIdsString">
+            <summary>Sets the stub of ISelenium.GetSelectedIds(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedIndexString">
+            <summary>Sets the stub of ISelenium.GetSelectedIndex(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedIndexesString">
+            <summary>Sets the stub of ISelenium.GetSelectedIndexes(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedLabelString">
+            <summary>Sets the stub of ISelenium.GetSelectedLabel(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedLabelsString">
+            <summary>Sets the stub of ISelenium.GetSelectedLabels(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedValueString">
+            <summary>Sets the stub of ISelenium.GetSelectedValue(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSelectedValuesString">
+            <summary>Sets the stub of ISelenium.GetSelectedValues(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetSpeed">
+            <summary>Sets the stub of ISelenium.GetSpeed()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetTableString">
+            <summary>Sets the stub of ISelenium.GetTable(String tableCellAddress)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetTextString">
+            <summary>Sets the stub of ISelenium.GetText(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetTitle">
+            <summary>Sets the stub of ISelenium.GetTitle()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetValueString">
+            <summary>Sets the stub of ISelenium.GetValue(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetWhetherThisFrameMatchFrameExpressionStringString">
+            <summary>Sets the stub of ISelenium.GetWhetherThisFrameMatchFrameExpression(String currentFrameString, String target)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetWhetherThisWindowMatchWindowExpressionStringString">
+            <summary>Sets the stub of ISelenium.GetWhetherThisWindowMatchWindowExpression(String currentWindowString, String target)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GetXpathCountString">
+            <summary>Sets the stub of ISelenium.GetXpathCount(String xpath)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.GoBack">
+            <summary>Sets the stub of ISelenium.GoBack()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.HighlightString">
+            <summary>Sets the stub of ISelenium.Highlight(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IgnoreAttributesWithoutValueString">
+            <summary>Sets the stub of ISelenium.IgnoreAttributesWithoutValue(String ignore)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsAlertPresent">
+            <summary>Sets the stub of ISelenium.IsAlertPresent()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsCheckedString">
+            <summary>Sets the stub of ISelenium.IsChecked(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsConfirmationPresent">
+            <summary>Sets the stub of ISelenium.IsConfirmationPresent()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsCookiePresentString">
+            <summary>Sets the stub of ISelenium.IsCookiePresent(String name)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsEditableString">
+            <summary>Sets the stub of ISelenium.IsEditable(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsElementPresentString">
+            <summary>Sets the stub of ISelenium.IsElementPresent(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsOrderedStringString">
+            <summary>Sets the stub of ISelenium.IsOrdered(String locator1, String locator2)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsPromptPresent">
+            <summary>Sets the stub of ISelenium.IsPromptPresent()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsSomethingSelectedString">
+            <summary>Sets the stub of ISelenium.IsSomethingSelected(String selectLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsTextPresentString">
+            <summary>Sets the stub of ISelenium.IsTextPresent(String pattern)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.IsVisibleString">
+            <summary>Sets the stub of ISelenium.IsVisible(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.KeyDownNativeString">
+            <summary>Sets the stub of ISelenium.KeyDownNative(String keycode)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.KeyDownStringString">
+            <summary>Sets the stub of ISelenium.KeyDown(String locator, String keySequence)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.KeyPressNativeString">
+            <summary>Sets the stub of ISelenium.KeyPressNative(String keycode)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.KeyPressStringString">
+            <summary>Sets the stub of ISelenium.KeyPress(String locator, String keySequence)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.KeyUpNativeString">
+            <summary>Sets the stub of ISelenium.KeyUpNative(String keycode)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.KeyUpStringString">
+            <summary>Sets the stub of ISelenium.KeyUp(String locator, String keySequence)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MetaKeyDown">
+            <summary>Sets the stub of ISelenium.MetaKeyDown()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MetaKeyUp">
+            <summary>Sets the stub of ISelenium.MetaKeyUp()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseDownAtStringString">
+            <summary>Sets the stub of ISelenium.MouseDownAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseDownRightAtStringString">
+            <summary>Sets the stub of ISelenium.MouseDownRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseDownRightString">
+            <summary>Sets the stub of ISelenium.MouseDownRight(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseDownString">
+            <summary>Sets the stub of ISelenium.MouseDown(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseMoveAtStringString">
+            <summary>Sets the stub of ISelenium.MouseMoveAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseMoveString">
+            <summary>Sets the stub of ISelenium.MouseMove(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseOutString">
+            <summary>Sets the stub of ISelenium.MouseOut(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseOverString">
+            <summary>Sets the stub of ISelenium.MouseOver(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseUpAtStringString">
+            <summary>Sets the stub of ISelenium.MouseUpAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseUpRightAtStringString">
+            <summary>Sets the stub of ISelenium.MouseUpRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseUpRightString">
+            <summary>Sets the stub of ISelenium.MouseUpRight(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.MouseUpString">
+            <summary>Sets the stub of ISelenium.MouseUp(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.OpenString">
+            <summary>Sets the stub of ISelenium.Open(String url)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.OpenWindowStringString">
+            <summary>Sets the stub of ISelenium.OpenWindow(String url, String windowID)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.Refresh">
+            <summary>Sets the stub of ISelenium.Refresh()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.RemoveAllSelectionsString">
+            <summary>Sets the stub of ISelenium.RemoveAllSelections(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.RemoveScriptString">
+            <summary>Sets the stub of ISelenium.RemoveScript(String scriptTagId)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.RemoveSelectionStringString">
+            <summary>Sets the stub of ISelenium.RemoveSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.RetrieveLastRemoteControlLogs">
+            <summary>Sets the stub of ISelenium.RetrieveLastRemoteControlLogs()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.RollupStringString">
+            <summary>Sets the stub of ISelenium.Rollup(String rollupName, String kwargs)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.RunScriptString">
+            <summary>Sets the stub of ISelenium.RunScript(String script)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SelectFrameString">
+            <summary>Sets the stub of ISelenium.SelectFrame(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SelectPopUpString">
+            <summary>Sets the stub of ISelenium.SelectPopUp(String windowID)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SelectStringString">
+            <summary>Sets the stub of ISelenium.Select(String selectLocator, String optionLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SelectWindowString">
+            <summary>Sets the stub of ISelenium.SelectWindow(String windowID)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AddLocationStrategy(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.AddLocationStrategy(String strategyName, String functionDefinition)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AddScript(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.AddScript(String scriptContent, String scriptTagId)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AddSelection(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.AddSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AllowNativeXpath(System.String)">
+            <summary>Sets the stub of ISelenium.AllowNativeXpath(String allow)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AltKeyDown">
+            <summary>Sets the stub of ISelenium.AltKeyDown()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AltKeyUp">
+            <summary>Sets the stub of ISelenium.AltKeyUp()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AnswerOnNextPrompt(System.String)">
+            <summary>Sets the stub of ISelenium.AnswerOnNextPrompt(String answer)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AssignId(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.AssignId(String locator, String identifier)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#AttachFile(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.AttachFile(String fieldLocator, String fileLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#CaptureEntirePageScreenshot(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.CaptureEntirePageScreenshot(String filename, String kwargs)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#CaptureEntirePageScreenshotToString(System.String)">
+            <summary>Sets the stub of ISelenium.CaptureEntirePageScreenshotToString(String kwargs)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#CaptureScreenshot(System.String)">
+            <summary>Sets the stub of ISelenium.CaptureScreenshot(String filename)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#CaptureScreenshotToString">
+            <summary>Sets the stub of ISelenium.CaptureScreenshotToString()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Check(System.String)">
+            <summary>Sets the stub of ISelenium.Check(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ChooseCancelOnNextConfirmation">
+            <summary>Sets the stub of ISelenium.ChooseCancelOnNextConfirmation()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ChooseOkOnNextConfirmation">
+            <summary>Sets the stub of ISelenium.ChooseOkOnNextConfirmation()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Click(System.String)">
+            <summary>Sets the stub of ISelenium.Click(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ClickAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.ClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Close">
+            <summary>Sets the stub of ISelenium.Close()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ContextMenu(System.String)">
+            <summary>Sets the stub of ISelenium.ContextMenu(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ContextMenuAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.ContextMenuAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ControlKeyDown">
+            <summary>Sets the stub of ISelenium.ControlKeyDown()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ControlKeyUp">
+            <summary>Sets the stub of ISelenium.ControlKeyUp()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#CreateCookie(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.CreateCookie(String nameValuePair, String optionsString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DeleteAllVisibleCookies">
+            <summary>Sets the stub of ISelenium.DeleteAllVisibleCookies()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DeleteCookie(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.DeleteCookie(String name, String optionsString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DeselectPopUp">
+            <summary>Sets the stub of ISelenium.DeselectPopUp()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DoubleClick(System.String)">
+            <summary>Sets the stub of ISelenium.DoubleClick(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DoubleClickAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.DoubleClickAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DragAndDrop(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.DragAndDrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#DragAndDropToObject(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.DragAndDropToObject(String locatorOfObjectToBeDragged, String locatorOfDragDestinationObject)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Dragdrop(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.Dragdrop(String locator, String movementsString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#FireEvent(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.FireEvent(String locator, String eventName)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Focus(System.String)">
+            <summary>Sets the stub of ISelenium.Focus(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAlert">
+            <summary>Sets the stub of ISelenium.GetAlert()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAllButtons">
+            <summary>Sets the stub of ISelenium.GetAllButtons()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAllFields">
+            <summary>Sets the stub of ISelenium.GetAllFields()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAllLinks">
+            <summary>Sets the stub of ISelenium.GetAllLinks()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAllWindowIds">
+            <summary>Sets the stub of ISelenium.GetAllWindowIds()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAllWindowNames">
+            <summary>Sets the stub of ISelenium.GetAllWindowNames()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAllWindowTitles">
+            <summary>Sets the stub of ISelenium.GetAllWindowTitles()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAttribute(System.String)">
+            <summary>Sets the stub of ISelenium.GetAttribute(String attributeLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetAttributeFromAllWindows(System.String)">
+            <summary>Sets the stub of ISelenium.GetAttributeFromAllWindows(String attributeName)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetBodyText">
+            <summary>Sets the stub of ISelenium.GetBodyText()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetCSSCount(System.String)">
+            <summary>Sets the stub of ISelenium.GetCSSCount(String cssLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetConfirmation">
+            <summary>Sets the stub of ISelenium.GetConfirmation()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetCookie">
+            <summary>Sets the stub of ISelenium.GetCookie()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetCookieByName(System.String)">
+            <summary>Sets the stub of ISelenium.GetCookieByName(String name)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetCursorPosition(System.String)">
+            <summary>Sets the stub of ISelenium.GetCursorPosition(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetElementHeight(System.String)">
+            <summary>Sets the stub of ISelenium.GetElementHeight(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetElementIndex(System.String)">
+            <summary>Sets the stub of ISelenium.GetElementIndex(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetElementPositionLeft(System.String)">
+            <summary>Sets the stub of ISelenium.GetElementPositionLeft(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetElementPositionTop(System.String)">
+            <summary>Sets the stub of ISelenium.GetElementPositionTop(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetElementWidth(System.String)">
+            <summary>Sets the stub of ISelenium.GetElementWidth(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetEval(System.String)">
+            <summary>Sets the stub of ISelenium.GetEval(String script)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetExpression(System.String)">
+            <summary>Sets the stub of ISelenium.GetExpression(String expression)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetHtmlSource">
+            <summary>Sets the stub of ISelenium.GetHtmlSource()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetLocation">
+            <summary>Sets the stub of ISelenium.GetLocation()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetMouseSpeed">
+            <summary>Sets the stub of ISelenium.GetMouseSpeed()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetPrompt">
+            <summary>Sets the stub of ISelenium.GetPrompt()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectOptions(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectOptions(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedId(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedId(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedIds(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedIds(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedIndex(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedIndex(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedIndexes(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedIndexes(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedLabel(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedLabel(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedLabels(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedLabels(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedValue(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedValue(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSelectedValues(System.String)">
+            <summary>Sets the stub of ISelenium.GetSelectedValues(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetSpeed">
+            <summary>Sets the stub of ISelenium.GetSpeed()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetTable(System.String)">
+            <summary>Sets the stub of ISelenium.GetTable(String tableCellAddress)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetText(System.String)">
+            <summary>Sets the stub of ISelenium.GetText(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetTitle">
+            <summary>Sets the stub of ISelenium.GetTitle()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetValue(System.String)">
+            <summary>Sets the stub of ISelenium.GetValue(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetWhetherThisFrameMatchFrameExpression(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.GetWhetherThisFrameMatchFrameExpression(String currentFrameString, String target)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetWhetherThisWindowMatchWindowExpression(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.GetWhetherThisWindowMatchWindowExpression(String currentWindowString, String target)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GetXpathCount(System.String)">
+            <summary>Sets the stub of ISelenium.GetXpathCount(String xpath)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#GoBack">
+            <summary>Sets the stub of ISelenium.GoBack()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Highlight(System.String)">
+            <summary>Sets the stub of ISelenium.Highlight(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IgnoreAttributesWithoutValue(System.String)">
+            <summary>Sets the stub of ISelenium.IgnoreAttributesWithoutValue(String ignore)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsAlertPresent">
+            <summary>Sets the stub of ISelenium.IsAlertPresent()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsChecked(System.String)">
+            <summary>Sets the stub of ISelenium.IsChecked(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsConfirmationPresent">
+            <summary>Sets the stub of ISelenium.IsConfirmationPresent()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsCookiePresent(System.String)">
+            <summary>Sets the stub of ISelenium.IsCookiePresent(String name)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsEditable(System.String)">
+            <summary>Sets the stub of ISelenium.IsEditable(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsElementPresent(System.String)">
+            <summary>Sets the stub of ISelenium.IsElementPresent(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsOrdered(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.IsOrdered(String locator1, String locator2)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsPromptPresent">
+            <summary>Sets the stub of ISelenium.IsPromptPresent()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsSomethingSelected(System.String)">
+            <summary>Sets the stub of ISelenium.IsSomethingSelected(String selectLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsTextPresent(System.String)">
+            <summary>Sets the stub of ISelenium.IsTextPresent(String pattern)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#IsVisible(System.String)">
+            <summary>Sets the stub of ISelenium.IsVisible(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#KeyDown(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.KeyDown(String locator, String keySequence)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#KeyDownNative(System.String)">
+            <summary>Sets the stub of ISelenium.KeyDownNative(String keycode)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#KeyPress(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.KeyPress(String locator, String keySequence)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#KeyPressNative(System.String)">
+            <summary>Sets the stub of ISelenium.KeyPressNative(String keycode)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#KeyUp(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.KeyUp(String locator, String keySequence)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#KeyUpNative(System.String)">
+            <summary>Sets the stub of ISelenium.KeyUpNative(String keycode)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MetaKeyDown">
+            <summary>Sets the stub of ISelenium.MetaKeyDown()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MetaKeyUp">
+            <summary>Sets the stub of ISelenium.MetaKeyUp()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseDown(System.String)">
+            <summary>Sets the stub of ISelenium.MouseDown(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseDownAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.MouseDownAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseDownRight(System.String)">
+            <summary>Sets the stub of ISelenium.MouseDownRight(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseDownRightAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.MouseDownRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseMove(System.String)">
+            <summary>Sets the stub of ISelenium.MouseMove(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseMoveAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.MouseMoveAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseOut(System.String)">
+            <summary>Sets the stub of ISelenium.MouseOut(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseOver(System.String)">
+            <summary>Sets the stub of ISelenium.MouseOver(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseUp(System.String)">
+            <summary>Sets the stub of ISelenium.MouseUp(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseUpAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.MouseUpAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseUpRight(System.String)">
+            <summary>Sets the stub of ISelenium.MouseUpRight(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#MouseUpRightAt(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.MouseUpRightAt(String locator, String coordString)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Open(System.String)">
+            <summary>Sets the stub of ISelenium.Open(String url)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#OpenWindow(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.OpenWindow(String url, String windowID)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Refresh">
+            <summary>Sets the stub of ISelenium.Refresh()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#RemoveAllSelections(System.String)">
+            <summary>Sets the stub of ISelenium.RemoveAllSelections(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#RemoveScript(System.String)">
+            <summary>Sets the stub of ISelenium.RemoveScript(String scriptTagId)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#RemoveSelection(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.RemoveSelection(String locator, String optionLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#RetrieveLastRemoteControlLogs">
+            <summary>Sets the stub of ISelenium.RetrieveLastRemoteControlLogs()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Rollup(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.Rollup(String rollupName, String kwargs)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#RunScript(System.String)">
+            <summary>Sets the stub of ISelenium.RunScript(String script)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Select(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.Select(String selectLocator, String optionLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SelectFrame(System.String)">
+            <summary>Sets the stub of ISelenium.SelectFrame(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SelectPopUp(System.String)">
+            <summary>Sets the stub of ISelenium.SelectPopUp(String windowID)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SelectWindow(System.String)">
+            <summary>Sets the stub of ISelenium.SelectWindow(String windowID)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetBrowserLogLevel(System.String)">
+            <summary>Sets the stub of ISelenium.SetBrowserLogLevel(String logLevel)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetContext(System.String)">
+            <summary>Sets the stub of ISelenium.SetContext(String context)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetCursorPosition(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.SetCursorPosition(String locator, String position)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetExtensionJs(System.String)">
+            <summary>Sets the stub of ISelenium.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetMouseSpeed(System.String)">
+            <summary>Sets the stub of ISelenium.SetMouseSpeed(String pixels)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetSpeed(System.String)">
+            <summary>Sets the stub of ISelenium.SetSpeed(String value)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#SetTimeout(System.String)">
+            <summary>Sets the stub of ISelenium.SetTimeout(String timeout)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ShiftKeyDown">
+            <summary>Sets the stub of ISelenium.ShiftKeyDown()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ShiftKeyUp">
+            <summary>Sets the stub of ISelenium.ShiftKeyUp()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#ShutDownSeleniumServer">
+            <summary>Sets the stub of ISelenium.ShutDownSeleniumServer()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Start">
+            <summary>Sets the stub of ISelenium.Start()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Stop">
+            <summary>Sets the stub of ISelenium.Stop()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Submit(System.String)">
+            <summary>Sets the stub of ISelenium.Submit(String formLocator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Type(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.Type(String locator, String value)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#TypeKeys(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.TypeKeys(String locator, String value)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#Uncheck(System.String)">
+            <summary>Sets the stub of ISelenium.Uncheck(String locator)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#UseXpathLibrary(System.String)">
+            <summary>Sets the stub of ISelenium.UseXpathLibrary(String libraryName)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#WaitForCondition(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.WaitForCondition(String script, String timeout)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#WaitForFrameToLoad(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.WaitForFrameToLoad(String frameAddress, String timeout)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#WaitForPageToLoad(System.String)">
+            <summary>Sets the stub of ISelenium.WaitForPageToLoad(String timeout)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#WaitForPopUp(System.String,System.String)">
+            <summary>Sets the stub of ISelenium.WaitForPopUp(String windowID, String timeout)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#WindowFocus">
+            <summary>Sets the stub of ISelenium.WindowFocus()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubISelenium.twsc::Selenium#ISelenium#WindowMaximize">
+            <summary>Sets the stub of ISelenium.WindowMaximize()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetBrowserLogLevelString">
+            <summary>Sets the stub of ISelenium.SetBrowserLogLevel(String logLevel)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetContextString">
+            <summary>Sets the stub of ISelenium.SetContext(String context)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetCursorPositionStringString">
+            <summary>Sets the stub of ISelenium.SetCursorPosition(String locator, String position)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetExtensionJsString">
+            <summary>Sets the stub of ISelenium.SetExtensionJs(String extensionJs)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetMouseSpeedString">
+            <summary>Sets the stub of ISelenium.SetMouseSpeed(String pixels)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetSpeedString">
+            <summary>Sets the stub of ISelenium.SetSpeed(String value)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SetTimeoutString">
+            <summary>Sets the stub of ISelenium.SetTimeout(String timeout)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ShiftKeyDown">
+            <summary>Sets the stub of ISelenium.ShiftKeyDown()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ShiftKeyUp">
+            <summary>Sets the stub of ISelenium.ShiftKeyUp()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.ShutDownSeleniumServer">
+            <summary>Sets the stub of ISelenium.ShutDownSeleniumServer()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.Start">
+            <summary>Sets the stub of ISelenium.Start()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.Stop">
+            <summary>Sets the stub of ISelenium.Stop()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.SubmitString">
+            <summary>Sets the stub of ISelenium.Submit(String formLocator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.TypeKeysStringString">
+            <summary>Sets the stub of ISelenium.TypeKeys(String locator, String value)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.TypeStringString">
+            <summary>Sets the stub of ISelenium.Type(String locator, String value)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.UncheckString">
+            <summary>Sets the stub of ISelenium.Uncheck(String locator)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.UseXpathLibraryString">
+            <summary>Sets the stub of ISelenium.UseXpathLibrary(String libraryName)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.WaitForConditionStringString">
+            <summary>Sets the stub of ISelenium.WaitForCondition(String script, String timeout)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.WaitForFrameToLoadStringString">
+            <summary>Sets the stub of ISelenium.WaitForFrameToLoad(String frameAddress, String timeout)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.WaitForPageToLoadString">
+            <summary>Sets the stub of ISelenium.WaitForPageToLoad(String timeout)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.WaitForPopUpStringString">
+            <summary>Sets the stub of ISelenium.WaitForPopUp(String windowID, String timeout)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.WindowFocus">
+            <summary>Sets the stub of ISelenium.WindowFocus()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubISelenium.WindowMaximize">
+            <summary>Sets the stub of ISelenium.WindowMaximize()</summary>
+        </member>
+        <member name="T:Selenium.Fakes.StubSeleniumException">
+            <summary>Stub type of Selenium.SeleniumException</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.#ctor(System.String)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.AttachBackingFieldToHelpLink">
+            <summary>Attaches delegates to emulate StubSeleniumException.HelpLink as a property with a backing field.</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.AttachBackingFieldToSource">
+            <summary>Attaches delegates to emulate StubSeleniumException.Source as a property with a backing field.</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.DataGet">
+            <summary>Sets the stub of Exception.get_Data()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.GetBaseException">
+            <summary>Sets the stub of Exception.GetBaseException()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.GetBaseException01">
+            <summary>Sets the stub of Exception.GetBaseException()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Sets the stub of Exception.GetObjectData(SerializationInfo info, StreamingContext context)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.GetObjectDataSerializationInfoStreamingContext">
+            <summary>Sets the stub of Exception.GetObjectData(SerializationInfo info, StreamingContext context)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.HelpLinkGet">
+            <summary>Sets the stub of Exception.get_HelpLink()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.HelpLinkSetString">
+            <summary>Sets the stub of Exception.set_HelpLink(String value)</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.InitializeStub">
+            <summary>Initializes a new instance of type StubSeleniumException</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.MessageGet">
+            <summary>Sets the stub of Exception.get_Message()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.SourceGet">
+            <summary>Sets the stub of Exception.get_Source()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.SourceSetString">
+            <summary>Sets the stub of Exception.set_Source(String value)</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.StackTraceGet">
+            <summary>Sets the stub of Exception.get_StackTrace()</summary>
+        </member>
+        <member name="M:Selenium.Fakes.StubSeleniumException.ToString">
+            <summary>Sets the stub of Exception.ToString()</summary>
+        </member>
+        <member name="F:Selenium.Fakes.StubSeleniumException.ToString01">
+            <summary>Sets the stub of Exception.ToString()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.Data">
+            <summary>Sets the stub of Exception.get_Data()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.HelpLink">
+            <summary>Sets the stub of Exception.get_HelpLink()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.Message">
+            <summary>Sets the stub of Exception.get_Message()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.Source">
+            <summary>Sets the stub of Exception.get_Source()</summary>
+        </member>
+        <member name="P:Selenium.Fakes.StubSeleniumException.StackTrace">
+            <summary>Sets the stub of Exception.get_StackTrace()</summary>
+        </member>
+    </members>
+</doc>

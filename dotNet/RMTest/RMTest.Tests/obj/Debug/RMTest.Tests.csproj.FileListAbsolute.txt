@@ -1,0 +1,12 @@
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\RMTest.Tests.dll
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\RMTest.Tests.pdb
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\obj\Debug\RMTest.Tests.csprojResolveAssemblyReference.cache
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\obj\Debug\RMTest.Tests.dll
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\obj\Debug\RMTest.Tests.pdb
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\RMTest.dll
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\RMTest.pdb
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\WebDriver.dll
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\Newtonsoft.Json.dll
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\WebDriver.pdb
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\WebDriver.xml
+C:\Redmind\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\Newtonsoft.Json.xml

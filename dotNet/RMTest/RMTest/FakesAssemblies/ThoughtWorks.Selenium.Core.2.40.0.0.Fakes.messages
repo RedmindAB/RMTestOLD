@@ -1,0 +1,3 @@
+C:\Redmind\RMTest\dotNet\RMTest\RMTest\Fakes\ThoughtWorks.Selenium.Core.fakes : warning : Cannot generate shim for Selenium.IRemoteCommand: type is an interface.
+C:\Redmind\RMTest\dotNet\RMTest\RMTest\Fakes\ThoughtWorks.Selenium.Core.fakes : warning : Cannot generate shim for Selenium.ISelenium: type is an interface.
+C:\Redmind\RMTest\dotNet\RMTest\RMTest\Fakes\ThoughtWorks.Selenium.Core.fakes : warning : Cannot generate shim for Selenium.ICommandProcessor: type is an interface.
