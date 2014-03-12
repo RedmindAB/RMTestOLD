@@ -68,6 +68,9 @@ public class AbMobileNavTest {    //
 		
 		tNavPage.clickLeftMenuItem("Nöje");
 		tNavPage.assertPageTitle("Nöje");
+
+        tNavPage.clickLeftMenuItem("Plus");
+        tNavPage.assertPageTitle("Plus");
 		
 		tNavPage.clickLeftMenuItem("Ledare");
 		tNavPage.assertPageTitle("Ledare");
@@ -80,12 +83,9 @@ public class AbMobileNavTest {    //
 		
 		tNavPage.clickLeftMenuItem("Kolumnister");
 		tNavPage.assertPageTitle("Kolumnister");
-		
-		tNavPage.clickLeftMenuItem("Plus");
-		tNavPage.assertPageTitle("Plus");
-		
-		tNavPage.clickLeftMenuItem("Wendela");
-		tNavPage.assertPageTitle("Wendela");
+
+        tNavPage.clickLeftMenuItem("Om Aftonbladet");
+        tNavPage.assertPageTitle("Integritetspolicy för Aftonbladet | Vanliga frågor | Hjälp & info | Aftonbladet");
 	}
 	
 	
@@ -124,16 +124,23 @@ public class AbMobileNavTest {    //
 		tNavPage.clickLeftSubMenuItem("Kolumnister", "Lena Mellin");
 		tNavPage.assertPageTitle("Mellin");
 		
-		tNavPage.clickLeftSubMenuItem("Ekonomi", "Min ekonomi");
-		tNavPage.assertPageTitle("Min Ekonomi");
+		//tNavPage.clickLeftMen("Visa mer", "Min ekonomi");
+		//tNavPage.assertPageTitle("Min Ekonomi");
+
+        tNavPage.clickLeftSubMenuItem("Visa mer", "Svenska hjältar");
+        tNavPage.assertPageTitle("Svenska Hjältar");
 		
-		tNavPage.clickLeftSubMenuItem("Livsstil", "Wellness");
+		tNavPage.clickLeftSubMenuItem("Visa mer", "Wellness");
 		tNavPage.assertPageTitle("Wellness");
-		
-		tNavPage.clickLeftSubMenuItem("Livsstil", "Resa");
+
+        tNavPage.clickLeftSubMenuItem("Visa mer", "Wendela");
+        tNavPage.assertPageTitle("Wendela");
+
+
+        tNavPage.clickLeftSubMenuItem("Visa mer", "Resa");
 		tNavPage.assertPageTitle("Resa");
 		
-		tNavPage.clickLeftSubMenuItem("Livsstil", "Bil");
+		tNavPage.clickLeftSubMenuItem("Visa mer", "Bil");
 		tNavPage.assertPageTitle("Bil");
 	}
 	
@@ -163,9 +170,9 @@ public class AbMobileNavTest {    //
 		// Click Nöje in top nav, then click all sub menu links:
 		tNavPage.clickTopBarItem("Nöje");
 		tNavPage.assertPageTitle("Nöje");
-		
-		tNavPage.clickTopBarSubItem("Musik");
-		tNavPage.assertPageTitle("Musik");
+
+		tNavPage.clickTopBarSubItem("Schlager");
+		tNavPage.assertPageTitle("Melodifestivalen | Nöjesbladet | Aftonbladet");
 		
 		tNavPage.clickTopBarSubItem("Spela");
 		tNavPage.assertPageTitle("Spela");
@@ -180,7 +187,7 @@ public class AbMobileNavTest {    //
 		tNavPage.clickTopBarItem("Start");
 		tNavPage.assertPageTitle("Aftonbladet: Sveriges nyhetskälla och mötesplats");
 	}
-	
+
 	@Test
     //@Ignore
 	public void ensure_mobile_nav_navigates_to_external_page() throws Exception {
@@ -193,9 +200,12 @@ public class AbMobileNavTest {    //
 		
 		tNavPage.navigateBack();
 		tNavPage.assertPageTitle("Aftonbladet: Sveriges nyhetskälla och mötesplats");
-		
+
+        tNavPage.clickLeftMenuItemExternal("Bloggar");
+        tNavPage.assertPageTitle("Aftonbladets bloggar");
+
 		// ledarbloggar, SubSubLevel
-		
+
 		//Jan Helin
         tNavPage.navigateStartUrl();
 		tNavPage.clickLeftSubMenuItemExternal("Bloggar", "Jan Helin");
@@ -209,6 +219,8 @@ public class AbMobileNavTest {    //
 		tNavPage.assertPageTitle("Välkommen in!");
 		tNavPage.navigateBack();
 		tNavPage.assertPageTitle("Aftonbladet: Sveriges nyhetskälla och mötesplats");
+
+
 		
 		//Nyhetsbloggar  -  SubSubLevel
 		
@@ -228,6 +240,7 @@ public class AbMobileNavTest {    //
 		tNavPage.navigateBack();
 		//tNavPage.assertPageTitle("Aftonbladet: Sveriges nyhetskälla och mötesplats");
 		assertTrue(tNavPage.pageTitleContains("Aftonbladet: Sveriges nyhetskälla och mötesplats"));
-		*/
+        */
 	}
+
 }

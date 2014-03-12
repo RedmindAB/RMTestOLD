@@ -82,7 +82,7 @@ public class AbMobileNav extends HTMLPage {
 	
 	public void clickFirstTeaser() throws Exception {
         driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(By.id("abMeasure")));
-		By teaserPath = By.xpath("//*[@id='abBody']/article[1]/a");
+		By teaserPath = By.xpath("//*[@id='abBody']/div[@class='abMainNews']/article[1]/a");
 		//driverWaitClickable(By.xpath(teaserPath), 20);
 		spinnerClickBy(teaserPath);
         driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(mTopBtnLink));
