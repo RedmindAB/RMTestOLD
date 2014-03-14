@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -x
 
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]; then

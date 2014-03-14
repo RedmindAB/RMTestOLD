@@ -153,6 +153,15 @@ public class FotbollNav extends AnApp {
 
 	private void clickMenuItem(String menuItemInnerText) throws Exception {
 		//System.out.println("menuItemInnerText: " + menuItemInnerText);
+//		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView")), mLongTimeout);
+//		WebElement el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"));
+		List<WebElement> menuButtons = driver.findElements(By.id("se.aftonbladet.sportbladet.fotboll:id/menuButton"));
+		for (int i = 0; i < menuButtons.size(); i++) {
+			if (menuButtons.get(i).getText().equalsIgnoreCase(menuItemInnerText)) {
+				humanClick(menuButtons.get(i));
+				System.out.println("Hitta Knappen med text: " + menuItemInnerText);
+			}
+		}
 		By tMenuItemPath = By.xpath("//ExpandableListView[@id='" + mLeftMenuBox + "']/*/Button[@text='" + menuItemInnerText + "']");
 		//		driverWaitClickable(By.xpath(tMenuItemPath), 8);
 		spinnerClickBy(tMenuItemPath);

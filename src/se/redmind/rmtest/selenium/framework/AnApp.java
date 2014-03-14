@@ -9,5 +9,4 @@ public class AnApp extends HTMLPage{
 		// TODO Auto-generated constructor stub
 	}
 	
-	
 }
