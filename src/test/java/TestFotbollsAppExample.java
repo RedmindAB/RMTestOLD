@@ -68,10 +68,17 @@ public class TestFotbollsAppExample {
     public void testFotboll() throws Exception {
         
         WebDriver driver = driverWrapper.getDriver();
+        
         appNav = new FotbollNav(driver);
         appNav.initialStartNoAction();
 //        appNav.openMenu();
         appNav.clickLeftMenuItem("Nyheter");
+        appNav.clickLeftMenuItem("Matcher");
+        appNav.clickLeftMenuItem("Resultat");
+        appNav.clickLeftMenuItem("Lag");
+        appNav.clickLeftMenuItem("TV");
+        appNav.clickLeftMenuItem("Bloggar");
+        appNav.clickLeftMenuItem("Silly Season");
 //        appNav.closeMenu();
 //        driver.quit();
     }

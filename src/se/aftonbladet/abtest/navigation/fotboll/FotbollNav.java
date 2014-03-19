@@ -3,6 +3,8 @@ package se.aftonbladet.abtest.navigation.fotboll;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
 
 import com.google.common.base.Objects;
 import org.openqa.selenium.By;
@@ -16,16 +18,19 @@ import se.redmind.rmtest.selenium.framework.HTMLPage;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
+
 /**
  * @author oskeke
  */
 public class FotbollNav extends AnApp {
 
 	private By mTopBtnLink = By.id("android:id/up");
-	private String mLeftMenuBox = "se.aftonbladet.sportbladet.fotboll:id/leftDrawer";
+	private By mLeftMenuBox = By.id("se.aftonbladet.sportbladet.fotboll:id/leftDrawer");
 	private String mRightMenuBox = "se.aftonbladet.sportbladet.fotboll:id/rightDrawer";
 	private int mLongTimeout = 30;
 	private int mShortTimeout = 10;
+	private int mVeryShortTimeout = 1;
 
 	/**
 	 * @param pDriver
@@ -56,29 +61,42 @@ public class FotbollNav extends AnApp {
 //		el.click();
 		humanClick(el);
 
-		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper")),mLongTimeout);
+		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper")),mShortTimeout);
 		el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"));
 //		el.click();
 		humanClick(el);
-		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper")),mLongTimeout);
+		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper")),mShortTimeout);
 		el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"));
 		humanClick(el);
 //		el.click();
 
 		//Condition for app to be loaded, might need more?
-		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView")), mLongTimeout);
+		if (driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(mLeftMenuBox), mVeryShortTimeout)) {
+			WebElement topLeftBtn;
+			topLeftBtn = driver.findElement(mTopBtnLink);
+			humanClick(topLeftBtn);
+		}
+		
+		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView")), mShortTimeout);
 
 	}
 
 
 	public void openMenu()  {
-		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(mTopBtnLink), mShortTimeout);
+//		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(mTopBtnLink), mShortTimeout);
+		driverFluentWaitForCondition(ExpectedConditions.elementToBeClickable(mTopBtnLink), mShortTimeout);
 		WebElement topLeftBtn;
 		topLeftBtn = driver.findElement(mTopBtnLink);
 		
 		humanClick(topLeftBtn);
-//		topLeftBtn.click();
-		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/leftDrawer")), mShortTimeout);
+		
+		driverFluentWaitForCondition(ExpectedConditions.elementToBeClickable(mLeftMenuBox), mShortTimeout);
+		//		try {
+//			spinnerClickBy(mTopBtnLink);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 	
@@ -92,31 +110,30 @@ public class FotbollNav extends AnApp {
 	
 	
 	public void humanClick(WebElement clickableElement){
-		try {
-			TimeUnit.MILLISECONDS.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			TimeUnit.MILLISECONDS.sleep(100);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		driverFluentWaitForCondition(ExpectedConditions.elementToBeClickable(clickableElement), mShortTimeout);
 		clickableElement.click();
+	
 	}
 
 	
 	public void clickLeftMenuItem(String pMenuText) throws Exception {
 		System.out.println("clickLeftMenuItem pMenuText: " + pMenuText);
 		openMenu();
-		clickMenuItem(pMenuText);
+		WebElement menuButton = getMenuItemByText(pMenuText, By.id("se.aftonbladet.sportbladet.fotboll:id/menuButton"));
+		
+		humanClick(menuButton);
+
 		//waitUntilDomReady();
 		driverFluentWaitForCondition(ExpectedConditions.presenceOfElementLocated(mTopBtnLink), mShortTimeout);
 	}
 
-	public void clickLeftMenuItemExternal(String pMenuText) throws Exception {
-		System.out.println("clickLeftMenuItemExternal pMenuText: " + pMenuText);
-		openMenu();
-		clickMenuItem(pMenuText);
-		//waitUntilDomReady();
-		//driverFluentWait(6).until(ExpectedConditions.presenceOfElementLocated(By.id("abMeasure")));
-	}
+
 
 	public void clickLeftSubMenuItem(String pMenuText, String pSubMenuText) throws Exception {
 		System.out.println("clickLeftSubMenuItem pMenuText: " + pMenuText + ", and pSubMenuText: " + pSubMenuText);
@@ -151,22 +168,21 @@ public class FotbollNav extends AnApp {
 		driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(By.id("abMeasure")));
 	}
 
-	private void clickMenuItem(String menuItemInnerText) throws Exception {
-		//System.out.println("menuItemInnerText: " + menuItemInnerText);
-//		driverFluentWaitForCondition(ExpectedConditions.visibilityOfElementLocated(By.id("se.aftonbladet.sportbladet.fotboll:id/tournamentListView")), mLongTimeout);
-//		WebElement el = driver.findElement(By.id("se.aftonbladet.sportbladet.fotboll:id/viewFlipper"));
-		List<WebElement> menuButtons = driver.findElements(By.id("se.aftonbladet.sportbladet.fotboll:id/menuButton"));
+
+	private WebElement getMenuItemByText(String pMenuText, By pButtonId) {
+		List<WebElement> menuButtons = driver.findElements(pButtonId);
+		WebElement buttonElement = null;
 		for (int i = 0; i < menuButtons.size(); i++) {
-			if (menuButtons.get(i).getText().equalsIgnoreCase(menuItemInnerText)) {
-				humanClick(menuButtons.get(i));
-				System.out.println("Hitta Knappen med text: " + menuItemInnerText);
+			if (menuButtons.get(i).getText().equalsIgnoreCase(pMenuText)) {
+				buttonElement = menuButtons.get(i);
+//				humanClick(menuButtons.get(i));
+				System.out.println("Hittat Knappen med text: " + pMenuText);
 			}
 		}
-		By tMenuItemPath = By.xpath("//ExpandableListView[@id='" + mLeftMenuBox + "']/*/Button[@text='" + menuItemInnerText + "']");
-		//		driverWaitClickable(By.xpath(tMenuItemPath), 8);
-		spinnerClickBy(tMenuItemPath);
+		assertFalse("Button could not be found: " + pMenuText, buttonElement == null);
+		 return buttonElement;
 	}
-
+	
 	private void clickMenuItemMore(String menuItemInnerText) throws Exception {
 		By tMenuItemPath = By.xpath("//*[@id='abTopMenuDynamic']/li/a[text()='" + menuItemInnerText + "']/../a[text()='Mer' and not(@disabled)]");     // and not(@disabled)
 		driverWaitClickable(tMenuItemPath, 6);

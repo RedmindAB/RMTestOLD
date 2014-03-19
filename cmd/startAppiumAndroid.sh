@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #. ../etc/RMTest.conf
-#./killAppiums.sh
+./killAppiums.sh
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]; then
 	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
@@ -21,8 +21,9 @@ export APK_PACKAGE=`$ADB_PATH/../build-tools/android-$AndroidBuildToolVersion/aa
 adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
 do
 	modelName=`adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
+	modelBrand=`adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
 	androidVersion=`adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
-	description="$modelName  $androidVersion"	
+	description="$modelBrand $modelName  $androidVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json

@@ -99,15 +99,16 @@ public class HTMLPage {
      * @param locator
      * @param timeoutInSeconds
      */
-    public void driverFluentWaitForCondition(ExpectedCondition condition, int timeoutInSeconds){
+    public boolean driverFluentWaitForCondition(ExpectedCondition condition, int timeoutInSeconds){
         int i = 0;
         while (i < 10) {
             try {
                 driverFluentWait(timeoutInSeconds).until(condition);   // changed to driverFluentWait to ignore WebDriverExceptions braking the wait
-                break;
+                return true;
             }
             catch (WebDriverException e) {
                 System.out.println("Caught a webdriveresception on driverFluentWaitForCondition try: " + i);
+                System.out.println(e);
                 i++;
             }
             catch (Exception e) {
@@ -115,7 +116,7 @@ public class HTMLPage {
                 i++;
             }
         }
-
+        return false;
     }
     /**
      * @param pBy
