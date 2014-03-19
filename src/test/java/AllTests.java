@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.BeforeClass;
 
+import se.aftonbladet.abtest.tests.app.TestFotbollsAppExample;
 //import se.aftonbladet.abtest.tests.mobile.menu.AbMobileNavTest;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 

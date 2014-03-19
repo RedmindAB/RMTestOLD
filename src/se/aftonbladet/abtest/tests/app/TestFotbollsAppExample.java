@@ -1,4 +1,4 @@
-package test.java;
+package se.aftonbladet.abtest.tests.app;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,7 +23,7 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import se.aftonbladet.abtest.navigation.fotboll.FotbollNav;
+import se.aftonbladet.abtest.navigation.app.fotboll.FotbollNav;
 import se.aftonbladet.abtest.navigation.mobil.AbMobileNav;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.TestParams;
