@@ -72,16 +72,15 @@ public class TestFotbollsAppExample {
         appNav = new FotbollNav(driver);
         appNav.initialStartNoAction();
 //        appNav.openMenu();
-        appNav.clickLeftMenuItem("Nyheter");
-        appNav.clickLeftMenuItem("Matcher");
-        appNav.clickLeftMenuItem("Resultat");
-        appNav.clickLeftMenuItem("Lag");
-        appNav.clickLeftMenuItem("TV");
-        appNav.clickLeftMenuItem("Bloggar");
-        appNav.clickLeftMenuItem("Silly Season");
-//        appNav.closeMenu();
-//        driver.quit();
-    }
+        	appNav.tryLeftMenu();
+//        appNav.clickLeftMenuItem("Nyheter");
+//        appNav.clickLeftMenuItem("Matcher");
+//        appNav.clickLeftMenuItem("Resultat");
+//        appNav.clickLeftMenuItem("Lag");
+//        appNav.clickLeftMenuItem("TV");
+//        appNav.clickLeftMenuItem("Bloggar");
+//        appNav.clickLeftMenuItem("Silly Season");
+        }
 
 
 

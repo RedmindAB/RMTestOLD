@@ -87,6 +87,7 @@ public class SportsApps extends AnApp {
 
 	private WebElement getMenuItemByText(String pMenuText, By pButtonId) {
 			List<WebElement> menuButtons = driver.findElements(pButtonId);
+			
 			WebElement buttonElement = null;
 			for (int i = 0; i < menuButtons.size(); i++) {
 				if (menuButtons.get(i).getText().equalsIgnoreCase(pMenuText)) {
@@ -99,6 +100,12 @@ public class SportsApps extends AnApp {
 			 return buttonElement;
 		}
 
+	public void tryLeftMenu(){
+		openMenu();
+		LeftMenu leftm = new LeftMenu(getmLeftMenuBox(), getDriver());
+		System.out.println("Num BUTTONS: " + leftm.getMainButtonBoxes().size());
+		
+	}
 
 	
 }
