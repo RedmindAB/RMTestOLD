@@ -14,8 +14,8 @@ public class DriverProvider {
     private static List<DriverNamingWrapper> driverList = new List<DriverNamingWrapper>();
     private static Boolean isInitialized = false;
     public static void startDrivers(){
-		//RmConfig config = new RmConfig();
-			String hubHost = "192.168.75.252";
+		RmConfig config = new RmConfig();
+        String hubHost = config.getHubIp();
 		int hubPort = 4444;
 		//HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
         HubNodesStatus nodeInfo = new HubNodesStatus(hubHost, hubPort);
