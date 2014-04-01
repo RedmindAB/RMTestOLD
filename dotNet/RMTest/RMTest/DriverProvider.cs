@@ -129,6 +129,13 @@ namespace RMTest
 			}
 		
 		}
+
+        public static DriverNamingWrapper getFirstDriver()
+        {
+            startDrivers();
+            return driverList[0];
+
+        }
     
 	//	/**
 	//	 * 
