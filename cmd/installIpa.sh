@@ -10,8 +10,8 @@ if [ -z "$IPA_PATH" ]; then
 fi
 
 echo "Apk to install: $IPA_PATH"
-export plistFile=`zipinfo -1 $IPA_PATH  | grep app/Info.plist`
-PKG_NAME=`unzip -p $IPA_PATH  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`   
+export plistFile=`zipinfo -1 "$IPA_PATH"  | grep app/Info.plist`
+PKG_NAME=`unzip -p "$IPA_PATH"  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`   
 echo "Package name: $PKG_NAME"
 export modelName=""
 
@@ -23,7 +23,7 @@ do
 
 	ideviceinstaller -U $currDevId -u $PKG_NAME
 
-	ideviceinstaller -U $currDevId -i $IPA_PATH
+	ideviceinstaller -U $currDevId -i "$IPA_PATH"
 done
 
 
