@@ -1,5 +1,5 @@
 .metadata/
-log/*
+log/*.log
 bin/
 target/
 etc/RMTestLocal.conf
