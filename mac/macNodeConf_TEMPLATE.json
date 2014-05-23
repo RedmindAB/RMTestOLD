@@ -10,7 +10,9 @@
 		"maxInstances": 1,
 		"platform" : "MAC"
 	},
-	{
+
+
+	 {
 		"seleniumProtocol": "WebDriver",
 		"browserName": "safari",
 		"osname":"OSX",

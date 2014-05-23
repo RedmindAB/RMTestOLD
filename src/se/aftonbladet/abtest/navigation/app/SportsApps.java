@@ -1,17 +1,14 @@
 package se.aftonbladet.abtest.navigation.app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import se.redmind.rmtest.selenium.framework.AnApp;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SportsApps extends AnApp {
 
@@ -69,7 +66,7 @@ public class SportsApps extends AnApp {
 	//			// TODO Auto-generated catch block
 	//			e.printStackTrace();
 	//		}
-			driverFluentWaitForCondition(ExpectedConditions.elementToBeClickable(clickableElement), mShortTimeout);
+			driverFluentWaitForCondition(ExpectedConditions.elementToBeClickable((By) clickableElement), mShortTimeout);
 			clickableElement.click();
 		
 		}

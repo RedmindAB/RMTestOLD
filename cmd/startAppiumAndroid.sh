@@ -49,7 +49,7 @@ do
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
 	logfile="$testHome/log/appium_android_$currDevId.log"	
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --no-reset --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
 	appiumStarted=true	
 	while $appiumStarted
 		do

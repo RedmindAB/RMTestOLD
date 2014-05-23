@@ -12,7 +12,7 @@
           "version":"DEVICE_VERSION",
           "app":"APP_PATH",
           "app-package":"APP_PKG",
-          "app-activity":".StartActivity",
+          "app-activity":".AftonbladetActivity",
           "browserName": ""
     }
    

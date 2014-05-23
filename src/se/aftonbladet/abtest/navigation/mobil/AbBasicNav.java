@@ -50,8 +50,10 @@ public class AbBasicNav extends HTMLPage {
             try {
                 mDriver.findElement(By.name("identifier")).clear();
                 mDriver.findElement(By.name("identifier")).sendKeys(name);
-                mDriver.findElement(By.name("password")).sendKeys(password);
+	            mDriver.findElement(By.name("password")).clear();
+	            mDriver.findElement(By.name("password")).sendKeys(password);
                 mDriver.findElement(By.id("remember_label")).submit();
+	            mDriver.findElement(By.className("btn submit")).click();
                 break;
             }
             catch (Exception e) {
@@ -62,12 +64,23 @@ public class AbBasicNav extends HTMLPage {
         }
     }
 
-    public void clickOnMenuItem(String pMenuText) throws Exception {
+	public void clickOnUserMenuItem(String pMenuText) throws Exception{
+
+		By byItemPath = By.xpath("//*[@class='abUserItem abRight abUserItemPlus']/a[@class='abHeaderPlusBuyLink']/a[text()='" + pMenuText + "']");
+		driverFluentWait(10).until(ExpectedConditions.elementToBeClickable(byItemPath));
+		spinnerClickBy(byItemPath);
+
+	}
+
+
+
+	public void clickOnMenuItem(String pMenuText) throws Exception {
         By byItemPath =  By.xpath("//a[text()='" + pMenuText + "']");
 
         driverFluentWait(10).until(ExpectedConditions.elementToBeClickable(byItemPath));
         spinnerClickBy(byItemPath);
     }
+
 
     public void clickOnSubMenuItem(String pSubMenuText) throws Exception {
         By byItemPath = By.xpath("//*[@id='abInnerBody']/div[@class='abContent']/nav[@class='abSubNav abSubMenuLevel2']/ul[@class='abHList clearfix']/li/a[text()='" + pSubMenuText + "']");
