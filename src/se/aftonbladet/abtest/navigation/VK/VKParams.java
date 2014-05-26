@@ -17,7 +17,7 @@ public class VKParams {
     public static String getBaseUrl() {
         String baseUrl;
         if (testBaseUrl == null) {
-            baseUrl = "http://stage.viktklubb.aftonbladet.se/v4";
+            baseUrl = "http://test.viktklubb.aftonbladet.se/v4/hem2014";
         }
         else    {
             baseUrl = testBaseUrl;

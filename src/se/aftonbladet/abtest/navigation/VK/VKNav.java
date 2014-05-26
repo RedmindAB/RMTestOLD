@@ -49,13 +49,15 @@ public class VKNav extends HTMLPage {
     }
     */
 
+    //-------------------------LOGIN/LOGOUT NAVIGATION----------------------------
+
     public void VKLogIn(String userName, String passWord) throws Exception {
-        By loginButtonPath = By.xpath("//*[@id='sales-button-login']/a");
+        By loginButtonPath = By.xpath("//*[@id='login-link']");
         By userNameFieldPath = By.xpath("//*[@id='identifier']");
         By passWordFieldPath = By.xpath("//*[@id='password']");
         By spidLoginButtonPath = By.xpath("//*[@value='Logga in']");
 
-        driverWaitElementPresent(By.xpath("//*[@id='sales-button-login']/a"), 15);
+        driverWaitElementPresent(By.xpath("//*[@id='login-link']"), 15);
         spinnerClickBy(loginButtonPath);
         driverWaitClickable(userNameFieldPath, 10);
         driver.findElement(userNameFieldPath).sendKeys(userName);
@@ -107,5 +109,20 @@ public class VKNav extends HTMLPage {
         }
 
     }
+
+
+    //-------------------------2014 SALESPAGES NAVIGATION----------------------------
+
+    public void VKBecomeMemberBtn() throws Exception {
+        By vkBecomeMemberBtn = By.xpath("//*[@class='btn btn-primary']");
+        spinnerClickBy(vkBecomeMemberBtn);
+    }
+
+    public void VKMemberIncludesBtn() throws Exception {
+        By vkMemberIncludesBtn = By.xpath("//*[@class='btn btn-default']");
+        spinnerClickBy(vkMemberIncludesBtn);
+    }
+
+    public void
 
 }

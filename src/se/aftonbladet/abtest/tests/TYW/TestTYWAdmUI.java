@@ -1,5 +1,6 @@
 package se.aftonbladet.abtest.tests.TYW;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -57,7 +58,7 @@ public class TestTYWAdmUI {
     //TESTCASES
 
     @Test
-    //Ignore
+    //@Ignore
     public void ensure_login_successful() throws Exception {
         tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
@@ -134,7 +135,15 @@ public class TestTYWAdmUI {
         tNavPage.NavTopMenu("Config");
         tNavPage.NavSubMenu("Config", "Users");
         tNavPage.assertPageContains(By.xpath("//*[@id='userTable']"), "Username");
+    }
 
-        }
+    @Test
+    //@Ignore
+    public void ensure_creation_of_new_top_node_in_category_tree() throws Exception {
+        tDriver = driverWrapper.getDriver();
+        System.out.println("Driver: " + tDriver);
+
+    }
+
 
 }

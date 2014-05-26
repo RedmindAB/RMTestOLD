@@ -93,21 +93,29 @@ public class TYWAdmUINav extends HTMLPage {
 
     }
 
-    //NAVIGATE THE TOP MENU (EXCL. Importer)
+    //---------------------Navigating the top menus (two)---------------------
 
     public void NavTopMenu(String topMenuNav) throws Exception {
         By menuItemPath = By.xpath("//div[@id='bs-example-navbar-collapse-1']/ul/li/a[text()='" + topMenuNav + "']");
         spinnerClickBy(menuItemPath);
     }
 
+    public void NavLowerTopMenu(String lowTopMenuNav) throws Exception {
+        By lowerMenuItemPath = By.xpath("//div[@id='bs-example-navbar-collapse-2']'/ul/li[text()='" + lowTopMenuNav + "']");
+        spinnerClickBy(lowerMenuItemPath);
+
+    }
+
+    //---------------------Navigating the sub menu drop downs---------------------
+
     public void NavSubMenu(String topMenuNav, String subMenuNav) throws Exception {
         By menuItemPath = By.xpath("//div[@id='bs-example-navbar-collapse-1']/ul/li/a[text()='" + topMenuNav + "']/../ul[@class='dropdown-menu']/li/a[text()='" + subMenuNav + "']");
         spinnerClickBy(menuItemPath);
     }
 
-    //CHECKBOXES BY IMPORTER, RUN IMPORTER
+    //---------------------Importer navigation and functionality---------------------
 
-    public void ImportTick(String storeName) throws Exception {
+    public void ImportCheckBoxTick(String storeName) throws Exception {
         By storeCheckBox = By.xpath("//*/input[@value='" + storeName + "']");
         spinnerClickBy(storeCheckBox);
     }
@@ -117,5 +125,10 @@ public class TYWAdmUINav extends HTMLPage {
         spinnerClickBy(runImportButton);
     }
 
+    //---------------------Category mappings menu functionality and navigation---------------------
+
+    public void addTopLevelCat() throws Exception {
+
+    }
 
 }
