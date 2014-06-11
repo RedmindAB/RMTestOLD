@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+. $testHome/cmd/setConfig.sh
+
 export IPA_PATH=$1
 export PKG_NAME="NOTSET"
 if [ -z "$IPA_PATH" ]; then

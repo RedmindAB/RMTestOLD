@@ -1,5 +1,7 @@
 #!/bin/bash -x
-. ../etc/RMTest.conf
+
+. $testHome/cmd/setConfig.sh
+
 export jar_home="$testHome/lib/selenium/"
 export androidNodeFile="/tmp/androidNodes.cfg"
 

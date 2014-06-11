@@ -1,6 +1,7 @@
 #!/bin/bash -x
-#. ../etc/RMTest.conf
-#./killAppiums.sh
+
+. $testHome/cmd/setConfig.sh
+
 export IPA_PATH=$1
 if [ -z "$IPA_PATH" ]; then
 	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"

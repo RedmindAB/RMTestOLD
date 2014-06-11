@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+. $testHome/cmd/setConfig.sh
+
 export modelName=""
 export androidVersion=""
 

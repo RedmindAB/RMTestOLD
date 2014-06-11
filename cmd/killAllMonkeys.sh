@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+. $testHome/cmd/setConfig.sh
+
 export modelName=""
 
 adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId

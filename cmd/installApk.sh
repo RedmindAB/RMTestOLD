@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+. $testHome/cmd/setConfig.sh
+
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]; then
 	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"

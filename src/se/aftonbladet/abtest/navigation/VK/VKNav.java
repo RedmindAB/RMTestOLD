@@ -123,6 +123,6 @@ public class VKNav extends HTMLPage {
         spinnerClickBy(vkMemberIncludesBtn);
     }
 
-    public void
+//    public void
 
 }

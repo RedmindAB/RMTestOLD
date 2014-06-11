@@ -19,14 +19,34 @@ import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 
 @RunWith(Parallelized.class)
-public class GoogleExampleAndroid extends ParameterizedTest{
+public class GoogleExampleAndroid{
 
 
-    public GoogleExampleAndroid(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-    	super(driverWrapper, driverDescription);
-    }
+	   private WebDriver tDriver;
+	    private final DriverNamingWrapper driverWrapper;
+	    private final String driverDescription;
 
+	    public GoogleExampleAndroid(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+	        this.driverWrapper = driverWrapper;
+	        this.driverDescription = driverDescription;
+	    }
+	    
+	    private static Object[] getDrivers() {
+	        return DriverProvider.getDrivers(Platform.MAC);
 
+	    }
+
+	    @Parameterized.Parameters(name = "{1}")
+	    public static Collection<Object[]> drivers() {
+	        ArrayList<Object[]> returnList = new ArrayList<Object[]>();
+	        Object[] wrapperList = getDrivers();
+	        for (int i = 0; i < wrapperList.length; i++) {
+	            returnList.add(new Object[]{wrapperList[i], wrapperList[i].toString()});
+	        }
+
+	        return returnList;
+	    }
+    
     @Test
     @Ignore
     public void testGoogle() throws Exception {

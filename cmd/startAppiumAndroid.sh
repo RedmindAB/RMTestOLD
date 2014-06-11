@@ -1,5 +1,7 @@
 #!/bin/bash -x
-#. ../etc/RMTest.conf
+
+. $testHome/cmd/setConfig.sh
+
 ./killAppiums.sh
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]; then

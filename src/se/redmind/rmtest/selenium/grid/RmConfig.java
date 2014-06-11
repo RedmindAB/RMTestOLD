@@ -59,9 +59,9 @@ static JSONObject config;
 		return configValue;
     }
     
-    public static String getTestHome() {
-		return getConfigValue("testHome");
-	}
+//    public static String getTestHome() {
+//		return getConfigValue("testHome");
+//	}
     
     public static String getAndroidHome() {
  		return getConfigValue("androidHome");
@@ -73,6 +73,10 @@ static JSONObject config;
 	
 	public static String getLocalIp() {
 		return getConfigValue("localIp");
+	}
+	
+	public static String getBuildToolsVersion() {
+		return getConfigValue("AndroidBuildtoolsVersion");
 	}
  
     }

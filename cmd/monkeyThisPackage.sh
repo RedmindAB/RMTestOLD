@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+. $testHome/cmd/setConfig.sh
+
 export APK_PATH=$1
 export INSTALLFIRST=$2
 if [ -z "$APK_PATH" ]; then
