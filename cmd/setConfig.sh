@@ -8,6 +8,7 @@ getConfigParam() {
 
 export androidHome=`getConfigParam androidHome`
 export ANDROIDHOME=$androidHome
+export ADB_PATH="$ANDROIDHOME/platform-tools/"
 export PATH=$PATH:$ANDROID_HOME/platform-tools/
 export RMTestHubIp=`getConfigParam hubIp`
 export RMTestLocalNodeIp=`getConfigParam localIp`
