@@ -15,7 +15,12 @@ export RMTestLocalNodeIp=`getConfigParam localIp`
 export AndroidBuildToolVersion=`getConfigParam AndroidBuildtoolsVersion`
 export seleniumVersion=`getConfigParam seleniumVersion`
 
+alias ws="cd $testHome"
+alias cmd="cd $testHome/cmd/"
+alias adt="cd $ANDROID_HOME"
 
+
+PATH=$PATH:$testHome/lib/
 
 
 
