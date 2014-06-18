@@ -8,11 +8,12 @@ import org.junit.BeforeClass;
 import se.aftonbladet.abtest.tests.app.TestFotbollsAppExample;
 //import se.aftonbladet.abtest.tests.mobile.menu.AbMobileNavTest;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.tests.mobile.GoogleExampleAndroid;
 
 
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses( {TestFotbollsAppExample.class})
+@Suite.SuiteClasses( {GoogleExampleAndroid.class})
 public class AllTests {
     @BeforeClass
     public static void beforeAllTests(){

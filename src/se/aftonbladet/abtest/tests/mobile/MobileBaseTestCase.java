@@ -2,7 +2,7 @@ package se.aftonbladet.abtest.tests.mobile;
 
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.android.AndroidDriver;
+//import org.openqa.selenium.android.AndroidDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -27,7 +27,7 @@ public abstract class MobileBaseTestCase {
 		if("chrome".equalsIgnoreCase(name)) {
 			return new ChromeDriver();
 		} else if("android".equalsIgnoreCase(name)) {
-			return new AndroidDriver();
+//			return new AndroidDriver();
 		}
 		return new FirefoxDriver();
 	}

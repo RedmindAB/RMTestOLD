@@ -1,4 +1,4 @@
-package test.java;
+package nottest;
 
 import static org.junit.Assert.assertTrue;
 

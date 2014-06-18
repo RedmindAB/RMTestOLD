@@ -9,8 +9,8 @@ getConfigParam() {
 export androidHome=`getConfigParam androidHome`
 export ANDROIDHOME=$androidHome
 export ANDROID_HOME=$androidHome
-export ADB_PATH="$ANDROIDHOME/platform-tools/"
-export PATH=$PATH:$ANDROID_HOME/platform-tools/
+export ADB_PATH="$ANDROIDHOME/platform-tools"
+export PATH=$PATH:$ANDROID_HOME/platform-tools
 export RMTestHubIp=`getConfigParam hubIp`
 export RMTestLocalNodeIp=`getConfigParam localIp`
 export AndroidBuildToolVersion=`getConfigParam AndroidBuildtoolsVersion`
@@ -21,7 +21,7 @@ alias cmd="cd $testHome/cmd/"
 alias adt="cd $ANDROID_HOME"
 
 
-PATH=$PATH:$testHome/lib/
+PATH=$PATH:$testHome/lib
 
 
 
