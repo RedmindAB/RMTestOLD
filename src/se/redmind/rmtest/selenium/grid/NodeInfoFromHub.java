@@ -11,7 +11,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHttpRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ public class NodeInfoFromHub {
  
     public static JSONObject main(String pHost, int pPort) throws ClientProtocolException, IOException, JSONException {
         URL  proxyApi = new URL("http://" + pHost + ":" + pPort + "/grid/admin/GridQueryServlet");
-        HttpClient client = new DefaultHttpClient();
+        HttpClient client = HttpClientBuilder.create().build();
         BasicHttpRequest r = new BasicHttpRequest("GET", proxyApi.toExternalForm());
         HttpHost host = new HttpHost(pHost, pPort);
         HttpResponse response = client.execute(host, r);

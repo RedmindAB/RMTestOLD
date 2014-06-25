@@ -1,37 +1,54 @@
 package se.redmind.rmtest.selenium.tests.desktop;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
-import org.openqa.selenium.Platform;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.grid.Parallelized;
 
 
 
-@RunWith(JUnitParamsRunner.class)
+@RunWith(Parallelized.class)
 public class GoogleExampleDesktop {
 
 
-    private Object[] getDrivers() {
-        return DriverProvider.getDrivers(Platform.MAC, "safari");
-    }
+	   private WebDriver tDriver;
+	    private final DriverNamingWrapper driverWrapper;
+	    private final String driverDescription;
+
+	    public GoogleExampleDesktop(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+	        this.driverWrapper = driverWrapper;
+	        this.driverDescription = driverDescription;
+	    }
+	    
+	    private static Object[] getDrivers() {
+	        return DriverProvider.getDrivers(Platform.ANDROID);
+
+	    }
+
+	    @Parameterized.Parameters(name = "{1}")
+	    public static Collection<Object[]> drivers() {
+	        ArrayList<Object[]> returnList = new ArrayList<Object[]>();
+	        Object[] wrapperList = getDrivers();
+	        for (int i = 0; i < wrapperList.length; i++) {
+	            returnList.add(new Object[]{wrapperList[i], wrapperList[i].toString()});
+	        }
+
+	        return returnList;
+	    }
 
 
     @Test
-    @Parameters(method = "getDrivers")
     public void testGoogle(DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver driver = driverWrapper.getDriver();
                 
@@ -49,7 +66,6 @@ public class GoogleExampleDesktop {
     }
     @Ignore
     @Test
-    @Parameters(method = "getDrivers")
     public void testAOS(DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver driver = driverWrapper.getDriver();
         // And now use this to visit Google

@@ -1,9 +1,12 @@
 package se.aftonbladet.abtest.tests.desktop;
 
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import se.aftonbladet.abtest.navigation.mobil.AbBasicNav;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.grid.Parallelized;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,33 +23,50 @@ import se.redmind.rmtest.selenium.grid.DriverProvider;
  * Time: 13:48
  */
 
-@RunWith(JUnitParamsRunner.class)
+@RunWith(Parallelized.class)
 public class AbDesktopNavTest {
-    private WebDriver tDriver;
-    private AbBasicNav tNavPage;
+	   private WebDriver tDriver;
+	    private final DriverNamingWrapper driverWrapper;
+	    private final String driverDescription;
 
-    private Object[] getDrivers() {
-        return DriverProvider.getDrivers(Platform.MAC, "safari");
-    }
+	    public AbDesktopNavTest(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+	        this.driverWrapper = driverWrapper;
+	        this.driverDescription = driverDescription;
+	    }
+	    
+	    private static Object[] getDrivers() {
+	        return DriverProvider.getDrivers(Platform.ANDROID);
+
+	    }
+
+	    @Parameterized.Parameters(name = "{1}")
+	    public static Collection<Object[]> drivers() {
+	        ArrayList<Object[]> returnList = new ArrayList<Object[]>();
+	        Object[] wrapperList = getDrivers();
+	        for (int i = 0; i < wrapperList.length; i++) {
+	            returnList.add(new Object[]{wrapperList[i], wrapperList[i].toString()});
+	        }
+
+	        return returnList;
+	    }
+
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Desktop_Login_credentials (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
         tNavPage.Login("fb.abse@gmail.com", "aftonbladet.se");
 
     }
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Sportbladet_Menu_and_Sub_menu (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
 
         tNavPage.clickOnMenuItem("Sport");
         tNavPage.pageTitleContains("Sport");
@@ -232,11 +253,10 @@ public class AbDesktopNavTest {
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Noje_Menu_and_Sub_menu (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
 
 
         tNavPage.clickOnMenuItem("Nöje");
@@ -270,12 +290,11 @@ public class AbDesktopNavTest {
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Ekonomi_Menu_and_Sub_menu (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
 
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
 
 
         tNavPage.clickOnMenuItem("Ekonomi");
@@ -286,11 +305,10 @@ public class AbDesktopNavTest {
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Ledare_Menu_and_Sub_menu (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
 
         tNavPage.clickOnMenuItem("Ledare");
 
@@ -301,11 +319,10 @@ public class AbDesktopNavTest {
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Kultur_Menu_and_Sub_menu (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
 
         tNavPage.clickOnMenuItem("Kultur");
         tNavPage.clickOnSubMenuItem("Böcker");
@@ -318,12 +335,11 @@ public class AbDesktopNavTest {
 
     @Test
     //@Ignore
-    @Parameters(method = "getDrivers")
     public void Plus_Menu (DriverNamingWrapper driverWrapper) throws Exception {
         WebDriver tDriver = driverWrapper.getDriver();
         System.out.println("Driver: " + tDriver);
 
-        tNavPage = new AbBasicNav(tDriver);
+        AbBasicNav tNavPage = new AbBasicNav(tDriver);
         tNavPage.clickOnMenuItem("Plus");
         tNavPage.clickOnSubMenuItem("Erbjudanden");
         tNavPage.clickOnSubMenuItem("Frågor och svar om Plus");
