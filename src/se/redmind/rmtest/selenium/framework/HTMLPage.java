@@ -99,7 +99,7 @@ public class HTMLPage {
      * @param locator
      * @param timeoutInSeconds
      */
-    public boolean driverFluentWaitForCondition(ExpectedCondition condition, int timeoutInSeconds){
+    public boolean driverFluentWaitForCondition(ExpectedCondition<?> condition, int timeoutInSeconds){
         int i = 0;
         while (i < 10) {
             try {
@@ -223,7 +223,7 @@ public class HTMLPage {
         int i = 0;
         while (i < 10) {
             try {
-                driverFluentWait(1).until(ExpectedConditions.textToBePresentInElement(locator, expText));
+                driverFluentWait(1).until(ExpectedConditions.textToBePresentInElementLocated(locator, expText));
                 driver.findElement(locator).getText().contains(expText);
                 break;
             }
