@@ -11,6 +11,7 @@ export ANDROIDHOME=$androidHome
 export ANDROID_HOME=$androidHome
 export ADB_PATH="$ANDROIDHOME/platform-tools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export RmJar="$testHome/target/RMTest-SNAPSHOT.jar"
 export RMTestHubIp=`getConfigParam hubIp`
 export RMTestLocalNodeIp=`getConfigParam localIp`
 export AndroidBuildToolVersion=`getConfigParam AndroidBuildtoolsVersion`
