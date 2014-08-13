@@ -4,4 +4,4 @@
 
 export jar_home="$testHome/lib/"
 
-java -cp $jar_home/RegisterNode.jar:$jar_home/selenium/selenium-server-standalone-$seleniumVersion.jar se.aftonbladet.abtest.selenium.grid.RegisterNode $@
+java -cp $RmJar:$jar_home/selenium/selenium-server-standalone-$seleniumVersion.jar se.redmind.rmtest.selenium.grid.RegisterNode $@
