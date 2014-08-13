@@ -25,7 +25,7 @@ cd $scriptDir
 
 echo "Running maven compile, correct any errors and rerun this script"
 
-mvn compile 
+mvn package 
 
 if [[ $? -ne 0 ]]
 then
