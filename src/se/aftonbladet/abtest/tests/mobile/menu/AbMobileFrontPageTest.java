@@ -2,6 +2,7 @@ package se.aftonbladet.abtest.tests.mobile.menu;
 
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
@@ -74,14 +75,13 @@ public class AbMobileFrontPageTest {
         tNavPage = new AbMobileNav(tDriver, startUrl);
         tNavPage.driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(By.id("abMeasure")));
 
-        tNavPage.assertPageContainsElementByClassName("abAdPoll");
-        tNavPage.assertPageContainsElementByClassName("abBox");
-        tNavPage.assertPageContainsElementByClassName("abFooter");
-        tNavPage.assertPageContains(By.xpath("//footer/div[@class='abBottomRow']/p"), "Tjänstgörande mobilredaktör:");
-        tNavPage.assertPageContainsElementByClassName("abStatLatestArticles");
-        tNavPage.assertNumberOfElementsByXpath("//div[@class='abBoxNoPad abStatLatestArticles']/div[1]/a", 5);
-
-        //tNavPage.assertPageContains(By.xpath("//div[@class='abBoxNoPad']/div[@class='abStreamer']/span[@class='abStreamerInner']"), "Fler nyheter");
-        //tNavPage.assertPageContains(By.cssSelector("div[class='abBoxNoPad abToggleTarget']:div[class='abStreamer abThemeBgGradient':span)"), "Fler nyheter");
+        tNavPage.assertPageContainsElementByClassName("abAdPoll");                                                                 //Polldaddy
+        tNavPage.assertPageContainsElementByClassName("abMainNews");                                                               //The container for all article teasers and ads
+        tNavPage.assertPageContainsElementByClassName("abBoxTvLive");                                                              //The fixed teaser for aftonbladet tv, near the bottom of the front page
+        tNavPage.assertPageContainsElementByClassName("abFooter");                                                                 //the footer
+        tNavPage.assertPageContains(By.xpath("//footer/div[@class='abBottomRow']/p"), "Tjänstgörande mobilredaktör:");             //Text in mobile footer
+        tNavPage.assertPageContainsElementByClassName("abStatLatestArticles");                                                     //Latest articles widget
+        tNavPage.assertNumberOfElementsByXpath("//div[@class='abBoxNoPad abStatLatestArticles']/div[1]/a", 7);                     //Ensure that latest article widget is populated with article teasers
+        tNavPage.assertPageContainsElementByXpath("//div[@class='abAdArea']");                                                     //Ensure front page loads ads
     }
 }

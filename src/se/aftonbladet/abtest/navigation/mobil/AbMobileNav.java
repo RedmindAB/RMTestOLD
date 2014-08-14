@@ -1,9 +1,5 @@
 package se.aftonbladet.abtest.navigation.mobil;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.google.common.base.Objects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * @author oskeke
@@ -198,6 +196,26 @@ public class AbMobileNav extends HTMLPage {
             }
         }
         assertTrue(driver.findElement(By.className(elementClassName)).isDisplayed());
+
+    }
+
+    public void assertPageContainsElementByXpath(String path) throws Exception {
+        System.out.println("assertPageContainsElementByXpath: " + path);
+
+        int i = 0;
+        while (i < 10) {
+            try {
+                driverFluentWait(1).until(ExpectedConditions.presenceOfElementLocated(By.xpath(path)));
+                break;
+            }
+            catch (Exception e) {
+                System.out.println("----- assertPageContainsElementByXpath Exception: " + e);
+                i = i + 1;
+                Thread.sleep(50);
+            }
+        }
+        // if i is 10, the spinner has failed to locate the webElement
+        assertTrue(i < 10);
 
     }
 

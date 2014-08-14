@@ -85,7 +85,7 @@ public class AbMobileNavTest {    //
 		tNavPage.assertPageTitle("Kolumnister");
 
         tNavPage.clickLeftMenuItem("Om Aftonbladet");
-        tNavPage.assertPageTitle("Integritetspolicy för Aftonbladet | Vanliga frågor | Hjälp & info | Aftonbladet");
+        tNavPage.assertPageTitle("Här kan du läsa mer om Aftonbladet | Vanliga frågor | Hjälp & info | Aftonbladet");
 	}
 	
 	
