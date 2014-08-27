@@ -18,6 +18,7 @@ import org.openqa.selenium.WebDriver;
 
 
 
+import se.redmind.rmtest.selenium.framework.StackTraceInfo;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
@@ -56,19 +57,22 @@ public class GoogleExample {
 
     @Test
     public void testGoogle() throws Exception {
-        WebDriver driver = driverWrapper.getDriver();
+//        WebDriver driver = driverWrapper.getDriver();
+        GoogleNav navPage = new GoogleNav(driverWrapper.getDriver());
                 
-        // And now use this to visit Google
-        driver.get("http://www.google.com");
         
         // Find the text input element by its name
-//        WebElement element = driver.findElement(By.name("q"));
-        System.out.println("Page title is: " + driver.getTitle());
+
+        System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(driver.getTitle().startsWith("Goo"));
-        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(scrFile, new File("/tmp/screenshot" + driverWrapper.getDriverDescription() + ".png"));
-//        assertFalse(driver.getTitle().startsWith("Goo"));
+        assertTrue(navPage.getTitle().startsWith("Goo"));
+        
+        System.out.println("TESTMETHONNAME: " + StackTraceInfo.getCurrentMethodName());
+        
+        File scrFile = ((TakesScreenshot)navPage.getDriver()).getScreenshotAs(OutputType.FILE);
+        
+        FileUtils.copyFile(scrFile, new File("/tmp/screenshot" + StackTraceInfo.getCurrentMethodName() + driverWrapper.getDriverDescription() + ".png"));
+
         
         
     }

@@ -2,6 +2,7 @@ package se.redmind.rmtest.selenium.framework;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -262,5 +264,12 @@ public class HTMLPage {
         driver.get(bUrl);
         //driverFluentWait(10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//footer")));
     }
+    
+    public String getTitle() {
+    	return driver.getTitle();
+    }
+
+
+
 }
 
