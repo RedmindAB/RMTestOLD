@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -269,7 +270,17 @@ public class HTMLPage {
     	return driver.getTitle();
     }
 
+    public void takeScreenshot(String fileName) {
+        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        
+        try {
+			FileUtils.copyFile(scrFile, new File("/tmp/" + fileName + ".png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+    }
 
 }
 

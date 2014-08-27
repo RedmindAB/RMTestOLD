@@ -67,11 +67,9 @@ public class GoogleExample {
         
         assertTrue(navPage.getTitle().startsWith("Goo"));
         
-        System.out.println("TESTMETHONNAME: " + StackTraceInfo.getCurrentMethodName());
+        navPage.searchForString("RedMind");
         
-        File scrFile = ((TakesScreenshot)navPage.getDriver()).getScreenshotAs(OutputType.FILE);
-        
-        FileUtils.copyFile(scrFile, new File("/tmp/screenshot" + StackTraceInfo.getCurrentMethodName() + driverWrapper.getDriverDescription() + ".png"));
+        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDriverDescription().replace(" ", "-"));
 
         
         

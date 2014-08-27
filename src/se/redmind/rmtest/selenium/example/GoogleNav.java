@@ -45,10 +45,11 @@ public class GoogleNav extends HTMLPage {
 	}
 	public void searchForString(String searchString) throws Exception {
         
+		By searchResult = By.id("ires");
 		WebElement searchbox = searchBox();
 		searchbox.sendKeys(searchString);
 		searchbox.sendKeys(Keys.RETURN);
-        
+		driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(searchResult)); 
 	}
 
 	
