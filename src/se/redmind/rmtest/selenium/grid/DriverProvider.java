@@ -1,5 +1,7 @@
 package se.redmind.rmtest.selenium.grid;
 
+import io.appium.java_client.AppiumDriver;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -81,7 +83,8 @@ public class DriverProvider {
 				if (capability.getCapability("app-package") == null) {
 					driver = new RemoteWebDriver(driverUrl, capability);
 				} else {
-					driver = new SwipeableWebDriver(driverUrl, capability);
+//					driver = new SwipeableWebDriver(driverUrl, capability);
+					driver = new AppiumDriver(driverUrl, capability);
 				}
 
 				driverList.add(new DriverNamingWrapper(description, driver, capability, driverUrl));

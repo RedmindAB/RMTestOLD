@@ -7,3 +7,4 @@ etc/Appium_TEMP.json
 etc/LocalConfig.json
 .metadata/
 .project
+.classpath
