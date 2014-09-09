@@ -22,7 +22,6 @@ import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 
-import se.redmind.rmtest.selenium.example.TestParams;
 
 
 @RunWith(Parallelized.class)
