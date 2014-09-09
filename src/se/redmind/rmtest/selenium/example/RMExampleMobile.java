@@ -1,21 +1,29 @@
 package se.redmind.rmtest.selenium.example;
 
+import java.io.File;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.*;
+
 import se.redmind.rmtest.selenium.grid.*;
-import se.redmind.rmtest.selenium.example.*;
 
 @RunWith(Parallelized.class)
 public class RMExampleMobile {
 
 	private WebDriver tDriver;
-	private final DriverNamingWrapper driverWrapper;
-	private final String driverDescription;
+	public final DriverNamingWrapper driverWrapper;
+	public final String driverDescription;
+	public WebDriverWait wait;
 	private String startUrl = TestParams.getBaseUrl();
 	private RmMobileNav tMobNav;
+	File scr;
 
 	public RMExampleMobile(final DriverNamingWrapper driverWrapper,
 			final String driverDescription) {
@@ -24,7 +32,7 @@ public class RMExampleMobile {
 	}
 
 	private static Object[] getDrivers() {
-		return DriverProvider.getDrivers(Platform.MAC, "firefox");
+		return DriverProvider.getDrivers(Platform.MAC, "chrome");
 
 	}
 
@@ -43,75 +51,101 @@ public class RMExampleMobile {
 	@Test
 	public void tpi() throws Exception {
 		tDriver = driverWrapper.getDriver();
+		wait = new WebDriverWait(tDriver, 1);
 		System.out.println("Driver:" + tDriver);
-
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
-		Thread.sleep(500L);
+		wait.until(ExpectedConditions.elementToBeClickable(By
+				.linkText("Tjänster")));
+		// Thread.sleep(500L);
 		tMobNav.openTpi("Tjänster", "TPI™ – Test process improvement");
-
 		tMobNav.assertPageTitle("TPI™ – Test process improvement");
-		Thread.sleep(2000L);
+		// Thread.sleep(2000L);
 		System.out.println("Page title is: " + tDriver.getTitle());
+		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(scr, new File(
+				"C://Users/Samoyl3000/Desktop/Screenshot/scr01.png"));
 
 	}
 
 	@Test
 	public void management() throws Exception {
-		//tDriver = driverWrapper.getDriver();
-		//System.out.println("Driver:" + tDriver);
+		tDriver = driverWrapper.getDriver();
+		wait = new WebDriverWait(tDriver, 1);
+		System.out.println("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
-		Thread.sleep(500L);
+		wait.until(ExpectedConditions.elementToBeClickable(By
+				.linkText("Tjänster")));
+		// Thread.sleep(500L);
 		tMobNav.openManag("Tjänster", "Management");
-
 		tMobNav.assertPageTitle("Management");
-		Thread.sleep(2000L);
+		// Thread.sleep(2000L);
 		System.out.println("Page title is: " + tDriver.getTitle());
+		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(scr, new File(
+				"C://Users/Samoyl3000/Desktop/Screenshot/scr02.png"));
 	}
 
 	@Test
 	public void rekrytering() throws Exception {
 		tDriver = driverWrapper.getDriver();
+		wait = new WebDriverWait(tDriver, 1);
 		System.out.println("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
-		Thread.sleep(500L);
+		wait.until(ExpectedConditions.elementToBeClickable(By
+				.linkText("Tjänster")));
+		// Thread.sleep(500L);
 		tMobNav.openRyk("Tjänster", "Rekrytering");
-
 		tMobNav.assertPageTitle("Rekrytering");
-		Thread.sleep(2000L);
+		// Thread.sleep(2000L);
 		System.out.println("Page title is: " + tDriver.getTitle());
+		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(scr, new File(
+				"C://Users/Samoyl3000/Desktop/Screenshot/scr03.png"));
 	}
 
 	@Test
 	public void ClientAcademy() throws Exception {
 		tDriver = driverWrapper.getDriver();
+		wait = new WebDriverWait(tDriver, 1);
 		System.out.println("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
-		Thread.sleep(500L);
+		wait.until(ExpectedConditions.elementToBeClickable(By
+				.linkText("Tjänster")));
+		// Thread.sleep(500L);
 		tMobNav.openClAc("Tjänster", "Client Academy");
 
 		tMobNav.assertPageTitle("Client Academy");
-		Thread.sleep(2000L);
+		// Thread.sleep(2000L);
 		System.out.println("Page title is: " + tDriver.getTitle());
+		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(scr, new File(
+				"C://Users/Samoyl3000/Desktop/Screenshot/scr04.png"));
 	}
 
 	@Test
 	public void Konsulttjänster() throws Exception {
 		tDriver = driverWrapper.getDriver();
+		wait = new WebDriverWait(tDriver, 1);
 		System.out.println("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
-		Thread.sleep(500L);
+		wait.until(ExpectedConditions.elementToBeClickable(By
+				.linkText("Tjänster")));
+		// Thread.sleep(500L);
 		tMobNav.openKTj("Tjänster", "Konsulttjänster", "Acceptance tester");
 
-//		tMobNav.assertPageTitle("Client Academy");
+		tMobNav.assertPageTitle("Acceptance tester");
+		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(scr, new File(
+				"C://Users/Samoyl3000/Desktop/Screenshot/scr05.png"));
 		Thread.sleep(2000L);
 		tDriver.quit();
 	}
