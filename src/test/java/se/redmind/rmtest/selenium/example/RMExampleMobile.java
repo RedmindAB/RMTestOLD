@@ -32,7 +32,7 @@ public class RMExampleMobile {
 	}
 
 	private static Object[] getDrivers() {
-		return DriverProvider.getDrivers(Platform.MAC, "chrome");
+		return DriverProvider.getDrivers(Platform.MAC, "firefox");
 
 	}
 
@@ -55,19 +55,16 @@ public class RMExampleMobile {
 		System.out.println("Driver:" + tDriver);
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
-		wait.until(ExpectedConditions.elementToBeClickable(By
-				.linkText("Tjänster")));
+		
+		tMobNav.driverWaitElementPresent(By.linkText("Tjänster"), 1);
 		// Thread.sleep(500L);
 		tMobNav.openTpi("Tjänster", "TPI™ – Test process improvement");
 		tMobNav.assertPageTitle("TPI™ – Test process improvement");
+		tMobNav.driverFluentWait(2);
 		// Thread.sleep(2000L);
 		System.out.println("Page title is: " + tDriver.getTitle());
-		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(scr, new File(
-				"C://Users/Samoyl3000/Desktop/Screenshot/scr01.png"));
-
 	}
-
+	/*
 	@Test
 	public void management() throws Exception {
 		tDriver = driverWrapper.getDriver();
@@ -149,4 +146,5 @@ public class RMExampleMobile {
 		Thread.sleep(2000L);
 		tDriver.quit();
 	}
+	*/
 }
