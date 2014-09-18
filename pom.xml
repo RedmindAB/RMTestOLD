@@ -8,7 +8,7 @@
 	<description>Redmind Auto tests</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<runSuite>**/AllTests.class</runSuite>
+		<runSuite>**/GoogleTests.class</runSuite>
 		
 	</properties>
 	<build>
@@ -149,7 +149,7 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.42.2</version>
+			<version>2.43.1</version>
 		</dependency>
 
 		<dependency>
