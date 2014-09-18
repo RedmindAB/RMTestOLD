@@ -77,10 +77,13 @@ public class RMNav extends HTMLPage {
 				.perform();
 
 		System.out.println("Hovering over " + pMenuText);
-		Thread.sleep(2000L);
+		
+		driverFluentWait(20).until(ExpectedConditions.elementToBeClickable(By.className("sub-menu")));
+		
 		System.out.println("Pressing " + pSubMenuText);
 		driver.findElement(By.cssSelector(getCssSelector(pSubMenuText)))
 				.click();
+		driverFluentWait(20);
 	}
 
 	public void clickOnSubmenu(String pMenuText, String pSubMenuText,
@@ -92,17 +95,21 @@ public class RMNav extends HTMLPage {
 				.perform();
 
 		System.out.println("Hovering over " + pMenuText);
-		Thread.sleep(2000L);
+
+		driverFluentWait(20).until(ExpectedConditions.elementToBeClickable(By.className("sub-menu")));
 
 		builder.moveToElement(
 				driver.findElement(By.cssSelector(getCssSelector(pSubMenuText))))
 				.perform();
 
 		System.out.println("Hovering over " + pSubMenuText);
-		Thread.sleep(2000L);
+		
+		driverFluentWait(20).until(ExpectedConditions.elementToBeClickable(By.className("sub-menu")));
 
 		System.out.println("Pressing " + pSubSubMenuText);
 		driver.findElement(By.cssSelector(getCssSelector(pSubSubMenuText)))
 				.click();
+		
+		driverFluentWait(20);
 	}
 }
