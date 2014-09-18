@@ -13,6 +13,10 @@ import org.openqa.selenium.remote.UnreachableBrowserException;
 
 
 
+/**
+ * @author petter
+ *
+ */
 public class DriverProvider {
 
 
@@ -23,6 +27,9 @@ public class DriverProvider {
 	static ArrayList <DriverNamingWrapper> driverList = new ArrayList<DriverNamingWrapper>();
 	
 	
+	/**
+	 * 
+	 */
 	private static void updateDrivers() {
 		RmConfig config = new RmConfig();
 		HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
@@ -65,7 +72,10 @@ public class DriverProvider {
 		}
 	}
 
-	public static void startDrivers(ArrayList <UrlCapContainer> filteredUrlCapList){
+	/**
+	 * @param filteredUrlCapList
+	 */
+	private static void startDrivers(ArrayList <UrlCapContainer> filteredUrlCapList){
 		driverList = new ArrayList<DriverNamingWrapper>();
 		DesiredCapabilities capability;
 		URL driverUrl;
@@ -111,6 +121,9 @@ public class DriverProvider {
 	//		}
 	//	}
 
+	/**
+	 * 
+	 */
 	public static void stopDrivers() {
 
 		for (int i = 0; i < driverList.size(); i++) {
@@ -131,9 +144,10 @@ public class DriverProvider {
 		return driverList.toArray();
 	}
 
+	
 	/**
-	 * 
-	 * @return 
+	 * @param pPlatform
+	 * @return
 	 */
 	public synchronized static Object[] getDrivers(Platform pPlatform) {
 		updateDrivers();
@@ -147,9 +161,11 @@ public class DriverProvider {
 		return driverList.toArray();
 	}
 
+
 	/**
-	 * 
-	 * @return 
+	 * @param pPlatform1
+	 * @param pPlatform2
+	 * @return
 	 */
 	public synchronized static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2) {
 		updateDrivers();
@@ -166,9 +182,11 @@ public class DriverProvider {
 		return driverList.toArray();
 	}
 
+
 	/**
-	 * 
-	 * @return 
+	 * @param pPlatform
+	 * @param pBrowserName
+	 * @return
 	 */
 	public synchronized static Object[] getDrivers(Platform pPlatform, String pBrowserName) {
 		updateDrivers();
