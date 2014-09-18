@@ -37,7 +37,7 @@ public class HTMLPage {
     /**
      * @return WebDriver
      */
-    public final WebDriver getDriver() {
+    public WebDriver getDriver() {
         return driver;
     }    
     
