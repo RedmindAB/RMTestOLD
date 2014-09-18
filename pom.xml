@@ -8,6 +8,8 @@
 	<description>Redmind Auto tests</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<runSuite>**/AllTests.class</runSuite>
+		
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -82,6 +84,9 @@
 					<additionalClasspathElements>
 						<additionalClasspathElement>lib/</additionalClasspathElement>
 					</additionalClasspathElements>
+					<includes>
+                    	<include>${runSuite}</include>
+                	</includes>
 				</configuration>
 			</plugin>
 		</plugins>
