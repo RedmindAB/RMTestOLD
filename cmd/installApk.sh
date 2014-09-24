@@ -9,7 +9,7 @@ if [ -z "$APK_PATH" ]; then
 fi
 echo "Apk to install: $APK_PATH"
 echo "adb library used: $ADB_PATH"
-export APK_PACKAGE=`$ADB_PATH/../build-tools/android-$AndroidBuildToolVersion/aapt dump badging "$APK_PATH" | grep package: | cut -d " " -f 2 | cut -d "'" -f 2`
+export APK_PACKAGE=`$AAPTCmd dump badging "$APK_PATH" | grep package: | cut -d " " -f 2 | cut -d "'" -f 2`
 export modelName=""
 
 adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId

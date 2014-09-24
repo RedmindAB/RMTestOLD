@@ -14,7 +14,8 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export RmJar="$testHome/target/RMTest-SNAPSHOT.jar"
 export RMTestHubIp=`getConfigParam hubIp`
 export RMTestLocalNodeIp=`getConfigParam localIp`
-export AndroidBuildToolVersion=`getConfigParam AndroidBuildtoolsVersion`
+#export AndroidBuildToolVersion=`getConfigParam AndroidBuildtoolsVersion`
+export AAPTCmd=`find $androidHome -name aapt | head -1`
 export seleniumVersion=`getConfigParam seleniumVersion`
 
 alias ws="cd $testHome"
