@@ -37,7 +37,7 @@ public class GoogleNav extends HTMLPage {
 		}
 	}
 	public WebElement searchBox() {
-		By searchInputField = By.id("gbqfq");
+		By searchInputField = By.name("q");
 		driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(searchInputField)); 
 
 		return driver.findElement(searchInputField);

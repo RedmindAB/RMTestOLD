@@ -39,7 +39,7 @@ public class GoogleExample {
 	    }
 	    
 	    private static Object[] getDrivers() {
-	        return DriverProvider.getDrivers(Platform.MAC);
+	        return DriverProvider.getDrivers("browserName", "Chromium");
 
 	    }
 

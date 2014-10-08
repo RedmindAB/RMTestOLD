@@ -1,18 +1,18 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 . $testHome/cmd/setConfig.sh
 
 ./killAppiums.sh
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]; then
-	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
-	exit 1
+	echo "No APK supplied as argument, starting Chrome"
 fi
 
 export jar_home="$testHome/lib/selenium/"
 export androidNodeFile="/tmp/androidNodes.cfg"
 
 export basePort=8080
+export basePort=10080
 export modelName=""
 export androidVersion=""
 export isInstalled=""
@@ -28,19 +28,22 @@ do
 	description="$modelBrand $modelName  $androidVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
+	bootstrapPort=$[$bootstrapPort+1]
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
 	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/OS_NAME/ANDROID/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
-	sed -i '' "s:APP_PATH:$APK_PATH:g" $testHome/etc/Appium_TEMP.json
-	if [ $APK_PATH == ""chrome ]
+	if [ -z $APK_PATH ]
 		then
+		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
 		sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json	
 		sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
+		sed -i '' "s:BROWSER_NAME:Chromium:g" $testHome/etc/Appium_TEMP.json
 	else	
 		sed -i '' "s:APP_PKG:$APK_PACKAGE:g" $testHome/etc/Appium_TEMP.json
+		sed -i '' '/BROWSER_NAME/d' $testHome/etc/Appium_TEMP.json
 	fi
 	sed -i '' "s/DEVICE_NAME/android/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$androidVersion/g" $testHome/etc/Appium_TEMP.json
@@ -51,7 +54,7 @@ do
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
 	logfile="$testHome/log/appium_android_$currDevId.log"	
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
 	appiumStarted=true	
 	while $appiumStarted
 		do

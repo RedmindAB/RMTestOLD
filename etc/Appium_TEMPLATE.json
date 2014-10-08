@@ -13,7 +13,7 @@
           "app":"APP_PATH",
           "app-package":"APP_PKG",
           "app-activity":".StartActivity",
-          "browserName": ""
+          "browserName": "BROWSER_NAME"
     }
    
       ],
