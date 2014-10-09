@@ -23,7 +23,7 @@ import se.redmind.rmtest.selenium.example.*;
 public class RMExample {
 
 
-	    private WebDriver tDriver;
+//	    private WebDriver tDriver;
 	    private final DriverNamingWrapper driverWrapper;
 	    private final String driverDescription;
 	    private String startUrl = TestParams.getBaseUrl();
@@ -36,7 +36,7 @@ public class RMExample {
 	    }
 	    
 	    private static Object[] getDrivers() {
-	        return DriverProvider.getDrivers(Platform.ANDROID);
+	        return DriverProvider.getDrivers(Platform.MAC);
 
 	    }
 
@@ -53,7 +53,7 @@ public class RMExample {
 	        
 	    }
 
-		private void prepPage() throws Exception {
+		private void prepPage(WebDriver tDriver) throws Exception {
 			tDriver = driverWrapper.getDriver();   
 	    	System.out.println("Driver:" + tDriver);
 
@@ -63,7 +63,8 @@ public class RMExample {
 	    
 	    @Test
 	    public void management() throws Exception {
-	    	prepPage();
+	    	WebDriver tDriver = driverWrapper.getDriver();
+	    	prepPage(tDriver);
 	        
 	        //Mobile
 	        if (tDriver.findElement(By.className("mobile-menu-wrapper")).isDisplayed()) {
@@ -85,6 +86,7 @@ public class RMExample {
 		    		tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDriverDescription().replace(" ", "-"));
 	        	}
 	        } else { //desktop
+//	        	tDriver.manage().window().maximize() ;
 	        	tNavPage.clickOnSubmenu("tjanster", "management");
 	        	
 	            tNavPage.assertPageTitle("Management");
@@ -95,7 +97,8 @@ public class RMExample {
 	    
 	    @Test
 	    public void TPI() throws Exception {
-	    	prepPage();
+	    	WebDriver tDriver = driverWrapper.getDriver();
+	    	prepPage(tDriver);
 	    	
 	        //Mobile
 	        if (tDriver.findElement(By.className("mobile-menu-wrapper")).isDisplayed()) {
@@ -137,7 +140,8 @@ public class RMExample {
 	    
 	    @Test
 	    public void rekrytering() throws Exception {
-	    	prepPage();
+	    	WebDriver tDriver = driverWrapper.getDriver();
+	    	prepPage(tDriver);
 	        
 	        //Mobile
 	        if (tDriver.findElement(By.className("mobile-menu-wrapper")).isDisplayed()) {
@@ -170,7 +174,8 @@ public class RMExample {
 	    
 	    @Test
 	    public void clientAcademy() throws Exception {
-	    	prepPage();
+	    	WebDriver tDriver = driverWrapper.getDriver();
+	    	prepPage(tDriver);
 	        
 	        //Mobile
 	        if (tDriver.findElement(By.className("mobile-menu-wrapper")).isDisplayed()) {
@@ -202,7 +207,8 @@ public class RMExample {
 	    
 	    @Test
 	    public void konsulttjanster() throws Exception {
-	    	prepPage();
+	    	WebDriver tDriver = driverWrapper.getDriver();
+	    	prepPage(tDriver);
 	        
 	        //Mobile
 	        if (tDriver.findElement(By.className("mobile-menu-wrapper")).isDisplayed()) {
