@@ -12,7 +12,9 @@ export jar_home="$testHome/lib/selenium/"
 export androidNodeFile="/tmp/androidNodes.cfg"
 
 export basePort=8080
-export basePort=10080
+export bootstrapPort=10080
+export chromeDriverPort=11080
+export selendroidPort=12080
 export modelName=""
 export androidVersion=""
 export isInstalled=""
@@ -29,9 +31,11 @@ do
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
 	bootstrapPort=$[$bootstrapPort+1]
+	chromeDriverPort=$[$chromeDriverPort+1]
+	selendroidPort=$[$selendroidPort+1]
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
-	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/PLATFORM/Android/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/OS_NAME/ANDROID/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
@@ -54,7 +58,7 @@ do
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
 	logfile="$testHome/log/appium_android_$currDevId.log"	
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
 	appiumStarted=true	
 	while $appiumStarted
 		do

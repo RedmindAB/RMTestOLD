@@ -90,11 +90,13 @@ public class DriverProvider {
 			try {
 
 				WebDriver driver;
-				if (capability.getCapability("app-package") == null) {
+				if (capability.getCapability("app-package") == null && capability.getCapability("browserName") == null) {
 					driver = new RemoteWebDriver(driverUrl, capability);
+					System.out.println("This is a RemoteWebDriver");
 				} else {
 //					driver = new SwipeableWebDriver(driverUrl, capability);
 					driver = new AppiumDriver(driverUrl, capability);
+					System.out.println("This is a AppiumDriver");
 				}
 
 				driverList.add(new DriverNamingWrapper(description, driver, capability, driverUrl));
