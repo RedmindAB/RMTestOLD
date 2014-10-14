@@ -8,7 +8,7 @@
 	<description>Redmind Auto tests</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<runSuite>**/GoogleTests.class</runSuite>
+		<!--runSuite>**/GoogleTests.class</runSuite-->
 		
 	</properties>
 	<build>
