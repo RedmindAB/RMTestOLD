@@ -8,3 +8,4 @@ etc/LocalConfig.json
 .metadata/
 .project
 .classpath
+.idea/
