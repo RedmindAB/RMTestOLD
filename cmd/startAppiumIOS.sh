@@ -1,23 +1,22 @@
 #!/bin/bash -x
 
-. $testHome/cmd/setConfig.sh
+ . $testHome/cmd/setConfig.sh
 
 export IPA_PATH=$1
-if [ -z "$IPA_PATH" ]; then
-	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
-	exit 1
-fi
+#if [ -k "$IPA_PATH" ]; then
+#	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
+#	exit 1
+#fi
 
 export jar_home="$testHome/lib/selenium/"
 
-export basePort=8180
+export basePort=4723
 export modelName=""
 export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
-export idevicePath="$testHome/lib/libimobiledevice-macosx"
+export idevicePath="$testHome/appium/submodules/libimobiledevice-macosx"
 export PKG_NAME=`unzip -p $IPA_PATH  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`
-
 
 $idevicePath/idevice_id -l | while read currDevId
 do
@@ -29,10 +28,14 @@ do
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
 	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
-	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/OS_NAME/iOS/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s:APP_PATH:$IPA_PATH:g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/BROWSER/Safari/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/UDID_DEVICE/$currDevId/g" $testHome/etc/Appium_TEMP.json
+
+
         if [ $IPA_PATH == "safari" ]
                 then
                 sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json
@@ -47,12 +50,14 @@ do
 	sed -i '' "s/APPIUM_HOST/$RMTestLocalNodeIp/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
-	cat $testHome/etc/Appium_TEMP.json	
+	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
+	cat $testHome/etc/Appium_TEMP.json
 	
-#	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
-#	sleep 5
+	#$testHome/appium/bin/appium.js -U $currDevId  --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log &
+	sleep 5
+	ios_webkit_debug_proxy -c $currDevId:27753 &> $testHome/log/ios_webkit_debug_proxy_$currDevId.log &
 	logfile="$testHome/log/appium_ios_$currDevId.log"
-        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+       appium  --udid $currDevId -p $basePort --device-name "$modelName" --platform-name IOS --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
         appiumStarted=true
         while $appiumStarted
                 do

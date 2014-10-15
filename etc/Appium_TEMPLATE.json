@@ -2,17 +2,20 @@
   "capabilities":
       [
 
-    {
-          "osname": "OS_NAME",
+  {
+          "platform": "PLATFORM",
+          "platformName": "OS_NAME",
           "deviceId": "DEVICE_ID",
           "description": "DESCR_STRING",
           "maxInstances": 1,
-          "platformName":"PLATFORM",
           "platformVersion":"DEVICE_VERSION",
           "app":"APP_PATH",
           "app-package":"APP_PKG",
           "app-activity":".StartActivity",
-          "browserName": "BROWSER_NAME"
+          "browserName": "BROWSER",
+          "UDID" : "UDID_DEVICE"
+
+
     }
    
       ],
