@@ -5,14 +5,14 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebDriver;
 
 public class AnApp extends HTMLPage{
-	private AppiumDriver appDriver;
-	public AnApp(AppiumDriver pDriver) {
+	private WebDriver appDriver;
+	public AnApp(WebDriver pDriver) {
 		super(pDriver);
 		appDriver = pDriver;
 		// TODO Auto-generated constructor stub
 	}
 	
-	 public final AppiumDriver getDriver() {
+	 public final WebDriver getDriver() {
 	        return appDriver;
 	    }    
 }
