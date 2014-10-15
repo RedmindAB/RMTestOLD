@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-# . $testHome/cmd/setConfig.sh
+ . $testHome/cmd/setConfig.sh
 
 export IPA_PATH=$1
 #if [ -k "$IPA_PATH" ]; then
@@ -15,7 +15,7 @@ export modelName=""
 export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
-export idevicePath="$testHome/lib/libimobiledevice-macosx"
+export idevicePath="$testHome/appium/submodules/libimobiledevice-macosx"
 export PKG_NAME=`unzip -p $IPA_PATH  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`
 
 $idevicePath/idevice_id -l | while read currDevId

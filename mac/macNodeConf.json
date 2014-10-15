@@ -1,0 +1,34 @@
+{
+  "capabilities":
+      [
+
+	{
+		"seleniumProtocol": "WebDriver",
+		"browserName": "firefox",
+		"osname":"OSX",
+		"description": "OSX firefox",
+		"maxInstances": 1,
+		"platform" : "MAC"
+	},
+
+	{
+		"seleniumProtocol": "WebDriver",
+		"browserName": "chrome",
+		"osname":"OSX",
+		"description": "OSX chrome",
+		"maxInstances": 1,
+		"platform" : "MAC"
+	}
+      ],
+  "configuration":
+  {
+    "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+    "maxSession": 5,
+    "port": 6650,
+    "host": 127.0.0.1,
+    "register": true,
+    "registerCycle": 5000,
+    "hubPort": 4444,
+    "hubHost": 127.0.0.1
+  }
+}
