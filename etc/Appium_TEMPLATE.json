@@ -4,7 +4,7 @@
 
   {
           "platform": "PLATFORM",
-          "platformName": "OS_NAME",
+	  "platformName": "OS_NAME",
           "deviceId": "DEVICE_ID",
           "description": "DESCR_STRING",
           "maxInstances": 1,

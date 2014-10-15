@@ -35,7 +35,7 @@ do
 	selendroidPort=$[$selendroidPort+1]
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
-	sed -i '' "s/PLATFORM/Android/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/PLATFORM/ANDROID/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/OS_NAME/ANDROID/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
