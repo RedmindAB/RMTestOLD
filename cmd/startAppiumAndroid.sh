@@ -44,12 +44,12 @@ do
 		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
 		sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json	
 		sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
-		sed -i '' "s:BROWSER_NAME:Chromium:g" $testHome/etc/Appium_TEMP.json
+		sed -i '' "s:BROWSER_NAME:Chrome:g" $testHome/etc/Appium_TEMP.json
 	else	
 		sed -i '' "s:APP_PKG:$APK_PACKAGE:g" $testHome/etc/Appium_TEMP.json
 		sed -i '' '/BROWSER_NAME/d' $testHome/etc/Appium_TEMP.json
 	fi
-	sed -i '' "s/DEVICE_NAME/android/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/DEVICE_NAME/$modelName/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$androidVersion/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/APPIUM_PORT/$basePort/g" $testHome/etc/Appium_TEMP.json
