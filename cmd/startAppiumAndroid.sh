@@ -1,11 +1,14 @@
-#!/bin/bash 
+#!/bin/bash -x
 
 . $testHome/cmd/setConfig.sh
-
+logName=`getLogPrefix`
 ./killAppiums.sh
 export APK_PATH=$1
-if [ -z "$APK_PATH" ]; then
+if [ -z "$APK_PATH" ]
+then
 	echo "No APK supplied as argument, starting Chrome"
+else 
+	export APK_PACKAGE=`$AAPTCmd dump badging $APK_PATH | grep package: | cut -d " " -f 2 | cut -d "'" -f 2`
 fi
 
 export jar_home="$testHome/lib/selenium/"
@@ -19,7 +22,6 @@ export modelName=""
 export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
-export APK_PACKAGE=`$ADB_PATH/../build-tools/android-$AndroidBuildToolVersion/aapt dump badging $APK_PATH | grep package: | cut -d " " -f 2 | cut -d "'" -f 2`
 
 
 adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
@@ -57,12 +59,11 @@ do
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
-	logfile="$testHome/log/appium_android_$currDevId.log"	
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --nodeconfig $testHome/etc/Appium_TEMP.json 2> $logName.$currDevId.ERROR.log > $logName.$currDevId.log &
 	appiumStarted=true	
 	while $appiumStarted
 		do
-		connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" $logfile`
+		connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" "$logName.$currDevId.log"`
 		if [ $connectedCount -gt 0  ]
 		then
 			echo "Connected to HUB"

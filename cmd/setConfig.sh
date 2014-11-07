@@ -17,10 +17,16 @@ export RMTestLocalNodeIp=`getConfigParam localIp`
 #export AndroidBuildToolVersion=`getConfigParam AndroidBuildtoolsVersion`
 export AAPTCmd=`find $androidHome -name aapt | head -1`
 export seleniumVersion=`getConfigParam seleniumVersion`
+export PRETTY_TIMESTAMP="date +%Y%m%d_%H%M%S"
+
 
 alias ws="cd $testHome"
 alias cmd="cd $testHome/cmd/"
 alias adt="cd $ANDROID_HOME"
+
+getLogPrefix() {
+	echo "$testHome/log/$0-`$PRETTY_TIMESTAMP`"
+}
 
 
 PATH=$PATH:$testHome/lib

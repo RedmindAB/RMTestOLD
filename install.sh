@@ -1,6 +1,8 @@
 #!/bin/bash 
 
 scriptDir="$( cd "$( dirname "$0" )" && pwd )"
+cd $scriptDir
+
 foundOldConfig=false
 if [ -f $HOME/.RmTest ]; then
 	oldRmHome=`grep TESTHOME ~/.RmTest | cut -d "=" -f2`
@@ -8,12 +10,13 @@ if [ -f $HOME/.RmTest ]; then
 		foundOldConfig=true		
 	fi    
 fi
+
 echo "TESTHOME=$scriptDir" > $HOME/.RmTest
 echo ".RmTest configured"
 
 if [[ ! -f $scriptDir/etc/LocalConfig.json ]]
 then
-	if [ $foundOldConfig ]; then
+	if [ $foundOldConfig ] && [ -f $oldRmHome/etc/LocalConfig.json ]; then
     		echo "Found old installation, copying config"
 		cp $oldRmHome/etc/LocalConfig.json $scriptDir/etc/LocalConfig.json
 	else
@@ -32,7 +35,7 @@ else
 	exit 1
 fi
 
-cd $scriptDir
+
 
 echo "Running maven compile, correct any errors and rerun this script"
 
