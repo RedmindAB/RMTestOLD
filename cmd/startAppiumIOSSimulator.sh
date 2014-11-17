@@ -7,7 +7,7 @@ logName=`getLogPrefix`
 
 export jar_home="$testHome/lib/selenium/"
 
-export basePort=8180
+export basePort=4723
 export modelName=""
 export androidVersion=""
 export isInstalled=""
@@ -44,7 +44,7 @@ done
 #	sed -i '' "s/DEVICE_NAME/iphone/g" $testHome/etc/Appium_TEMP.json
 #	sed -i '' "s/DEVICE_VERSION/$iosVersion/g" $testHome/etc/Appium_TEMP.json
 #	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s/APPIUM_PORT/$basePort/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/APPIUM_PORT/$basePort/g" $testHome/etc/Simulator_Temp.json
 	sed -i '' "s/APPIUM_HOST/$RMTestLocalNodeIp/g" $testHome/etc/Simulator_Temp.json
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Simulator_Temp.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Simulator_Temp.json
@@ -52,9 +52,11 @@ done
 	
 #	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
 #	sleep 5
-	logfile="$testHome/log/logName.log"
+	logfile="$logName.log"
         #$testHome/appium/bin/appium.js --nodeconfig $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
-        $testHome/appium/bin/appium.js --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
+        appium --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
+#$testHome/appium/bin/appium.js --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --app /Applications/Appium.app/Contents/Resources/node_modules/appium/build/SafariLauncher/SafariLauncher.zip --session-override &> $logfile &
+
         appiumStarted=true
         while $appiumStarted
                 do
