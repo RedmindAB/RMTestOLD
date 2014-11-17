@@ -11,6 +11,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 
@@ -133,7 +134,14 @@ public class DriverProvider {
 
 		for (int i = 0; i < driverList.size(); i++) {
 			System.out.println("Closing driver: " + driverList.get(i).getDriverDescription());
-			driverList.get(i).getDriver().quit();
+			try {
+				driverList.get(i).getDriver().quit();
+			} catch (SessionNotFoundException e) {
+				System.out.println("For some reason a session was gone while quitting");
+				System.out.println(e);
+			}
+			
+			
 
 		}
 	}

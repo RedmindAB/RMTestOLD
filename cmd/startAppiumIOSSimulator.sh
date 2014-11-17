@@ -2,7 +2,7 @@
 
 . $testHome/cmd/setConfig.sh
 logName=`getLogPrefix`
-. $testHome/cmd/killAppiums.sh
+#. $testHome/cmd/killAppiums.sh
 # TODO: Add posibility to tests app on simulator
 
 export jar_home="$testHome/lib/selenium/"

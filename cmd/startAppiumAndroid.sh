@@ -2,7 +2,7 @@
 
 . $testHome/cmd/setConfig.sh
 logName=`getLogPrefix`
-./killAppiums.sh
+#./killAppiums.sh
 export APK_PATH=$1
 if [ -z "$APK_PATH" ]
 then
