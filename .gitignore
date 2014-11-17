@@ -8,3 +8,7 @@ etc/LocalConfig.json
 .metadata/
 .project
 .classpath
+.idea/
+RMTest.iml
+etc/Simulator_Temp.json
+

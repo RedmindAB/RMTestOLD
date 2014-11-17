@@ -1,6 +1,7 @@
 #!/bin/bash -x
 
 . $testHome/cmd/setConfig.sh
+logName=`getLogPrefix`
 . $testHome/cmd/killAppiums.sh
 # TODO: Add posibility to tests app on simulator
 
@@ -10,7 +11,6 @@ export basePort=8180
 export modelName=""
 export androidVersion=""
 export isInstalled=""
-rm -f $androidNodeFile
 export idevicePath="$testHome/lib/libimobiledevice-macosx"
 
 #export PKG_NAME=`unzip -p $IPA_PATH  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`
@@ -52,9 +52,9 @@ done
 	
 #	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
 #	sleep 5
-	logfile="$testHome/log/appium_ios_$currDevId.log"
+	logfile="$testHome/log/logName.log"
         #$testHome/appium/bin/appium.js --nodeconfig $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
-        appium --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
+        $testHome/appium/bin/appium.js --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
         appiumStarted=true
         while $appiumStarted
                 do

@@ -5,7 +5,6 @@
     {
           "osname": "OS_NAME",
           "deviceId": "DEVICE_ID",
-          "rmDeviceType": "mobile",
           "description": "DESCR_STRING",
           "maxInstances": 1,
           "deviceName":"DEVICE_NAME",
