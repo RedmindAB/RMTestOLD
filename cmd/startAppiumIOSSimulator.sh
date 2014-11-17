@@ -54,7 +54,7 @@ done
 #	sleep 5
 	logfile="$logName.log"
         #$testHome/appium/bin/appium.js --nodeconfig $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
-        appium --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
+        appium --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --launchTimeout 20000 --session-override &> $logfile &
 #$testHome/appium/bin/appium.js --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --app /Applications/Appium.app/Contents/Resources/node_modules/appium/build/SafariLauncher/SafariLauncher.zip --session-override &> $logfile &
 
         appiumStarted=true
