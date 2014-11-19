@@ -2,12 +2,6 @@
 
 . $testHome/cmd/setConfig.sh
 
-#export IPA_PATH=$1
-# if [ -z "$IPA_PATH" ]; then
-#	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
-#	exit 1
-# fi
-
 export jar_home="$testHome/lib/selenium/"
 
 export basePort=8180
@@ -16,7 +10,6 @@ export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
 export idevicePath="$testHome/lib/libimobiledevice-macosx"
-export PKG_NAME=`unzip -p $IPA_PATH  $plistFile |  plutil -p '-' | grep "CFBundleIdentifier" | cut -d " " -f5 | tr -d "\""`
 
 
 $idevicePath/idevice_id -l | while read currDevId
@@ -33,13 +26,6 @@ do
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s:APP_PATH:$IPA_PATH:g" $testHome/etc/Appium_TEMP.json
-        if [ $IPA_PATH == "safari" ]
-                then
-                sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json
-                sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
-        else
-		sed -i '' "s:APP_PKG:$PKG_NAME:g" $testHome/etc/Appium_TEMP.json
-        fi
 	sed -i '' "s/DEVICE_NAME/iphone/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_VERSION/$iosVersion/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
@@ -54,7 +40,8 @@ do
 #	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
 #	sleep 5
 	logfile="$testHome/log/appium_ios_$currDevId.log"
-        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json --safari &> $logfile &
+        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json --app /Users/testrunner/GIT/SafariLauncher.ipa --session-override &> $logfile &
+        ios_webkit_debug_proxy -c $currDevId:27753 -d &
         appiumStarted=true
         while $appiumStarted
                 do
