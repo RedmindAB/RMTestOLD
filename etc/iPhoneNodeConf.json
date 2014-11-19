@@ -1,0 +1,30 @@
+{
+    "capabilities": [
+        {
+        	"browserName": "Safari",
+            "version": "6.1.3",
+            "maxInstances": 1,
+            "platformName": "iOS",
+            "deviceName": "iPod 5",
+            "platform": "MAC",
+            "UUID" : "bc5c67a6298ac37bee4bcb9cd727654bf663e4a6",
+            "platformVersion":"6.1.3",
+            "launchTimeout" : "30000",
+            "rmDeviceType" : "mobile",
+             "autoWebview" : true            
+        }
+    ],
+    "configuration": {
+        "cleanUpCycle": 2000,
+        "timeout": 30000,
+        "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+        "url": "http://10.12.14.222:4723/wd/hub",
+        "host": "10.12.14.222",
+        "port": 4723,
+        "maxSession": 1,
+        "register": true,
+        "registerCycle": 5000,
+        "hubPort": 4444,
+        "hubHost": "10.12.14.222"
+    }
+}

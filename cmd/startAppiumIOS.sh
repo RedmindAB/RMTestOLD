@@ -2,11 +2,11 @@
 
 . $testHome/cmd/setConfig.sh
 
-export IPA_PATH=$1
-if [ -z "$IPA_PATH" ]; then
-	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
-	exit 1
-fi
+#export IPA_PATH=$1
+# if [ -z "$IPA_PATH" ]; then
+#	echo "usage: Full or relative path to the apk to installed should be supplied as an argument"
+#	exit 1
+# fi
 
 export jar_home="$testHome/lib/selenium/"
 
@@ -28,7 +28,7 @@ do
 	basePort=$[$basePort+1]
 	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
 	
-	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/PLATFORM/iOS/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
@@ -47,12 +47,14 @@ do
 	sed -i '' "s/APPIUM_HOST/$RMTestLocalNodeIp/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
+    sed -i '' "s/BROWSER_NAME/Safari/g" $testHome/etc/Appium_TEMP.json
+
 	cat $testHome/etc/Appium_TEMP.json	
 	
 #	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
 #	sleep 5
 	logfile="$testHome/log/appium_ios_$currDevId.log"
-        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json &> $logfile &
+        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json --safari &> $logfile &
         appiumStarted=true
         while $appiumStarted
                 do
