@@ -11,7 +11,8 @@
             "platformVersion":"6.1.3",
             "launchTimeout" : "30000",
             "rmDeviceType" : "mobile",
-             "autoWebview" : true            
+            "app" : "/Users/testrunner/GIT/SafariLauncher.ipa"
+   
         }
     ],
     "configuration": {

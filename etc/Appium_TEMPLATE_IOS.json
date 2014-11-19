@@ -1,0 +1,35 @@
+{
+  "capabilities":
+      [
+
+    {
+          "description": "DESCR_STRING",
+          "maxInstances": 1,
+          "rmDeviceType": "mobile",
+          "deviceName":"DEVICE_NAME",
+          "platformName":"iOS",
+          "platformVersion":"DEVICE_VERSION",
+          "app":"APP_PATH",
+          "app-package":"APP_PKG",
+          "app-activity":".StartActivity",
+          "browserName": "BROWSER_NAME",
+          "version": "6.1.3",
+          "platform": "MAC",
+          "launchTimeout" : "30000",
+          "rmDeviceType" : "mobile"
+    }
+   
+      ],
+  "configuration":
+  {
+    "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+    "maxSession": MAX_SESSIONS,
+    "port": APPIUM_PORT,
+    "host": "APPIUM_HOST",
+    "url":"http://APPIUM_HOST:APPIUM_PORT/wd/hub",
+    "register": true,
+    "registerCycle": 5000,
+    "hubPort": HUB_PORT,
+    "hubHost": "HUB_HOST"
+  }
+}

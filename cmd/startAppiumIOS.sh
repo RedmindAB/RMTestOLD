@@ -19,7 +19,7 @@ do
 	description="$modelName  $iosVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
-	cp -f $testHome/etc/Appium_TEMPLATE.json	$testHome/etc/Appium_TEMP.json
+	cp -f $testHome/etc/Appium_TEMPLATE_IOS.json	$testHome/etc/Appium_TEMP.json
 	
 	sed -i '' "s/PLATFORM/iOS/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Appium_TEMP.json
