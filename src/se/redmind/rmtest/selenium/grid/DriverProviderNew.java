@@ -21,8 +21,8 @@ public class DriverProviderNew {
 
 	private static Boolean isInitialized = false;
 	private static ArrayList<UrlCapContainer> urlCapList = new ArrayList<UrlCapContainer>();
-	static ArrayList<DriverNamingWrapper> driverList = new ArrayList<DriverNamingWrapper>();
-	static ArrayList<DriverNamingWrapper> filteredList = new ArrayList<DriverNamingWrapper>();
+	static ArrayList<DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
+//	static ArrayList<DriverNamingWrapper> filteredList = new ArrayList<DriverNamingWrapper>();
 
 	/**
 	 * 
@@ -80,7 +80,7 @@ public class DriverProviderNew {
 	 * @param filteredUrlCapList
 	 */
 	private static void startDrivers(ArrayList<UrlCapContainer> filteredUrlCapList) {
-		driverList = new ArrayList<DriverNamingWrapper>();
+//		driverList = new ArrayList<DriverNamingWrapper>();
 		DesiredCapabilities capability;
 		URL driverUrl;
 		String description;
@@ -102,7 +102,7 @@ public class DriverProviderNew {
 					System.out.println("This is a AppiumDriver");
 				}
 
-				driverList.add(new DriverNamingWrapper(description, driver,
+				filteredDriverList.add(new DriverNamingWrapper(description, driver,
 						capability, driverUrl));
 				System.out.println("Started driver: " + description);
 
@@ -111,8 +111,9 @@ public class DriverProviderNew {
 						+ description + " ::: " + driverUrl.toString());
 				e.printStackTrace();
 			} catch (Exception e) {
-				// TODO: handle exception
+				System.out.println("Unhandled Exception in StartDriver");
 				e.printStackTrace();
+				
 			}
 		}
 	}
@@ -123,10 +124,10 @@ public class DriverProviderNew {
 	 */
 	public static void stopDrivers() {
 
-		for (int i = 0; i < driverList.size(); i++) {
+		for (int i = 0; i < filteredDriverList.size(); i++) {
 			System.out.println("Closing driver: "
-					+ driverList.get(i).getDriverDescription());
-			driverList.get(i).getDriver().quit();
+					+ filteredDriverList.get(i).getDriverDescription());
+			filteredDriverList.get(i).getDriver().quit();
 
 		}
 	}
@@ -136,18 +137,36 @@ public class DriverProviderNew {
 	 * @return
 	 */
 	public synchronized static Object[] getDrivers() {
-//		updateDrivers();
-
-//		startDrivers(urlCapList);
-		return filteredList.toArray();
+		return filteredDriverList.toArray();
 	}
 
 	/**
-	 * @param pPlatform
+	 * 
 	 * @return
 	 */
-	public synchronized static Object[] addDrivers(Platform pPlatform) {
+	public synchronized static void clearAndFetchDrivers() {
+		if (filteredDriverList != null) {
+			for (int i = 0; i < filteredDriverList.size(); i++) {
+				filteredDriverList.get(i).getDriver().quit();
+			}
+		}
+		filteredDriverList = new ArrayList<DriverNamingWrapper>();
 		updateDrivers();
+	}
+	
+	/**
+	 */
+	public synchronized static void addDrivers() {
+		
+
+		startDrivers(urlCapList);
+	}
+	
+	/**
+	 * @param pPlatform
+	 */
+	public synchronized static void addDrivers(Platform pPlatform) {
+		
 		ArrayList<UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
 		for (int i = 0; i < urlCapList.size(); i++) {
 			if (urlCapList.get(i).getCapability().getPlatform().is(pPlatform)) {
@@ -155,7 +174,7 @@ public class DriverProviderNew {
 			}
 		}
 		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+//		return filteredDriverList.toArray();
 	}
 
 
@@ -163,11 +182,11 @@ public class DriverProviderNew {
 	/**
 	 * @param pPlatform
 	 * @param pBrowserName
-	 * @return
+
 	 */
-	public synchronized static Object[] addDrivers(Platform pPlatform,
+	public synchronized static void addDrivers(Platform pPlatform,
 			String pBrowserName) {
-		updateDrivers();
+		
 		ArrayList<UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
 		for (int i = 0; i < urlCapList.size(); i++) {
 			if (urlCapList.get(i).getCapability().getPlatform().is(pPlatform)) {
@@ -182,7 +201,7 @@ public class DriverProviderNew {
 		// System.out.println("Number of drivers: " +
 		// filteredDriverList.size());
 		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+//		return filteredDriverList.toArray();
 	}
 
 	/**
@@ -190,11 +209,10 @@ public class DriverProviderNew {
 	 * 
 	 * @param capKey
 	 * @param capValue
-	 * @return
 	 */
-	public synchronized static Object[] addDrivers(String capKey,
+	public synchronized static void addDrivers(String capKey,
 			String capValue) {
-		updateDrivers();
+		
 		ArrayList<UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
 		String currCap;
 		for (int i = 0; i < urlCapList.size(); i++) {
@@ -208,6 +226,6 @@ public class DriverProviderNew {
 			}
 		}
 		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+
 	}
 }
