@@ -59,7 +59,7 @@ do
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --nodeconfig $testHome/etc/Appium_TEMP.json 2> $logName.$currDevId.ERROR.log > $logName.$currDevId.log &
+	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --nodeconfig $testHome/etc/Appium_TEMP.json  --session-override 2> $logName.$currDevId.ERROR.log > $logName.$currDevId.log &
 	appiumStarted=true	
 	while $appiumStarted
 		do
