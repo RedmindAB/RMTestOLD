@@ -2,8 +2,17 @@
 
 . $testHome/cmd/setConfig.sh
 logName=`getLogPrefix`
-#. $testHome/cmd/killAppiums.sh
-# TODO: Add posibility to tests app on simulator
+export PHONE_NAME=$1
+export IOSVERSION=$2
+export USAGE_MESSAGE="Usage: command.sh <Iphone model> <IOS version>"
+if [ -z "$PHONE_NAME" ]; then
+        echo $USAGE_MESSAGE
+	exit 1
+fi
+if [ -z "$IOSVERSION" ]; then
+        echo $USAGE_MESSAGE
+        exit 1
+fi
 
 export jar_home="$testHome/lib/selenium/"
 
@@ -24,26 +33,26 @@ done
 
 #	modelName=`$idevicePath/ideviceinfo -u $currDevId | grep DeviceName | sed "s/DeviceName: //g"`
 #	iosVersion=`$idevicePath/ideviceinfo -u $currDevId | grep ProductVersion | sed "s/ProductVersion: //g"`
-#	description="$modelName  $iosVersion"
+	description="$PHONE_NAME  $IOSVERSION `hostname`"
 #	echo "####### $modelName ########"
 #	basePort=$[$basePort+1]
 	cp -f $testHome/etc/iPhoneSimulator.json	$testHome/etc/Simulator_Temp.json
 	
-#	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s:APP_PATH:$IPA_PATH:g" $testHome/etc/Appium_TEMP.json
+#	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Simulator_Temp.json
+#	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Simulator_Temp.json
+#	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Simulator_Temp.json
+	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Simulator_Temp.json
+#	sed -i '' "s:APP_PATH:$IPA_PATH:g" $testHome/etc/Simulator_Temp.json
 #        if [ $IPA_PATH == "safari" ]
 #                then
-#                sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json
-#                sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
+#                sed -i '' '/app-package/d' $testHome/etc/Simulator_Temp.json
+#                sed -i '' '/app-activity/d' $testHome/etc/Simulator_Temp.json
 #        else
-#		sed -i '' "s:APP_PKG:$PKG_NAME:g" $testHome/etc/Appium_TEMP.json
+#		sed -i '' "s:APP_PKG:$PKG_NAME:g" $testHome/etc/Simulator_Temp.json
 #        fi
-#	sed -i '' "s/DEVICE_NAME/iphone/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s/DEVICE_VERSION/$iosVersion/g" $testHome/etc/Appium_TEMP.json
-#	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Appium_TEMP.json
+	sed -i '' "s/DEVICE_NAME/$PHONE_NAME/g" $testHome/etc/Simulator_Temp.json
+	sed -i '' "s/IOS_VERSION/$IOSVERSION/g" $testHome/etc/Simulator_Temp.json
+#	sed -i '' "s/MAX_SESSIONS/1/g" $testHome/etc/Simulator_Temp.json
 	sed -i '' "s/APPIUM_PORT/$basePort/g" $testHome/etc/Simulator_Temp.json
 	sed -i '' "s/APPIUM_HOST/$RMTestLocalNodeIp/g" $testHome/etc/Simulator_Temp.json
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Simulator_Temp.json

@@ -2,12 +2,13 @@
     "capabilities": [
         {
             "browserName": "Safari",
-            "version": "7.1",
+            "version": "IOS_VERSION",
             "maxInstances": 1,
+            "description": "DESCR_STRING",
             "platformName": "iOS",
-            "deviceName": "iPhone 5",
+            "deviceName": "DEVICE_NAME",
             "platform": "MAC",
-            "platformVersion":"7.1",
+            "platformVersion":"IOS_VERSION",
 	    "rmDeviceType":"mobile",
             "launchTimeout" : "30000"
         }
