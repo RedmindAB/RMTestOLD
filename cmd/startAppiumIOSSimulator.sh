@@ -36,7 +36,7 @@ done
 	description="$PHONE_NAME  $IOSVERSION `hostname`"
 #	echo "####### $modelName ########"
 #	basePort=$[$basePort+1]
-	cp -f $testHome/etc/iPhoneSimulator.json	$testHome/etc/Simulator_Temp.json
+	cp -f $testHome/etc/iPhoneSimulator_TEMPLATE.json	$testHome/etc/Simulator_Temp.json
 	
 #	sed -i '' "s/PLATFORM/MAC/g" $testHome/etc/Simulator_Temp.json
 #	sed -i '' "s/OS_NAME/IOS/g" $testHome/etc/Simulator_Temp.json
