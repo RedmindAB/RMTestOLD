@@ -10,6 +10,7 @@
             "platform": "MAC",
             "platformVersion":"IOS_VERSION",
 	    "rmDeviceType":"mobile",
+	    "newCommandTimeout":"300",
             "launchTimeout" : "30000"
         }
     ],

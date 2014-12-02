@@ -9,7 +9,7 @@ export modelName=""
 export androidVersion=""
 export isInstalled=""
 rm -f $androidNodeFile
-export idevicePath="$testHome/lib/libimobiledevice-macosx"
+export idevicePath="$testHome/libimobiledevice-macosx"
 
 
 $idevicePath/idevice_id -l | while read currDevId
