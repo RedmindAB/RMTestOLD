@@ -39,7 +39,7 @@ public class GoogleExample {
 	    }
 	    
 	    private static Object[] getDrivers() {
-	        return DriverProvider.getDrivers("platformName", "Android");
+	        return DriverProvider.getDrivers("rmDeviceType", "mobile");
 //	    	return DriverProvider.getDrivers(Platform.ANDROID);
 
 	    }
