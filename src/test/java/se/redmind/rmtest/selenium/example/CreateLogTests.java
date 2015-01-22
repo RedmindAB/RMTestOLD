@@ -5,15 +5,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.BeforeClass;
 
+import se.redmind.rmtest.selenium.example.CreateLogsTest;
+import se.redmind.rmtest.selenium.example.CreateLogsTestSecond;
 import se.redmind.rmtest.selenium.example.GoogleExample;
 //import se.aftonbladet.abtest.tests.mobile.menu.AbMobileNavTest;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
-
-
-
-
 @RunWith(Suite.class)
-@Suite.SuiteClasses( {GoogleExample.class})
+@Suite.SuiteClasses( {CreateLogsTest.class,CreateLogsTestSecond.class})
 public class CreateLogTests {
     @BeforeClass
     public static void beforeAllTests(){

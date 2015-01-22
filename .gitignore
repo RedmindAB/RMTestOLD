@@ -9,6 +9,8 @@ etc/LocalConfig.json
 .project
 .classpath
 .idea/
+.settings
+cmd/.log
 RMTest.iml
 etc/Simulator_Temp.json
 
