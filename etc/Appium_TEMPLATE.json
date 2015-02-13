@@ -10,6 +10,7 @@
           "rmDeviceType": "mobile",
           "deviceName":"DEVICE_NAME",
           "platformName":"PLATFORM",
+	  "platform": "OS_NAME",
           "platformVersion":"DEVICE_VERSION",
           "app":"APP_PATH",
           "app-package":"APP_PKG",
