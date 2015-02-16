@@ -50,40 +50,7 @@ public class DriverProvider {
 				DesiredCapabilities capability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
 				//                    System.out.println("DESCRIPTION OF DEVICE: " + capability.getCapability("description") + nodeReq.getDescription());
 
-				String os;
-				if (capability.getCapability("rmOsName") != null) { 
-					os = (String) capability.getCapability("rmOsName");
-				} else if (capability.getCapability("platformName") != null) { 
-					os = (String) capability.getCapability("platformName");
-				} else if (capability.getCapability("osname") != null) { 
-					os = (String) capability.getCapability("osname");
-				} else  {
-					os = (String) capability.getCapability("platform");
-				}
-				String osVer;
-				if (capability.getCapability("platformVersion") != null){
-					osVer = (String) capability.getCapability("platformVersion");
-				} else {
-					osVer = "UNKNOWN";
-				}
-				
-				String device;
-				if (capability.getCapability("deviceName") != null) {
-					device = (String) capability.getCapability("deviceName"); 
-				} else {
-					device = "UNKNOWN";
-				}
-				
-				String browser;
-				if (capability.getCapability("browserName") != null) {
-					browser = (String) capability.getCapability("browserName"); 
-				} else {
-					browser = "UNKNOWN";
-				}
-				String browserVersion = "UNKNOWN";
-				description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
-
-				System.out.println("Description of driver is: " + description);
+				description = buildDescriptionFromCapabilities(capability);
 				URL driverUrl;
 				try {
 					driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
@@ -98,6 +65,94 @@ public class DriverProvider {
 
 		}
 	}
+
+	/**
+	 * @param capability
+	 * @return
+	 */
+	private static String buildDescriptionFromCapabilities(
+			DesiredCapabilities capability) {
+		String description;
+		
+		String os;
+		if (capability.getCapability("rmOsName") != null) { 
+			os = (String) capability.getCapability("rmOsName");
+		} else if (capability.getCapability("platformName") != null) { 
+			os = (String) capability.getCapability("platformName");
+		} else if (capability.getCapability("osname") != null) { 
+			os = (String) capability.getCapability("osname");
+		} else  {
+			os = (String) capability.getCapability("platform");
+		}
+		
+		
+		String osVer;
+		if (capability.getCapability("platformVersion") != null){
+			osVer = (String) capability.getCapability("platformVersion");
+		} else {
+			osVer = "UNKNOWN";
+		}
+		
+		String device;
+		if (capability.getCapability("deviceName") != null) {
+			device = (String) capability.getCapability("deviceName"); 
+		} else {
+			device = "UNKNOWN";
+		}
+		
+		String browser;
+		if (capability.getCapability("browserName") != null) {
+			browser = (String) capability.getCapability("browserName"); 
+		} else {
+			browser = "UNKNOWN";
+		}
+		String browserVersion = "UNKNOWN";
+		
+		description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
+
+		System.out.println("Description of driver is: " + description);
+		return description;
+	}
+
+	/**
+	 * @param filteredUrlCapList
+	 */
+	public static void startDriver(UrlCapContainer UrlCap){
+		
+		DesiredCapabilities capability;
+		URL driverUrl;
+		String description;
+
+			capability = UrlCap.getCapability();
+			driverUrl = UrlCap.getUrl();
+			description = UrlCap.getDescription();
+
+			try {
+
+				WebDriver driver;
+				if (capability.getCapability("rmDeviceType") == null) {
+					driver = new RemoteWebDriver(driverUrl, capability);
+					System.out.println("This is a RemoteWebDriver");
+				} else {
+//					driver = new SwipeableWebDriver(driverUrl, capability);
+					driver = new AppiumDriver(driverUrl, capability);
+					System.out.println("This is a AppiumDriver");
+				}
+
+				driverList.add(new DriverNamingWrapper(description, driver, capability, driverUrl));
+				System.out.println("Started driver: " + description);
+
+			} catch (UnreachableBrowserException e) {
+				System.out.println("This driver seems to be nonresponsive: " +
+						description + " ::: " + driverUrl.toString());
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		
+	}
+
 
 	/**
 	 * @param filteredUrlCapList
@@ -179,6 +234,17 @@ public class DriverProvider {
 		
 		startDrivers(urlCapList);
 		return driverList.toArray();
+	}
+	
+	/**
+	 * 
+	 * @return 
+	 */
+	public synchronized static Object[] getDriversNew() {
+		updateDrivers();
+		
+//		startDrivers(urlCapList);
+		return urlCapList.toArray();
 	}
 
 	
