@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,6 +25,7 @@ public class CopyOfGoogleExample {
 	   private WebDriver tDriver;
 	    private final UrlCapContainer urlContainer;
 	    private final String driverDescription;
+		private static GoogleNav navPage;
 
 	    public CopyOfGoogleExample(final UrlCapContainer driverWrapper, final String driverDescription) {
 	        this.urlContainer = driverWrapper;
@@ -48,12 +50,16 @@ public class CopyOfGoogleExample {
 	        return returnList;
 	    }
 
-
+	    @AfterClass
+	    public static void afterAllTests(){
+	    	navPage.getDriver().close();
+	    }
+	    
     @Test
     public void testGoogle() throws Exception {
 //        WebDriver driver = urlContainer.startDriver();
     	
-        GoogleNav navPage = new GoogleNav(urlContainer.startDriver());
+        navPage = new GoogleNav(urlContainer.startDriver());
                 
         
         // Find the text input element by its name
