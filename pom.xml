@@ -8,7 +8,7 @@
 	<description>Redmind Auto tests</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<runSuite>**/CreateLogTests.class</runSuite>
+		<!--runSuite>**/RandomResults.class</runSuite-->
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
     	<timestamp>${maven.build.timestamp}</timestamp>
 	</properties>

@@ -14,6 +14,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.SessionNotFoundException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
+import se.redmind.rmtest.selenium.framework.DeviceDescription;
+
 
 
 /**
@@ -48,14 +50,38 @@ public class DriverProvider {
 				DesiredCapabilities capability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
 				//                    System.out.println("DESCRIPTION OF DEVICE: " + capability.getCapability("description") + nodeReq.getDescription());
 
-				if (capability.getCapability("description") != null) { 
-					description = (String) capability.getCapability("description");
-				} else if (nodeReq.getDescription() != null) {
-					description = nodeReq.getDescription();
-				} else {
-					description = capability.getPlatform() + " " + capability.getBrowserName();
-
+				String os;
+				if (capability.getCapability("rmOsName") != null) { 
+					os = (String) capability.getCapability("rmOsName");
+				} else if (capability.getCapability("platformName") != null) { 
+					os = (String) capability.getCapability("platformName");
+				} else if (capability.getCapability("osname") != null) { 
+					os = (String) capability.getCapability("osname");
+				} else  {
+					os = (String) capability.getCapability("platform");
 				}
+				String osVer;
+				if (capability.getCapability("platformVersion") != null){
+					osVer = (String) capability.getCapability("platformVersion");
+				} else {
+					osVer = "UNKNOWN";
+				}
+				
+				String device;
+				if (capability.getCapability("deviceName") != null) {
+					device = (String) capability.getCapability("deviceName"); 
+				} else {
+					device = "UNKNOWN";
+				}
+				
+				String browser;
+				if (capability.getCapability("browserName") != null) {
+					browser = (String) capability.getCapability("browserName"); 
+				} else {
+					browser = "UNKNOWN";
+				}
+				String browserVersion = "UNKNOWN";
+				description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
 
 				System.out.println("Description of driver is: " + description);
 				URL driverUrl;
@@ -67,8 +93,6 @@ public class DriverProvider {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
-
 
 			}
 
