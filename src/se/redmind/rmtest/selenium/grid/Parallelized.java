@@ -49,6 +49,13 @@ public class Parallelized extends Parameterized
     public Parallelized(Class klass) throws Throwable
     {
         super(klass);
-        setScheduler(new ThreadPoolScheduler(noThreads));
+
+        try {
+        	setScheduler(new ThreadPoolScheduler(noThreads));
+		} catch (IllegalArgumentException e) {
+			System.err.println("ERROR: No drivers found with current filter");
+//			e.printStackTrace();
+		}
+        
     }
 }
