@@ -1,9 +1,11 @@
 package se.redmind.rmtest.selenium.grid;
 
+import static org.junit.Assert.assertTrue;
 import io.appium.java_client.AppiumDriver;
 
 import java.net.URL;
 
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -52,7 +54,13 @@ public class UrlCapContainer {
 					System.out.println("This is a RemoteWebDriver");
 				} else {
 //					driver = new SwipeableWebDriver(driverUrl, capability);
-					this.driver = new AppiumDriver(url, capability);
+					try {
+						this.driver = new AppiumDriver(url, capability);
+					} catch (SessionNotCreatedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						assertTrue(false);
+					}
 					System.out.println("This is a AppiumDriver");
 				}
 

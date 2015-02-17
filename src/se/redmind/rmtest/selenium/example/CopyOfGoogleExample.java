@@ -63,12 +63,12 @@ public class CopyOfGoogleExample {
     	
         navPage = new HTMLPage(urlContainer.startDriver());
         
-        navPage.getDriver().get("http://www.redmind.se");
+        navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
         System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(navPage.getTitle().startsWith("Redmind"));
+        assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
         navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
@@ -79,6 +79,27 @@ public class CopyOfGoogleExample {
         
         
     }
+    @Test
+    public void testGoogle2() throws Exception {
+//        WebDriver driver = urlContainer.startDriver();
+    	
+        navPage = new HTMLPage(urlContainer.startDriver());
+        
+        navPage.getDriver().get("http://www.google.se");
+        // Find the text input element by its name
 
+        System.out.println("Page title is: " + navPage.getTitle());
+        
+        assertTrue(navPage.getTitle().startsWith("Goo"));
+        
+        
+        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
+        System.out.println("Done!");
+       
+       navPage.getDriver().quit();
+
+        
+        
+    }
 
 }
