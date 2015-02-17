@@ -170,11 +170,14 @@ public class DriverProvider {
 			try {
 
 				WebDriver driver;
-				if (capability.getCapability("rmDeviceType") == null) {
+				String rmDeviceType = (String) capability.getCapability("rmDeviceType");
+				if (rmDeviceType == null) {
 					driver = new RemoteWebDriver(driverUrl, capability);
 					System.out.println("This is a RemoteWebDriver");
+				} else if (rmDeviceType.equalsIgnoreCase("desktop")) {
+					driver = new RemoteWebDriver(driverUrl, capability);
+					System.out.println("This is a Desktop remotewebdriver");
 				} else {
-//					driver = new SwipeableWebDriver(driverUrl, capability);
 					driver = new AppiumDriver(driverUrl, capability);
 					System.out.println("This is a AppiumDriver");
 				}

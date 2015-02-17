@@ -38,7 +38,7 @@ public class HTMLPage {
      * @return WebDriver
      */
     public WebDriver getDriver() {
-        return driver;
+        return this.driver;
     }    
     
     /**
@@ -46,7 +46,7 @@ public class HTMLPage {
      * @return
      */
     private WebDriverWait driverWait(int timeoutInSeconds) {
-        return new WebDriverWait(driver, timeoutInSeconds);
+        return new WebDriverWait(this.driver, timeoutInSeconds);
     }
     
     public FluentWait<WebDriver> driverFluentWait(int timeoutInSeconds) {
@@ -61,7 +61,7 @@ public class HTMLPage {
             	 */
             	Logger.getLogger("org.openqa.selenium.support.ui.ExpectedConditions").setLevel(Level.SEVERE);
                 
-            	fw = new FluentWait<WebDriver>(driver)
+            	fw = new FluentWait<WebDriver>(this.driver)
                 .withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
                 fw.ignoring(WebDriverException.class,ClassCastException.class);
                 fw.ignoring(NoSuchElementException.class);
