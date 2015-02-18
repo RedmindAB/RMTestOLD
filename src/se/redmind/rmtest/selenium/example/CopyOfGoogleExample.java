@@ -84,7 +84,7 @@ public class CopyOfGoogleExample {
 //        WebDriver driver = urlContainer.startDriver();
     	
         navPage = new HTMLPage(urlContainer.startDriver());
-        
+        System.out.println("Driver started");
         navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 

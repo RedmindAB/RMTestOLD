@@ -2,6 +2,9 @@ package se.redmind.rmtest.selenium.grid;
 
 import static org.junit.Assert.assertTrue;
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 
 import java.net.URL;
 
@@ -55,11 +58,17 @@ public class UrlCapContainer {
 				} else {
 //					driver = new SwipeableWebDriver(driverUrl, capability);
 					try {
-						this.driver = new AppiumDriver(url, capability);
+						if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
+							this.driver = new AndroidDriver(url, capability);
+						} else {
+							this.driver = new IOSDriver(url, capability);
+						}
+//						this.driver = new AppiumDriver(url, capability);
+						
 					} catch (SessionNotCreatedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						assertTrue(false);
+						assertTrue("Driver failed to start properly",false);
 					}
 					System.out.println("This is a AppiumDriver");
 				}

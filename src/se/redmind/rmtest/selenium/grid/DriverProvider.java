@@ -1,6 +1,8 @@
 package se.redmind.rmtest.selenium.grid;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -135,7 +137,11 @@ public class DriverProvider {
 					System.out.println("This is a RemoteWebDriver");
 				} else {
 //					driver = new SwipeableWebDriver(driverUrl, capability);
-					driver = new AppiumDriver(driverUrl, capability);
+					if (capability.getCapability("rmDeviceType") == "Android") {
+						driver = new AndroidDriver(driverUrl, capability);
+					} else {
+						driver = new IOSDriver(driverUrl, capability);
+					}
 					System.out.println("This is a AppiumDriver");
 				}
 
@@ -178,7 +184,11 @@ public class DriverProvider {
 					driver = new RemoteWebDriver(driverUrl, capability);
 					System.out.println("This is a Desktop remotewebdriver");
 				} else {
-					driver = new AppiumDriver(driverUrl, capability);
+					if (capability.getCapability("rmDeviceType") == "Android") {
+						driver = new AndroidDriver(driverUrl, capability);
+					} else {
+						driver = new IOSDriver(driverUrl, capability);
+					}
 					System.out.println("This is a AppiumDriver");
 				}
 
