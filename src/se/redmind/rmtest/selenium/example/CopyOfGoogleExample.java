@@ -29,7 +29,7 @@ public class CopyOfGoogleExample {
 	   private WebDriver tDriver;
 	    private final UrlCapContainer urlContainer;
 	    private final String driverDescription;
-		private HTMLPage navPage;
+//		private HTMLPage navPage;
 
 	    public CopyOfGoogleExample(final UrlCapContainer driverWrapper, final String driverDescription) {
 	        this.urlContainer = driverWrapper;
@@ -54,46 +54,46 @@ public class CopyOfGoogleExample {
 	        return returnList;
 	    }
 
-	    @After
-	    public void afterTest(){
-	    	this.navPage.getDriver().quit();
+	    @AfterClass
+	    public static void afterTest(){
+	    	DriverProvider.stopDrivers();
 	    }
 	    
 
 	    @Before
 	    public void beforeTest(){
-	    	this.navPage = new HTMLPage(urlContainer.startDriver());
+	    	this.tDriver = this.urlContainer.startDriver();
 	    }
 	    
     @Test
     public void testGoogle() throws Exception {
-
+    	HTMLPage navPage = new HTMLPage(this.tDriver);
         
-        this.navPage.getDriver().get("http://www.google.se");
+        navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
-        System.out.println("Page title is: " + this.navPage.getTitle());
+        System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(this.navPage.getTitle().startsWith("Goo"));
+        assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        this.navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
+        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         System.out.println("Done!");   
         
     }
     @Test
     public void testGoogle2() throws Exception {
-
+    	HTMLPage navPage = new HTMLPage(this.tDriver);
         
-    	this.navPage.getDriver().get("http://www.google.se");
+    	navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
-        System.out.println("Page title is: " + this.navPage.getTitle());
+        System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(this.navPage.getTitle().startsWith("Goo"));
+        assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        this.navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
+        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         System.out.println("Done!");        
         
     }

@@ -224,10 +224,10 @@ public class DriverProvider {
 	 */
 	public static void stopDrivers() {
 
-		for (int i = 0; i < driverList.size(); i++) {
-			System.out.println("Closing driver: " + driverList.get(i).getDriverDescription());
+		for (int i = 0; i < urlCapList.size(); i++) {
+			System.out.println("Closing driver: " + urlCapList.get(i).getDescription());
 			try {
-				driverList.get(i).getDriver().quit();
+				urlCapList.get(i).getDriver().quit();
 			} catch (SessionNotFoundException e) {
 				System.out.println("For some reason a session was gone while quitting");
 				System.out.println(e);

@@ -20,77 +20,87 @@ public class UrlCapContainer {
 	private DesiredCapabilities capability;
 	String description;
 	WebDriver driver;
-	
-	
+
+
 	public UrlCapContainer(URL url, DesiredCapabilities capability, String description) {
 		this.url = url;
 		this.capability = capability;
 		this.description = description;
-		
+
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public URL getUrl() {
 		return url;
 	}
-	
+
 	public DesiredCapabilities getCapability() {
 		return capability;
 	}
+
+	public WebDriver getDriver() {
+		return this.driver;
+	}
 	
-	
-	
+
 	/**
 	 * @param filteredUrlCapList
 	 */
 	public WebDriver startDriver(){
+		if (this.driver == null) {
+			
 		
+		int maxRetryAttempts = 5;
+		int retryAttempts = 0;
+		while (retryAttempts < maxRetryAttempts) {
+			System.out.println("Attempt: " + retryAttempts);
 
 			try {
 
-				WebDriver driver;
+//				WebDriver driver;
 				if (capability.getCapability("rmDeviceType") == null) {
 					this.driver = new RemoteWebDriver(url, capability);
 					System.out.println("This is a RemoteWebDriver");
 				} else {
-//					driver = new SwipeableWebDriver(driverUrl, capability);
-					try {
-						if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
-							this.driver = new AndroidDriver(url, capability);
-						} else {
-							this.driver = new IOSDriver(url, capability);
-						}
-//						this.driver = new AppiumDriver(url, capability);
-						
-					} catch (SessionNotCreatedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						assertTrue("Driver failed to start properly",false);
+
+					if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
+						this.driver = new AndroidDriver(url, capability);
+					} else {
+						this.driver = new IOSDriver(url, capability);
 					}
+
 					System.out.println("This is a AppiumDriver");
 				}
 
-//				driverList.add(new DriverNamingWrapper(description, driver, capability, driverUrl));
 				System.out.println("Started driver: " + description);
 
 			} catch (UnreachableBrowserException e) {
-				System.out.println("This driver seems to be nonresponsive: " +
-						description + " ::: " + url.toString());
+//				System.out.println("This driver seems to be nonresponsive: " +
+//						description + " ::: " + url.toString());
 				e.printStackTrace();
+				retryAttempts++;
+			} catch (SessionNotCreatedException e) {
+				e.printStackTrace();
+				retryAttempts++;
 			} catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
+				retryAttempts++;
 			}
 			return this.driver;
-		
+		}
+		assertTrue("Driver failed to start properly after " + retryAttempts + " attempts",false);
+		return this.driver;
+		} else {
+			return this.driver;
+		}
 	}
 
-	
-    @Override
-    public String toString() {
-        return description;
-    }
+
+	@Override
+	public String toString() {
+		return description;
+	}
 }
