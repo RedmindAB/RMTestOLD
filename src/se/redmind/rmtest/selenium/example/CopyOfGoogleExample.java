@@ -6,7 +6,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -52,53 +54,47 @@ public class CopyOfGoogleExample {
 	        return returnList;
 	    }
 
-//	    @AfterClass
-//	    public static void afterAllTests(){
-//	    	navPage.getDriver().quit();
-//	    }
+	    @After
+	    public void afterTest(){
+	    	this.navPage.getDriver().quit();
+	    }
+	    
+
+	    @Before
+	    public void beforeTest(){
+	    	this.navPage = new HTMLPage(urlContainer.startDriver());
+	    }
 	    
     @Test
     public void testGoogle() throws Exception {
-//        WebDriver driver = urlContainer.startDriver();
-    	
-        navPage = new HTMLPage(urlContainer.startDriver());
+
         
-        navPage.getDriver().get("http://www.google.se");
+        this.navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
-        System.out.println("Page title is: " + navPage.getTitle());
+        System.out.println("Page title is: " + this.navPage.getTitle());
         
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        assertTrue(this.navPage.getTitle().startsWith("Goo"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
-        System.out.println("Done!");
-       
-       navPage.getDriver().quit();
-
-        
+        this.navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
+        System.out.println("Done!");   
         
     }
     @Test
     public void testGoogle2() throws Exception {
-//        WebDriver driver = urlContainer.startDriver();
-    	
-        navPage = new HTMLPage(urlContainer.startDriver());
-        System.out.println("Driver started");
-        navPage.getDriver().get("http://www.google.se");
+
+        
+    	this.navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
-        System.out.println("Page title is: " + navPage.getTitle());
+        System.out.println("Page title is: " + this.navPage.getTitle());
         
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        assertTrue(this.navPage.getTitle().startsWith("Goo"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
-        System.out.println("Done!");
-       
-       navPage.getDriver().quit();
-
-        
+        this.navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
+        System.out.println("Done!");        
         
     }
 
