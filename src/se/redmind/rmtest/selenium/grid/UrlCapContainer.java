@@ -54,10 +54,8 @@ public class UrlCapContainer {
 			
 		
 		int maxRetryAttempts = 5;
-		int retryAttempts = 0;
-		while (retryAttempts < maxRetryAttempts) {
-			System.out.println("Attempt: " + retryAttempts);
-
+		int retryAttempts = 1;
+		while (retryAttempts <= maxRetryAttempts) {
 			try {
 
 //				WebDriver driver;
@@ -78,20 +76,27 @@ public class UrlCapContainer {
 				System.out.println("Started driver: " + description);
 
 			} catch (UnreachableBrowserException e) {
-//				System.out.println("This driver seems to be nonresponsive: " +
-//						description + " ::: " + url.toString());
+				System.out.println("Having trouble starting webdriver for device: " + this.description);
+				System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
 				e.printStackTrace();
 				retryAttempts++;
+				continue;
 			} catch (SessionNotCreatedException e) {
+				System.out.println("Having trouble starting webdriver for device: " + this.description);
+				System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
 				e.printStackTrace();
 				retryAttempts++;
+				continue;
 			} catch (Exception e) {
+				System.out.println("Having trouble starting webdriver for device: " + this.description);
+				System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
 				e.printStackTrace();
 				retryAttempts++;
+				continue;
 			}
 			return this.driver;
 		}
-		assertTrue("Driver failed to start properly after " + retryAttempts + " attempts",false);
+		assertTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
 		return this.driver;
 		} else {
 			return this.driver;
