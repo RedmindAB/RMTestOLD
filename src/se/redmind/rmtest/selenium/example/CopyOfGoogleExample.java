@@ -69,12 +69,12 @@ public class CopyOfGoogleExample {
     public void testGoogle() throws Exception {
     	HTMLPage navPage = new HTMLPage(this.tDriver);
         
-        navPage.getDriver().get("http://www.google.se");
+        navPage.getDriver().get("http://www.comaround.se");
         // Find the text input element by its name
 
         System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        assertTrue(navPage.getTitle().startsWith("Z"));
         
         
         navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));

@@ -39,7 +39,7 @@ public class GoogleExample {
 	    }
 	    
 	    private static Object[] getDrivers() {
-	        return DriverProvider.getDrivers("rmDeviceType", "mobile");
+	        return DriverProvider.getDrivers();
 //	    	return DriverProvider.getDrivers(Platform.ANDROID);
 
 	    }
@@ -71,8 +71,6 @@ public class GoogleExample {
         navPage.searchForString("RedMind");
         
         navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDriverDescription().replace(" ", "-"));
-
-        
         
     }
 
