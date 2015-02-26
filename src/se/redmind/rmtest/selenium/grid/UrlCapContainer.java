@@ -6,6 +6,7 @@ import io.appium.java_client.ios.IOSDriver;
 
 import java.net.URL;
 
+import org.junit.Assume;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -54,7 +55,7 @@ public class UrlCapContainer {
 			int maxRetryAttempts = 5;
 
 			if (this.imAFailure) {
-				assertTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ",false);
+				Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ",false);
 				return this.driver;
 			} else {
 				
@@ -101,7 +102,7 @@ public class UrlCapContainer {
 				return this.driver;
 			}
 			this.imAFailure=true;
-			assertTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
+			Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
 			return this.driver;
 			}
 		} else {
