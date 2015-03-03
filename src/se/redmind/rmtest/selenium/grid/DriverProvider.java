@@ -161,6 +161,7 @@ public class DriverProvider {
 
 
 	/**
+	 * @deprecated
 	 * @param filteredUrlCapList
 	 */
 	private static void startDrivers(ArrayList <UrlCapContainer> filteredUrlCapList){
@@ -243,17 +244,6 @@ public class DriverProvider {
 	 * 
 	 * @return 
 	 */
-	public synchronized static Object[] getDriversNew() {
-		updateDrivers();
-		
-//		startDrivers(urlCapList);
-		return urlCapList.toArray();
-	}
-	
-	/**
-	 * 
-	 * @return 
-	 */
 	public synchronized static Object[] getDrivers() {
 		updateDrivers();
 		
@@ -274,8 +264,7 @@ public class DriverProvider {
 				filteredUrlCapList.add(urlCapList.get(i));
 			}
 		}
-		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+		return filteredUrlCapList.toArray();
 	}
 
 
@@ -295,8 +284,7 @@ public class DriverProvider {
 				filteredUrlCapList.add(urlCapList.get(i));
 			}
 		}
-		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+		return filteredUrlCapList.toArray();
 	}
 
 
@@ -311,14 +299,11 @@ public class DriverProvider {
 		for (int i = 0; i < urlCapList.size(); i++) {
 			if (urlCapList.get(i).getCapability().getPlatform().is(pPlatform)) {
 				if (urlCapList.get(i).getCapability().getBrowserName().contains(pBrowserName)) {
-					//                    System.out.println("Choosen driver: " + driverList.get(i));
 					filteredUrlCapList.add(urlCapList.get(i));
 				}
 			}
-		}
-		//        System.out.println("Number of drivers: " + filteredDriverList.size());
-		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+		}		
+		return filteredUrlCapList.toArray();
 	}
 
 
@@ -341,7 +326,6 @@ public class DriverProvider {
 				filteredUrlCapList.add(urlCapList.get(i));
 			}
 		}
-		startDrivers(filteredUrlCapList);
-		return driverList.toArray();
+		return filteredUrlCapList.toArray();
 	}
 }
