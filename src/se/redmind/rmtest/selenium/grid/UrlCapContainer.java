@@ -1,6 +1,5 @@
 package se.redmind.rmtest.selenium.grid;
 
-import static org.junit.Assert.assertTrue;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 

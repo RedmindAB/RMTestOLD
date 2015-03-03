@@ -5,7 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import se.redmind.rmtest.selenium.grid.DriverProviderNew;
+import se.redmind.rmtest.selenium.grid.DriverProvider;
 //import se.aftonbladet.abtest.tests.mobile.menu.AbMobileNavTest;
 
 
@@ -22,6 +22,6 @@ public class ComaroundTests {
     
     @AfterClass
     public static void afterAllTests(){
-        DriverProviderNew.stopDrivers();
+        DriverProvider.stopDrivers();
     }
 }
