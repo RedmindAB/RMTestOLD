@@ -238,22 +238,23 @@ public class DriverProvider {
 		}
 	}
 
-	/**
-	 * 
-	 * @return 
-	 */
-	public synchronized static Object[] getDrivers() {
-		updateDrivers();
-		
-		startDrivers(urlCapList);
-		return driverList.toArray();
-	}
 	
 	/**
 	 * 
 	 * @return 
 	 */
 	public synchronized static Object[] getDriversNew() {
+		updateDrivers();
+		
+//		startDrivers(urlCapList);
+		return urlCapList.toArray();
+	}
+	
+	/**
+	 * 
+	 * @return 
+	 */
+	public synchronized static Object[] getDrivers() {
 		updateDrivers();
 		
 //		startDrivers(urlCapList);

@@ -13,10 +13,10 @@
 	  "platform": "OS_NAME",
           "platformVersion":"DEVICE_VERSION",
           "app":"APP_PATH",
-          "app-package":"APP_PKG",
-          "app-activity":".StartActivity",
-	  "newCommandTimeout":"300",
-          "browserName": "BROWSER_NAME"
+          "appPackage":"APP_PKG",
+          "appActivity":"START_ACTIVITY",
+          "browserName": "BROWSER_NAME",
+	  "newCommandTimeout":"300"
     }
    
       ],
