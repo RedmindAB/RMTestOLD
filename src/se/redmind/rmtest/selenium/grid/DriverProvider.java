@@ -94,12 +94,20 @@ public class DriverProvider {
 			device = "UNKNOWN";
 		}
 		
-		String browser;
+		String browser = null;
+		
 		if (capability.getCapability("browserName") != null) {
 			browser = (String) capability.getCapability("browserName"); 
-		} else {
+		} 
+		else if(capability.getCapability("appPackage")!=null){
+			browser = (String) capability.getCapability("appPackage");
+			
+		}
+		
+		else {
 			browser = "UNKNOWN";
 		}
+		
 		String browserVersion = "UNKNOWN";
 		
 		description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
