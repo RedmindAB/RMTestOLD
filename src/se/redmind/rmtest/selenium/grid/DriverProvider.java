@@ -23,7 +23,7 @@ public class DriverProvider {
 
 
 
-	private static ArrayList <UrlCapContainer> urlCapList = new ArrayList<UrlCapContainer>();
+	private static ArrayList <DriverNamingWrapper> urlCapList = new ArrayList<DriverNamingWrapper>();
 	
 	
 	/**
@@ -33,7 +33,7 @@ public class DriverProvider {
 		RmConfig config = new RmConfig();
 		HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
 		ArrayList <RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
-		urlCapList = new ArrayList<UrlCapContainer>();
+		urlCapList = new ArrayList<DriverNamingWrapper>();
 
 		RegistrationRequest nodeReq;
 		String description;
@@ -48,7 +48,7 @@ public class DriverProvider {
 				URL driverUrl;
 				try {
 					driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-					urlCapList.add(new UrlCapContainer(driverUrl, capability, description));
+					urlCapList.add(new DriverNamingWrapper(driverUrl, capability, description));
 
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
@@ -94,12 +94,20 @@ public class DriverProvider {
 			device = "UNKNOWN";
 		}
 		
-		String browser;
+		String browser = null;
+		
 		if (capability.getCapability("browserName") != null) {
 			browser = (String) capability.getCapability("browserName"); 
-		} else {
+		} 
+		else if(capability.getCapability("appPackage")!=null){
+			browser = (String) capability.getCapability("appPackage");
+			
+		}
+		
+		else {
 			browser = "UNKNOWN";
 		}
+		
 		String browserVersion = "UNKNOWN";
 		
 		description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
@@ -146,7 +154,7 @@ public class DriverProvider {
 	 */
 	public synchronized static Object[] getDrivers(Platform pPlatform) {
 		updateDrivers();
-		ArrayList <UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
+		ArrayList <DriverNamingWrapper> filteredUrlCapList = new ArrayList<DriverNamingWrapper>();
 		for (int i = 0; i < urlCapList.size(); i++) {
 			if (urlCapList.get(i).getCapability().getPlatform().is(pPlatform)) {
 				filteredUrlCapList.add(urlCapList.get(i));
@@ -163,7 +171,7 @@ public class DriverProvider {
 	 */
 	public synchronized static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2) {
 		updateDrivers();
-		ArrayList <UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
+		ArrayList <DriverNamingWrapper> filteredUrlCapList = new ArrayList<DriverNamingWrapper>();
 		for (int i = 0; i < urlCapList.size(); i++) {
 			if (urlCapList.get(i).getCapability().getPlatform().is(pPlatform1)) {
 				filteredUrlCapList.add(urlCapList.get(i));
@@ -183,7 +191,7 @@ public class DriverProvider {
 	 */
 	public synchronized static Object[] getDrivers(Platform pPlatform, String pBrowserName) {
 		updateDrivers();
-		ArrayList <UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
+		ArrayList <DriverNamingWrapper> filteredUrlCapList = new ArrayList<DriverNamingWrapper>();
 		for (int i = 0; i < urlCapList.size(); i++) {
 			if (urlCapList.get(i).getCapability().getPlatform().is(pPlatform)) {
 				if (urlCapList.get(i).getCapability().getBrowserName().contains(pBrowserName)) {
@@ -203,7 +211,7 @@ public class DriverProvider {
 	 */
 	public synchronized static Object[] getDrivers(String capKey, String capValue) {
 		updateDrivers();
-		ArrayList <UrlCapContainer> filteredUrlCapList = new ArrayList<UrlCapContainer>();
+		ArrayList <DriverNamingWrapper> filteredUrlCapList = new ArrayList<DriverNamingWrapper>();
 		String currCap;
 		for (int i = 0; i < urlCapList.size(); i++) {
 			currCap = (String) urlCapList.get(i).getCapability().getCapability(capKey);

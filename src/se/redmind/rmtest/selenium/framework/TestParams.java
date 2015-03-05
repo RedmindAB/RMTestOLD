@@ -9,7 +9,8 @@ package se.redmind.rmtest.selenium.framework;
  */
 public class TestParams {
     private static String testBaseUrl;
-
+    public static String rmDeviceStype = "desktop";
+    
     public static void setBaseUrl(String baseUrl) {
         testBaseUrl = baseUrl;
     }
