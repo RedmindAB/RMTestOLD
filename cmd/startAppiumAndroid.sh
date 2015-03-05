@@ -24,11 +24,11 @@ export isInstalled=""
 rm -f $androidNodeFile
 
 
-adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
+$ANDROID_HOME/platform-tools/adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
 do
-	modelName=`adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
-	modelBrand=`adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
-	androidVersion=`adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
+	modelName=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
+	modelBrand=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
+	androidVersion=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
 	description="$modelBrand $modelName  $androidVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
