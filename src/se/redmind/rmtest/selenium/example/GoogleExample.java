@@ -14,9 +14,9 @@ import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.StackTraceInfo;
+import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
-import se.redmind.rmtest.selenium.grid.UrlCapContainer;
 
 
 
@@ -25,11 +25,11 @@ public class GoogleExample {
 
 
 	   private WebDriver tDriver;
-	    private final UrlCapContainer urlContainer;
+	    private final DriverNamingWrapper urlContainer;
 	    private final String driverDescription;
 //		private HTMLPage navPage;
 
-	    public GoogleExample(final UrlCapContainer driverWrapper, final String driverDescription) {
+	    public GoogleExample(final DriverNamingWrapper driverWrapper, final String driverDescription) {
 	        this.urlContainer = driverWrapper;
 	        this.driverDescription = driverDescription;
 	    }
