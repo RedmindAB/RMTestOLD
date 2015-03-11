@@ -44,8 +44,8 @@ do
 	if [ -z $APK_PATH ]
 		then
 		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
-		sed -i '' '/app-package/d' $testHome/etc/Appium_TEMP.json	
-		sed -i '' '/app-activity/d' $testHome/etc/Appium_TEMP.json
+		sed -i '' '/APP_PKG/d' $testHome/etc/Appium_TEMP.json	
+		sed -i '' '/START_ACTIVITY/d' $testHome/etc/Appium_TEMP.json
 		sed -i '' "s:BROWSER_NAME:Chrome:g" $testHome/etc/Appium_TEMP.json
 	else
 		if [ -z $2 ]
