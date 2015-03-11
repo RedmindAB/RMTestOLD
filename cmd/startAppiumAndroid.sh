@@ -56,6 +56,7 @@ do
 			sed -i '' "s:APP_PKG:$APK_PACKAGE:g" $testHome/etc/Appium_TEMP.json
 			sed -i '' "s:APP_PATH:$APK_PATH:g" $testHome/etc/Appium_TEMP.json
 			sed -i '' "s:START_ACTIVITY:$2:g" $testHome/etc/Appium_TEMP.json
+			sed -i '' "s:WAIT_ACTIVITY:$3:g" $testHome/etc/Appium_TEMP.json
 			sed -i '' '/BROWSER_NAME/d' $testHome/etc/Appium_TEMP.json
 		fi
 	fi
