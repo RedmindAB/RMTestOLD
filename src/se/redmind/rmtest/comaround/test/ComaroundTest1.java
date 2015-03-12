@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -30,8 +32,9 @@ public class ComaroundTest1 {
 	    }
 	    
 	    private static Object[] getDrivers() {
-	        return DriverProvider.getDrivers();
+//	        return DriverProvider.getDrivers("rmDeviceType", "mobile");
 //	    	return DriverProvider.getDrivers(Platform.ANDROID);
+	    	return DriverProvider.getDrivers();
 
 	    }
 
@@ -46,6 +49,16 @@ public class ComaroundTest1 {
 	        return returnList;
 	    }
 
+	    @AfterClass
+	    public static void afterTest(){
+	    	DriverProvider.stopDrivers();
+	    }
+	    
+
+	    @Before
+	    public void beforeTest(){
+	    	this.tDriver = this.driverWrapper.startDriver();
+	    }
 	@Test
 	public void clickComAroundZero() {
 		cNav.clickComAroundZeroNav();
