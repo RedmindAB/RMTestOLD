@@ -9,14 +9,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
  
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 import org.openqa.grid.common.exception.GridException;
 import org.openqa.grid.internal.ProxySet;
 import org.openqa.grid.internal.Registry;
 import org.openqa.grid.internal.RemoteProxy;
 import org.openqa.grid.web.servlet.RegistryBasedServlet;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
  
 public class GridQueryServlet extends RegistryBasedServlet {
  
@@ -44,37 +47,35 @@ public class GridQueryServlet extends RegistryBasedServlet {
  
     }
  
-    protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException  {
         response.setContentType("text/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(200);
-        JSONObject res;
-        try {
+        JsonObject res;
+ 
           res = getResponse();
           response.getWriter().print(res);
           response.getWriter().close();
-        } catch (JSONException e) {
-          throw new GridException(e.getMessage());
-        }
+
  
     }
  
-    private JSONObject getResponse() throws IOException, JSONException {
-        JSONObject requestJSON = new JSONObject();
+    private JsonObject getResponse() throws IOException {
+        JsonObject requestJSON = new JsonObject();
         ProxySet proxies = this.getRegistry().getAllProxies();
         Iterator<RemoteProxy> iterator = proxies.iterator();
-        JSONArray busyProxies = new JSONArray();
-        JSONArray freeProxies = new JSONArray();
+        JsonArray busyProxies = new JsonArray();
+        JsonArray freeProxies = new JsonArray();
         while (iterator.hasNext()) {
             RemoteProxy eachProxy = iterator.next();
             if (eachProxy.isBusy()) {
-                busyProxies.put(eachProxy.getOriginalRegistrationRequest().getAssociatedJSON());
+            	busyProxies.add(eachProxy.getOriginalRegistrationRequest().getAssociatedJSON());
             } else {
-                freeProxies.put(eachProxy.getOriginalRegistrationRequest().getAssociatedJSON());
+                freeProxies.add(eachProxy.getOriginalRegistrationRequest().getAssociatedJSON());
             }
         }
-        requestJSON.put("BusyProxies", busyProxies);
-        requestJSON.put("FreeProxies", freeProxies);
+        requestJSON.add("BusyProxies", busyProxies);
+        requestJSON.add("FreeProxies", freeProxies);
  
         return requestJSON;
     }

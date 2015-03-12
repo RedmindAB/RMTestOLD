@@ -10,14 +10,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONException;
+//import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
  
 public class RmConfig {
 
 static 	String configFile = TestHome.main() + "/etc/LocalConfig.json";
 
-static JSONObject config;
+static JsonObject config;
 	
     public  RmConfig() {
     	InputStream fis = null;
@@ -32,11 +35,9 @@ static JSONObject config;
           }
         br.close();
         
-        config = new JSONObject(s.toString());
+        config = new Gson().fromJson(s.toString(), JsonObject.class);
+
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -49,12 +50,9 @@ static JSONObject config;
     public static String getConfigValue(String ConfigKey) {
     	String configValue = null;
     	System.out.println(config.toString());
-		try {
-			configValue = config.getJSONObject("configuration").getString(ConfigKey);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+			configValue = config.getAsJsonObject("configuration").get(ConfigKey).getAsString();
+	
 		
 		return configValue;
     }

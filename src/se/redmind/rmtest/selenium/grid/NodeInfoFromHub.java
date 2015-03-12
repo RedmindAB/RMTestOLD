@@ -13,28 +13,31 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHttpRequest;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 import org.junit.Assert;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
  
 public class NodeInfoFromHub {
     
 //    static String hubHost = "localhost";
 //    static int hubPort = 4444;
  
-    public static JSONObject main(String pHost, int pPort) throws ClientProtocolException, IOException, JSONException {
+    public static JsonObject main(String pHost, int pPort) throws ClientProtocolException, IOException {
         URL  proxyApi = new URL("http://" + pHost + ":" + pPort + "/grid/admin/GridQueryServlet");
         HttpClient client = HttpClientBuilder.create().build();
         BasicHttpRequest r = new BasicHttpRequest("GET", proxyApi.toExternalForm());
         HttpHost host = new HttpHost(pHost, pPort);
         HttpResponse response = client.execute(host, r);
         Assert.assertEquals(200, response.getStatusLine().getStatusCode());
-        JSONObject o = extractObject(response);
+        JsonObject o = extractObject(response);
         return o;
  
     }
     
-    private static JSONObject extractObject(HttpResponse resp) throws IOException, JSONException {
+    private static JsonObject extractObject(HttpResponse resp) throws IOException {
         BufferedReader rd = new BufferedReader(new InputStreamReader(resp.getEntity().getContent()));
         StringBuilder s = new StringBuilder();
         String line;
@@ -43,6 +46,7 @@ public class NodeInfoFromHub {
         }
         rd.close();
 //        System.out.println(s.toString());
-        return new JSONObject(s.toString());
+//        new Gson().fromJson(s.toString(), JsonObject.class)
+        return new Gson().fromJson(s.toString(), JsonObject.class);
       }
 }
