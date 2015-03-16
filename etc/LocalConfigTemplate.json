@@ -4,7 +4,6 @@
     "androidHome": "PATH/TO/ANDROIDHOME",
     "localIp": "127.0.0.1",
     "hubIp": "127.0.0.1",
-    "AndroidBuildtoolsVersion": "4.4",
-    "seleniumVersion": "2.45.0"
+    "AndroidBuildtoolsVersion": "4.4"
   }
 }
