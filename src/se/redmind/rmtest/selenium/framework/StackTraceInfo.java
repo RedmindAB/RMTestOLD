@@ -48,7 +48,7 @@ public class StackTraceInfo
     {
         return Thread.currentThread().getStackTrace()[CLIENT_CODE_STACK_INDEX + offset].getMethodName();
     }
-
+    
     public static String getCurrentClassName()
     {
         return getCurrentClassName(1);      // making additional overloaded method call requires +1 offset

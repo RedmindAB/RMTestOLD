@@ -14,12 +14,12 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.selenium.grid.TestHome;
 
 public class RMReportScreenshot {
 
 	private static final int MAX_LONG_SIDE = 1280;
-	private static final int MAX_SHORT_SIDE = 720;
-	
+	private static final String FILE_EXTENTION = "png";
 	private DriverNamingWrapper namingWrapper;
 	private WebDriver driver;
 
@@ -28,22 +28,63 @@ public class RMReportScreenshot {
 		this.driver = namingWrapper.getDriver();
 	}
 	
-	public void takeScreenshot(){
+	/**
+	 *
+	 * this method should be called directly from a test-method, the filename will have the name of the invoked class and method inside it.
+	 * if more than one screenshot is taken in the same method make sure that the screenshot is unique for each screenshot.
+	 * @param prefix - optional, description of the screenshot can be null or empty.
+	 */
+	public void takeScreenshot(String prefix){
+		String className = StackTraceInfo.getInvokingClassName();
+		String methodName = StackTraceInfo.getInvokingMethodName();
+		takeScreenshot(className, methodName, prefix);
+	}
+	
+	/** 
+	 * USE WITH CAUTION!
+	 * 
+	 * This method should be an alternative to the takeScreenshot method if needed, examples of use is Navigation classes.
+	 * its important that the class and method name is the same as they are stored in RMReport. 
+	 * @param className - name of the testclass.
+	 * @param methodName - name of the test method that was invoked.
+	 */
+	public void takeScreenshot(String className, String methodName, String prefix){
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 		BufferedImage image = fileToImage(scrFile);
 		if (isResizeNecessary(image)) {
 			image = resizeImage(image);
 		}
-		SaveImage(image);
+		String filename = getFileName(className, methodName, prefix);
+		if (filename == null) {
+			System.err.println("No screenshot taken, run with 'mvn test'");
+			return;
+		}
+		SaveImage(image, filename);
 	}
 
-	private void SaveImage(BufferedImage image) {
+	private void SaveImage(BufferedImage image, String filename) {
 		try {
-			ImageIO.write(image, ".png", new File(""));
+			System.out.println(filename);
+			ImageIO.write(image, FILE_EXTENTION, new File(filename));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	private String getFileName(String className, String methodName, String prefix) {
+		String timestamp = System.getProperty("rmt.timestamp");
+		if (timestamp == null) {
+			return null;
+		}
+		timestamp = timestamp.replace("-", "");
+		String description = namingWrapper.getDescription();
+		String filename = className+"."+methodName+"-"+timestamp+"["+description+"]."+FILE_EXTENTION;
+		if (prefix != null && prefix.length() > 0) {
+			filename = prefix + "-_-" + filename;
+		}
+		filename = getSavePath(timestamp)+filename;
+		return filename;
 	}
 
 	private BufferedImage resizeImage(BufferedImage originalImage) {
@@ -87,12 +128,12 @@ public class RMReportScreenshot {
 		int width = originalImage.getWidth();
 		float factor = 0; 
 		if (height>width) {
-			factor = MAX_LONG_SIDE / height;
+			factor = (float) MAX_LONG_SIDE / height;
 			height = MAX_LONG_SIDE;
 			width = (int) (width * factor);
 		}
 		else {
-			factor = MAX_LONG_SIDE / width;
+			factor = (float) MAX_LONG_SIDE / width;
 			width = MAX_LONG_SIDE;
 			height = (int) (height * factor);
 		}
@@ -111,6 +152,13 @@ public class RMReportScreenshot {
 	private int getType(BufferedImage originalImage){
 		return originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
 
+	}
+	
+	private String getSavePath(String timestamp){
+		String path = TestHome.main() + "/RMR-Screenshots/"+timestamp+"/";
+		File file = new File(path);
+		file.mkdirs();
+		return path;
 	}
 	
 }

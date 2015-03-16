@@ -58,6 +58,7 @@ public class ComaroundTest1 {
 	    @Before
 	    public void beforeTest(){
 	    	this.tDriver = this.driverWrapper.startDriver();
+	    	System.out.println(System.getenv("timestamp"));
 	    }
 	@Test
 	public void clickComAroundZero() {
