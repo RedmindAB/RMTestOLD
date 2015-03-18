@@ -11,14 +11,17 @@ getRmConfigParam() {
 
 export androidHome=`getLocalConfigParam androidHome`
 export ANDROIDHOME=$androidHome
-export ANDROID_HOME=$androidHome
+if [[ -z "$ANDROID_HOME" ]]
+then 
+	export ANDROID_HOME=$androidHome
+fi
 export ADB_PATH="$ANDROIDHOME/platform-tools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export RmJar="$testHome/target/RMTest-SNAPSHOT.jar"
 export RMTestHubIp=`getLocalConfigParam hubIp`
 export RMTestLocalNodeIp=`getLocalConfigParam localIp`
 #export AndroidBuildToolVersion=`getLocalConfigParam AndroidBuildtoolsVersion`
-if [ -f $androidHome ] 
+if [[ -e $androidHome ]] 
 then
 	export AAPTCmd=`find $androidHome -name aapt | head -1`
 fi
