@@ -18,7 +18,10 @@ export RmJar="$testHome/target/RMTest-SNAPSHOT.jar"
 export RMTestHubIp=`getLocalConfigParam hubIp`
 export RMTestLocalNodeIp=`getLocalConfigParam localIp`
 #export AndroidBuildToolVersion=`getLocalConfigParam AndroidBuildtoolsVersion`
-export AAPTCmd=`find $androidHome -name aapt | head -1`
+if [ -f $androidHome ] 
+then
+	export AAPTCmd=`find $androidHome -name aapt | head -1`
+fi
 export seleniumVersion=`getRmConfigParam seleniumVersion`
 export PRETTY_TIMESTAMP="date +%Y%m%d_%H%M%S"
 
