@@ -124,7 +124,10 @@ public class DriverProvider {
 		for (int i = 0; i < urlCapList.size(); i++) {
 			System.out.println("Closing driver: " + urlCapList.get(i).getDescription());
 			try {
-				urlCapList.get(i).getDriver().quit();
+				if (urlCapList.get(i).getDriver() != null) {
+					urlCapList.get(i).getDriver().quit();
+				}
+				
 			} catch (SessionNotFoundException e) {
 				System.out.println("For some reason a session was gone while quitting");
 				System.out.println(e);
