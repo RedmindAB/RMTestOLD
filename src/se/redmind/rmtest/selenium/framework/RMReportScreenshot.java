@@ -47,6 +47,7 @@ public class RMReportScreenshot {
 	 * its important that the class and method name is the same as they are stored in RMReport. 
 	 * @param className - name of the testclass.
 	 * @param methodName - name of the test method that was invoked.
+	 * @param prefix - adds a prefix to the screenshot filename, this is later on displayed in RMReport.
 	 */
 	public void takeScreenshot(String className, String methodName, String prefix){
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
@@ -56,7 +57,7 @@ public class RMReportScreenshot {
 		}
 		String filename = getFileName(className, methodName, prefix);
 		if (filename == null) {
-			System.err.println("No screenshot taken, run with 'mvn test'");
+			System.err.println("No RMReport-screenshot taken, run with 'mvn test'");
 			return;
 		}
 		SaveImage(image, filename);
