@@ -29,6 +29,7 @@ do
 	modelName=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
 	modelBrand=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
 	androidVersion=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
+	$ANDROID_HOME/platform-tools/adb -s $currDevId uninstall io.appium.unlock
 	description="$modelBrand $modelName  $androidVersion"	
 	echo "####### $modelName ########"
 	basePort=$[$basePort+1]
