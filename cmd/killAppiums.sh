@@ -1,12 +1,10 @@
 #!/bin/bash
-
-#Cleans up portforwards
-ps -e | grep "ium/bin/appium.js" | grep -v grep | sed -e 's/^ *//g' | tr -s ' ' | cut -d " " -f1 | while read thePid
+ps ax | grep "node" | grep "ium/bin/appium.js" | cut -d " " -f1 | while read thePid
 	do
 	echo "killing $thePid"
 	kill $thePid
 done
-ps -e | grep "appium" | grep -v grep | sed -e 's/^ *//g' | tr -s ' ' | cut -d " " -f1 | while read thePid
+ps ax | grep "node" | grep "appium" | cut -d " " -f1 | while read thePid
 	do
 	echo "killing $thePid"
 	kill $thePid
