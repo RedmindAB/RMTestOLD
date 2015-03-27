@@ -6,6 +6,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -18,8 +19,9 @@ import se.redmind.rmtest.selenium.grid.TestHome;
 
 public class RMReportScreenshot {
 
-	private static final int MAX_LONG_SIDE = 1280;
+	private static final int MAX_LONG_SIDE = 1920;
 	private static final String FILE_EXTENTION = "png";
+	private static HashMap<String, Integer> filenameNumbers = new HashMap<String, Integer>();;
 	private DriverNamingWrapper namingWrapper;
 	private WebDriver driver;
 
@@ -32,7 +34,7 @@ public class RMReportScreenshot {
 	 *
 	 * this method should be called directly from a test-method, the filename will have the name of the invoked class and method inside it.
 	 * if more than one screenshot is taken in the same method make sure that the screenshot is unique for each screenshot.
-	 * @param prefix - optional, description of the screenshot can be null or empty.
+	 * @param prefix - optional, description of the screenshot can be null or empty. if there are two or more screenshots taken in the same method without a prefix the oldest file will be over written
 	 */
 	public void takeScreenshot(String prefix){
 		String className = StackTraceInfo.getInvokingClassName();
@@ -47,7 +49,7 @@ public class RMReportScreenshot {
 	 * its important that the class and method name is the same as they are stored in RMReport. 
 	 * @param className - name of the testclass.
 	 * @param methodName - name of the test method that was invoked.
-	 * @param prefix - adds a prefix to the screenshot filename, this is later on displayed in RMReport.
+	 * @param prefix - optional, description of the screenshot can be null or empty. if there are two or more screenshots taken in the same method without a prefix the oldest file will be over written
 	 */
 	public void takeScreenshot(String className, String methodName, String prefix){
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
@@ -65,11 +67,13 @@ public class RMReportScreenshot {
 
 	private void SaveImage(BufferedImage image, String filename) {
 		try {
-			System.out.println(filename);
 			ImageIO.write(image, FILE_EXTENTION, new File(filename));
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			try {
+				throw new Exception("Image: "+image+" filename: "+filename+"\n"+e.getStackTrace());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -81,10 +85,12 @@ public class RMReportScreenshot {
 		timestamp = timestamp.replace("-", "");
 		String description = namingWrapper.getDescription();
 		String filename = className+"."+methodName+"-"+timestamp+"["+description+"]."+FILE_EXTENTION;
+		System.out.println(filename);
+		int screenshotNumber = getPrefixNumber(filename);
 		if (prefix != null && prefix.length() > 0) {
 			filename = prefix + "-_-" + filename;
 		}
-		filename = getSavePath(timestamp)+filename;
+		filename = getSavePath(timestamp)+screenshotNumber+"-"+filename;
 		return filename;
 	}
 
@@ -160,6 +166,17 @@ public class RMReportScreenshot {
 		File file = new File(path);
 		file.mkdirs();
 		return path;
+	}
+	
+	public static synchronized int getPrefixNumber(String filename){
+		Integer number = filenameNumbers.get(filename);
+		System.out.println("number: "+number);
+		if (number == null) {
+			number = new Integer(0);
+		}
+		number++;
+		filenameNumbers.put(filename, number);
+		return number;
 	}
 	
 }

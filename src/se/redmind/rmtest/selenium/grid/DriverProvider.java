@@ -24,6 +24,7 @@ public class DriverProvider {
 
 
 	private static ArrayList <DriverNamingWrapper> urlCapList = new ArrayList<DriverNamingWrapper>();
+	private static ArrayList <DriverNamingWrapper> allDrivers = new ArrayList<DriverNamingWrapper>();
 	
 	
 	/**
@@ -48,8 +49,9 @@ public class DriverProvider {
 				URL driverUrl;
 				try {
 					driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-					urlCapList.add(new DriverNamingWrapper(driverUrl, capability, description));
-
+					DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, capability, description);
+					urlCapList.add(driver);
+					allDrivers.add(driver);
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -122,10 +124,10 @@ public class DriverProvider {
 	public static void stopDrivers() {
 
 		for (int i = 0; i < urlCapList.size(); i++) {
-			System.out.println("Closing driver: " + urlCapList.get(i).getDescription());
+			System.out.println("Closing driver: " + allDrivers.get(i).getDescription());
 			try {
-				if (urlCapList.get(i).getDriver() != null) {
-					urlCapList.get(i).getDriver().quit();
+				if (allDrivers.get(i).getDriver() != null) {
+					allDrivers.get(i).getDriver().quit();
 				}
 				
 			} catch (SessionNotFoundException e) {
@@ -136,6 +138,7 @@ public class DriverProvider {
 			
 
 		}
+		allDrivers = new ArrayList<DriverNamingWrapper>();
 	}
 
 	
