@@ -123,7 +123,7 @@ public class DriverProvider {
 	 */
 	public static void stopDrivers() {
 
-		for (int i = 0; i < urlCapList.size(); i++) {
+		for (int i = 0; i < allDrivers.size(); i++) {
 			System.out.println("Closing driver: " + allDrivers.get(i).getDescription());
 			try {
 				if (allDrivers.get(i).getDriver() != null) {
