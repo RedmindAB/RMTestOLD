@@ -25,6 +25,7 @@ public class DriverProvider {
 
 	private static ArrayList <DriverNamingWrapper> urlCapList = new ArrayList<DriverNamingWrapper>();
 	private static ArrayList <DriverNamingWrapper> allDrivers = new ArrayList<DriverNamingWrapper>();
+	private static DesiredCapabilities currentCapability;
 	
 	
 	/**
@@ -42,14 +43,13 @@ public class DriverProvider {
 		for (int j = 0; j < nodeList.size(); j++) { 
 			nodeReq = nodeList.get(j); 
 			for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
-				DesiredCapabilities capability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
-				//                    System.out.println("DESCRIPTION OF DEVICE: " + capability.getCapability("description") + nodeReq.getDescription());
+				currentCapability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
 
-				description = buildDescriptionFromCapabilities(capability);
+				description = buildDescriptionFromCapabilities(currentCapability);
 				URL driverUrl;
 				try {
 					driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-					DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, capability, description);
+					DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, currentCapability, description);
 					urlCapList.add(driver);
 					allDrivers.add(driver);
 				} catch (MalformedURLException e) {
@@ -62,50 +62,63 @@ public class DriverProvider {
 		}
 	}
 
+	private static String getSafeCapability(String capName) {
+		String capValue = (String) currentCapability.getCapability(capName);
+		return capValue;
+	}
+	
+	private static Boolean isCapabilitySet(String capName) {
+		String capValue = getSafeCapability(capName);
+		if (capValue == null || capValue.equals("")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	/**
-	 * @param capability
+	 * @param capabilities
 	 * @return
 	 */
 	private static String buildDescriptionFromCapabilities(
-			DesiredCapabilities capability) {
+			DesiredCapabilities capabilities) {
 		String description;
 		
 		String os;
-		if (capability.getCapability("rmOsName") != null) { 
-			os = (String) capability.getCapability("rmOsName");
-		} else if (capability.getCapability("platformName") != null) { 
-			os = (String) capability.getCapability("platformName");
-		} else if (capability.getCapability("osname") != null) { 
-			os = (String) capability.getCapability("osname");
-		} else  {
-			os = (String) capability.getCapability("platform");
+		if (isCapabilitySet("rmOsName")) { 
+			os = getSafeCapability("rmOsName");
+		} else if (isCapabilitySet("platformName")) { 
+			os = getSafeCapability("platformName");
+		} else if (isCapabilitySet("osname")) { 
+			os = getSafeCapability("osname");
+		} else if (isCapabilitySet("platform")) {
+			os = getSafeCapability("platform");
+		} else {
+			os = "UNKNOWN";
 		}
 		
 		
 		String osVer;
-		if (capability.getCapability("platformVersion") != null){
-			osVer = (String) capability.getCapability("platformVersion");
+		if (isCapabilitySet("platformVersion")){
+			osVer = getSafeCapability("platformVersion");
 		} else {
 			osVer = "UNKNOWN";
 		}
 		
 		String device;
-		if (capability.getCapability("deviceName") != null) {
-			device = (String) capability.getCapability("deviceName"); 
+		if (isCapabilitySet("deviceName")) {
+			device = getSafeCapability("deviceName"); 
 		} else {
 			device = "UNKNOWN";
 		}
 		
 		String browser = null;
-		
-		if (capability.getCapability("browserName") != null) {
-			browser = (String) capability.getCapability("browserName"); 
+		if (isCapabilitySet("browserName")) {
+			browser = getSafeCapability("browserName"); 
 		} 
-		else if(capability.getCapability("appPackage")!=null){
-			browser = (String) capability.getCapability("appPackage");
-			
+		else if(isCapabilitySet("appPackage")){
+			browser = getSafeCapability("appPackage");
 		}
-		
 		else {
 			browser = "UNKNOWN";
 		}
