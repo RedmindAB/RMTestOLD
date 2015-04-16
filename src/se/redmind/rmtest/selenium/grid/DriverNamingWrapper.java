@@ -6,11 +6,17 @@ import io.appium.java_client.ios.IOSDriver;
 import java.net.URL;
 
 import org.junit.Assume;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.By;
 
 public class DriverNamingWrapper {
 
@@ -44,7 +50,37 @@ public class DriverNamingWrapper {
 		return this.driver;
 	}
 
+	public void ignoreAtNoConnectivityById(String url, String id) {		
+		ignoreAtNoConnectivityTo(url, By.id(id));
+	}
 
+	public void ignoreAtNoConnectivityByClass(String url, String className) {		
+		ignoreAtNoConnectivityTo(url, By.className(className));
+	}
+	
+	public void ignoreAtNoConnectivityByXpath(String url, String xpath) {		
+		ignoreAtNoConnectivityTo(url, By.xpath(xpath));
+	}
+	
+	public void ignoreAtNoConnectivityTo(String url, By by) {		
+		try {
+			getDriver().get(url);
+			driverWaitElementPresent(by, 10);
+		} catch (NoSuchElementException|TimeoutException e) {
+			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
+			this.imAFailure = true;
+		}	
+	}
+
+
+    /**
+     * @param pBy
+     * @param timeoutInSeconds
+     */
+    public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
+    	new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
+    }
+    
 	/**
 	 * @param filteredUrlCapList
 	 */
