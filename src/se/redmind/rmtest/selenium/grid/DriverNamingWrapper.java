@@ -67,8 +67,9 @@ public class DriverNamingWrapper {
 			getDriver().get(url);
 			driverWaitElementPresent(by, 10);
 		} catch (NoSuchElementException|TimeoutException e) {
-			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
 			this.imAFailure = true;
+			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
+			
 		}	
 	}
 
