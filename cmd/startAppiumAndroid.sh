@@ -26,8 +26,13 @@ rm -f $androidNodeFile
 
 $ANDROID_HOME/platform-tools/adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
 do
-	screenWidth=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.hwui.external_width | tr -d "\r"`	
-	screenDensity=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.sf.lcd_density | tr -d "\r"`	
+	screenWidth=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell dumpsys window | grep mUnrestrictedScreen | cut -d ")" -f2 | cut -d "x" -f1 | xargs echo`
+        screenDensity=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.sf.lcd_density | tr -d "\r"`
+        screenSize=`echo "scale=1;$screenWidth/$screenDensity" | bc`
+        echo "Screenwidth: $screenWidth"
+        echo "ScreenDensity: $screenDensity"
+        echo "ScreenSizeInches: $screenSize"
+
 	modelName=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
 	modelBrand=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
 	androidVersion=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
