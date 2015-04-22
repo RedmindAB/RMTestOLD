@@ -6,20 +6,25 @@ export PHONE_NAME=$1
 export IOSVERSION=$2
 export USAGE_MESSAGE="Usage: command.sh <Iphone model> <IOS version>"
 
+listSims()
+{
+        xcrun instruments -s devices | grep Simulator | while read line
+        do
+                simName=`echo $line | cut -d "(" -f 1 | xargs echo`
+                simIosVersion=`echo $line | cut -d "(" -f 2 | cut -d ")" -f 1 | cut -d " " -f1`
+                if [ "$1 $2" = "$simName$simIosVersion" ]
+                then
+                        echo "Found simulator"
+                        exit 22
+                else
+                        echo "not matching simulator:\"$simName\" $simIosVersion"
+                fi
+        done
+}
+
 simExists()
 {
-	xcrun instruments -s devices | grep Simulator | while read line
-	do
-       	 	simName=`echo $line | cut -d "(" -f 1`
-       	 	simIosVersion=`echo $line | cut -d "(" -f 2 | cut -d ")" -f 1 | cut -d " " -f1`
-       	 	if [ "$1 $2" = "$simName$simIosVersion" ]
-       		then
-       	       		echo "Found simulator"
-       	       		exit 22
-		else
-			echo "not matching simulator: $simName$simIosVersion"
-       		fi
-	done
+	listSims "$1" "$2"
 	if [ $? -eq 22 ]
 	then
       		echo "Found: $PHONE_NAME $IOSVERSION"
@@ -32,6 +37,7 @@ simExists()
 
 if [ -z "$PHONE_NAME" ]; then
         echo $USAGE_MESSAGE
+	listSims | grep "not matching" | cut -d ":" -f2
 	exit 1
 fi
 if [ -z "$IOSVERSION" ]; then
