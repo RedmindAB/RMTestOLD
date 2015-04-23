@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 
-import se.redmind.rmtest.selenium.framework.FailedTestHandler;
+import se.redmind.rmtest.selenium.framework.RmTestWatcher;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.framework.StackTraceInfo;
@@ -25,9 +26,8 @@ import se.redmind.rmtest.selenium.grid.Parallelized;
 
 
 @RunWith(Parallelized.class)
-public class PetterTest {
-    @Rule
-    public FailedTestHandler ruleExample = new FailedTestHandler();
+public class TestWithRules {
+
 
 	   private WebDriver tDriver;
 	    private final DriverNamingWrapper urlContainer;
@@ -35,7 +35,7 @@ public class PetterTest {
 	    private final RMReportScreenshot rmrScreenshot;
 //		private HTMLPage navPage;
 
-	    public PetterTest(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+	    public TestWithRules(final DriverNamingWrapper driverWrapper, final String driverDescription) {
 	        this.urlContainer = driverWrapper;
 	        this.driverDescription = driverDescription;
 	        this.rmrScreenshot = new RMReportScreenshot(urlContainer);
@@ -47,7 +47,7 @@ public class PetterTest {
 	    	return DriverProvider.getDrivers();
 
 	    }
-
+	    
 	    @Parameterized.Parameters(name = "{1}")
 	    public static Collection<Object[]> drivers() {
 	        ArrayList<Object[]> returnList = new ArrayList<Object[]>();
@@ -58,16 +58,20 @@ public class PetterTest {
 
 	        return returnList;
 	    }
+	    
+	    @Rule
+	    public RmTestWatcher ruleExample = new RmTestWatcher();
 
 	    @AfterClass
 	    public static void afterTest(){
-	    	DriverProvider.stopDrivers();
+//	    	DriverProvider.stopDrivers();
 	    }
 	    
 
 	    @Before
 	    public void beforeTest(){
-	    	this.tDriver = this.urlContainer.startDriver();
+	    	ruleExample.initDriver(this.urlContainer);
+//	    	this.tDriver = this.urlContainer.startDriver();
 	    }
 	    
     @Test
@@ -92,7 +96,10 @@ public class PetterTest {
     }
     @Test
     public void testGoogle2() throws Exception {
-
+    	System.out.println("StartOfTest");
+    	HTMLPage navPage = new HTMLPage(this.urlContainer.getDriver());
+        
+        navPage.getDriver().get("http://www.comaround.se");
         assertTrue(false);
 
     }

@@ -5,15 +5,16 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.BeforeClass;
 
-import se.redmind.rmtest.selenium.example.PetterTest;
+import se.redmind.rmtest.selenium.example.TestWithRules;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 
 
 
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses( {PetterTest.class})
-public class RuleTest {
+@Suite.SuiteClasses( {TestWithRules.class})
+public class SuiteWithRules {
+//	public getDriver()
     @BeforeClass
     public static void beforeAllTests(){
         
