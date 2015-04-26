@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -x
 
 . $testHome/cmd/setConfig.sh
 logName=`getLogPrefix`
@@ -12,7 +12,7 @@ listSims()
         do
                 simName=`echo $line | cut -d "(" -f 1 | xargs echo`
                 simIosVersion=`echo $line | cut -d "(" -f 2 | cut -d ")" -f 1 | cut -d " " -f1`
-                if [ "$1 $2" = "$simName$simIosVersion" ]
+                if [ "$1 $2" = "$simName $simIosVersion" ]
                 then
                         echo "Found simulator"
                         exit 22
