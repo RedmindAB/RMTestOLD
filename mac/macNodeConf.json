@@ -8,6 +8,7 @@
 		"osname":"OSX",
 		"description": "OSX firefox",
 		"maxInstances": 1,
+		"deviceName": "AnApple",
 		"platform" : "MAC"
 	},
 
@@ -17,6 +18,7 @@
 		"osname":"OSX",
 		"description": "OSX chrome",
 		"maxInstances": 1,
+		"deviceName": "AnApple",
 		"platform" : "MAC"
 	}
       ],
