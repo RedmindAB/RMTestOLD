@@ -16,6 +16,7 @@
           "appPackage":"APP_PKG",
           "appActivity":"START_ACTIVITY",
 	  "appWaitActivity":"WAIT_ACTIVITY",
+	  "automationName":"AUTOMATION_NAME",
           "browserName": "BROWSER_NAME",
 	  "newCommandTimeout":"300"
     }
