@@ -7,7 +7,7 @@
           "deviceId": "DEVICE_ID",
           "description": "DESCR_STRING",
           "maxInstances": 1,
-          "rmDeviceType": "mobile",
+          "rmDeviceType": "DEVICE_TYPE",
           "deviceName":"DEVICE_NAME",
           "platformName":"PLATFORM",
 	  "platform": "OS_NAME",

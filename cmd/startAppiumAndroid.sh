@@ -28,7 +28,7 @@ $ANDROID_HOME/platform-tools/adb devices | grep "	device" | cut -d "	" -f1 | whi
 do
 	screenWidth=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell dumpsys window | grep mUnrestrictedScreen | cut -d ")" -f2 | cut -d "x" -f1 | xargs echo`
         screenDensity=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.sf.lcd_density | tr -d "\r"`
-        screenSize=`echo "scale=1;$screenWidth/$screenDensity" | bc`
+        export screenSize=`echo "scale=0;$screenWidth/$screenDensity" | bc`
         echo "Screenwidth: $screenWidth"
         echo "ScreenDensity: $screenDensity"
         echo "ScreenSizeInches: $screenSize"
@@ -49,6 +49,17 @@ do
 	sed -i '' "s/OS_NAME/ANDROID/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
+	
+	     if [[ "$screenSize" -gt "6" ]]
+                then
+		sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
+                echo "im a tablet"
+        fi
+
+
+
+
+
 	if [ -z $APK_PATH ]
 		then
 		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
