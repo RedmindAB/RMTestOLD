@@ -33,6 +33,7 @@ do
         echo "ScreenDensity: $screenDensity"
         echo "ScreenSizeInches: $screenSize"
 
+
 	modelName=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
 	modelBrand=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
 	androidVersion=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
@@ -50,15 +51,15 @@ do
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	
-	     if [[ "$screenSize" -gt "6" ]]
+	     if [[ "$screenSize" -gt "4" ]]
                 then
-		sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
-                echo "im a tablet"
+			sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
+                	echo "im a tablet"
+		
+		else
+			sed -i '' "s/DEVICE_TYPE/mobile/g" $testHome/etc/Appium_TEMP.json
+		
         fi
-
-
-
-
 
 	if [ -z $APK_PATH ]
 		then
