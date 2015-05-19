@@ -73,6 +73,17 @@ done
 description="$PHONE_NAME  $IOSVERSION `hostname`"
 cp -f $testHome/etc/iPhoneSimulator_TEMPLATE.json	$testHome/etc/Simulator_Temp.json
 
+TYPE=${PHONE_NAME:0:4}
+if [[ "$TYPE" == "iPad" ]]
+   then
+		   sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Simulator_Temp.json
+		   echo "im an iPad"
+
+   else
+		   sed -i '' "s/DEVICE_TYPE/mobile/g" $testHome/etc/Simulator_Temp.json
+
+fi
+
 sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Simulator_Temp.json
 sed -i '' "s/DEVICE_NAME/$PHONE_NAME/g" $testHome/etc/Simulator_Temp.json
 sed -i '' "s/IOS_VERSION/$IOSVERSION/g" $testHome/etc/Simulator_Temp.json
