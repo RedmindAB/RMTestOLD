@@ -20,6 +20,16 @@
 		"maxInstances": 1,
 		"deviceName": "AnApple",
 		"platform" : "MAC"
+	},
+	
+	{
+		"seleniumProtocol": "WebDriver",
+		"browserName": "phantomjs",
+		"osname":"OSX",
+		"description": "OSX phantomjs",
+		"maxInstances": 1,
+		"deviceName": "AnApple",
+		"platform" : "MAC",
 	}
       ],
   "configuration":
