@@ -57,7 +57,7 @@ public class GoogleExample {
 
 	    @AfterClass
 	    public static void afterTest(){
-	    	DriverProvider.stopDrivers();
+//	    	DriverProvider.stopDrivers();
 	    }
 	    
 

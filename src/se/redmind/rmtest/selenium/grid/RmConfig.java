@@ -95,4 +95,9 @@ public class RmConfig {
 		return getLocalConfigValue("AndroidBuildtoolsVersion");
 	}
 
+	public static boolean runOnGrid() {
+		Boolean runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		return runOnGrid;
+	}
+
 }
