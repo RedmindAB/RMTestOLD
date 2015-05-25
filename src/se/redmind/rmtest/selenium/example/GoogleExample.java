@@ -70,12 +70,12 @@ public class GoogleExample {
     public void testGoogle() throws Exception {
     	HTMLPage navPage = new HTMLPage(this.tDriver);
         
-        navPage.getDriver().get("http://www.comaround.se");
+        navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
         System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(navPage.getTitle().startsWith("Z"));
+        assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
         navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));

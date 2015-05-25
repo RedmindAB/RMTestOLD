@@ -163,13 +163,17 @@ public class DriverNamingWrapper {
 	private WebDriver startLocalDriver(Browser browser) {
 		WebDriver driver = null;
 		switch (browser) {
-		case CHROME:
+		case Chrome:
 			System.setProperty("webdriver.chrome.driver", TestHome.main()+"/lib/chromedriver");
 			driver = new ChromeDriver();
 			break;
-		case FIREFOX:
+		case Firefox:
 			driver = new FirefoxDriver();
 			break;
+//		case PhantomJS:
+//			System.setProperty("phantomjs.binary.path", TestHome.main()+"/lib/phantomjs");
+//			driver = new PhantomJSDriver();
+//			break;
 		default:
 			break;
 		}
