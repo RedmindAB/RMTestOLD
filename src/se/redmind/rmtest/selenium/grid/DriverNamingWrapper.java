@@ -12,6 +12,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -170,10 +171,9 @@ public class DriverNamingWrapper {
 		case Firefox:
 			driver = new FirefoxDriver();
 			break;
-//		case PhantomJS:
-//			System.setProperty("phantomjs.binary.path", TestHome.main()+"/lib/phantomjs");
-//			driver = new PhantomJSDriver();
-//			break;
+		case PhantomJS:
+			driver = new PhantomJSDriver();
+			break;
 		default:
 			break;
 		}
