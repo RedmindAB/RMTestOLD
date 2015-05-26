@@ -106,8 +106,9 @@ do
 	then
 		echo "Connected to HUB"
 		appiumStarted=false
+	else
+		echo "Not yet connected to HUB"
+        	sleep 1
 	fi
-	echo "Not yet connected to HUB"
-	sleep 1
 done
 
