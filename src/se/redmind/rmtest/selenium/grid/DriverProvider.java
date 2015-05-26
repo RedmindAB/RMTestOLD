@@ -9,6 +9,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
+import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.framework.DeviceDescription;
 
 
@@ -33,9 +34,13 @@ public class DriverProvider {
 	 */
 	private static void updateDrivers() {
 		RmConfig config = new RmConfig();
+		urlCapList = new ArrayList<DriverNamingWrapper>();
+		if (!RmConfig.runOnGrid()) {
+			loadLocalDrivers();
+			return;
+		}
 		HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
 		ArrayList <RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
-		urlCapList = new ArrayList<DriverNamingWrapper>();
 
 		RegistrationRequest nodeReq;
 		String description;
@@ -59,6 +64,15 @@ public class DriverProvider {
 
 			}
 
+		}
+	}
+
+	private static void loadLocalDrivers() {
+		for (int i = 0; i < Browser.values().length; i++) {
+			Browser browser = Browser.values()[i];
+			DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+			urlCapList.add(driver);
+			allDrivers.add(driver);
 		}
 	}
 

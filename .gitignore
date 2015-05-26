@@ -14,3 +14,4 @@ cmd/.log
 RMTest.iml
 etc/Simulator_Temp.json
 RMR-Screenshots/
+*.png

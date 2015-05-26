@@ -9,7 +9,7 @@
             "deviceName": "DEVICE_NAME",
             "platform": "MAC",
             "platformVersion":"IOS_VERSION",
-	    "rmDeviceType":"mobile",
+	    "rmDeviceType":"DEVICE_TYPE",
 	    "newCommandTimeout":"300",
             "launchTimeout" : "30000"
         }

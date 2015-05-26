@@ -10,13 +10,17 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.By;
+
+import se.redmind.rmtest.selenium.framework.Browser;
 
 public class DriverNamingWrapper {
 
@@ -25,6 +29,7 @@ public class DriverNamingWrapper {
 	String description;
 	WebDriver driver;
 	boolean imAFailure;
+	private Browser browser;
 
 
 	public DriverNamingWrapper(URL url, DesiredCapabilities capability, String description) {
@@ -32,6 +37,11 @@ public class DriverNamingWrapper {
 		this.capability = capability;
 		this.description = description;
 		this.imAFailure = false;
+	}
+
+	public DriverNamingWrapper(Browser browser, String description) {
+		this.browser = browser;
+		this.description = description;
 	}
 
 	public String getDescription() {
@@ -86,7 +96,11 @@ public class DriverNamingWrapper {
 	 * @param filteredUrlCapList
 	 */
 	public WebDriver startDriver(){
-		if (this.driver == null) {
+		if (browser != null && this.driver == null) {
+			this.driver = startLocalDriver(this.browser);
+			return this.driver;
+		}
+		else if (this.driver == null) {
 
 			int maxRetryAttempts = 5;
 
@@ -146,6 +160,25 @@ public class DriverNamingWrapper {
 		}
 	}
 
+
+	private WebDriver startLocalDriver(Browser browser) {
+		WebDriver driver = null;
+		switch (browser) {
+		case Chrome:
+			System.setProperty("webdriver.chrome.driver", TestHome.main()+"/lib/chromedriver");
+			driver = new ChromeDriver();
+			break;
+		case Firefox:
+			driver = new FirefoxDriver();
+			break;
+		case PhantomJS:
+			driver = new PhantomJSDriver();
+			break;
+		default:
+			break;
+		}
+		return driver;
+	}
 
 	@Override
 	public String toString() {
