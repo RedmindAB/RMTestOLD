@@ -10,7 +10,7 @@ listSims()
 {
         xcrun instruments -s devices | grep Simulator | while read line
         do
-                simName=`echo $line | cut -d "(" -f 1 | xargs echo`
+	        simName=`echo $line | cut -d "(" -f 1 | xargs echo`
                 simIosVersion=`echo $line | cut -d "(" -f 2 | cut -d ")" -f 1 | cut -d " " -f1`
                 if [ "$1 $2" = "$simName $simIosVersion" ]
                 then
@@ -51,6 +51,7 @@ simExists "$PHONE_NAME" "$IOSVERSION"
 if [ $? -ne 0 ]
 then
 	echo "Cannot find simulator with preferences: $PHONE_NAME $IOSVERSION"
+	xcrun instruments -s devices 
 	exit 1
 fi
 
