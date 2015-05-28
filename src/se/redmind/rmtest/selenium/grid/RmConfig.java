@@ -99,5 +99,10 @@ public class RmConfig {
 		Boolean runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
 		return runOnGrid;
 	}
+	
+	public static boolean usePhantomJS(){
+		Boolean usePhantomJS = Boolean.valueOf(getLocalConfigValue("usePhantomJS"));
+		return usePhantomJS;
+	}
 
 }
