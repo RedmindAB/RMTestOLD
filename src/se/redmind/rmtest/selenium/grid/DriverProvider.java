@@ -70,8 +70,11 @@ public class DriverProvider {
 	private static void loadLocalDrivers() {
 		for (int i = 0; i < Browser.values().length; i++) {
 			Browser browser = Browser.values()[i];
-			if (browser == Browser.PhantomJS) {
+			if (browser == Browser.PhantomJS || browser == Browser.Chrome) {
 				if (!RmConfig.usePhantomJS()) {
+					continue;
+				}
+				else if (!RmConfig.useChrome()) {
 					continue;
 				}
 			}

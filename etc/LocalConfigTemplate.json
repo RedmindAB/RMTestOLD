@@ -6,6 +6,7 @@
     "hubIp": "127.0.0.1",
     "AndroidBuildtoolsVersion": "4.4",
     "runOnGrid": "false",
-    "usePhantomJS":"false"
+    "usePhantomJS":"false",
+    "useChrome":"false"
   }
 }

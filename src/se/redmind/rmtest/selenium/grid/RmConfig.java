@@ -105,4 +105,8 @@ public class RmConfig {
 		return usePhantomJS;
 	}
 
+	public static boolean useChrome() {
+		return Boolean.valueOf(getLocalConfigValue("useChrome"));
+	}
+
 }
