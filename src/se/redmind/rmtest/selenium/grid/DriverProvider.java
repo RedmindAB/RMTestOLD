@@ -70,14 +70,8 @@ public class DriverProvider {
 	private static void loadLocalDrivers() {
 		for (int i = 0; i < Browser.values().length; i++) {
 			Browser browser = Browser.values()[i];
-			if (browser == Browser.PhantomJS || browser == Browser.Chrome) {
-				if (!RmConfig.usePhantomJS()) {
-					continue;
-				}
-				else if (!RmConfig.useChrome()) {
-					continue;
-				}
-			}
+			if (browser == Browser.PhantomJS 	&& !RmConfig.usePhantomJS()) 	continue;
+			if (browser == Browser.Chrome 		&& !RmConfig.useChrome()) 		continue;
 			DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
 			urlCapList.add(driver);
 			allDrivers.add(driver);

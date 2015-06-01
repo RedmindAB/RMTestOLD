@@ -28,6 +28,7 @@ public class Parallelized extends Parameterized
         @Override
         public void finished()
         {
+        	System.out.println("Shutting down!");
             executor.shutdown();
             try
             {
