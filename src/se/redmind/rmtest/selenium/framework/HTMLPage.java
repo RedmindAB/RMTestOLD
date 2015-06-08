@@ -175,8 +175,10 @@ public class HTMLPage {
 				break;
 			}
 			catch (Exception e) {
-				System.out.println("pageTitle: " + pageTitle);
-				System.out.println("----- AssertPageTitle Exception: " + e);
+                if(1 >= 9){
+				    System.out.println("pageTitle: " + pageTitle);
+				    System.out.println("----- AssertPageTitle Exception: " + e);
+                }
 				i = i + 1;
 				Thread.sleep(50);
 			}				
@@ -194,7 +196,9 @@ public class HTMLPage {
 				return b;
 			}
 			catch (Exception e) {
-				System.out.println("pageTitleContains exception: " + e);
+                if(1 >= 9){
+				    System.out.println("pageTitleContains exception: " + e);
+                }
 				i = i + 1;
 				Thread.sleep(50);
 			}
@@ -212,7 +216,9 @@ public class HTMLPage {
 				return b;
 			}
 			catch (Exception e) {
-				System.out.println("pageTitleContains exception: " + e);
+                if(1 >= 9){
+				    System.out.println("pageTitleContains exception: " + e);
+                }
 				i = i + 1;
 				Thread.sleep(50);
 			}
@@ -231,7 +237,9 @@ public class HTMLPage {
                 break;
             }
             catch (Exception e) {
-                System.out.println("----- assertPageContains Exception: " + e);
+                if(1 >= 9){
+                    System.out.println("----- assertPageContains Exception: " + e);
+                }
                 i = i + 1;
                 Thread.sleep(50);
             }
@@ -253,7 +261,9 @@ public class HTMLPage {
                 break;
             }
             catch (Exception e) {
-                System.out.println("spinnerClickBy exception: " + e);
+                if(1 >= 9){
+                    System.out.println("spinnerClickBy exception: " + e);
+                }
                 i = i + 1;
                 Thread.sleep(50);
             }
