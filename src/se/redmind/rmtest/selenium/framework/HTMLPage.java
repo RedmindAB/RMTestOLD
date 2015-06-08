@@ -68,7 +68,9 @@ public class HTMLPage {
                 return fw;
             }
             catch(Exception e){
-                System.out.println("driverFluentWait Failed attempt : " + i + "/n" + e);
+                if(1 >= 9){
+                    System.out.println("driverFluentWait Failed attempt : " + i + "/n" + e);
+                }
                 i++;
             }
         }
@@ -92,7 +94,9 @@ public class HTMLPage {
                 break;
             }
             catch (Exception e) {
-                System.out.println("driverWaitClickable exception: " + e);
+                if(1 >= 9){
+                    System.out.println("driverWaitClickable exception: " + e);
+                }
                 i++;
             }
         }
@@ -115,7 +119,9 @@ public class HTMLPage {
                 i++;
             }
             catch (Exception e) {
-                System.out.println("This is another exception?" + e);
+                if(1 >= 9){
+                    System.out.println("This is another exception?" + e);
+                }
                 i++;
             }
         }
