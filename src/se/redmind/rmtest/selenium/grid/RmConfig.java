@@ -96,17 +96,33 @@ public class RmConfig {
 	}
 
 	public static boolean runOnGrid() {
-		Boolean runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		Boolean runOnGrid = false;
+		try {
+			runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		} catch (Exception e) {
+			
+		}
 		return runOnGrid;
 	}
 	
 	public static boolean usePhantomJS(){
-		Boolean usePhantomJS = Boolean.valueOf(getLocalConfigValue("usePhantomJS"));
+		boolean usePhantomJS = false;
+		try {
+			usePhantomJS = Boolean.valueOf(getLocalConfigValue("usePhantomJS"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return usePhantomJS;
 	}
 
 	public static boolean useChrome() {
-		return Boolean.valueOf(getLocalConfigValue("useChrome"));
+		boolean useChrome = false;
+		try {
+			useChrome = Boolean.valueOf(getLocalConfigValue("useChrome"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return useChrome;
 	}
 
 }
