@@ -11,22 +11,6 @@ else
 	export APK_PACKAGE=`$AAPTCmd dump badging $APK_PATH | grep package: | cut -d " " -f 2 | cut -d "'" -f 2`
 fi
 
-isTablet() {
-	tabletLimit=6.0
-	currDevId=$1
-screenDensity=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.sf.lcd_density | tr -d "\r"`
-
-        screenWidth=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell dumpsys window | grep mUnrestrictedScreen | cut -d ")" -f2 | cut -d "x" -f1 | xargs echo`
-        screenHight=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell dumpsys window | grep mUnrestrictedScreen | cut -d ")" -f2 | cut -d "x" -f2 | tr -d "\r" | xargs echo`
-        screenSizeW=`echo "scale=2;$screenWidth/$screenDensity" | bc`
-        screenSizeW2=`echo "scale=2;$screenSizeW*$screenSizeW" | bc`
-        screenSizeH=`echo "scale=2;$screenHight/$screenDensity" | bc`
-        screenSizeH2=`echo "scale=2;$screenSizeH*$screenSizeH" | bc`
-        screenSize=`echo "scale=2;sqrt($screenSizeW2+$screenSizeH2)" | bc`
-	isTabletBool=`echo "scale=0;$screenSize>$tabletLimit" | bc`
-	echo $isTabletBool
-}
-
 export jar_home="$testHome/lib/selenium/"
 export androidNodeFile="/tmp/androidNodes.cfg"
 
@@ -42,6 +26,13 @@ rm -f $androidNodeFile
 
 $ANDROID_HOME/platform-tools/adb devices | grep "	device" | cut -d "	" -f1 | while read currDevId
 do
+	screenWidth=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell dumpsys window | grep mUnrestrictedScreen | cut -d ")" -f2 | cut -d "x" -f1 | xargs echo`
+        screenDensity=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.sf.lcd_density | tr -d "\r"`
+        screenSize=`echo "scale=1;$screenWidth/$screenDensity" | bc`
+        echo "Screenwidth: $screenWidth"
+        echo "ScreenDensity: $screenDensity"
+        echo "ScreenSizeInches: $screenSize"
+
 	modelName=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.model | tr -d "\r"`	
 	modelBrand=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.product.brand | tr -d "\r"`	
 	androidVersion=`$ANDROID_HOME/platform-tools/adb -s $currDevId shell getprop ro.build.version.release | tr -d "\r"`
@@ -58,17 +49,7 @@ do
 	sed -i '' "s/OS_NAME/ANDROID/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
-	
-	     if [ `isTablet $currDevId` -eq 1 ]
-                then
-			sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
-                	echo "im a tablet"
-		
-		else
-			sed -i '' "s/DEVICE_TYPE/mobile/g" $testHome/etc/Appium_TEMP.json
-		
-        fi
-
+	sed -i '' "s/AUTOMATION_NAME/Selendroid/g" $testHome/etc/Appium_TEMP.json
 	if [ -z $APK_PATH ]
 		then
 		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
@@ -105,11 +86,9 @@ do
 		then
 			echo "Connected to HUB"
 			appiumStarted=false
-		else
-			echo "Not yet connected to HUB"
-                	sleep 1
 		fi
-		
+		echo "Not yet connected to HUB"
+		sleep 1
 	done
 done
 

@@ -7,7 +7,7 @@
           "deviceId": "DEVICE_ID",
           "description": "DESCR_STRING",
           "maxInstances": 1,
-          "rmDeviceType": "mobile",
+          "rmDeviceType": "DEVICE_TYPE",
           "deviceName":"DEVICE_NAME",
           "platformName":"PLATFORM",
 	  "platform": "OS_NAME",
@@ -16,6 +16,7 @@
           "appPackage":"APP_PKG",
           "appActivity":"START_ACTIVITY",
 	  "appWaitActivity":"WAIT_ACTIVITY",
+	  "automationName":"AUTOMATION_NAME",
           "browserName": "BROWSER_NAME",
 	  "newCommandTimeout":"300"
     }
