@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
@@ -162,10 +163,12 @@ public class DriverProvider {
 			} catch (SessionNotFoundException e) {
 				System.out.println("For some reason a session was gone while quitting");
 				System.out.println(e);
+				continue;
 			}
-			
-			
-
+			catch (WebDriverException e){
+				System.out.println("Crached webdriver, continue to closing drivers");
+				continue;
+			}
 		}
 		allDrivers = new ArrayList<DriverNamingWrapper>();
 	}
