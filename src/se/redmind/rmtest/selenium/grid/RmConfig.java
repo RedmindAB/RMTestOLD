@@ -96,7 +96,12 @@ public class RmConfig {
 	}
 
 	public static boolean runOnGrid() {
-		Boolean runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		Boolean runOnGrid = false;
+		try {
+			runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return runOnGrid;
 	}
 	
