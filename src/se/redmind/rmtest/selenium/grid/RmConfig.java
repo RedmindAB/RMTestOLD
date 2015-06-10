@@ -95,4 +95,18 @@ public class RmConfig {
 		return getLocalConfigValue("AndroidBuildtoolsVersion");
 	}
 
+	public static boolean runOnGrid() {
+		Boolean runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		return runOnGrid;
+	}
+	
+	public static boolean usePhantomJS(){
+		Boolean usePhantomJS = Boolean.valueOf(getLocalConfigValue("usePhantomJS"));
+		return usePhantomJS;
+	}
+
+	public static boolean useChrome() {
+		return Boolean.valueOf(getLocalConfigValue("useChrome"));
+	}
+
 }
