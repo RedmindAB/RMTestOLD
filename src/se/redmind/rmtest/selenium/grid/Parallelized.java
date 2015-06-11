@@ -31,7 +31,7 @@ public class Parallelized extends Parameterized
             executor.shutdown();
             try
             {
-                executor.awaitTermination(10, TimeUnit.MINUTES);
+                executor.awaitTermination(20, TimeUnit.MINUTES);
             }
             catch (InterruptedException exc)
             {

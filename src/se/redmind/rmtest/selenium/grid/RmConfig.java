@@ -100,7 +100,6 @@ public class RmConfig {
 		try {
 			runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
 		} catch (Exception e) {
-			
 		}
 		return runOnGrid;
 	}
