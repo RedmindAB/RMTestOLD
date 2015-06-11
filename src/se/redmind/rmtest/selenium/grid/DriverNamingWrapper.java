@@ -5,6 +5,7 @@ import io.appium.java_client.ios.IOSDriver;
 
 import java.net.URL;
 
+import org.apache.xalan.xsltc.compiler.util.TestGenerator;
 import org.junit.Assume;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -167,7 +168,7 @@ public class DriverNamingWrapper {
 		WebDriver driver = null;
 		switch (browser) {
 		case Chrome:
-			System.setProperty("webdriver.chrome.driver", TestHome.main()+"/lib/chromedriver");
+			System.setProperty("webdriver.chrome.driver", getChromePath());
 			driver = new ChromeDriver();
 			break;
 		case Firefox:
@@ -180,6 +181,14 @@ public class DriverNamingWrapper {
 			break;
 		}
 		return driver;
+	}
+
+	private String getChromePath() {
+		String osName = System.getProperty("os.name");
+		if (osName.startsWith("Mac")) {
+			return TestHome.main()+"/lib/chromedriver";
+		}
+		else return TestHome.main()+"/lib/linux/chromedriver";
 	}
 
 	@Override
