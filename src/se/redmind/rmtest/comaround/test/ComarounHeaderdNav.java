@@ -21,7 +21,6 @@ public class ComarounHeaderdNav extends HTMLPage {
 				this.driver.get("http://www.comaround.se");
 				break;
 			} catch (Exception e) {
-				// TODO: handle exception
 			}
 		}
 	}

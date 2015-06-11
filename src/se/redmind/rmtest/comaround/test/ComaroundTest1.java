@@ -28,7 +28,6 @@ public class ComaroundTest1 {
 	    public ComaroundTest1(final DriverNamingWrapper driverWrapper, final String driverDescription) {
 	        this.driverWrapper = driverWrapper;
 	        this.driverDescription = driverDescription;
-	        cNav = new ComarounHeaderdNav(driverWrapper.getDriver());
 	    }
 	    
 	    private static Object[] getDrivers() {
@@ -58,7 +57,7 @@ public class ComaroundTest1 {
 	    @Before
 	    public void beforeTest(){
 	    	this.tDriver = this.driverWrapper.startDriver();
-	    	System.out.println(System.getenv("timestamp"));
+	    	this.cNav = new ComarounHeaderdNav(tDriver);
 	    }
 	@Test
 	public void clickComAroundZero() {
