@@ -123,5 +123,15 @@ public class RmConfig {
 		}
 		return useChrome;
 	}
+	
+	public static boolean autoCloseDrivers(){
+		boolean autoCloseDrivers = true;
+		try {
+			autoCloseDrivers = Boolean.valueOf(getLocalConfigValue("autoCloseDrivers"));
+		} catch (Exception e) {
+			
+		}
+		return autoCloseDrivers;
+	}
 
 }
