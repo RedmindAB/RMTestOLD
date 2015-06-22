@@ -12,7 +12,7 @@ public class RmTestWatcher extends TestWatcher{
 
     public RmTestWatcher(){
         this.driverContainer = getDriverWrapper(driverContainer);
-        System.out.println("Initializing ScreenShotRule");
+        System.out.println("Initializing RmTestWatcher");
     }
 
     public DriverNamingWrapper getDriverWrapper(DriverNamingWrapper driverWrapper){
