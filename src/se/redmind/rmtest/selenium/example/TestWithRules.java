@@ -70,7 +70,7 @@ public class TestWithRules {
 
 	    @Before
 	    public void beforeTest(){
-	    	ruleExample.initDriver(this.urlContainer);
+	    	ruleExample.getDriverWrapper(this.urlContainer);
 //	    	this.tDriver = this.urlContainer.startDriver();
 	    }
 	    
