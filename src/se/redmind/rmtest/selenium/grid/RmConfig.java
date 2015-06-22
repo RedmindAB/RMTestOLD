@@ -57,7 +57,6 @@ public class RmConfig {
 
 	public static String getLocalConfigValue(String ConfigKey) {
 		String configValue = null;
-		System.out.println(localConfig.toString());
 
 		configValue = localConfig.getAsJsonObject("configuration").get(ConfigKey)
 				.getAsString();
@@ -67,7 +66,6 @@ public class RmConfig {
 
 	public static String getRmConfigValue(String ConfigKey) {
 		String configValue = null;
-		System.out.println(rmConfig.toString());
 
 		configValue = rmConfig.getAsJsonObject("configuration").get(ConfigKey)
 				.getAsString();
@@ -132,6 +130,35 @@ public class RmConfig {
 			
 		}
 		return autoCloseDrivers;
+	}
+
+	public static String getRMRLiveAddress() {
+		String rmrLiveAddress = "127.0.0.1";
+		try {
+			rmrLiveAddress = getLocalConfigValue("RmReportIP");
+		} catch (Exception e) {
+			
+		}
+		return rmrLiveAddress;
+	}
+	
+	public static int getRMRLivePort(){
+		int port = 12345;
+		try {
+			port = Integer.valueOf(getLocalConfigValue("RmReportLivePort"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return port;
+	}
+
+	public static boolean enableLiveStream() {
+		boolean enableLiveStream = false;
+		try {
+			enableLiveStream = Boolean.valueOf(getLocalConfigValue("enableLiveStream"));
+		} catch (Exception e) {
+		}
+		return enableLiveStream;
 	}
 
 }
