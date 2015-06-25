@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 import org.junit.runner.Description;
+import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import com.google.gson.JsonArray;
@@ -28,6 +29,10 @@ public class RmTestResultBuilder {
 	private List<String> driverDescriptions;
 	private final String uid;
 	private String timestamp;
+	private int totalFail;
+	private int totalIgnored;
+	private double runTime;
+	private boolean success;
 	
 	
 	public RmTestResultBuilder() {
@@ -94,6 +99,10 @@ public class RmTestResultBuilder {
 		JsonObject buildObj = new JsonObject();
 		buildObj.addProperty("suite", suiteName);
 		buildObj.addProperty("totalTests", totalTests);
+		buildObj.addProperty("failures", totalFail);
+		buildObj.addProperty("totalIgnored", totalIgnored);
+		buildObj.addProperty("success", success);
+		buildObj.addProperty("runTime", runTime);
 		buildObj.addProperty("UUID", this.uid);
 		buildObj.addProperty("timestamp", timestamp);
 		Set<String> keySet = testMap.keySet();
@@ -143,8 +152,23 @@ public class RmTestResultBuilder {
 		}
 	}
 	
+	public void addRunTime(String dispName, double time){
+		JsonObject test = testMap.get(dispName);
+		test.addProperty("runTime", time);
+	}
+	
 	private String formattedTimestamp(){
 		SimpleDateFormat form = new SimpleDateFormat("yyyyMMddHHmmss");
 		return form.format(new Date());
+	}
+
+
+
+
+	public void setResult(Result result) {
+		this.totalFail = result.getFailureCount();
+		this.totalIgnored = result.getIgnoreCount();
+		this.runTime = (double) result.getRunTime()/1000;
+		this.success = result.wasSuccessful();
 	}
 }
