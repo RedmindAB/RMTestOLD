@@ -289,17 +289,6 @@ public class HTMLPage {
     /**
      * @param fileName  Path to filename without extension. example: /tmp/thefilename
      */
-    public void takeScreenshot(String fileName) {
-        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        
-        try {
-			FileUtils.copyFile(scrFile, new File(fileName + ".png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-    }
 
 }
 
