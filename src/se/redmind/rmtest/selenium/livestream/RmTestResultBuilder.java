@@ -106,10 +106,10 @@ public class RmTestResultBuilder {
 		buildObj.addProperty("UUID", this.uid);
 		buildObj.addProperty("timestamp", timestamp);
 		Set<String> keySet = testMap.keySet();
-		JsonObject tests = new JsonObject();
+		JsonArray tests = new JsonArray();
 		for (String key : keySet) {
 			JsonObject test = testMap.get(key);
-			tests.add(test.get("id").getAsString(),test);
+			tests.add(test);
 		}
 		buildObj.add("tests", tests);
 		return buildObj;
