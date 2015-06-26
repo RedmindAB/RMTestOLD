@@ -112,6 +112,7 @@ do
                 	sleep 1
 		fi
 		loopcount=$[loopcount+1]
+		echo loopcount
 		if [ $loopcount -gt 58 ]
 		then
 			keepTrying=false
