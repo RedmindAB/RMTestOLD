@@ -1,5 +1,11 @@
 package se.redmind.rmtest.selenium.livestream;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,6 +15,8 @@ import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+
+import se.redmind.rmtest.selenium.grid.RmConfig;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -100,15 +108,30 @@ public class LiveStreamListener extends RunListener{
 	public void testRunFinished(Result result) throws Exception {
 		if (parrentRunner) {
 			resBuilder.setResult(result);
-			JsonObject build = resBuilder.build();
-			System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(build));
+			JsonObject results = resBuilder.build();
 			rmrConnection.sendSuiteFinished();
 			rmrConnection.sendClose();
 			rmrConnection.close();
+			saveReport();
 			super.testRunFinished(result);
 		}
 	}
 	
+	private void saveReport() {
+		String suitename = resBuilder.getSuiteName();
+		String timestamp = resBuilder.getTimestamp();
+		String savePath = RmConfig.getJsonReportSavePath();
+		new File(savePath).mkdirs();
+		String filename = suitename+"-"+timestamp+".json";
+		try {
+			PrintWriter writer = new PrintWriter(savePath+"/"+filename, "UTF-8");
+			writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void initSuite(Description desc, int level){
 		level++;
 		String suitename = System.getProperty("rmt.live.suitename");

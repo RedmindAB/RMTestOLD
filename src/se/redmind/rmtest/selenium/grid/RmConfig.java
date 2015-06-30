@@ -161,4 +161,14 @@ public class RmConfig {
 		return enableLiveStream;
 	}
 
+	public static String getJsonReportSavePath() {
+		String savePath = TestHome.main()+"/target/RMTReports";
+		try {
+			savePath = getLocalConfigValue("jsonReportSavePath");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return savePath;
+	}
+
 }

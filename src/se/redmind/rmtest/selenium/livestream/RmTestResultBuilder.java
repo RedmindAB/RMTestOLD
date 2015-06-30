@@ -77,7 +77,6 @@ public class RmTestResultBuilder {
 		int start = displayName.indexOf('[');
 		int end = displayName.lastIndexOf(']');
 		String deviceInfoString = displayName.substring(start+1, end);
-		System.out.println(deviceInfoString);
 		return extractDeviceInfo(deviceInfoString);
 	}
 	
@@ -160,8 +159,14 @@ public class RmTestResultBuilder {
 	}
 	
 	private String formattedTimestamp(){
-		SimpleDateFormat form = new SimpleDateFormat("yyyyMMddHHmmss");
-		return form.format(new Date());
+		String surefireTimestamp = System.getProperty("rmt.timestamp").replaceAll("-", "");
+		if (surefireTimestamp != null){
+			return surefireTimestamp;
+		}
+		else {
+			SimpleDateFormat form = new SimpleDateFormat("yyyyMMddHHmmss");
+			return form.format(new Date());
+		}
 	}
 
 
@@ -170,5 +175,10 @@ public class RmTestResultBuilder {
 		this.totalIgnored = result.getIgnoreCount();
 		this.runTime = (double) result.getRunTime()/1000;
 		this.success = result.wasSuccessful();
+	}
+
+
+	public String getTimestamp() {
+		return timestamp;
 	}
 }
