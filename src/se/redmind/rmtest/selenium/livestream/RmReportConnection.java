@@ -15,6 +15,7 @@ public class RmReportConnection {
 	private String rmrLiveAddress;
 	private int rmrLivePort;
 	private PrintWriter out;
+	private boolean isConnected;
 	
 	public RmReportConnection() {
 		this.rmrLiveAddress = RmConfig.getRMRLiveAddress();
@@ -32,6 +33,7 @@ public class RmReportConnection {
 			return false;
 		}
 		System.out.println("Connection etablished.");
+		isConnected = true;
 		return true;
 	}
 	
@@ -41,7 +43,7 @@ public class RmReportConnection {
 			socket.close();
 			out.close();
 			System.out.println("Connection closed");
-		} catch (IOException e) {
+		} catch (NullPointerException | IOException e) {
 			System.err.println("Could not close socket...");
 			return false;
 		}
@@ -49,28 +51,36 @@ public class RmReportConnection {
 	}
 	
 	public synchronized void sendMessage(String type, JsonObject message){
-		out.println(type+"@"+new Gson().toJson(message));
-		out.flush();
+		send(type+"@"+new Gson().toJson(message));
 	}
 	
 	public synchronized void sendMessage(String message){
-		out.println("message@"+message);
-		out.flush();
+		send("message@"+message);
 	}
 	
 	public synchronized void sendMessage(String type, String message){
-		out.println(type+"@"+message);
-		out.flush();
+		send(type+"@"+message);
 	}
 	
 	public synchronized void sendSuiteFinished(){
-		out.println("!suiteFinished@");
-		out.flush();
+		send("!suiteFinished@");
 	}
 	
 	public synchronized void sendClose(){
-		out.println("!close@");
-		out.flush();
+		send("!close@");
+	}
+	
+	private synchronized void send(String message){
+		try {
+			out.println(message);
+			out.flush();
+		} catch (NullPointerException e) {
+			isConnected = false;
+		}
+	}
+	
+	public boolean isConnected(){
+		return isConnected;
 	}
 	
 }

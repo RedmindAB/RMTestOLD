@@ -92,6 +92,7 @@ public class LiveStreamListener extends RunListener{
 	@Override
 	public void testIgnored(Description description) throws Exception {
 		resBuilder.addIgnoredTest(description.getDisplayName());
+		rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
 		super.testIgnored(description);
 	}
 	

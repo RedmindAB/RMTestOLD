@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -83,8 +84,10 @@ public class CopyOfGoogleExample {
         new RMReportScreenshot(urlContainer).takeScreenshot("first");
         new RMReportScreenshot(urlContainer).takeScreenshot("after");
         System.out.println("Done!");   
+        assertTrue(false);
         
     }
+    @Ignore
     @Test
     public void testGoogle2() throws Exception {
     	HTMLPage navPage = new HTMLPage(this.tDriver);

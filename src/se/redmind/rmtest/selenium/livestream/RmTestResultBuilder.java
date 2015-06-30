@@ -59,6 +59,7 @@ public class RmTestResultBuilder {
 			test.addProperty("id", totalTests);
 			test.addProperty("method", getMethodName(displayName));
 			test.addProperty("testclass", getTestClass(displayName));
+			test.addProperty("status", "idle");
 			test.add(RESULT, JsonNull.INSTANCE);
 			test.add("deviceInfo", getDeviceInfo(displayName));
 			testMap.put(displayName, test);
@@ -141,6 +142,7 @@ public class RmTestResultBuilder {
 
 	public void addIgnoredTest(String displayName) {
 		JsonObject test = testMap.get(displayName);
+		test.addProperty("runTime", 0);
 		test.addProperty(RESULT, "skipped");
 	}
 
@@ -161,8 +163,6 @@ public class RmTestResultBuilder {
 		SimpleDateFormat form = new SimpleDateFormat("yyyyMMddHHmmss");
 		return form.format(new Date());
 	}
-
-
 
 
 	public void setResult(Result result) {
