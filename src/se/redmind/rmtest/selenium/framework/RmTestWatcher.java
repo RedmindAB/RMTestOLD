@@ -25,29 +25,14 @@ public class RmTestWatcher extends TestWatcher{
 		}
     	new RMReportScreenshot(driverContainer).takeScreenshot(description.getClassName(), methodName, "FailedTestcase");
     }
-   
-    
-    @Override
-    protected void finished(Description description) {
-    	System.out.println("FinishRule");
-    	this.driverContainer.getDriver().close();
+
+    public DriverNamingWrapper getDriverWrapper(DriverNamingWrapper driverWrapper){
+        this.driverContainer = driverWrapper;
+        return driverWrapper;
     }
-    
-//    @Override
-//    protected void starting(Description description) {
-//    	System.out.println("StartingRule");
-//    	this.driverContainer.startDriver();
-//    	this.driverContainer.getDriver().get("www.google.se");
-//    }
-    
-    public DriverNamingWrapper getDriverContainer() {
-    	System.out.println("");
-    	return driverContainer;
-    }
-    
-    public void initDriver(DriverNamingWrapper pDriverContainer){
-    	this.driverContainer = pDriverContainer;
+
+    public void initDriver(DriverNamingWrapper driver){
+    	this.driverContainer = driver;
     	this.driverContainer.startDriver();
-    	
     }
 }
