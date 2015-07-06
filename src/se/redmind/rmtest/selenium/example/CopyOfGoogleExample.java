@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -15,6 +16,7 @@ import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
+import se.redmind.rmtest.selenium.framework.RmTestWatcher;
 import se.redmind.rmtest.selenium.framework.StackTraceInfo;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
@@ -26,7 +28,9 @@ import se.redmind.rmtest.selenium.grid.Parallelized;
 public class CopyOfGoogleExample {
 
 
-	   private WebDriver tDriver;
+		public @Rule RmTestWatcher testWatcher = new RmTestWatcher();
+	
+		private WebDriver tDriver;
 	    private final DriverNamingWrapper urlContainer;
 	    private final String driverDescription;
 	    private final RMReportScreenshot rmrScreenshot;
@@ -64,7 +68,7 @@ public class CopyOfGoogleExample {
 
 	    @Before
 	    public void beforeTest(){
-	    	this.tDriver = this.urlContainer.startDriver();
+	    	testWatcher.initDriver(urlContainer);
 	    }
 	    
     @Test

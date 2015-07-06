@@ -76,7 +76,6 @@ public class LiveStreamListener extends RunListener{
 		finishedTests.add(displayName);
 		if (parrentRunner) {
 			double runTime = (double) (System.currentTimeMillis() - testStartTimes.get(displayName)) / 1000;
-			System.out.println(displayName+": "+runTime);
 			resBuilder.addRunTime(displayName, runTime);
 			rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
 		}

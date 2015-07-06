@@ -9,12 +9,10 @@ import org.junit.runners.model.RunnerBuilder;
 import se.redmind.rmtest.selenium.grid.AutoCloseListener;
 import se.redmind.rmtest.selenium.grid.RmConfig;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
-import se.redmind.rmtest.selenium.livestream.RmTestResultBuilder;
 
 public class RmSuite extends Suite {
 
 	private LiveStreamListener liveStreamListener;
-	private volatile RmTestResultBuilder resBuilder;
 
 	public RmSuite(Class<?> klass, RunnerBuilder builder)
 			throws InitializationError {
@@ -23,8 +21,7 @@ public class RmSuite extends Suite {
 	
 	@Override
 	public void run(RunNotifier notifier) {
-		resBuilder = new RmTestResultBuilder();
-		if (RmConfig.enableLiveStream()){
+		if (RmConfig.enableLiveStream() && RmConfig.runOnGrid()){
 			liveStreamListener = new LiveStreamListener();
 			notifier.addListener(liveStreamListener);
 		}
@@ -35,7 +32,9 @@ public class RmSuite extends Suite {
 	
 	@Override
 	protected void runChild(Runner runner, RunNotifier notifier) {
-		if (RmConfig.enableLiveStream()) notifier.addListener(liveStreamListener.getSubListener());
+		if (RmConfig.enableLiveStream() && liveStreamListener != null){
+			notifier.addListener(liveStreamListener.getSubListener());
+		}
 		super.runChild(runner, notifier);
 	}
 	
