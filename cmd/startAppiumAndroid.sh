@@ -59,7 +59,7 @@ do
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	
-	     if [ `isTablet $currDevId` -eq 1 ]
+	     if [ `isTablet $currDevId` -eq 1 ] | [ "$modelName" = "SM-T550" ]
                 then
 			sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
                 	echo "im a tablet"
