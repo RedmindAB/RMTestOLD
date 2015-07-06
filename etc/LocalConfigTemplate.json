@@ -11,6 +11,6 @@
     "autoCloseDrivers":"true",
     "RmReportIP":"127.0.0.1",
     "RmReportLivePort":"12345",
-    "enableLiveStream":"false"
+    "enableLiveStream":"false",
   }
 }

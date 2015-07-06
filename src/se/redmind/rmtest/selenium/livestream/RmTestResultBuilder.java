@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import org.apache.xerces.impl.dv.DVFactoryException;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -54,15 +55,18 @@ public class RmTestResultBuilder {
 	
 	public void addTest(String displayName) {
 		if (!testMap.containsKey(displayName)) {
-			totalTests++;
-			JsonObject test = new JsonObject();
-			test.addProperty("id", totalTests);
-			test.addProperty("method", getMethodName(displayName));
-			test.addProperty("testclass", getTestClass(displayName));
-			test.addProperty("status", "idle");
-			test.add(RESULT, JsonNull.INSTANCE);
-			test.add("deviceInfo", getDeviceInfo(displayName));
-			testMap.put(displayName, test);
+			JsonElement deviceInfo = getDeviceInfo(displayName);
+			if (deviceInfo != JsonNull.INSTANCE){
+				totalTests++;
+				JsonObject test = new JsonObject();
+				test.addProperty("id", totalTests);
+				test.addProperty("method", getMethodName(displayName));
+				test.addProperty("testclass", getTestClass(displayName));
+				test.addProperty("status", "idle");
+				test.add(RESULT, JsonNull.INSTANCE);
+				test.add("deviceInfo", deviceInfo);
+				testMap.put(displayName, test);
+			}
 		}
 	}
 
@@ -78,16 +82,22 @@ public class RmTestResultBuilder {
 		int end = displayName.lastIndexOf(']');
 		String deviceInfoString = displayName.substring(start+1, end);
 		return extractDeviceInfo(deviceInfoString);
+		
 	}
 	
 	private JsonElement extractDeviceInfo(String deviceInfo){
 		String[] info = deviceInfo.split("_");
 		JsonObject deviceInfoObject = new JsonObject();
-		deviceInfoObject.addProperty("os", info[0]);
-		deviceInfoObject.addProperty("osver", info[1]);
-		deviceInfoObject.addProperty("device", info[2]);
-		deviceInfoObject.addProperty("browser", info[3]);
-		deviceInfoObject.addProperty("browserVer", info[4]);
+		if (info.length == 5) {
+			deviceInfoObject.addProperty("os", info[0]);
+			deviceInfoObject.addProperty("osver", info[1]);
+			deviceInfoObject.addProperty("device", info[2]);
+			deviceInfoObject.addProperty("browser", info[3]);
+			deviceInfoObject.addProperty("browserVer", info[4]);
+		} else {
+			
+			return JsonNull.INSTANCE;
+		}
 		return deviceInfoObject;
 	}
 
@@ -134,33 +144,42 @@ public class RmTestResultBuilder {
 
 	public void addTestFailure(String description, Failure failure) {
 		JsonObject test = testMap.get(description);
-		test.addProperty(RESULT, "failure");
-		test.addProperty(FAILURE_MESSAGE, failure.getTrace());
+		if (test != null) {
+			test.addProperty(RESULT, "failure");
+			test.addProperty(FAILURE_MESSAGE, failure.getTrace());
+		}
 	}
 
 
 	public void addIgnoredTest(String displayName) {
 		JsonObject test = testMap.get(displayName);
-		test.addProperty("runTime", 0);
-		test.addProperty(RESULT, "skipped");
+		if (test != null) {
+			test.addProperty("runTime", 0);
+			test.addProperty(RESULT, "skipped");
+		}
 	}
 
 
 	public void addFinishedTest(String displayName) {
 		JsonObject test = testMap.get(displayName);
-		if (test.get(RESULT) instanceof JsonNull) {
-			test.addProperty(RESULT, "passed");
+		if (test != null) {
+			if (test.get(RESULT) instanceof JsonNull) {
+				test.addProperty(RESULT, "passed");
+			}
 		}
 	}
 	
 	public void addRunTime(String dispName, double time){
 		JsonObject test = testMap.get(dispName);
-		test.addProperty("runTime", time);
+		if (test != null) {
+			test.addProperty("runTime", time);
+		}
 	}
 	
 	private String formattedTimestamp(){
-		String surefireTimestamp = System.getProperty("rmt.timestamp").replaceAll("-", "");
+		String surefireTimestamp = System.getProperty("rmt.timestamp");
 		if (surefireTimestamp != null){
+			surefireTimestamp = surefireTimestamp.replaceAll("-", "");
 			return surefireTimestamp;
 		}
 		else {
