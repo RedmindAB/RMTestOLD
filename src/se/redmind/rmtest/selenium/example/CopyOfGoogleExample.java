@@ -68,7 +68,7 @@ public class CopyOfGoogleExample {
 
 	    @Before
 	    public void beforeTest(){
-	    	testWatcher.initDriver(urlContainer);
+	    	testWatcher.setDriver(urlContainer);
 	    }
 	    
     @Test

@@ -30,9 +30,8 @@ public class RmTestWatcher extends TestWatcher{
         this.driverContainer = driverWrapper;
         return driverWrapper;
     }
-
-    public void initDriver(DriverNamingWrapper driver){
-    	this.driverContainer = driver;
-    	this.driverContainer.startDriver();
+    
+    public void setDriver(DriverNamingWrapper pDriverContainer){
+    	this.driverContainer = pDriverContainer;
     }
 }
