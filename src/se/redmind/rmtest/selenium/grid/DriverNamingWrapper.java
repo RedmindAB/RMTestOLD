@@ -57,11 +57,11 @@ public class DriverNamingWrapper {
 	public void ignoreAtNoConnectivityByClass(String url, String className) {		
 		ignoreAtNoConnectivityTo(url, By.className(className));
 	}
-	
+
 	public void ignoreAtNoConnectivityByXpath(String url, String xpath) {		
 		ignoreAtNoConnectivityTo(url, By.xpath(xpath));
 	}
-	
+
 	public void ignoreAtNoConnectivityTo(String url, By by) {		
 		try {
 			getDriver().get(url);
@@ -69,19 +69,19 @@ public class DriverNamingWrapper {
 		} catch (NoSuchElementException|TimeoutException e) {
 			this.imAFailure = true;
 			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
-			
+
 		}	
 	}
 
 
-    /**
-     * @param pBy
-     * @param timeoutInSeconds
-     */
-    public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
-    	new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
-    }
-    
+	/**
+	 * @param pBy
+	 * @param timeoutInSeconds
+	 */
+	public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
+		new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
+	}
+
 	/**
 	 * @param filteredUrlCapList
 	 */
@@ -94,52 +94,54 @@ public class DriverNamingWrapper {
 				Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ",false);
 				return this.driver;
 			} else {
-				
-			int retryAttempts = 1;
-			
-			while (retryAttempts <= maxRetryAttempts) {
-				try {
 
-					if (capability.getCapability("rmDeviceType") == null) {
-						this.driver = new RemoteWebDriver(url, capability);
-						System.out.println("This is a RemoteWebDriver");
-					} else {
+				int retryAttempts = 1;
 
-						if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
-							this.driver = new AndroidDriver(url, capability);
+				while (retryAttempts <= maxRetryAttempts) {
+					try {
+						if (this.driver != null) {
+							this.driver.close();
+						}
+						if (capability.getCapability("rmDeviceType") == null) {
+							this.driver = new RemoteWebDriver(url, capability);
+							System.out.println("This is a RemoteWebDriver");
 						} else {
-							this.driver = new IOSDriver(url, capability);
+
+							if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
+								this.driver = new AndroidDriver(url, capability);
+							} else {
+								this.driver = new IOSDriver(url, capability);
+							}
+
+							System.out.println("This is a AppiumDriver");
 						}
 
-						System.out.println("This is a AppiumDriver");
+						System.out.println("Started driver: " + description);
+
+					} catch (UnreachableBrowserException e) {
+						System.out.println("Having trouble starting webdriver for device: " + this.description);
+						System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+						e.printStackTrace();
+						retryAttempts++;
+						continue;
+					} catch (SessionNotCreatedException e) {
+						System.out.println("Having trouble starting webdriver for device: " + this.description);
+						System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+						e.printStackTrace();
+						retryAttempts++;
+						continue;
+					} catch (Exception e) {
+						System.out.println("Having trouble starting webdriver for device: " + this.description);
+						System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+						e.printStackTrace();
+						retryAttempts++;
+						continue;
 					}
-
-					System.out.println("Started driver: " + description);
-
-				} catch (UnreachableBrowserException e) {
-					System.out.println("Having trouble starting webdriver for device: " + this.description);
-					System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-					e.printStackTrace();
-					retryAttempts++;
-					continue;
-				} catch (SessionNotCreatedException e) {
-					System.out.println("Having trouble starting webdriver for device: " + this.description);
-					System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-					e.printStackTrace();
-					retryAttempts++;
-					continue;
-				} catch (Exception e) {
-					System.out.println("Having trouble starting webdriver for device: " + this.description);
-					System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-					e.printStackTrace();
-					retryAttempts++;
-					continue;
+					return this.driver;
 				}
+				this.imAFailure=true;
+				Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
 				return this.driver;
-			}
-			this.imAFailure=true;
-			Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
-			return this.driver;
 			}
 		} else {
 			return this.driver;
