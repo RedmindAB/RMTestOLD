@@ -57,7 +57,7 @@ public class GoogleExample {
 
 	    @AfterClass
 	    public static void afterTest(){
-	    	DriverProvider.stopDrivers();
+//	    	DriverProvider.stopDrivers();
 	    }
 	    
 
@@ -70,15 +70,14 @@ public class GoogleExample {
     public void testGoogle() throws Exception {
     	HTMLPage navPage = new HTMLPage(this.tDriver);
         
-        navPage.getDriver().get("http://www.comaround.se");
+        navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
         System.out.println("Page title is: " + navPage.getTitle());
         
-        assertTrue(navPage.getTitle().startsWith("Z"));
+        assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         new RMReportScreenshot(urlContainer).takeScreenshot(null);
         new RMReportScreenshot(urlContainer).takeScreenshot("first");
         new RMReportScreenshot(urlContainer).takeScreenshot("after");
@@ -97,7 +96,6 @@ public class GoogleExample {
         assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         new RMReportScreenshot(urlContainer).takeScreenshot("");
         System.out.println("Done!");        
         

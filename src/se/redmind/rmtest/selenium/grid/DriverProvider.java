@@ -6,9 +6,11 @@ import java.util.ArrayList;
 
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
+import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.framework.DeviceDescription;
 
 
@@ -33,9 +35,13 @@ public class DriverProvider {
 	 */
 	private static void updateDrivers() {
 		RmConfig config = new RmConfig();
+		urlCapList = new ArrayList<DriverNamingWrapper>();
+		if (!RmConfig.runOnGrid()) {
+			loadLocalDrivers();
+			return;
+		}
 		HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
 		ArrayList <RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
-		urlCapList = new ArrayList<DriverNamingWrapper>();
 
 		RegistrationRequest nodeReq;
 		String description;
@@ -59,6 +65,17 @@ public class DriverProvider {
 
 			}
 
+		}
+	}
+
+	private static void loadLocalDrivers() {
+		for (int i = 0; i < Browser.values().length; i++) {
+			Browser browser = Browser.values()[i];
+			if (browser == Browser.PhantomJS 	&& !RmConfig.usePhantomJS()) 	continue;
+			if (browser == Browser.Chrome 		&& !RmConfig.useChrome()) 		continue;
+			DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+			urlCapList.add(driver);
+			allDrivers.add(driver);
 		}
 	}
 
@@ -146,10 +163,12 @@ public class DriverProvider {
 			} catch (SessionNotFoundException e) {
 				System.out.println("For some reason a session was gone while quitting");
 				System.out.println(e);
+				continue;
 			}
-			
-			
-
+			catch (WebDriverException e){
+				System.out.println("Crached webdriver, continue to closing drivers");
+				continue;
+			}
 		}
 		allDrivers = new ArrayList<DriverNamingWrapper>();
 	}
