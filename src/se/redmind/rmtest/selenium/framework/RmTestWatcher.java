@@ -45,9 +45,8 @@ public class RmTestWatcher extends TestWatcher{
     	return driverContainer;
     }
     
-    public void initDriver(DriverNamingWrapper pDriverContainer){
+    public void setDriver(DriverNamingWrapper pDriverContainer){
     	this.driverContainer = pDriverContainer;
-    	this.driverContainer.startDriver();
     	
     }
 }
