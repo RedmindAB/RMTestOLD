@@ -68,6 +68,7 @@ public class CopyOfGoogleExample {
 
 	    @Before
 	    public void beforeTest(){
+	    	this.tDriver = urlContainer.startDriver();
 	    	testWatcher.setDriver(urlContainer);
 	    }
 	    
