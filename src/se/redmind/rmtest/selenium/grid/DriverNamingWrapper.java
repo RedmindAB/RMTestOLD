@@ -74,6 +74,16 @@ public class DriverNamingWrapper {
 	}
 
 	public void ignoreAtNoConnectivityTo(String url, By by) {		
+<<<<<<< HEAD
+		try {
+			getDriver().get(url);
+			driverWaitElementPresent(by, 10);
+		} catch (NoSuchElementException|TimeoutException e) {
+			this.imAFailure = true;
+			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
+
+		}	
+=======
 		if (!imAFailure) {
 			try {
 				getDriver().get(url);
@@ -84,6 +94,7 @@ public class DriverNamingWrapper {
 
 			}	
 		}
+>>>>>>> 81f4bbbed7df228b80b5f4bbe30aadedafdc8e35
 	}
 
 
@@ -116,7 +127,13 @@ public class DriverNamingWrapper {
 
 				while (retryAttempts <= maxRetryAttempts) {
 					try {
+<<<<<<< HEAD
+						if (this.driver != null) {
+							this.driver.close();
+						}
+=======
 
+>>>>>>> 81f4bbbed7df228b80b5f4bbe30aadedafdc8e35
 						if (capability.getCapability("rmDeviceType") == null) {
 							this.driver = new RemoteWebDriver(url, capability);
 							System.out.println("This is a RemoteWebDriver");

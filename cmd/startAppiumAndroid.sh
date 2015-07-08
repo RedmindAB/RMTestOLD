@@ -62,11 +62,11 @@ do
 	     if [ `isTablet $currDevId` -eq 1 ] | [ "$modelName" = "SM-T550" ]
                 then
 			sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
-                	echo "im a tablet"
-		
+                	echo "im a tablet, oh yes i am!"
+					
 		else
 			sed -i '' "s/DEVICE_TYPE/mobile/g" $testHome/etc/Appium_TEMP.json
-		
+			echo "im a mobileomophone, oh yes i am!"
         fi
 
 	if [ -z $APK_PATH ]
