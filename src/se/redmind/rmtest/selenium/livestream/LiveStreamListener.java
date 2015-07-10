@@ -39,6 +39,7 @@ public class LiveStreamListener extends RunListener{
 		listeners = new ArrayList<LiveStreamListener>();
 		rmrConnection = new RmReportConnection();
 		this.testStartTimes = new HashMap<String, Long>();
+		addShutdownHook(rmrConnection);
 	}
 	
 	private LiveStreamListener(RmTestResultBuilder resBuilder, RmReportConnection connection){
@@ -114,6 +115,10 @@ public class LiveStreamListener extends RunListener{
 			saveReport();
 			super.testRunFinished(result);
 		}
+	}
+	
+	private void addShutdownHook(RmReportConnection con){
+		Runtime.getRuntime().addShutdownHook(new Thread(new LiveTestShutdownHook(con)));
 	}
 	
 	private void saveReport() {
