@@ -54,7 +54,7 @@ public class RMExample {
 	    }
 
 		private void prepPage(WebDriver tDriver) throws Exception {
-			tDriver = driverWrapper.getDriver();   
+			tDriver = driverWrapper.startDriver();   
 	    	System.out.println("Driver:" + tDriver);
 
 	        tNavPage = new RMNav(tDriver, startUrl);

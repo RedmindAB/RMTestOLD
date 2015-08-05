@@ -88,10 +88,9 @@ public class CopyOfGoogleExample {
         new RMReportScreenshot(urlContainer).takeScreenshot("first");
         new RMReportScreenshot(urlContainer).takeScreenshot("after");
         System.out.println("Done!");   
-        assertTrue(false);
+        assertTrue(true);
         
     }
-    @Ignore
     @Test
     public void testGoogle2() throws Exception {
     	HTMLPage navPage = new HTMLPage(this.tDriver);
