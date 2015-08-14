@@ -7,17 +7,16 @@
 		"browserName": "firefox",
 		"osname":"OSX",
 		"description": "OSX firefox",
-		"maxInstances": 1,
+		"maxInstances": 3,
 		"deviceName": "AnApple",
 		"platform" : "MAC"
 	},
-
 	{
 		"seleniumProtocol": "WebDriver",
 		"browserName": "chrome",
 		"osname":"OSX",
 		"description": "OSX chrome",
-		"maxInstances": 1,
+		"maxInstances": 3,
 		"deviceName": "AnApple",
 		"platform" : "MAC"
 	}
