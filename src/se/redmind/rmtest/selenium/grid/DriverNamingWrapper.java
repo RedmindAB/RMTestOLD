@@ -5,6 +5,7 @@ import io.appium.java_client.ios.IOSDriver;
 
 import java.net.URL;
 
+import org.apache.xalan.xsltc.compiler.util.TestGenerator;
 import org.junit.Assume;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -12,7 +13,9 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -30,7 +33,6 @@ public class DriverNamingWrapper {
 	WebDriver driver;
 	boolean imAFailure;
 	private Browser browser;
-
 
 	public DriverNamingWrapper(URL url, DesiredCapabilities capability, String description) {
 		this.url = url;
@@ -67,11 +69,11 @@ public class DriverNamingWrapper {
 	public void ignoreAtNoConnectivityByClass(String url, String className) {		
 		ignoreAtNoConnectivityTo(url, By.className(className));
 	}
-	
+
 	public void ignoreAtNoConnectivityByXpath(String url, String xpath) {		
 		ignoreAtNoConnectivityTo(url, By.xpath(xpath));
 	}
-	
+
 	public void ignoreAtNoConnectivityTo(String url, By by) {		
 		try {
 			getDriver().get(url);
@@ -79,19 +81,19 @@ public class DriverNamingWrapper {
 		} catch (NoSuchElementException|TimeoutException e) {
 			this.imAFailure = true;
 			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
-			
+
 		}	
 	}
 
 
-    /**
-     * @param pBy
-     * @param timeoutInSeconds
-     */
-    public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
-    	new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
-    }
-    
+	/**
+	 * @param pBy
+	 * @param timeoutInSeconds
+	 */
+	public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
+		new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
+	}
+
 	/**
 	 * @param filteredUrlCapList
 	 */
@@ -108,52 +110,57 @@ public class DriverNamingWrapper {
 				Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ",false);
 				return this.driver;
 			} else {
-				
-			int retryAttempts = 1;
-			
-			while (retryAttempts <= maxRetryAttempts) {
-				try {
 
-					if (capability.getCapability("rmDeviceType") == null) {
-						this.driver = new RemoteWebDriver(url, capability);
-						System.out.println("This is a RemoteWebDriver");
-					} else {
+				int retryAttempts = 1;
 
-						if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
-							this.driver = new AndroidDriver(url, capability);
+				while (retryAttempts <= maxRetryAttempts) {
+					try {
+						if (this.driver != null) {
+							this.driver.close();
+						}
+						if (capability.getCapability("rmDeviceType") == null) {
+							if(capability.getBrowserName().equals("firefox")) {
+								addFirefoxProfile(capability);
+							}
+							this.driver = new RemoteWebDriver(url, capability);
+							System.out.println("This is a RemoteWebDriver");
 						} else {
-							this.driver = new IOSDriver(url, capability);
+
+							if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
+								this.driver = new AndroidDriver(url, capability);
+							} else {
+								this.driver = new IOSDriver(url, capability);
+							}
+
+							System.out.println("This is a AppiumDriver");
 						}
 
-						System.out.println("This is a AppiumDriver");
+						System.out.println("Started driver: " + description);
+
+					} catch (UnreachableBrowserException e) {
+						System.out.println("Having trouble starting webdriver for device: " + this.description);
+						System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+						e.printStackTrace();
+						retryAttempts++;
+						continue;
+					} catch (SessionNotCreatedException e) {
+						System.out.println("Having trouble starting webdriver for device: " + this.description);
+						System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+						e.printStackTrace();
+						retryAttempts++;
+						continue;
+					} catch (Exception e) {
+						System.out.println("Having trouble starting webdriver for device: " + this.description);
+						System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+						e.printStackTrace();
+						retryAttempts++;
+						continue;
 					}
-
-					System.out.println("Started driver: " + description);
-
-				} catch (UnreachableBrowserException e) {
-					System.out.println("Having trouble starting webdriver for device: " + this.description);
-					System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-					e.printStackTrace();
-					retryAttempts++;
-					continue;
-				} catch (SessionNotCreatedException e) {
-					System.out.println("Having trouble starting webdriver for device: " + this.description);
-					System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-					e.printStackTrace();
-					retryAttempts++;
-					continue;
-				} catch (Exception e) {
-					System.out.println("Having trouble starting webdriver for device: " + this.description);
-					System.out.println("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-					e.printStackTrace();
-					retryAttempts++;
-					continue;
+					return this.driver;
 				}
+				this.imAFailure=true;
+				Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
 				return this.driver;
-			}
-			this.imAFailure=true;
-			Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
-			return this.driver;
 			}
 		} else {
 			return this.driver;
@@ -161,11 +168,20 @@ public class DriverNamingWrapper {
 	}
 
 
+	private void addFirefoxProfile(DesiredCapabilities capability) {
+		FirefoxProfile ffp = new FirefoxProfile();
+		ffp.setPreference("webdriver.load.strategy", "unstable");
+		capability.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "none");
+		capability.setCapability(FirefoxDriver.PROFILE, ffp);
+	}
+
+
+
 	private WebDriver startLocalDriver(Browser browser) {
 		WebDriver driver = null;
 		switch (browser) {
 		case Chrome:
-			System.setProperty("webdriver.chrome.driver", TestHome.main()+"/lib/chromedriver");
+			System.setProperty("webdriver.chrome.driver", getChromePath());
 			driver = new ChromeDriver();
 			break;
 		case Firefox:
@@ -178,6 +194,20 @@ public class DriverNamingWrapper {
 			break;
 		}
 		return driver;
+	}
+
+	private String getChromePath() {
+		String osName = System.getProperty("os.name");
+		String _default = TestHome.main()+"/lib/chromedriver";
+		if (osName.startsWith("Mac")) {
+			System.out.println("Setting default chromedriver");
+			return _default;
+		}
+		else if (osName.startsWith("Linux")) {
+			System.out.println("Setting linux chromedriver");
+			return TestHome.main()+"/lib/linux/chromedriver";
+		}
+		return _default;
 	}
 
 	@Override

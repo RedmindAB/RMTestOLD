@@ -68,7 +68,9 @@ public class HTMLPage {
                 return fw;
             }
             catch(Exception e){
-                System.out.println("driverFluentWait Failed attempt : " + i + "/n" + e);
+                if(i >= 9){
+                    System.out.println("driverFluentWait Failed attempt : " + i + "/n" + e);
+                }
                 i++;
             }
         }
@@ -92,7 +94,9 @@ public class HTMLPage {
                 break;
             }
             catch (Exception e) {
-                System.out.println("driverWaitClickable exception: " + e);
+                if(i >= 9){
+                    System.out.println("driverWaitClickable exception: " + e);
+                }
                 i++;
             }
         }
@@ -115,7 +119,9 @@ public class HTMLPage {
                 i++;
             }
             catch (Exception e) {
-                System.out.println("This is another exception?" + e);
+                if(i >= 9){
+                    System.out.println("This is another exception?" + e);
+                }
                 i++;
             }
         }
@@ -175,8 +181,10 @@ public class HTMLPage {
 				break;
 			}
 			catch (Exception e) {
-				System.out.println("pageTitle: " + pageTitle);
-				System.out.println("----- AssertPageTitle Exception: " + e);
+                if(i >= 9){
+				    System.out.println("pageTitle: " + pageTitle);
+				    System.out.println("----- AssertPageTitle Exception: " + e);
+                }
 				i = i + 1;
 				Thread.sleep(50);
 			}				
@@ -194,7 +202,9 @@ public class HTMLPage {
 				return b;
 			}
 			catch (Exception e) {
-				System.out.println("pageTitleContains exception: " + e);
+                if(i >= 9){
+				    System.out.println("pageTitleContains exception: " + e);
+                }
 				i = i + 1;
 				Thread.sleep(50);
 			}
@@ -212,7 +222,9 @@ public class HTMLPage {
 				return b;
 			}
 			catch (Exception e) {
-				System.out.println("pageTitleContains exception: " + e);
+                if(i >= 9){
+				    System.out.println("pageTitleContains exception: " + e);
+                }
 				i = i + 1;
 				Thread.sleep(50);
 			}
@@ -231,7 +243,9 @@ public class HTMLPage {
                 break;
             }
             catch (Exception e) {
-                System.out.println("----- assertPageContains Exception: " + e);
+                if(i >= 9){
+                    System.out.println("----- assertPageContains Exception: " + e);
+                }
                 i = i + 1;
                 Thread.sleep(50);
             }
@@ -253,7 +267,9 @@ public class HTMLPage {
                 break;
             }
             catch (Exception e) {
-                System.out.println("spinnerClickBy exception: " + e);
+                if(i >= 9){
+                    System.out.println("spinnerClickBy exception: " + e);
+                }
                 i = i + 1;
                 Thread.sleep(50);
             }
@@ -273,17 +289,6 @@ public class HTMLPage {
     /**
      * @param fileName  Path to filename without extension. example: /tmp/thefilename
      */
-    public void takeScreenshot(String fileName) {
-        File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        
-        try {
-			FileUtils.copyFile(scrFile, new File(fileName + ".png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-    }
 
 }
 

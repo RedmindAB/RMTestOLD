@@ -57,12 +57,10 @@ echo "### Installation finished successfully ###"
 echo ""
 echo ""
 
-echo "Proceed with the following manual configurations"
+echo $(tput setaf 1) "Proceed with the following manual configurations"
 
 cat $scriptDir/Installation.txt
 
-
- 
-
+echo $(tput sgr0)
 
 

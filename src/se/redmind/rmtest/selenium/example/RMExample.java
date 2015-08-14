@@ -54,7 +54,7 @@ public class RMExample {
 	    }
 
 		private void prepPage(WebDriver tDriver) throws Exception {
-			tDriver = driverWrapper.getDriver();   
+			tDriver = driverWrapper.startDriver();   
 	    	System.out.println("Driver:" + tDriver);
 
 	        tNavPage = new RMNav(tDriver, startUrl);
@@ -76,14 +76,12 @@ public class RMExample {
 	        		
 		        	tMobNav.assertPageTitle("Management");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	} else { // Mobile sites on desktop
 	        		tMobNav.openMobileMenu();
 		        	tMobNav.clickOnMobileMenu("Tjänster", "Management");
 		    		
 		        	tMobNav.assertPageTitle("Management");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	}
 	        } else { //desktop
 //	        	tDriver.manage().window().maximize() ;
@@ -91,7 +89,6 @@ public class RMExample {
 	        	
 	            tNavPage.assertPageTitle("Management");
 	            System.out.println("Page title is: " + tDriver.getTitle());
-	            tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        }
 	    }
 	    
@@ -109,14 +106,12 @@ public class RMExample {
 	        		
 		        	tMobNav.assertPageTitle("TPI™ – Test process improvement");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	} else { // Mobile sites on desktop
 	        		tMobNav.openMobileMenu();
 		        	tMobNav.clickOnMobileMenu("Tjänster", "TPI™ – Test process improvement");
 		    		
 		        	tMobNav.assertPageTitle("TPI™ – Test process improvement");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	}
 	        } else { //Desktop 
 	        	
@@ -133,7 +128,6 @@ public class RMExample {
 		            
 		            
 		            System.out.println("Page title is: " + tDriver.getTitle());
-		            tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	}
 	        }
 	    }
@@ -152,14 +146,12 @@ public class RMExample {
 	        		
 		        	tMobNav.assertPageTitle("Rekrytering");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	} else { // Mobile sites on desktop
 	        		tMobNav.openMobileMenu();
 		        	tMobNav.clickOnMobileMenu("Tjänster", "Rekrytering");
 		    		
 		        	tMobNav.assertPageTitle("Rekrytering");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	}
 	        	
 	        } else { //Desktop
@@ -168,7 +160,6 @@ public class RMExample {
 	            
 	            
 	            System.out.println("Page title is: " + tDriver.getTitle());
-	            tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        }
 	    }
 	    
@@ -186,14 +177,12 @@ public class RMExample {
 	        		
 		        	tMobNav.assertPageTitle("Client Academy");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	} else { // Mobile sites on desktop
 	        		tMobNav.openMobileMenu();
 		        	tMobNav.clickOnMobileMenu("Tjänster", "Client Academy");
 		    		
 		        	tMobNav.assertPageTitle("Client Academy");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	}
 	        } else { //Desktop
 	        	tNavPage.clickOnSubmenu("tjanster", "client-academy");
@@ -201,7 +190,6 @@ public class RMExample {
 	          
 	            
 	            System.out.println("Page title is: " + tDriver.getTitle());
-	            tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        }
 	    }
 	    
@@ -219,21 +207,18 @@ public class RMExample {
 	        		
 		        	tMobNav.assertPageTitle("Acceptance tester");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	} else { // Mobile sites on desktop
 	        		tMobNav.openMobileMenu();
 		        	tMobNav.clickOnMobileMenu("Tjänster", "Konsulttjänster", "Acceptance tester");
 		    		
 		        	tMobNav.assertPageTitle("Acceptance tester");	
 		    		System.out.println("Page title is: " + tDriver.getTitle());
-		    		tMobNav.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        	}
 	        } else { //Desktop
 	        	tNavPage.clickOnSubmenu("tjanster", "konsulttjanster");
 	            assertTrue(tDriver.getTitle().startsWith("Konsulttjänster"));
 	            
 	            System.out.println("Page title is: " + tDriver.getTitle());
-	            tNavPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + driverWrapper.getDescription().replace(" ", "-"));
 	        }
 	    }
 }

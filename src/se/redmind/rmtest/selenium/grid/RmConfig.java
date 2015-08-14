@@ -57,7 +57,6 @@ public class RmConfig {
 
 	public static String getLocalConfigValue(String ConfigKey) {
 		String configValue = null;
-		System.out.println(localConfig.toString());
 
 		configValue = localConfig.getAsJsonObject("configuration").get(ConfigKey)
 				.getAsString();
@@ -67,7 +66,6 @@ public class RmConfig {
 
 	public static String getRmConfigValue(String ConfigKey) {
 		String configValue = null;
-		System.out.println(rmConfig.toString());
 
 		configValue = rmConfig.getAsJsonObject("configuration").get(ConfigKey)
 				.getAsString();
@@ -96,8 +94,81 @@ public class RmConfig {
 	}
 
 	public static boolean runOnGrid() {
-		Boolean runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		Boolean runOnGrid = false;
+		try {
+			runOnGrid = Boolean.valueOf(getLocalConfigValue("runOnGrid"));
+		} catch (Exception e) {
+		}
 		return runOnGrid;
+	}
+	
+	public static boolean usePhantomJS(){
+		boolean usePhantomJS = false;
+		try {
+			usePhantomJS = Boolean.valueOf(getLocalConfigValue("usePhantomJS"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return usePhantomJS;
+	}
+
+	public static boolean useChrome() {
+		boolean useChrome = false;
+		try {
+			useChrome = Boolean.valueOf(getLocalConfigValue("useChrome"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return useChrome;
+	}
+	
+	public static boolean autoCloseDrivers(){
+		boolean autoCloseDrivers = true;
+		try {
+			autoCloseDrivers = Boolean.valueOf(getLocalConfigValue("autoCloseDrivers"));
+		} catch (Exception e) {
+			
+		}
+		return autoCloseDrivers;
+	}
+
+	public static String getRMRLiveAddress() {
+		String rmrLiveAddress = "127.0.0.1";
+		try {
+			rmrLiveAddress = getLocalConfigValue("RmReportIP");
+		} catch (Exception e) {
+			
+		}
+		return rmrLiveAddress;
+	}
+	
+	public static int getRMRLivePort(){
+		int port = 12345;
+		try {
+			port = Integer.valueOf(getLocalConfigValue("RmReportLivePort"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return port;
+	}
+
+	public static boolean enableLiveStream() {
+		boolean enableLiveStream = false;
+		try {
+			enableLiveStream = Boolean.valueOf(getLocalConfigValue("enableLiveStream"));
+		} catch (Exception e) {
+		}
+		return enableLiveStream;
+	}
+
+	public static String getJsonReportSavePath() {
+		String savePath = TestHome.main()+"/target/RMTReports";
+		try {
+			savePath = getLocalConfigValue("jsonReportSavePath");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return savePath;
 	}
 
 }

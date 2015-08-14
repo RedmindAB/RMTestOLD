@@ -78,7 +78,6 @@ public class GoogleExample {
         assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         new RMReportScreenshot(urlContainer).takeScreenshot(null);
         new RMReportScreenshot(urlContainer).takeScreenshot("first");
         new RMReportScreenshot(urlContainer).takeScreenshot("after");
@@ -97,7 +96,6 @@ public class GoogleExample {
         assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         new RMReportScreenshot(urlContainer).takeScreenshot("");
         System.out.println("Done!");        
         

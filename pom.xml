@@ -11,6 +11,7 @@
 		<!--runSuite>**/GoogleTests.class</runSuite-->
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 		<timestamp>${maven.build.timestamp}</timestamp>
+		<seleniumVer>2.47.1</seleniumVer>
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -154,19 +155,6 @@
 				<artifactId>maven-surefire-report-plugin</artifactId>
 				<version>2.16</version>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.3</version>
-			</plugin>
-	      <plugin>
-	        <groupId>com.github.klieber</groupId>
-	        <artifactId>phantomjs-maven-plugin</artifactId>
-	        <version>${phantomjs-maven-plugin.version}</version>
-	        <configuration>
-	          <version>1.9.7</version>
-	        </configuration>
-	      </plugin>
 		</plugins>
 	</reporting>
 	<dependencies>
@@ -187,15 +175,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${seleniumVer}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.45.0</version>
+			<version>${seleniumVer}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
-			<version>2.45.0</version>
+			<version>${seleniumVer}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>

@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 //import junitparams.JUnitParamsRunner;
 
+
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
 import org.junit.runners.model.RunnerScheduler;
 
@@ -31,7 +33,7 @@ public class Parallelized extends Parameterized
             executor.shutdown();
             try
             {
-                executor.awaitTermination(10, TimeUnit.MINUTES);
+                executor.awaitTermination(20, TimeUnit.MINUTES);
             }
             catch (InterruptedException exc)
             {
@@ -46,8 +48,7 @@ public class Parallelized extends Parameterized
         }
     }
 
-    public Parallelized(Class klass) throws Throwable
-    {
+    public Parallelized(Class klass) throws Throwable {
         super(klass);
 
         try {
@@ -57,5 +58,11 @@ public class Parallelized extends Parameterized
 //			e.printStackTrace();
 		}
         
+    }
+    
+    @Override
+    public void run(RunNotifier notifier) {
+    	if (RmConfig.autoCloseDrivers()) notifier.addListener(new AutoCloseListener());
+    	super.run(notifier);
     }
 }

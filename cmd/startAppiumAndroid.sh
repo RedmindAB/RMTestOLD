@@ -59,16 +59,17 @@ do
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	
-	     if [ `isTablet $currDevId` -eq 1 ]
+	     if [ `isTablet $currDevId` -eq 1 ] || [ "$modelName" =  "SM-T550" ] 
                 then
 			sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
-                	echo "im a tablet"
-		
+                	echo "im a tablet, oh yes i am!"
+					
 		else
 			sed -i '' "s/DEVICE_TYPE/mobile/g" $testHome/etc/Appium_TEMP.json
-		
-        fi
-
+			echo "im a mobileomophone, oh yes i am!"
+        	fi
+	
+	 
 	if [ -z $APK_PATH ]
 		then
 		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
@@ -97,17 +98,28 @@ do
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
 	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --selendroid-port $selendroidPort --nodeconfig $testHome/etc/Appium_TEMP.json  --session-override &> $logName.$currDevId.log &
-	appiumStarted=true	
-	while $appiumStarted
+	loopcount=0
+	keepTrying=true
+	while $keepTrying
 		do
 		connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" "$logName.$currDevId.log"`
 		if [ $connectedCount -gt 0  ]
 		then
 			echo "Connected to HUB"
-			appiumStarted=false
+			keepTrying=false
+		else
+			echo "Not yet connected to HUB"
+
+                	sleep 1
 		fi
-		echo "Not yet connected to HUB"
-		sleep 1
+		loopcount=$[loopcount+1]
+		echo loopcount
+		if [ $loopcount -gt 58 ]
+		then
+			keepTrying=false
+			echo "Failed to connect to HUB"
+		fi
+		
 	done
 done
 

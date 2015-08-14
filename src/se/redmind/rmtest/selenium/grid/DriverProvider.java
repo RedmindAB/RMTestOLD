@@ -3,9 +3,11 @@ package se.redmind.rmtest.selenium.grid;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
 
@@ -27,7 +29,7 @@ public class DriverProvider {
 	private static ArrayList <DriverNamingWrapper> urlCapList = new ArrayList<DriverNamingWrapper>();
 	private static ArrayList <DriverNamingWrapper> allDrivers = new ArrayList<DriverNamingWrapper>();
 	private static DesiredCapabilities currentCapability;
-	
+	private static List<DriverConfig> driverConfigs = new ArrayList<DriverConfig>();
 	
 	/**
 	 * 
@@ -49,8 +51,8 @@ public class DriverProvider {
 			nodeReq = nodeList.get(j); 
 			for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
 				currentCapability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
-
 				description = buildDescriptionFromCapabilities(currentCapability);
+				addDriverConfig(currentCapability, description);
 				URL driverUrl;
 				try {
 					driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
@@ -67,9 +69,17 @@ public class DriverProvider {
 		}
 	}
 
+	private static void addDriverConfig(DesiredCapabilities capabilities, String description) {
+		for (DriverConfig driverConfig : driverConfigs) {
+			if(driverConfig.eval(currentCapability, description)) driverConfig.config(currentCapability);
+		}
+	}
+
 	private static void loadLocalDrivers() {
 		for (int i = 0; i < Browser.values().length; i++) {
 			Browser browser = Browser.values()[i];
+			if (browser == Browser.PhantomJS 	&& !RmConfig.usePhantomJS()) 	continue;
+			if (browser == Browser.Chrome 		&& !RmConfig.useChrome()) 		continue;
 			DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
 			urlCapList.add(driver);
 			allDrivers.add(driver);
@@ -160,10 +170,12 @@ public class DriverProvider {
 			} catch (SessionNotFoundException e) {
 				System.out.println("For some reason a session was gone while quitting");
 				System.out.println(e);
+				continue;
 			}
-			
-			
-
+			catch (WebDriverException e){
+				System.out.println("Crached webdriver, continue to closing drivers");
+				continue;
+			}
 		}
 		allDrivers = new ArrayList<DriverNamingWrapper>();
 	}
@@ -256,5 +268,9 @@ public class DriverProvider {
 			}
 		}
 		return filteredUrlCapList.toArray();
+	}
+	
+	public synchronized static void addDriverConfig(DriverConfig conf){
+		driverConfigs.add(conf);
 	}
 }
