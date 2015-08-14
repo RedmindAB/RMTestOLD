@@ -1,0 +1,10 @@
+{
+  "configuration":
+  {
+    "androidHome": "/Users/testrunner/adt/adt-bundle-mac-x86_64-20140702/sdk",
+    "localIp": "10.12.14.222",
+    "hubIp": "10.12.14.222",
+    "AndroidBuildtoolsVersion": "4.4",
+    "seleniumVersion": "2.45.0"
+  }
+}

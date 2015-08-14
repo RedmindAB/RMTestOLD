@@ -59,16 +59,17 @@ do
 	sed -i '' "s/DEVICE_ID/$currDevId/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/DESCR_STRING/$description/g" $testHome/etc/Appium_TEMP.json
 	
-	     if [ `isTablet $currDevId` -eq 1 ]
+	     if [ `isTablet $currDevId` -eq 1 ] || [ "$modelName" =  "SM-T550" ] 
                 then
 			sed -i '' "s/DEVICE_TYPE/tablet/g" $testHome/etc/Appium_TEMP.json
-                	echo "im a tablet"
-		
+                	echo "im a tablet, oh yes i am!"
+					
 		else
 			sed -i '' "s/DEVICE_TYPE/mobile/g" $testHome/etc/Appium_TEMP.json
-		
-        fi
-
+			echo "im a mobileomophone, oh yes i am!"
+        	fi
+	
+	 
 	if [ -z $APK_PATH ]
 		then
 		sed -i '' "/APP_PATH/d" $testHome/etc/Appium_TEMP.json
@@ -112,6 +113,7 @@ do
                 	sleep 1
 		fi
 		loopcount=$[loopcount+1]
+		echo loopcount
 		if [ $loopcount -gt 58 ]
 		then
 			keepTrying=false

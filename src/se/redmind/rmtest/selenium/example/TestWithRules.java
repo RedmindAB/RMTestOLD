@@ -70,7 +70,7 @@ public class TestWithRules {
 
 	    @Before
 	    public void beforeTest(){
-	    	ruleExample.getDriverWrapper(this.urlContainer);
+	    	ruleExample.setDriver(this.urlContainer);
 //	    	this.tDriver = this.urlContainer.startDriver();
 	    }
 	    
@@ -87,7 +87,6 @@ public class TestWithRules {
         assertTrue(navPage.getTitle().startsWith("Z"));
         
         
-        navPage.takeScreenshot(StackTraceInfo.getCurrentMethodName() + "_" + urlContainer.getDescription().replace(" ", "-"));
         new RMReportScreenshot(urlContainer).takeScreenshot(null);
         new RMReportScreenshot(urlContainer).takeScreenshot("first");
         new RMReportScreenshot(urlContainer).takeScreenshot("after");
