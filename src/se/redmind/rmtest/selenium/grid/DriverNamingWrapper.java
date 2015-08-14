@@ -4,6 +4,8 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.xalan.xsltc.compiler.util.TestGenerator;
 import org.junit.Assume;
@@ -33,6 +35,7 @@ public class DriverNamingWrapper {
 	WebDriver driver;
 	boolean imAFailure;
 	private Browser browser;
+	private List<DriverConfig> driverConfigs = new ArrayList<DriverConfig>();
 
 	public DriverNamingWrapper(URL url, DesiredCapabilities capability, String description) {
 		this.url = url;
@@ -44,6 +47,20 @@ public class DriverNamingWrapper {
 	public DriverNamingWrapper(Browser browser, String description) {
 		this.browser = browser;
 		this.description = description;
+		this.capability = getLocalCapability();
+	}
+
+	private DesiredCapabilities getLocalCapability() {
+		switch (browser) {
+		case Chrome:
+			return DesiredCapabilities.chrome();
+		case Firefox:
+			return DesiredCapabilities.firefox();
+		case PhantomJS:
+			return DesiredCapabilities.phantomjs();
+		default:
+			return null;
+		}
 	}
 
 	public String getDescription() {
@@ -84,6 +101,16 @@ public class DriverNamingWrapper {
 
 		}	
 	}
+	
+	public void addDriverConfig(DriverConfig conf){
+		driverConfigs.add(conf);
+	}
+
+	private void addDriverConfig(DesiredCapabilities capabilities, String description) {
+		for (DriverConfig driverConfig : driverConfigs) {
+			if(driverConfig.eval(this.capability, description)) driverConfig.config(this.capability);
+		}
+	}
 
 
 	/**
@@ -98,6 +125,7 @@ public class DriverNamingWrapper {
 	 * @param filteredUrlCapList
 	 */
 	public WebDriver startDriver(){
+		//TODO: Fix custom capabilities
 		if (browser != null && this.driver == null) {
 			this.driver = startLocalDriver(this.browser);
 			return this.driver;
@@ -119,9 +147,6 @@ public class DriverNamingWrapper {
 							this.driver.close();
 						}
 						if (capability.getCapability("rmDeviceType") == null) {
-							if(capability.getBrowserName().equals("firefox")) {
-								addFirefoxProfile(capability);
-							}
 							this.driver = new RemoteWebDriver(url, capability);
 							System.out.println("This is a RemoteWebDriver");
 						} else {
@@ -182,13 +207,13 @@ public class DriverNamingWrapper {
 		switch (browser) {
 		case Chrome:
 			System.setProperty("webdriver.chrome.driver", getChromePath());
-			driver = new ChromeDriver();
+			driver = new ChromeDriver(capability);
 			break;
 		case Firefox:
-			driver = new FirefoxDriver();
+			driver = new FirefoxDriver(capability);
 			break;
 		case PhantomJS:
-			driver = new PhantomJSDriver();
+			driver = new PhantomJSDriver(capability);
 			break;
 		default:
 			break;
