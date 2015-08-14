@@ -11,6 +11,7 @@
 		<!--runSuite>**/GoogleTests.class</runSuite-->
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 		<timestamp>${maven.build.timestamp}</timestamp>
+		<seleniumVer>2.47.1</seleniumVer>
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -154,15 +155,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${seleniumVer}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.46.0</version>
+			<version>${seleniumVer}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
-			<version>2.46.0</version>
+			<version>${seleniumVer}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>

@@ -13,7 +13,9 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -31,7 +33,6 @@ public class DriverNamingWrapper {
 	WebDriver driver;
 	boolean imAFailure;
 	private Browser browser;
-
 
 	public DriverNamingWrapper(URL url, DesiredCapabilities capability, String description) {
 		this.url = url;
@@ -118,6 +119,9 @@ public class DriverNamingWrapper {
 							this.driver.close();
 						}
 						if (capability.getCapability("rmDeviceType") == null) {
+							if(capability.getBrowserName().equals("firefox")) {
+								addFirefoxProfile(capability);
+							}
 							this.driver = new RemoteWebDriver(url, capability);
 							System.out.println("This is a RemoteWebDriver");
 						} else {
@@ -162,6 +166,15 @@ public class DriverNamingWrapper {
 			return this.driver;
 		}
 	}
+
+
+	private void addFirefoxProfile(DesiredCapabilities capability) {
+		FirefoxProfile ffp = new FirefoxProfile();
+		ffp.setPreference("webdriver.load.strategy", "unstable");
+		capability.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "none");
+		capability.setCapability(FirefoxDriver.PROFILE, ffp);
+	}
+
 
 
 	private WebDriver startLocalDriver(Browser browser) {
