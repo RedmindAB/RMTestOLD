@@ -26,7 +26,6 @@ import se.redmind.rmtest.selenium.grid.RmAllDevice;
 @RunWith(Parallelized.class)
 public class GoogleExample extends RmAllDevice{
 
-	private WebDriver tDriver;
 //	    private final DriverNamingWrapper driverWrapper;
 //	    private final String driverDescription;
 //	    private final RMReportScreenshot rmrScreenshot;
@@ -34,9 +33,8 @@ public class GoogleExample extends RmAllDevice{
 
 	    public GoogleExample(final DriverNamingWrapper driverWrapper, @SuppressWarnings("unused") final String driverDescription) {
 	        super(driverWrapper, TestParams.getBaseUrl());
+	        driverWrapper.addDriverConfig(new TestConfig());
 	    }
-
-
 
 	    @AfterClass
 	    public static void afterTest(){
@@ -44,14 +42,10 @@ public class GoogleExample extends RmAllDevice{
 	    }
 	    
 
-	    @Before
-	    public void beforeTest(){
-	    	this.tDriver = this.driverNamingWrapper.startDriver();
-	    }
 	    
     @Test
     public void testGoogle() throws Exception {
-    	HTMLPage navPage = new HTMLPage(this.tDriver);
+    	HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
         
         navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
@@ -69,7 +63,7 @@ public class GoogleExample extends RmAllDevice{
     }
     @Test
     public void testGoogle2() throws Exception {
-    	HTMLPage navPage = new HTMLPage(this.tDriver);
+    	HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
         
     	navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name

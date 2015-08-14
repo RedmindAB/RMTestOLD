@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.xalan.xsltc.compiler.util.TestGenerator;
 import org.junit.Assume;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -15,9 +14,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -106,13 +103,6 @@ public class DriverNamingWrapper {
 		driverConfigs.add(conf);
 	}
 
-	private void addDriverConfig(DesiredCapabilities capabilities, String description) {
-		for (DriverConfig driverConfig : driverConfigs) {
-			if(driverConfig.eval(this.capability, description)) driverConfig.config(this.capability);
-		}
-	}
-
-
 	/**
 	 * @param pBy
 	 * @param timeoutInSeconds
@@ -125,7 +115,7 @@ public class DriverNamingWrapper {
 	 * @param filteredUrlCapList
 	 */
 	public WebDriver startDriver(){
-		//TODO: Fix custom capabilities
+		setupCapabilities();
 		if (browser != null && this.driver == null) {
 			this.driver = startLocalDriver(this.browser);
 			return this.driver;
@@ -193,14 +183,13 @@ public class DriverNamingWrapper {
 	}
 
 
-	private void addFirefoxProfile(DesiredCapabilities capability) {
-		FirefoxProfile ffp = new FirefoxProfile();
-		ffp.setPreference("webdriver.load.strategy", "unstable");
-		capability.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "none");
-		capability.setCapability(FirefoxDriver.PROFILE, ffp);
+	private void setupCapabilities() {
+		for (DriverConfig driverConfig : driverConfigs) {
+			if(driverConfig.eval(capability, description)){
+				driverConfig.config(capability);
+			}
+		}
 	}
-
-
 
 	private WebDriver startLocalDriver(Browser browser) {
 		WebDriver driver = null;
