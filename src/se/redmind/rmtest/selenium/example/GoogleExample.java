@@ -2,26 +2,17 @@ package se.redmind.rmtest.selenium.example;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
-import se.redmind.rmtest.selenium.framework.StackTraceInfo;
 import se.redmind.rmtest.selenium.framework.TestParams;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
-import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 import se.redmind.rmtest.selenium.grid.RmAllDevice;
-
-
 
 @RunWith(Parallelized.class)
 public class GoogleExample extends RmAllDevice{
@@ -33,7 +24,7 @@ public class GoogleExample extends RmAllDevice{
 
 	    public GoogleExample(final DriverNamingWrapper driverWrapper, @SuppressWarnings("unused") final String driverDescription) {
 	        super(driverWrapper, TestParams.getBaseUrl());
-	        driverWrapper.addDriverConfig(new TestConfig());
+//	        driverWrapper.addDriverConfig(new TestConfig());
 	    }
 
 	    @AfterClass
@@ -41,6 +32,11 @@ public class GoogleExample extends RmAllDevice{
 //	    	DriverProvider.stopDrivers();
 	    }
 	    
+	    
+	    @Before
+	    public void before(){
+	    	this.webDriver = driverNamingWrapper.startDriver();
+	    }
 
 	    
     @Test
