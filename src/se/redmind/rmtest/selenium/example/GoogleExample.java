@@ -24,14 +24,14 @@ public class GoogleExample extends RmAllDevice{
 
 	    public GoogleExample(final DriverNamingWrapper driverWrapper, @SuppressWarnings("unused") final String driverDescription) {
 	        super(driverWrapper, TestParams.getBaseUrl());
-//	        driverWrapper.addDriverConfig(new TestConfig());
+	        driverWrapper.addDriverConfig(new TestConfig());
 	    }
 
 	    @AfterClass
 	    public static void afterTest(){
 //	    	DriverProvider.stopDrivers();
 	    }
-	    
+
 	    
 	    @Before
 	    public void before(){
@@ -57,6 +57,8 @@ public class GoogleExample extends RmAllDevice{
         System.out.println("Done!");   
         
     }
+    
+    
     @Test
     public void testGoogle2() throws Exception {
     	HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());

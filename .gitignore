@@ -15,3 +15,5 @@ RMTest.iml
 etc/Simulator_Temp.json
 RMR-Screenshots/
 *.png
+*.log
+.DS_Store
