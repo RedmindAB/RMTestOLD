@@ -5,7 +5,10 @@
     {
         "seleniumProtocol": "WebDriver",
         "browserName": "firefox",
+        "osname": "Windows 7",
+        "description": "Windows firefox",
         "maxInstances": 1,
+        "deviceName": "VMWare fusion",
         "platform" : "WINDOWS"
     }
       ],
