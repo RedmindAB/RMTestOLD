@@ -22,7 +22,7 @@ public class GoogleExample extends RmAllDevice{
 //	    private final RMReportScreenshot rmrScreenshot;
 //		private HTMLPage navPage;
 
-	    public GoogleExample(final DriverNamingWrapper driverWrapper, @SuppressWarnings("unused") final String driverDescription) {
+	    public GoogleExample(final DriverNamingWrapper driverWrapper, final String driverDescription) {
 	        super(driverWrapper, TestParams.getBaseUrl());
 	        driverWrapper.addDriverConfig(new TestConfig());
 	    }
@@ -38,7 +38,9 @@ public class GoogleExample extends RmAllDevice{
 	    	this.webDriver = driverNamingWrapper.startDriver();
 	    }
 
-	    
+	/*
+	 * @rmTest
+	 */
     @Test
     public void testGoogle() throws Exception {
     	HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
