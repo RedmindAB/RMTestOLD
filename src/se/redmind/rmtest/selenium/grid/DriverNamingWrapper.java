@@ -5,7 +5,6 @@ import io.appium.java_client.ios.IOSDriver;
 
 import java.net.URL;
 
-import org.apache.xalan.xsltc.compiler.util.TestGenerator;
 import org.junit.Assume;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SessionNotCreatedException;
@@ -14,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.UnreachableBrowserException;
@@ -103,7 +103,7 @@ public class DriverNamingWrapper {
 		}
 		else if (this.driver == null) {
 
-			int maxRetryAttempts = 5;
+			int maxRetryAttempts = 1;
 
 			if (this.imAFailure) {
 				Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ",false);
@@ -166,16 +166,17 @@ public class DriverNamingWrapper {
 
 	private WebDriver startLocalDriver(Browser browser) {
 		WebDriver driver = null;
+		DesiredCapabilities caps = new DesiredCapabilities();
+		caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/bin/phantomjs");
 		switch (browser) {
 		case Chrome:
-			System.setProperty("webdriver.chrome.driver", getChromePath());
 			driver = new ChromeDriver();
 			break;
 		case Firefox:
 			driver = new FirefoxDriver();
 			break;
 		case PhantomJS:
-			driver = new PhantomJSDriver();
+			driver = new PhantomJSDriver(caps);
 			break;
 		default:
 			break;

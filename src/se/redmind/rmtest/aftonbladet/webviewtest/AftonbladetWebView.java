@@ -22,7 +22,7 @@ import se.redmind.rmtest.selenium.grid.Parallelized;
 public class AftonbladetWebView {
 
 
-	   private AndroidDriver tDriver;
+	    private AndroidDriver tDriver;
 	    private final DriverNamingWrapper urlContainer;
 	    private final String driverDescription;
 	    private final RMReportScreenshot rmrScreenshot;

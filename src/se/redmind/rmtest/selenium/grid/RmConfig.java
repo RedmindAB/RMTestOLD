@@ -19,16 +19,12 @@ public class RmConfig {
 	static JsonObject rmConfig;
 
 	public RmConfig() {
-
-		rmConfig = appendFileToConfig(rmConfigFile);
+        rmConfig = appendFileToConfig(rmConfigFile);
 		localConfig = appendFileToConfig(localConfigFile);
-
-		
-
-	}
+    }
 
 	/**
-	 * @param s
+	 * @param
 	 */
 	private JsonObject appendFileToConfig(String configFile) {
 		InputStream fis = null;
@@ -107,10 +103,20 @@ public class RmConfig {
 		try {
 			usePhantomJS = Boolean.valueOf(getLocalConfigValue("usePhantomJS"));
 		} catch (Exception e) {
-			// TODO: handle exception
-		}
+            // TODO: handle exception
+        }
 		return usePhantomJS;
 	}
+	public static boolean useFirefox(){
+		boolean useFirefox = false;
+		try {
+			useFirefox = Boolean.valueOf(getLocalConfigValue("useFirefox"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return useFirefox;
+	}
+
 
 	public static boolean useChrome() {
 		boolean useChrome = false;

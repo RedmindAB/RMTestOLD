@@ -13,6 +13,9 @@ import org.openqa.selenium.remote.SessionNotFoundException;
 import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.framework.DeviceDescription;
 
+import static se.redmind.rmtest.selenium.grid.RmConfig.useChrome;
+import static se.redmind.rmtest.selenium.grid.RmConfig.useFirefox;
+import static se.redmind.rmtest.selenium.grid.RmConfig.usePhantomJS;
 
 
 /**
@@ -35,8 +38,9 @@ public class DriverProvider {
 	 */
 	private static void updateDrivers() {
 		RmConfig config = new RmConfig();
+        System.out.println("DriverProvider.updateDrivers: "+usePhantomJS());
 		urlCapList = new ArrayList<DriverNamingWrapper>();
-		if (!RmConfig.runOnGrid()) {
+		if (usePhantomJS()) {
 			loadLocalDrivers();
 			return;
 		}
@@ -71,11 +75,21 @@ public class DriverProvider {
 	private static void loadLocalDrivers() {
 		for (int i = 0; i < Browser.values().length; i++) {
 			Browser browser = Browser.values()[i];
-			if (browser == Browser.PhantomJS 	&& !RmConfig.usePhantomJS()) 	continue;
-			if (browser == Browser.Chrome 		&& !RmConfig.useChrome()) 		continue;
-			DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
-			urlCapList.add(driver);
-			allDrivers.add(driver);
+			if (browser == Browser.PhantomJS && usePhantomJS()){
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+                urlCapList.add(driver);
+                allDrivers.add(driver);
+            }
+            if (browser == Browser.Chrome && RmConfig.useChrome()){
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+                urlCapList.add(driver);
+                allDrivers.add(driver);
+            }
+			if (browser == Browser.Firefox && RmConfig.useFirefox()){
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+                urlCapList.add(driver);
+                allDrivers.add(driver);
+            }
 		}
 	}
 
@@ -253,6 +267,7 @@ public class DriverProvider {
 		String currCap;
 		for (int i = 0; i < urlCapList.size(); i++) {
 			currCap = (String) urlCapList.get(i).getCapability().getCapability(capKey);
+
 			if (currCap == null) {
 				currCap = "";
 			}
