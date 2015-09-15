@@ -19,8 +19,6 @@ import se.redmind.rmtest.selenium.grid.DriverProvider;
 	    public static void beforeAllTests(){
 	        
 	    }
-
-	    
 	    @AfterClass
 	    public static void afterAllTests(){
 	        DriverProvider.stopDrivers();
