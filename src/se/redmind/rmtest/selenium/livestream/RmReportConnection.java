@@ -1,5 +1,7 @@
 package se.redmind.rmtest.selenium.livestream;
 
+import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -7,21 +9,20 @@ import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import se.redmind.rmtest.selenium.grid.RmConfig;
-
 public class RmReportConnection {
-	
+
 	private Socket socket;
 	private String rmrLiveAddress;
 	private int rmrLivePort;
 	private PrintWriter out;
 	private boolean isConnected;
-	
+
 	public RmReportConnection() {
-		this.rmrLiveAddress = RmConfig.getRMRLiveAddress();
-		this.rmrLivePort = RmConfig.getRMRLivePort();
+		final FrameworkConfig config = FrameworkConfig.getConfig();
+		this.rmrLiveAddress = config.getRMRLiveAddress();
+		this.rmrLivePort = config.getRMRLivePort();
 	}
-	
+
 	public boolean connect(){
 		System.out.println("Connecting to RMReport...");
 		try {
@@ -36,7 +37,7 @@ public class RmReportConnection {
 		isConnected = true;
 		return true;
 	}
-	
+
 	public boolean close(){
 		System.out.println("Closing connection to RMReport...");
 		try {
@@ -49,27 +50,27 @@ public class RmReportConnection {
 		}
 		return true;
 	}
-	
+
 	public synchronized void sendMessage(String type, JsonObject message){
 		send(type+"@"+new Gson().toJson(message));
 	}
-	
+
 	public synchronized void sendMessage(String message){
 		send("message@"+message);
 	}
-	
+
 	public synchronized void sendMessage(String type, String message){
 		send(type+"@"+message);
 	}
-	
+
 	public synchronized void sendSuiteFinished(){
 		send("!suiteFinished@");
 	}
-	
+
 	public synchronized void sendClose(){
 		send("!close@");
 	}
-	
+
 	private synchronized void send(String message){
 		try {
 			out.println(message);
@@ -78,9 +79,9 @@ public class RmReportConnection {
 			isConnected = false;
 		}
 	}
-	
+
 	public boolean isConnected(){
 		return isConnected;
 	}
-	
+
 }
