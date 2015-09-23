@@ -10,6 +10,9 @@ import java.io.InputStreamReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/**
+ * @deprecated Don't use this, use the FrameworkConfig class instead!
+ */
 public class RmConfig {
 
 	static String localConfigFile = TestHome.main() + "/etc/LocalConfig.json";
