@@ -16,7 +16,6 @@ public abstract class TestBase {
 
 	protected final DriverNamingWrapper driverNamingWrapper;
 	protected WebDriver webDriver;
-	private static final Logger LOG = LoggerFactory.getLogger(ScreenShotRule.class);
 
 	private static List<Object> getDrivers() {
 		return Arrays.asList(DriverProvider.getDrivers());
