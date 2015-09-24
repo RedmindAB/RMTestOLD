@@ -1,0 +1,34 @@
+{
+  "capabilities":
+      [
+
+    {
+          "osname": "ANDROID",
+          "deviceId": "YT910YZ2PT",
+          "description": "Sony D5803  5.1.1",
+          "maxInstances": 1,
+          "rmDeviceType": "mobile",
+          "deviceName":"D5803",
+          "platformName":"Android",
+	  "platform": "ANDROID",
+          "platformVersion":"5.1.1",
+	  "appWaitActivity":"WAIT_ACTIVITY",
+	  "automationName":"AUTOMATION_NAME",
+          "browserName": "Chrome",
+	  "newCommandTimeout":"300"
+    }
+   
+      ],
+  "configuration":
+  {
+    "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+    "maxSession": 1,
+    "port": 8081,
+    "host": "127.0.0.1",
+    "url":"http://127.0.0.1:8081/wd/hub",
+    "register": true,
+    "registerCycle": 5000,
+    "hubPort": 4444,
+    "hubHost": "127.0.0.1"
+  }
+}

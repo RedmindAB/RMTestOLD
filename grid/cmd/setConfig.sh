@@ -15,9 +15,11 @@ if [[ -z "$ANDROID_HOME" ]]
 then 
 	export ANDROID_HOME=$androidHome
 fi
+export seleniumVersion=`getRmConfigParam seleniumVersion`
 export ADB_PATH="$ANDROIDHOME/platform-tools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export RmJar="$testHome/target/RMTest-SNAPSHOT.jar"
+export RmJar="$testHome/grid/lib/GridQueryServlet.jar"
+export SeleniumJar="$testHome/../java/rmtest-core/target/*"
 export RMTestHubIp=`getLocalConfigParam hubIp`
 export RMTestLocalNodeIp=`getLocalConfigParam localIp`
 #export AndroidBuildToolVersion=`getLocalConfigParam AndroidBuildtoolsVersion`
@@ -25,7 +27,6 @@ if [[ -e $androidHome ]]
 then
 	export AAPTCmd=`find $androidHome -name aapt | head -1`
 fi
-export seleniumVersion=`getRmConfigParam seleniumVersion`
 export PRETTY_TIMESTAMP="date +%Y%m%d_%H%M%S"
 
 
