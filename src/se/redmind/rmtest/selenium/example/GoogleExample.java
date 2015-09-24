@@ -23,7 +23,7 @@ public class GoogleExample extends RmAllDevice{
 //		private HTMLPage navPage;
 
 	    public GoogleExample(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-	        super(driverWrapper, TestParams.getBaseUrl());
+	        super(driverWrapper, driverDescription);
 	        driverWrapper.addDriverConfig(new TestConfig());
 	    }
 
