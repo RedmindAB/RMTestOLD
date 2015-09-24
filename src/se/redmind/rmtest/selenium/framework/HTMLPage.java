@@ -59,8 +59,8 @@ public class HTMLPage {
             try {
                 /*
                  * Stops prinouts of ExpectedConditions.findElement()
-            	 * This can be removed when printouts are removed
-            	 */
+                 * This can be removed when printouts are removed
+                 */
                 Logger.getLogger("org.openqa.selenium.support.ui.ExpectedConditions").setLevel(Level.SEVERE);
                 fw = new FluentWait<WebDriver>(this.driver)
                         .withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
@@ -200,7 +200,7 @@ public class HTMLPage {
         int i = 0;
         while(i < 10) {
             try {
-                LOG.debug(">>>Compare to page url: "+articleId);
+                LOG.debug(">>>Compare to page url: " + articleId);
                 boolean b = driver.getTitle().contains(articleId);
                 return b;
             }

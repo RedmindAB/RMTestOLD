@@ -80,7 +80,6 @@ public class RMExample {
             }
         }
         else { //desktop
-//	        	tDriver.manage().window().maximize() ;
             tNavPage.clickOnSubmenu("tjanster", "management");
             tNavPage.assertPageTitle("Management");
             LOG.debug("Page title is: " + tDriver.getTitle());
@@ -201,6 +200,3 @@ public class RMExample {
         }
     }
 }
-
-
-	    
