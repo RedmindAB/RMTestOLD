@@ -1,5 +1,4 @@
 .metadata/
-log/*.log
 bin/
 target/
 etc/RMTestLocal.conf
@@ -15,5 +14,5 @@ RMTest.iml
 etc/Simulator_Temp.json
 RMR-Screenshots/
 *.png
+*.DS_Store
 *.log
-.DS_Store

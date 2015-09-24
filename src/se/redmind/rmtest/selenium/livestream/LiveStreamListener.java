@@ -1,11 +1,11 @@
 package se.redmind.rmtest.selenium.livestream;
 
+import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,9 +16,6 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
-import se.redmind.rmtest.selenium.grid.RmConfig;
-
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
@@ -124,7 +121,7 @@ public class LiveStreamListener extends RunListener{
 	private void saveReport() {
 		String suitename = resBuilder.getSuiteName();
 		String timestamp = resBuilder.getTimestamp();
-		String savePath = RmConfig.getJsonReportSavePath();
+		String savePath = FrameworkConfig.getConfig().getJsonReportSavePath();
 		new File(savePath).mkdirs();
 		String filename = suitename+"-"+timestamp+".json";
 		try {

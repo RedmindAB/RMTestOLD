@@ -99,17 +99,25 @@ echo "Appium version:"
 $testHome/appium/bin/appium.js -v
 $testHome/appium/bin/appium.js --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
 
-appiumStarted=true
-while $appiumStarted
-do
-	connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" $logfile`
-	if [ $connectedCount -gt 0  ]
-	then
-		echo "Connected to HUB"
-		appiumStarted=false
-	else
-		echo "Not yet connected to HUB"
-        	sleep 1
-	fi
-done
+loopcount=0
+keepTrying=true
+while $keepTrying
+	do
+		connectedCount=`grep -c "Appium successfully registered with the grid on $RMTestHubIp:4444" $logfile`
+		if [ $connectedCount -gt 0  ]
+		then
+			echo "Connected to HUB"
+			keepTrying=false
+		else
+			echo "Not yet connected to HUB"
+			sleep 1
+		fi
+		loopcount=$[loopcount+1]
+		echo loopcount
+		if [ $loopcount -gt 60 ]
+		then
+			keepTrying=false
+			echo "Failed to connect to HUB"
+		fi
+	done
 

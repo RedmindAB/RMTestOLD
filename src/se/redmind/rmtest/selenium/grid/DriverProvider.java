@@ -13,8 +13,7 @@ import org.openqa.selenium.remote.SessionNotFoundException;
 
 import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.framework.DeviceDescription;
-
-
+import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 /**
  * @author petter
@@ -35,9 +34,9 @@ public class DriverProvider {
 	 * 
 	 */
 	private static void updateDrivers() {
-		RmConfig config = new RmConfig();
+		final FrameworkConfig config = FrameworkConfig.getConfig();
 		urlCapList = new ArrayList<DriverNamingWrapper>();
-		if (!RmConfig.runOnGrid()) {
+		if (!config.runOnGrid()) {
 			loadLocalDrivers();
 			return;
 		}
@@ -70,10 +69,11 @@ public class DriverProvider {
 
 
 	private static void loadLocalDrivers() {
+		final FrameworkConfig config = FrameworkConfig.getConfig();
 		for (int i = 0; i < Browser.values().length; i++) {
 			Browser browser = Browser.values()[i];
-			if (browser == Browser.PhantomJS 	&& !RmConfig.usePhantomJS()) 	continue;
-			if (browser == Browser.Chrome 		&& !RmConfig.useChrome()) 		continue;
+			if (browser == Browser.PhantomJS 	&& !config.usePhantomJS()) 	continue;
+			if (browser == Browser.Chrome 		&& !config.useChrome()) 		continue;
 			DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
 			urlCapList.add(driver);
 			allDrivers.add(driver);
