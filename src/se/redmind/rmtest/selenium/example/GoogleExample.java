@@ -2,73 +2,46 @@ package se.redmind.rmtest.selenium.example;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
-import se.redmind.rmtest.selenium.framework.StackTraceInfo;
+import se.redmind.rmtest.selenium.framework.TestParams;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
-import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
-
-
+import se.redmind.rmtest.selenium.grid.RmAllDevice;
 
 @RunWith(Parallelized.class)
-public class GoogleExample {
+public class GoogleExample extends RmAllDevice{
 
-
-	   private WebDriver tDriver;
-	    private final DriverNamingWrapper urlContainer;
-	    private final String driverDescription;
-	    private final RMReportScreenshot rmrScreenshot;
+//	    private final DriverNamingWrapper driverWrapper;
+//	    private final String driverDescription;
+//	    private final RMReportScreenshot rmrScreenshot;
 //		private HTMLPage navPage;
 
-	    public GoogleExample(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-	        this.urlContainer = driverWrapper;
-	        this.driverDescription = driverDescription;
-	        this.rmrScreenshot = new RMReportScreenshot(urlContainer);
-	    }
-	    
-	    private static Object[] getDrivers() {
-//	        return DriverProvider.getDrivers("rmDeviceType", "mobile");
-//	    	return DriverProvider.getDrivers(Platform.ANDROID);
-	    	return DriverProvider.getDrivers();
-
-	    }
-
-	    @Parameterized.Parameters(name = "{1}")
-	    public static Collection<Object[]> drivers() {
-	        ArrayList<Object[]> returnList = new ArrayList<Object[]>();
-	        Object[] wrapperList = getDrivers();
-	        for (int i = 0; i < wrapperList.length; i++) {
-	            returnList.add(new Object[]{wrapperList[i], wrapperList[i].toString()});
-	        }
-
-	        return returnList;
+	    public GoogleExample(final DriverNamingWrapper driverWrapper, @SuppressWarnings("unused") final String driverDescription) {
+	        super(driverWrapper, TestParams.getBaseUrl());
+	        driverWrapper.addDriverConfig(new TestConfig());
 	    }
 
 	    @AfterClass
 	    public static void afterTest(){
 //	    	DriverProvider.stopDrivers();
 	    }
-	    
 
+	    
 	    @Before
-	    public void beforeTest(){
-	    	this.tDriver = this.urlContainer.startDriver();
+	    public void before(){
+	    	this.webDriver = driverNamingWrapper.startDriver();
 	    }
+
 	    
     @Test
     public void testGoogle() throws Exception {
-    	HTMLPage navPage = new HTMLPage(this.tDriver);
+    	HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
         
         navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
@@ -78,15 +51,17 @@ public class GoogleExample {
         assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        new RMReportScreenshot(urlContainer).takeScreenshot(null);
-        new RMReportScreenshot(urlContainer).takeScreenshot("first");
-        new RMReportScreenshot(urlContainer).takeScreenshot("after");
+        new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot(null);
+        new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("first");
+        new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("after");
         System.out.println("Done!");   
         
     }
+    
+    
     @Test
     public void testGoogle2() throws Exception {
-    	HTMLPage navPage = new HTMLPage(this.tDriver);
+    	HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
         
     	navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
@@ -96,7 +71,7 @@ public class GoogleExample {
         assertTrue(navPage.getTitle().startsWith("Goo"));
         
         
-        new RMReportScreenshot(urlContainer).takeScreenshot("");
+        new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("");
         System.out.println("Done!");        
         
     }

@@ -3,6 +3,7 @@ package se.redmind.rmtest.selenium.grid;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.Platform;
@@ -49,7 +50,6 @@ public class DriverProvider {
 			nodeReq = nodeList.get(j); 
 			for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
 				currentCapability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
-
 				description = buildDescriptionFromCapabilities(currentCapability);
 				URL driverUrl;
 				try {
@@ -66,6 +66,7 @@ public class DriverProvider {
 
 		}
 	}
+
 
 	private static void loadLocalDrivers() {
 		final FrameworkConfig config = FrameworkConfig.getConfig();

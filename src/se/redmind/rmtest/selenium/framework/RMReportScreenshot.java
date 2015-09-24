@@ -26,8 +26,8 @@ public class RMReportScreenshot {
 	private WebDriver driver;
 
 	public RMReportScreenshot(DriverNamingWrapper namingWrapper) {
-		this.namingWrapper = namingWrapper;
 		this.driver = namingWrapper.getDriver();
+		this.namingWrapper = namingWrapper;
 	}
 	
 	/**

@@ -11,6 +11,7 @@
 		<!--runSuite>**/GoogleTests.class</runSuite-->
 		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
 		<timestamp>${maven.build.timestamp}</timestamp>
+		<seleniumVer>2.47.1</seleniumVer>
 	</properties>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -23,6 +24,21 @@
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+		    	<groupId>com.github.searls</groupId>
+		    	<artifactId>jasmine-maven-plugin</artifactId>
+		    	<version>2.0-beta-02</version>
+		   	  	<executions>
+		       		<execution>
+		         		<goals>
+		           			<goal>test</goal>
+		         		</goals>
+		         		<configuration>
+		           			<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
+		         		</configuration>
+		       		</execution>
+		     	</executions>
+		   	</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -143,6 +159,11 @@
 	</reporting>
 	<dependencies>
 		<dependency>
+		    <groupId>com.github.detro</groupId>
+		    <artifactId>phantomjsdriver</artifactId>
+		    <version>1.2.0</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -154,15 +175,29 @@
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${seleniumVer}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
-			<version>2.46.0</version>
+			<version>${seleniumVer}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-chrome-driver</artifactId>
-			<version>2.46.0</version>
+			<version>${seleniumVer}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>${seleniumVer}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-api</artifactId>
+			<version>${seleniumVer}</version>
+		</dependency>
 		<dependency>
 			<groupId>io.appium</groupId>
 			<artifactId>java-client</artifactId>
@@ -173,5 +208,10 @@
 		    <artifactId>phantomjsdriver</artifactId>
 		    <version>1.2.1</version>
 		</dependency>
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
 	</dependencies>
 </project>
