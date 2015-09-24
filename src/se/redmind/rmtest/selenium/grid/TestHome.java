@@ -12,36 +12,36 @@ public class TestHome {
 	/**
 	 * @param args
 	 */
-	 public static String main() {
+	public static String main() {
 		// TODO Auto-generated method stub
-		 String testHome = null;
-		 if (isWindows()) {
-			 System.out.println("We're on windows");
-			 testHome = System.getenv("TESTHOME");
-		 } else {
-			 System.out.println("We're on a unixy system");
-			 InputStream fis;
-			 try {
-				 fis = new FileInputStream(System.getenv("HOME") + "/.RmTest");
+		String testHome = null;
+		if (isWindows()) {
+			System.out.println("We're on windows");
+			testHome = System.getenv("TESTHOME");
+		} else {
+			System.out.println("We're on a unixy system");
+			InputStream fis;
+			try {
+				fis = new FileInputStream(System.getenv("HOME") + "/.RmTest");
 
-				 BufferedReader br = new BufferedReader(new InputStreamReader(fis)); 
-				 String line;
-				 
-				 while ((line = br.readLine()) != null) {                
-					 if (line.contains("TESTHOME=")) {
-						 System.out.println(line);
-						 testHome = line.split("=")[1];
-						 System.out.println(testHome);
-					 }
-				 }
-			 } catch (FileNotFoundException e) {
-				 // TODO Auto-generated catch block
-				 e.printStackTrace();
-			 } catch (IOException e) {
-				 // TODO Auto-generated catch block
-				 e.printStackTrace();
-			 }
-		 }
+				BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+				String line;
+
+				while ((line = br.readLine()) != null) {
+					if (line.contains("TESTHOME=")) {
+						System.out.println(line);
+						testHome = line.split("=")[1];
+						System.out.println(testHome);
+					}
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if (testHome == null) {
 			System.out.println("ERROR: We where not able to find a testhome folder");
 			System.out.println("On windows, set your TESTHOME system variable");
@@ -49,23 +49,18 @@ public class TestHome {
 		}
 		return testHome;
 
-	 }
+	}
 
+	public static String getOsName() {
+		String OS = null;
 
+		OS = System.getProperty("os.name");
+		return OS;
+	}
 
-
-	 public static String getOsName()
-	 {
-		 String OS = null;
-
-		 OS = System.getProperty("os.name");
-		 return OS;
-	 }
-
-	 public static boolean isWindows()
-	 {
-		 System.out.println(getOsName());
-		 return getOsName().startsWith("Windows");
-	 }
+	public static boolean isWindows() {
+		System.out.println(getOsName());
+		return getOsName().startsWith("Windows");
+	}
 
 }
