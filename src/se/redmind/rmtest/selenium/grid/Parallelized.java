@@ -1,11 +1,10 @@
 package se.redmind.rmtest.selenium.grid;
 
+import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-//import junitparams.JUnitParamsRunner;
-
 
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
@@ -55,14 +54,13 @@ public class Parallelized extends Parameterized
         	setScheduler(new ThreadPoolScheduler(noThreads));
 		} catch (IllegalArgumentException e) {
 			System.err.println("ERROR: No drivers found with current filter");
-//			e.printStackTrace();
 		}
         
     }
     
     @Override
     public void run(RunNotifier notifier) {
-    	if (RmConfig.autoCloseDrivers()) notifier.addListener(new AutoCloseListener());
+    	if (FrameworkConfig.getConfig().autoCloseDrivers()) notifier.addListener(new AutoCloseListener());
     	super.run(notifier);
     }
 }
