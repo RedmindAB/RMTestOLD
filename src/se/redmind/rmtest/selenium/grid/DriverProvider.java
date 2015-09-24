@@ -20,11 +20,7 @@ import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
  *
  */
 public class DriverProvider {
-
-
-
-
-
+	
 	private static ArrayList <DriverNamingWrapper> urlCapList = new ArrayList<DriverNamingWrapper>();
 	private static ArrayList <DriverNamingWrapper> allDrivers = new ArrayList<DriverNamingWrapper>();
 	private static DesiredCapabilities currentCapability;
@@ -45,12 +41,13 @@ public class DriverProvider {
 
 		RegistrationRequest nodeReq;
 		String description;
-
+		
+		DescriptionBuilder descriptionBuilder = new DescriptionBuilder();
 		for (int j = 0; j < nodeList.size(); j++) { 
 			nodeReq = nodeList.get(j); 
 			for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
 				currentCapability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
-				description = buildDescriptionFromCapabilities(currentCapability);
+				description = descriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
 				URL driverUrl;
 				try {
 					driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
@@ -80,74 +77,7 @@ public class DriverProvider {
 		}
 	}
 
-	private static String getSafeCapability(String capName) {
-		String capValue = (String) currentCapability.getCapability(capName);
-		return capValue;
-	}
 	
-	private static Boolean isCapabilitySet(String capName) {
-		String capValue = getSafeCapability(capName);
-		if (capValue == null || capValue.equals("")) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	/**
-	 * @param capabilities
-	 * @return
-	 */
-	private static String buildDescriptionFromCapabilities(
-			DesiredCapabilities capabilities) {
-		String description;
-		
-		String os;
-		if (isCapabilitySet("rmOsName")) { 
-			os = getSafeCapability("rmOsName");
-		} else if (isCapabilitySet("platformName")) { 
-			os = getSafeCapability("platformName");
-		} else if (isCapabilitySet("osname")) { 
-			os = getSafeCapability("osname");
-		} else if (isCapabilitySet("platform")) {
-			os = getSafeCapability("platform");
-		} else {
-			os = "UNKNOWN";
-		}
-		
-		
-		String osVer;
-		if (isCapabilitySet("platformVersion")){
-			osVer = getSafeCapability("platformVersion");
-		} else {
-			osVer = "UNKNOWN";
-		}
-		
-		String device;
-		if (isCapabilitySet("deviceName")) {
-			device = getSafeCapability("deviceName"); 
-		} else {
-			device = "UNKNOWN";
-		}
-		
-		String browser = null;
-		if (isCapabilitySet("browserName")) {
-			browser = getSafeCapability("browserName"); 
-		} 
-		else if(isCapabilitySet("appPackage")){
-			browser = getSafeCapability("appPackage");
-		}
-		else {
-			browser = "UNKNOWN";
-		}
-		
-		String browserVersion = "UNKNOWN";
-		
-		description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
-
-		System.out.println("Description of driver is: " + description);
-		return description;
-	}
 
 	/**
 	 * 
