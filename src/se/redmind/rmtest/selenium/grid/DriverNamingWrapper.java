@@ -76,30 +76,30 @@ public class DriverNamingWrapper {
 		return this.driver;
 	}
 
-	public void ignoreAtNoConnectivityById(String url, String id) {		
+	public void ignoreAtNoConnectivityById(String url, String id) {
 		ignoreAtNoConnectivityTo(url, By.id(id));
 	}
 
-	public void ignoreAtNoConnectivityByClass(String url, String className) {		
+	public void ignoreAtNoConnectivityByClass(String url, String className) {
 		ignoreAtNoConnectivityTo(url, By.className(className));
 	}
 
-	public void ignoreAtNoConnectivityByXpath(String url, String xpath) {		
+	public void ignoreAtNoConnectivityByXpath(String url, String xpath) {
 		ignoreAtNoConnectivityTo(url, By.xpath(xpath));
 	}
 
-	public void ignoreAtNoConnectivityTo(String url, By by) {		
+	public void ignoreAtNoConnectivityTo(String url, By by) {
 		try {
 			getDriver().get(url);
 			driverWaitElementPresent(by, 10);
-		} catch (NoSuchElementException|TimeoutException e) {
+		} catch (NoSuchElementException | TimeoutException e) {
 			this.imAFailure = true;
-			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url,false);
+			Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url, false);
 
-		}	
+		}
 	}
-	
-	public void addDriverConfig(DriverConfig conf){
+
+	public void addDriverConfig(DriverConfig conf) {
 		driverConfigs.add(conf);
 	}
 
@@ -114,18 +114,18 @@ public class DriverNamingWrapper {
 	/**
 	 * @param filteredUrlCapList
 	 */
-	public WebDriver startDriver(){
+	public WebDriver startDriver() {
 		setupCapabilities();
 		if (browser != null && this.driver == null) {
 			this.driver = startLocalDriver(this.browser);
 			return this.driver;
-		}
-		else if (this.driver == null) {
+		} else if (this.driver == null) {
 
 			int maxRetryAttempts = 5;
 
 			if (this.imAFailure) {
-				Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ",false);
+				Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts
+						+ " attempts, it probably wont start now ", false);
 				return this.driver;
 			} else {
 
@@ -141,7 +141,7 @@ public class DriverNamingWrapper {
 							System.out.println("This is a RemoteWebDriver");
 						} else {
 
-							if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName")) ) {
+							if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
 								this.driver = new AndroidDriver(url, capability);
 							} else {
 								this.driver = new IOSDriver(url, capability);
@@ -173,8 +173,8 @@ public class DriverNamingWrapper {
 					}
 					return this.driver;
 				}
-				this.imAFailure=true;
-				Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",false);
+				this.imAFailure = true;
+				Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts", false);
 				return this.driver;
 			}
 		} else {
@@ -182,10 +182,9 @@ public class DriverNamingWrapper {
 		}
 	}
 
-
 	private void setupCapabilities() {
 		for (DriverConfig driverConfig : driverConfigs) {
-			if(driverConfig.eval(capability, description)){
+			if (driverConfig.eval(capability, description)) {
 				driverConfig.config(capability);
 			}
 		}
@@ -212,14 +211,13 @@ public class DriverNamingWrapper {
 
 	private String getChromePath() {
 		String osName = System.getProperty("os.name");
-		String _default = TestHome.main()+"/lib/chromedriver";
+		String _default = TestHome.main() + "/lib/chromedriver";
 		if (osName.startsWith("Mac")) {
 			System.out.println("Setting default chromedriver");
 			return _default;
-		}
-		else if (osName.startsWith("Linux")) {
+		} else if (osName.startsWith("Linux")) {
 			System.out.println("Setting linux chromedriver");
-			return TestHome.main()+"/lib/linux/chromedriver";
+			return TestHome.main() + "/lib/linux/chromedriver";
 		}
 		return _default;
 	}
