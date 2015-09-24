@@ -17,8 +17,8 @@ public abstract class TestBase {
     public static final String TABLET_DEVICE = "tablet";
     public static final String MOBILE_DEVICE = "mobile";
     protected final DriverNamingWrapper driverNamingWrapper;
-    private final String deviceType;
-    private final String initialUrl;
+//    private final String deviceType;
+//    private final String initialUrl;
     protected WebDriver webDriver;
     private static final Logger LOG = LoggerFactory.getLogger(ScreenShotRule.class);
 
@@ -33,10 +33,10 @@ public abstract class TestBase {
                 .collect(Collectors.toList());
     }
     
-    public TestBase(final DriverNamingWrapper driverWrapper, final String deviceType, final String initialUrl) {
+    public TestBase(final DriverNamingWrapper driverWrapper, final String driverDescription) {
         this.driverNamingWrapper = driverWrapper;
-        this.deviceType = deviceType;
-        this.initialUrl = initialUrl;
+//        this.deviceType = deviceType;
+//        this.initi|alUrl = initialUrl;
     }
 
 //    @Rule

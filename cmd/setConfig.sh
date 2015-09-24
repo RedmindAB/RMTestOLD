@@ -39,6 +39,6 @@ getLogPrefix() {
 
 
 PATH=$PATH:$testHome/lib
-
+export MAVEN_OPTS="-Xms1024m -Xmx2048m -Xss2048k"
 
 

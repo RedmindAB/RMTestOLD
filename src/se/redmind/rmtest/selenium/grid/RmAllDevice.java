@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public abstract class RmAllDevice extends TestBase {
 
-    public RmAllDevice(DriverNamingWrapper driverWrapper, String initialUrl) {
-        super(driverWrapper, "", initialUrl);
+    public RmAllDevice(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+        super(driverWrapper, driverDescription);
     }
     
 //    @Parameterized.Parameters(name = "{1}")
