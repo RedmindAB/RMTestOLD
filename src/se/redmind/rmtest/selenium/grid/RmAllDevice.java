@@ -12,18 +12,8 @@ import java.util.stream.Collectors;
 
 public abstract class RmAllDevice extends TestBase {
 
-    public RmAllDevice(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-        super(driverWrapper, driverDescription);
-    }
-    
-//    @Parameterized.Parameters(name = "{1}")
-//    public static Collection<Object[]> drivers() {
-//        return getDrivers().stream()
-//                .map(obj -> new Object[]{obj, obj.toString()})
-//                .collect(Collectors.toList());
-//    }
-//    
-//    public static List<Object> getDrivers() {
-//        return Arrays.asList(DriverProvider.getDrivers("browserName","firefox"));
-//    }
+	public RmAllDevice(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+		super(driverWrapper, driverDescription);
+	}
+
 }
