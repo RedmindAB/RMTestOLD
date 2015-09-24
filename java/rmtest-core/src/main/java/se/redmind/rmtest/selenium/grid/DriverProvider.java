@@ -122,8 +122,7 @@ public class DriverProvider {
     public synchronized static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2) {
         updateDrivers();
         return urlCapList.stream()
-            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform1))
-            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform2))
+            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform1) || urlCapList1.getCapability().getPlatform().is(pPlatform2))
             .collect(Collectors.toList()).toArray();
     }
 
@@ -135,8 +134,7 @@ public class DriverProvider {
     public synchronized static Object[] getDrivers(Platform pPlatform, String pBrowserName) {
         updateDrivers();
         return urlCapList.stream()
-            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform))
-            .filter(urlCapList1 -> urlCapList1.getCapability().getBrowserName().contains(pBrowserName))
+            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform) || urlCapList1.getCapability().getBrowserName().contains(pBrowserName))
             .collect(Collectors.toList()).toArray();
     }
 
