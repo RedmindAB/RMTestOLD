@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.redmind.rmtest.selenium.grid.rules.ScreenShotRule;
+
 public abstract class TestBase {
 
 	protected final DriverNamingWrapper driverNamingWrapper;
