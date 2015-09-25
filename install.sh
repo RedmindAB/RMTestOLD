@@ -1,7 +1,9 @@
 #!/bin/bash 
 
 scriptDir="$( cd "$( dirname "$0" )" && pwd )"
-cd $scriptDir
+newTestHome=$scriptDir/grid
+coreHome=$scriptDir/java
+cd $newTestHome
 
 foundOldConfig=false
 if [ -f $HOME/.RmTest ]; then
@@ -11,17 +13,17 @@ if [ -f $HOME/.RmTest ]; then
 	fi    
 fi
 
-echo "TESTHOME=$scriptDir" > $HOME/.RmTest
+echo "TESTHOME=$newTestHome" > $HOME/.RmTest
 echo ".RmTest configured"
 
-if [[ ! -f $scriptDir/etc/LocalConfig.json ]]
+if [[ ! -f $newTestHome/etc/LocalConfig.json ]]
 then
 	if [ $foundOldConfig ] && [ -f $oldRmHome/etc/LocalConfig.json ]; then
     		echo "Found old installation, copying config"
-		cp $oldRmHome/etc/LocalConfig.json $scriptDir/etc/LocalConfig.json
+		cp $oldRmHome/etc/LocalConfig.json $newTestHome/etc/LocalConfig.json
 	else
 		echo "Could not find old config, creating from template"
-		cp $scriptDir/etc/LocalConfigTemplate.json $scriptDir/etc/LocalConfig.json
+		cp $newTestHome/etc/LocalConfigTemplate.json $newTestHome/etc/LocalConfig.json
 	fi
 fi
 echo "Verified LocalConfig.json"
@@ -38,7 +40,7 @@ fi
 
 
 echo "Running maven compile, correct any errors and rerun this script"
-
+cd $coreHome
 mvn package 
 
 if [[ $? -ne 0 ]]
@@ -47,6 +49,7 @@ then
 	exit 1
 else
 	echo "mvn build completed sucessfully"
+	cd $scriptDir
 fi
 
 
