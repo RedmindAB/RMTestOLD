@@ -1,6 +1,7 @@
 {
   "configuration":
   {
-    "seleniumVersion": "2.47.1"
+    "seleniumVersion": "2.47.1",
+    "appiumVersion": "1.4.11"
   }
 }
