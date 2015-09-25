@@ -1,8 +1,9 @@
 package se.redmind.rmtest.selenium.framework;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.selenium.grid.TestHome;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,170 +14,168 @@ import javax.imageio.ImageIO;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-
-import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
-import se.redmind.rmtest.selenium.grid.TestHome;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RMReportScreenshot {
 
-	private static final int MAX_LONG_SIDE = 1920;
-	private static final String FILE_EXTENTION = "png";
-	private static HashMap<String, Integer> filenameNumbers = new HashMap<String, Integer>();;
-	private DriverNamingWrapper namingWrapper;
-	private WebDriver driver;
+    private static final Logger LOG = LoggerFactory.getLogger(RMReportScreenshot.class);
 
-	public RMReportScreenshot(DriverNamingWrapper namingWrapper) {
-		this.driver = namingWrapper.getDriver();
-		this.namingWrapper = namingWrapper;
-	}
-	
-	/**
-	 *
-	 * this method should be called directly from a test-method, the filename will have the name of the invoked class and method inside it.
-	 * if more than one screenshot is taken in the same method make sure that the screenshot is unique for each screenshot.
-	 * @param prefix - optional, description of the screenshot can be null or empty. if there are two or more screenshots taken in the same method without a prefix the oldest file will be over written
-	 */
-	public void takeScreenshot(String prefix){
-		String className = StackTraceInfo.getInvokingClassName();
-		String methodName = StackTraceInfo.getInvokingMethodName();
-		takeScreenshot(className, methodName, prefix);
-	}
-	
-	/** 
-	 * USE WITH CAUTION!
-	 * 
-	 * This method should be an alternative to the takeScreenshot method if needed, examples of use is Navigation classes.
-	 * its important that the class and method name is the same as they are stored in RMReport. 
-	 * @param className - name of the testclass.
-	 * @param methodName - name of the test method that was invoked.
-	 * @param prefix - optional, description of the screenshot can be null or empty. if there are two or more screenshots taken in the same method without a prefix the oldest file will be over written
-	 */
-	public void takeScreenshot(String className, String methodName, String prefix){
-		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		BufferedImage image = fileToImage(scrFile);
-		if (isResizeNecessary(image)) {
-			image = resizeImage(image);
-		}
-		String filename = getFileName(className, methodName, prefix);
-		if (filename == null) {
-			System.err.println("No RMReport-screenshot taken, run with 'mvn test'");
-			return;
-		}
-		SaveImage(image, filename);
-	}
+    private static final int MAX_LONG_SIDE = 1920;
+    private static final String FILE_EXTENTION = "png";
+    private static HashMap<String, Integer> filenameNumbers = new HashMap<String, Integer>();
+    ;
+    private DriverNamingWrapper namingWrapper;
+    private WebDriver driver;
 
-	private void SaveImage(BufferedImage image, String filename) {
-		try {
-			ImageIO.write(image, FILE_EXTENTION, new File(filename));
-		} catch (IOException e) {
-			try {
-				throw new Exception("Image: "+image+" filename: "+filename+"\n"+e.getStackTrace());
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
+    public RMReportScreenshot(DriverNamingWrapper namingWrapper) {
+        this.driver = namingWrapper.getDriver();
+        this.namingWrapper = namingWrapper;
+    }
 
-	private String getFileName(String className, String methodName, String prefix) {
-		String timestamp = System.getProperty("rmt.timestamp");
-		if (timestamp == null) {
-			return null;
-		}
-		timestamp = timestamp.replace("-", "");
-		String description = namingWrapper.getDescription();
-		String filename = className+"."+methodName+"-"+timestamp+"["+description+"]."+FILE_EXTENTION;
-		System.out.println(filename);
-		int screenshotNumber = getPrefixNumber(filename);
-		if (prefix != null && prefix.length() > 0) {
-			filename = prefix + "-_-" + filename;
-		}
-		filename = getSavePath(timestamp)+screenshotNumber+"-"+filename;
-		return filename;
-	}
+    /**
+     * this method should be called directly from a test-method, the filename will have the name of the invoked class and method inside it.
+     * if more than one screenshot is taken in the same method make sure that the screenshot is unique for each screenshot.
+     *
+     * @param prefix - optional, description of the screenshot can be null or empty. if there are two or more screenshots taken in the same method without a prefix the oldest file will be over written
+     */
+    public void takeScreenshot(String prefix) {
+        String className = StackTraceInfo.getInvokingClassName();
+        String methodName = StackTraceInfo.getInvokingMethodName();
+        takeScreenshot(className, methodName, prefix);
+    }
 
-	private BufferedImage resizeImage(BufferedImage originalImage) {
-		BufferedImage resizedImage = null;
-		try {
-			int type = getType(originalImage);
-			resizedImage = resizeImageWithHint(originalImage, type);
-		} catch (Exception e) {
-			System.err.println("Could not resize screenshot image!");
-			e.printStackTrace();
-		}
-		return resizedImage;
-	}
+    /**
+     * USE WITH CAUTION!
+     * <p/>
+     * This method should be an alternative to the takeScreenshot method if needed, examples of use is Navigation classes.
+     * its important that the class and method name is the same as they are stored in RMReport.
+     *
+     * @param className  - name of the testclass.
+     * @param methodName - name of the test method that was invoked.
+     * @param prefix     - optional, description of the screenshot can be null or empty. if there are two or more screenshots taken in the same method without a prefix the oldest file will be over written
+     */
+    public void takeScreenshot(String className, String methodName, String prefix) {
+        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        BufferedImage image = fileToImage(scrFile);
+        if(isResizeNecessary(image)) {
+            image = resizeImage(image);
+        }
+        String filename = getFileName(className, methodName, prefix);
+        if(filename == null) {
+            LOG.warn("No RMReport-screenshot taken, run with 'mvn test'");
+            return;
+        }
+        SaveImage(image, filename);
+    }
 
-	private BufferedImage fileToImage(File scrFile) {
-		try {
-			return ImageIO.read(scrFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	private BufferedImage resizeImageWithHint(BufferedImage originalImage, int type){
-		
-		BufferedImage resizedImage = getResizedBufferedImage(originalImage, type);
-		Graphics2D g = resizedImage.createGraphics();
-		g.drawImage(originalImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
-		g.dispose();	
-		g.setComposite(AlphaComposite.Src);
-	 
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	 
-		return resizedImage;
-	}
-	
-	private BufferedImage getResizedBufferedImage(BufferedImage originalImage, int type) {
-		int height = originalImage.getHeight();
-		int width = originalImage.getWidth();
-		float factor = 0; 
-		if (height>width) {
-			factor = (float) MAX_LONG_SIDE / height;
-			height = MAX_LONG_SIDE;
-			width = (int) (width * factor);
-		}
-		else {
-			factor = (float) MAX_LONG_SIDE / width;
-			width = MAX_LONG_SIDE;
-			height = (int) (height * factor);
-		}
-		return new BufferedImage(width, height, type);
-	}
+    private void SaveImage(BufferedImage image, String filename) {
+        try {
+            ImageIO.write(image, FILE_EXTENTION, new File(filename));
+        }
+        catch(IOException e) {
+            LOG.debug("Image: " + image + " filename: " + filename, e);
+        }
+    }
 
-	private boolean isResizeNecessary(BufferedImage originalImage){
-		int width = originalImage.getWidth();
-		int height = originalImage.getHeight();
-		if (width>height) {
-			return width>MAX_LONG_SIDE;
-		}
-		else return height>MAX_LONG_SIDE;
-	}
-	
-	private int getType(BufferedImage originalImage){
-		return originalImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+    private String getFileName(String className, String methodName, String prefix) {
+        String timestamp = System.getProperty("rmt.timestamp");
+        if(timestamp == null) {
+            return null;
+        }
+        timestamp = timestamp.replace("-", "");
+        String description = namingWrapper.getDescription();
+        String filename = className + "." + methodName + "-" + timestamp + "[" + description + "]." + FILE_EXTENTION;
+        LOG.debug(filename);
+        int screenshotNumber = getPrefixNumber(filename);
+        if(prefix != null && prefix.length() > 0) {
+            filename = prefix + "-_-" + filename;
+        }
+        filename = getSavePath(timestamp) + screenshotNumber + "-" + filename;
+        return filename;
+    }
 
-	}
-	
-	private String getSavePath(String timestamp){
-		String path = TestHome.main() + "/RMR-Screenshots/"+timestamp+"/";
-		File file = new File(path);
-		file.mkdirs();
-		return path;
-	}
-	
-	public static synchronized int getPrefixNumber(String filename){
-		Integer number = filenameNumbers.get(filename);
-		System.out.println("number: "+number);
-		if (number == null) {
-			number = new Integer(0);
-		}
-		number++;
-		filenameNumbers.put(filename, number);
-		return number;
-	}
-	
+    private BufferedImage resizeImage(BufferedImage originalImage) {
+        BufferedImage resizedImage = null;
+        try {
+            int type = getType(originalImage);
+            resizedImage = resizeImageWithHint(originalImage, type);
+        }
+        catch(Exception e) {
+            LOG.info("Could not resize screenshot image!", e);
+        }
+        return resizedImage;
+    }
+
+    private BufferedImage fileToImage(File scrFile) {
+        try {
+            return ImageIO.read(scrFile);
+        }
+        catch(IOException e) {
+            LOG.info("", e);
+        }
+        return null;
+    }
+
+    private BufferedImage resizeImageWithHint(BufferedImage originalImage, int type) {
+        BufferedImage resizedImage = getResizedBufferedImage(originalImage, type);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, resizedImage.getWidth(), resizedImage.getHeight(), null);
+        g.dispose();
+        g.setComposite(AlphaComposite.Src);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        return resizedImage;
+    }
+
+    private BufferedImage getResizedBufferedImage(BufferedImage originalImage, int type) {
+        int height = originalImage.getHeight();
+        int width = originalImage.getWidth();
+        float factor = 0;
+        if(height > width) {
+            factor = (float) MAX_LONG_SIDE / height;
+            height = MAX_LONG_SIDE;
+            width = (int) (width * factor);
+        }
+        else {
+            factor = (float) MAX_LONG_SIDE / width;
+            width = MAX_LONG_SIDE;
+            height = (int) (height * factor);
+        }
+        return new BufferedImage(width, height, type);
+    }
+
+    private boolean isResizeNecessary(BufferedImage originalImage) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+        if(width > height) {
+            return width > MAX_LONG_SIDE;
+        }
+        else {
+            return height > MAX_LONG_SIDE;
+        }
+    }
+
+    private int getType(BufferedImage originalImage) {
+        return originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
+    }
+
+    private String getSavePath(String timestamp) {
+        String path = TestHome.main() + "/RMR-Screenshots/" + timestamp + "/";
+        File file = new File(path);
+        file.mkdirs();
+        return path;
+    }
+
+    public static synchronized int getPrefixNumber(String filename) {
+        Integer number = filenameNumbers.get(filename);
+        LOG.debug("number: " + number);
+        if(number == null) {
+            number = new Integer(0);
+        }
+        number++;
+        filenameNumbers.put(filename, number);
+        return number;
+    }
 }
