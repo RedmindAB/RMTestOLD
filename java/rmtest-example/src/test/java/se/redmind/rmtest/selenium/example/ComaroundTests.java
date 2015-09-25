@@ -1,4 +1,4 @@
-package test.java.se.redmind.rmtest.selenium.example;
+package se.redmind.rmtest.selenium.example;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
