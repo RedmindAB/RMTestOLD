@@ -2,15 +2,17 @@ package se.redmind.rmtest.selenium.framework;
 
 import io.appium.java_client.AppiumDriver;
 
-public class AnApp extends HTMLPage {
-    private AppiumDriver appDriver;
+import org.openqa.selenium.WebDriver;
 
-    public AnApp(AppiumDriver pDriver) {
-        super(pDriver);
-        appDriver = pDriver;
-    }
-
-    public final AppiumDriver getDriver() {
-        return appDriver;
-    }
+public class AnApp extends HTMLPage{
+	private AppiumDriver appDriver;
+	public AnApp(AppiumDriver pDriver) {
+		super(pDriver);
+		appDriver = pDriver;
+		// TODO Auto-generated constructor stub
+	}
+	
+	 public final AppiumDriver getDriver() {
+	        return appDriver;
+	    }    
 }
