@@ -96,8 +96,8 @@ cat $testHome/etc/Simulator_Temp.json
 
 logfile="$logName.log"
 echo "Appium version:"
-$testHome/appium/bin/appium.js -v
-$testHome/appium/bin/appium.js --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
+$appiumBinary -v
+$appiumBinary --nodeconfig  $testHome/etc/Simulator_Temp.json --show-ios-log --safari --session-override &> $logfile &
 
 loopcount=0
 keepTrying=true

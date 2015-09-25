@@ -1,8 +1,8 @@
 #!/bin/bash 
 
 scriptDir="$( cd "$( dirname "$0" )" && pwd )"
-newTestHome=$scriptDir/grid
-coreHome=$scriptDir/java
+newTestHome=$scriptDir
+coreHome=$scriptDir/../java
 cd $newTestHome
 
 foundOldConfig=false
@@ -37,8 +37,6 @@ else
 	exit 1
 fi
 
-
-
 echo "Running maven compile, correct any errors and rerun this script"
 cd $coreHome
 mvn package 
@@ -52,7 +50,25 @@ else
 	cd $scriptDir
 fi
 
+npmHome=`which npm`
+if [[ -x "$npmHome" ]]
+then
+        echo "NPM seems OK"
+else
+        echo "NPM doesnt exist or is not executable"
+        exit 1
+fi
 
+npm install appium
+
+appiumHome=`which appium`
+if [[ -x "$appiumHome" ]]
+then
+        echo "Appium seems OK"
+else
+        echo "Appium installation seems to have failed, please fix manually"
+        exit 1
+fi
 
 echo ""
 echo ""

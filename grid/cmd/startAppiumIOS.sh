@@ -37,10 +37,10 @@ do
 
 	cat $testHome/etc/Appium_TEMP.json	
 	
-#	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
+#	$appiumBinary -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig ../etc/Appium_TEMP.json &> $testHome/log/appium_$currDevId.log & 
 #	sleep 5
 	logfile="$testHome/log/appium_ios_$currDevId.log"
-        $testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json --app /Users/testrunner/GIT/SafariLauncher.ipa --session-override &> $logfile &
+        $appiumBinary -U $currDevId -a $RMTestLocalNodeIp -p $basePort --nodeconfig $testHome/etc/Appium_TEMP.json --app /Users/testrunner/GIT/SafariLauncher.ipa --session-override &> $logfile &
         ios_webkit_debug_proxy -c $currDevId:27753 -d &
         appiumStarted=true
         while $appiumStarted
