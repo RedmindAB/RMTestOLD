@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.grid;
+package se.redmind.rmtest.selenium.grid.rules;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;

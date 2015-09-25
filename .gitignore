@@ -4,13 +4,13 @@ target/
 etc/RMTestLocal.conf
 etc/Appium_TEMP.json
 etc/LocalConfig.json
-.metadata/
+.metadata
 .project
 .classpath
 .idea/
 .settings
 cmd/.log
-RMTest.iml
+*.iml
 etc/Simulator_Temp.json
 RMR-Screenshots/
 *.png
