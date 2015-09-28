@@ -20,6 +20,7 @@ export ADB_PATH="$ANDROIDHOME/platform-tools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export RmJar="$testHome/grid/lib/GridQueryServlet.jar"
 export SeleniumJar="$testHome/../java/rmtest-core/target/*"
+export appiumBinary="$HOME/node_modules/appium/bin/appium.js"
 export RMTestHubIp=`getLocalConfigParam hubIp`
 export RMTestLocalNodeIp=`getLocalConfigParam localIp`
 #export AndroidBuildToolVersion=`getLocalConfigParam AndroidBuildtoolsVersion`

@@ -97,7 +97,7 @@ do
 	sed -i '' "s/HUB_PORT/4444/g" $testHome/etc/Appium_TEMP.json
 	sed -i '' "s/HUB_HOST/$RMTestHubIp/g" $testHome/etc/Appium_TEMP.json
 	cat $testHome/etc/Appium_TEMP.json
-	$testHome/appium/bin/appium.js -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --selendroid-port $selendroidPort --nodeconfig $testHome/etc/Appium_TEMP.json  --session-override &> $logName.$currDevId.log &
+	$appiumBinary -U $currDevId -a $RMTestLocalNodeIp -p $basePort -bp $bootstrapPort --chromedriver-port $chromeDriverPort --selendroid-port $selendroidPort --nodeconfig $testHome/etc/Appium_TEMP.json  --session-override &> $logName.$currDevId.log &
 	loopcount=0
 	keepTrying=true
 	while $keepTrying
