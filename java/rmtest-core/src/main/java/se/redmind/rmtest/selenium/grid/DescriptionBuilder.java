@@ -1,6 +1,8 @@
 package se.redmind.rmtest.selenium.grid;
 
 import com.google.common.base.Strings;
+
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +81,12 @@ public class DescriptionBuilder {
     }
 
     private String getSafeCapability(String capName, DesiredCapabilities currentCapability) {
-        return (String) currentCapability.getCapability(capName);
+    	if (currentCapability.getCapability(capName) instanceof Platform) {
+    		return currentCapability.getCapability(capName).toString();
+		}else {
+			return (String) currentCapability.getCapability(capName);
+		}
+        
     }
 
 }
