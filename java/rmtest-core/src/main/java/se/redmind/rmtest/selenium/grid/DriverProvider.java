@@ -62,10 +62,13 @@ public class DriverProvider {
     private static void loadLocalDrivers() {
         final FrameworkConfig config = FrameworkConfig.getConfig();
         for (Browser browser : Browser.values()) {
-            if (browser == Browser.PhantomJS && !config.usePhantomJS()) {
+            if (browser == Browser.PhantomJS && config.usePhantomJS()) {
                 continue;
             }
-            if (browser == Browser.Chrome && !config.useChrome()) {
+            if (browser == Browser.Chrome && config.useChrome()) {
+                continue;
+            }
+            if (browser == Browser.Firefox && config.useFirefox()){
                 continue;
             }
             DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());

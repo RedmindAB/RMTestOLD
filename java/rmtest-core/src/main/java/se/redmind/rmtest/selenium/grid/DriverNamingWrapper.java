@@ -177,7 +177,8 @@ public class DriverNamingWrapper {
                 driver = new FirefoxDriver(capability);
                 break;
             case PhantomJS:
-                driver = new PhantomJSDriver(capability);
+                PhantomJSDesiredCapabalities PhantomJS = new PhantomJSDesiredCapabalities();
+                driver = new PhantomJSDriver(PhantomJS.getPhantomJSCapabilities());
                 break;
             default:
                 break;
