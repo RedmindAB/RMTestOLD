@@ -31,7 +31,7 @@ public class DriverProvider {
             loadLocalDrivers();
             return;
         }
-        HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstatants.hubPort);
+        HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstants.hubPort);
         ArrayList<RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
 
         RegistrationRequest nodeReq;
@@ -63,17 +63,20 @@ public class DriverProvider {
         final FrameworkConfig config = FrameworkConfig.getConfig();
         for (Browser browser : Browser.values()) {
             if (browser == Browser.PhantomJS && config.usePhantomJS()) {
-                continue;
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+                urlCapList.add(driver);
+                allDrivers.add(driver);
             }
             if (browser == Browser.Chrome && config.useChrome()) {
-                continue;
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+                urlCapList.add(driver);
+                allDrivers.add(driver);
             }
             if (browser == Browser.Firefox && config.useFirefox()){
-                continue;
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
+                urlCapList.add(driver);
+                allDrivers.add(driver);
             }
-            DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
-            urlCapList.add(driver);
-            allDrivers.add(driver);
         }
     }
 
