@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class PhantomJSDesiredCapabalities{
 
-    public Capabilities getPhantomJSCapabilities(){
+    public Capabilities createPhantomJSCapabilities(){
         DesiredCapabilities caps = new DesiredCapabilities();
         ArrayList<String> cliArgsCap = new ArrayList<String>();
 

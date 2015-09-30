@@ -12,7 +12,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -177,8 +176,8 @@ public class DriverNamingWrapper {
                 driver = new FirefoxDriver(capability);
                 break;
             case PhantomJS:
-                PhantomJSDesiredCapabalities PhantomJS = new PhantomJSDesiredCapabalities();
-                driver = new PhantomJSDriver(PhantomJS.getPhantomJSCapabilities());
+                final PhantomJSDesiredCapabalities phantomJS = new PhantomJSDesiredCapabalities();
+                driver = new PhantomJSDriver(phantomJS.createPhantomJSCapabilities());
                 break;
             default:
                 break;
