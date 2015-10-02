@@ -1,9 +1,9 @@
 .metadata/
 bin/
 target/
-etc/RMTestLocal.conf
-etc/Appium_TEMP.json
-etc/LocalConfig.json
+grid/etc/RMTestLocal.conf
+grid/etc/Appium_TEMP.json
+grid/etc/LocalConfig.json
 .metadata
 .project
 .classpath
@@ -11,7 +11,7 @@ etc/LocalConfig.json
 .settings
 cmd/.log
 *.iml
-etc/Simulator_Temp.json
+grid/etc/Simulator_Temp.json
 RMR-Screenshots/
 *.png
 *.DS_Store
