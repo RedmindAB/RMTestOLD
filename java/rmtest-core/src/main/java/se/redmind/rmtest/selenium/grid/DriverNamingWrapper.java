@@ -2,9 +2,11 @@ package se.redmind.rmtest.selenium.grid;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assume;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,7 +14,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import se.redmind.rmtest.selenium.framework.Browser;
 
 public class DriverNamingWrapper {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final List<DriverConfig> driverConfigs = new ArrayList<>();
     private final DesiredCapabilities capability;
@@ -91,7 +91,6 @@ public class DriverNamingWrapper {
         } catch (NoSuchElementException | TimeoutException e) {
             this.imAFailure = true;
             Assume.assumeTrue("This driver doesn't seem to have connectivity to: " + url, false);
-
         }
     }
 
@@ -122,7 +121,6 @@ public class DriverNamingWrapper {
                     return this.driver;
                 } else {
                     int retryAttempts = 1;
-
                     startDriver:
                     {
                         while (retryAttempts <= maxRetryAttempts) {
@@ -134,7 +132,6 @@ public class DriverNamingWrapper {
                                     this.driver = new RemoteWebDriver(url, capability);
                                     logger.info("This is a RemoteWebDriver");
                                 } else {
-
                                     if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
                                         this.driver = new AndroidDriver(url, capability);
                                     } else {
@@ -162,8 +159,8 @@ public class DriverNamingWrapper {
 
     private void setupCapabilities() {
         driverConfigs.stream()
-            .filter(driverConfig -> driverConfig.eval(capability, description))
-            .forEach(driverConfig -> driverConfig.config(capability));
+                .filter(driverConfig -> driverConfig.eval(capability, description))
+                .forEach(driverConfig -> driverConfig.config(capability));
     }
 
     private WebDriver startLocalDriver(Browser browser) {
@@ -177,7 +174,8 @@ public class DriverNamingWrapper {
                 driver = new FirefoxDriver(capability);
                 break;
             case PhantomJS:
-                driver = new PhantomJSDriver(capability);
+                final PhantomJSDesiredCapabalities phantomJS = new PhantomJSDesiredCapabalities();
+                driver = new PhantomJSDriver(phantomJS.createPhantomJSCapabilities());
                 break;
             default:
                 break;
