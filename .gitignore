@@ -4,6 +4,7 @@ target/
 grid/etc/RMTestLocal.conf
 grid/etc/Appium_TEMP.json
 grid/etc/LocalConfig.json
+grid/node_modules
 .metadata
 .project
 .classpath
