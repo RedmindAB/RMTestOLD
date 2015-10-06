@@ -59,7 +59,8 @@ else
         exit 1
 fi
 
-npm install appium
+npm uninstall appium
+npm install -g appium
 
 #appiumHome=`which appium`
 if [[ $? -eq 0 ]]
