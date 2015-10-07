@@ -8,7 +8,8 @@ export USAGE_MESSAGE="Usage: command.sh <Iphone model> <IOS version>"
 
 listSims()
 {
-        xcrun instruments -s devices | grep Simulator | while read line
+        #xcrun instruments -s devices | grep Simulator | while read line
+        xcrun instruments -s devices | grep -E 'iPhone|iPad' | grep [A-Z0-9]*-[A-Z0-9]*-[A-Z0-9]*-[A-Z0-9]*-[A-Z0-9]* | while read line
         do
 	        simName=`echo $line | cut -d "(" -f 1 | xargs echo`
                 simIosVersion=`echo $line | cut -d "(" -f 2 | cut -d ")" -f 1 | cut -d " " -f1`

@@ -61,8 +61,8 @@ fi
 
 npm install appium
 
-appiumHome=`which appium`
-if [[ -x "$appiumHome" ]]
+#appiumHome=`which appium`
+if [[ $? -eq 0 ]]
 then
         echo "Appium seems OK"
 else

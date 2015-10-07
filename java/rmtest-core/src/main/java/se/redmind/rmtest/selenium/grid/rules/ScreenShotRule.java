@@ -28,9 +28,13 @@ public class ScreenShotRule extends TestWatcher {
 	}
 
 	public void takeScreenShot(String className, String methodName) {
-		RMReportScreenshot RMRScreenshot = new RMReportScreenshot(driverContainer);
-		RMRScreenshot.takeScreenshot(className, methodName, "Failed Testcase");
-		LOG.debug("----------> ScreenShot from: " + methodName + " taken! <----------");
+		try {
+			RMReportScreenshot RMRScreenshot = new RMReportScreenshot(driverContainer);
+			RMRScreenshot.takeScreenshot(className, methodName, "Failed Testcase");
+			LOG.debug("----------> ScreenShot from: " + methodName + " taken! <----------");
+		} catch (Exception e) {
+			LOG.error("Error taking screenshot from method: "+methodName);
+		}
 	}
 
 	@Override
