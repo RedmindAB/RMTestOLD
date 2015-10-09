@@ -1,6 +1,5 @@
 package se.redmind.rmtest.selenium.example;
 
-import org.junit.AfterClass;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,19 +18,11 @@ public class GoogleExample extends RmAllDevice {
         driverWrapper.addDriverConfig(new TestConfig());
     }
 
-    @AfterClass
-    public static void afterTest() {
-//	    	DriverProvider.stopDrivers();
-    }
-
     @Before
     public void before() {
         this.webDriver = driverNamingWrapper.startDriver();
     }
 
-    /*
-     * @rmTest
-     */
     @Test
     public void testGoogle() throws Exception {
         HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
@@ -39,14 +30,14 @@ public class GoogleExample extends RmAllDevice {
         navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
-        System.out.println("Page title is: " + navPage.getTitle());
+        logger.info("Page title is: " + navPage.getTitle());
 
         assertTrue(navPage.getTitle().startsWith("Goo"));
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot(null);
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("first");
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("after");
-        System.out.println("Done!");
+        logger.info("Done!");
 
     }
 
@@ -57,12 +48,12 @@ public class GoogleExample extends RmAllDevice {
         navPage.getDriver().get("http://www.google.se");
         // Find the text input element by its name
 
-        System.out.println("Page title is: " + navPage.getTitle());
+        logger.info("Page title is: " + navPage.getTitle());
 
         assertTrue(navPage.getTitle().startsWith("Goo"));
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("");
-        System.out.println("Done!");
+        logger.info("Done!");
 
     }
 

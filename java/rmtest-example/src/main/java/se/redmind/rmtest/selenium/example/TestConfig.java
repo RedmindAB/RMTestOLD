@@ -4,7 +4,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
 import se.redmind.rmtest.selenium.grid.DriverConfig;
 
 public class TestConfig implements DriverConfig {
