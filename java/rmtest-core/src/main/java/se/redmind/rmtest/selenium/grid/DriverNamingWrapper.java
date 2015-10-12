@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import se.redmind.rmtest.selenium.framework.Browser;
 
 public class DriverNamingWrapper {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final List<DriverConfig> driverConfigs = new ArrayList<>();
     private final DesiredCapabilities capability;
@@ -117,37 +118,34 @@ public class DriverNamingWrapper {
             } else {
                 int maxRetryAttempts = 5;
                 if (this.imAFailure) {
-                    Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably wont start now ", false);
-                    return this.driver;
+                    Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably won't start now ", false);
                 } else {
                     int retryAttempts = 1;
-                    startDriver:
-                    {
-                        while (retryAttempts <= maxRetryAttempts) {
-                            try {
-                                if (this.driver != null) {
-                                    this.driver.close();
-                                }
-                                if (capability.getCapability("rmDeviceType") == null) {
-                                    this.driver = new RemoteWebDriver(url, capability);
-                                    logger.info("This is a RemoteWebDriver");
-                                } else {
-                                    if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
-                                        this.driver = new AndroidDriver(url, capability);
-                                    } else {
-                                        this.driver = new IOSDriver(url, capability);
-                                    }
-                                    logger.info("This is a AppiumDriver");
-                                }
-                                logger.info("Started driver: " + description);
-                            } catch (Exception e) {
-                                logger.warn("Having trouble starting webdriver for device: " + this.description, e);
-                                logger.warn("Attempt " + retryAttempts + " of " + maxRetryAttempts);
-                                retryAttempts++;
-                                continue;
+                    while (retryAttempts <= maxRetryAttempts) {
+                        try {
+                            if (this.driver != null) {
+                                this.driver.close();
                             }
-                            break startDriver;
+                            if (capability.getCapability("rmDeviceType") == null) {
+                                this.driver = new RemoteWebDriver(url, capability);
+                                logger.info("This is a RemoteWebDriver");
+                            } else {
+                                if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
+                                    this.driver = new AndroidDriver(url, capability);
+                                } else {
+                                    this.driver = new IOSDriver(url, capability);
+                                }
+                                logger.info("This is a AppiumDriver");
+                            }
+                            logger.info("Started driver: " + description);
+                        } catch (Exception e) {
+                            logger.warn("Having trouble starting webdriver for device: " + this.description, e);
+                            logger.warn("Attempt " + retryAttempts + " of " + maxRetryAttempts);
+                            retryAttempts++;
+                            continue;
                         }
+                    }
+                    if (this.driver == null) {
                         this.imAFailure = true;
                         Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts", false);
                     }
@@ -159,8 +157,8 @@ public class DriverNamingWrapper {
 
     private void setupCapabilities() {
         driverConfigs.stream()
-                .filter(driverConfig -> driverConfig.eval(capability, description))
-                .forEach(driverConfig -> driverConfig.config(capability));
+            .filter(driverConfig -> driverConfig.eval(capability, description))
+            .forEach(driverConfig -> driverConfig.config(capability));
     }
 
     private WebDriver startLocalDriver(Browser browser) {
