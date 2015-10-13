@@ -2,13 +2,14 @@ package se.redmind.rmtest.selenium.grid;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.Assume;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -112,47 +113,47 @@ public class DriverNamingWrapper {
      */
     public WebDriver startDriver() {
         setupCapabilities();
-        if (this.driver == null) {
+        if (driver == null) {
             if (browser != null) {
-                this.driver = startLocalDriver(this.browser);
+                driver = startLocalDriver(browser);
             } else {
                 int maxRetryAttempts = 5;
-                if (this.imAFailure) {
+                if (imAFailure) {
                     Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably won't start now ", false);
                 } else {
                     int retryAttempts = 1;
                     while (retryAttempts <= maxRetryAttempts) {
                         try {
-                            if (this.driver != null) {
-                                this.driver.close();
+                            if (driver != null) {
+                                driver.close();
                             }
                             if (capability.getCapability("rmDeviceType") == null) {
-                                this.driver = new RemoteWebDriver(url, capability);
+                                driver = new RemoteWebDriver(url, capability);
                                 logger.info("This is a RemoteWebDriver");
                             } else {
                                 if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
-                                    this.driver = new AndroidDriver(url, capability);
+                                    driver = new AndroidDriver(url, capability);
                                 } else {
-                                    this.driver = new IOSDriver(url, capability);
+                                    driver = new IOSDriver(url, capability);
                                 }
                                 logger.info("This is a AppiumDriver");
                             }
                             logger.info("Started driver: " + description);
                         } catch (Exception e) {
-                            logger.warn("Having trouble starting webdriver for device: " + this.description, e);
+                            logger.warn("Having trouble starting webdriver for device: " + description, e);
                             logger.warn("Attempt " + retryAttempts + " of " + maxRetryAttempts);
                             retryAttempts++;
                             continue;
                         }
                     }
-                    if (this.driver == null) {
-                        this.imAFailure = true;
+                    if (driver == null) {
+                        imAFailure = true;
                         Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts", false);
                     }
                 }
             }
         }
-        return this.driver;
+        return driver;
     }
 
     private void setupCapabilities() {
@@ -185,10 +186,10 @@ public class DriverNamingWrapper {
         String osName = System.getProperty("os.name");
         String _default = TestHome.main() + "/lib/chromedriver";
         if (osName.startsWith("Mac")) {
-            System.out.println("Setting default chromedriver");
+            logger.info("Setting default chromedriver");
             return _default;
         } else if (osName.startsWith("Linux")) {
-            System.out.println("Setting linux chromedriver");
+            logger.info("Setting linux chromedriver");
             return TestHome.main() + "/lib/linux/chromedriver";
         }
         return _default;

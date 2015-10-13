@@ -9,6 +9,8 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
@@ -17,13 +19,11 @@ import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
  */
 public class DriverProvider {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DriverProvider.class);
     private static ArrayList<DriverNamingWrapper> urlCapList = new ArrayList<>();
     private static ArrayList<DriverNamingWrapper> allDrivers = new ArrayList<>();
     private static DesiredCapabilities currentCapability;
 
-    /**
-     *
-     */
     private static void updateDrivers() {
         final FrameworkConfig config = FrameworkConfig.getConfig();
         urlCapList = new ArrayList<>();
@@ -85,16 +85,15 @@ public class DriverProvider {
      */
     public static void stopDrivers() {
         allDrivers.stream().forEach(allDriver -> {
-            System.out.println("Closing driver: " + allDriver.getDescription());
+            LOGGER.info("Closing driver: " + allDriver.getDescription());
             try {
                 if (allDriver.getDriver() != null) {
                     allDriver.getDriver().quit();
                 }
             } catch (SessionNotFoundException e) {
-                System.out.println("For some reason a session was gone while quitting");
-                System.out.println(e);
+                LOGGER.error("For some reason a session was gone while quitting", e);
             } catch (WebDriverException e) {
-                System.out.println("Crached webdriver, continue to closing drivers");
+                LOGGER.error("Crached webdriver, continue to closing drivers");
             }
         });
         allDrivers = new ArrayList<>();

@@ -54,7 +54,7 @@ public final class LogBackUtil {
         private static boolean julLoggersInstalled;
         private Level defaultLevel = Level.INFO;
         private final Map<String, Level> loggers = new LinkedHashMap<>();
-        private String format = "%d{HH:mm:ss.SSS} %-6level %logger{5}: %msg %n";
+        private String format = "%d{HH:mm:ss.SSS} %-5p [%logger{5}] %msg %n";
 
         public static LoggerContext getLoggerContext() {
             final long startTime = System.nanoTime();

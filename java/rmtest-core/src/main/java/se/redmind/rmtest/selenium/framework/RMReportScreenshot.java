@@ -7,26 +7,23 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-
 import javax.imageio.ImageIO;
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.TestHome;
 
 public class RMReportScreenshot {
 
-    private static Logger logger = LoggerFactory.getLogger(RMReportScreenshot.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RMReportScreenshot.class);
     private static final int MAX_LONG_SIDE = 1920;
     private static final String FILE_EXTENTION = "png";
-    private static final HashMap<String, Integer> filenameNumbers = new HashMap<>();
-    ;
-	private final DriverNamingWrapper namingWrapper;
+    private static final HashMap<String, Integer> FILENAME_NUMBERS = new HashMap<>();
+
+    private final DriverNamingWrapper namingWrapper;
     private final WebDriver driver;
 
     public RMReportScreenshot(DriverNamingWrapper namingWrapper) {
@@ -35,7 +32,6 @@ public class RMReportScreenshot {
     }
 
     /**
-     *
      * this method should be called directly from a test-method, the filename will have the name of the invoked class and method inside it. if more than one
      * screenshot is taken in the same method make sure that the screenshot is unique for each screenshot.
      *
@@ -67,29 +63,28 @@ public class RMReportScreenshot {
         }
         String filename = getFileName(className, methodName, prefix);
         if (filename == null) {
-            System.err.println("No RMReport-screenshot taken, run with 'mvn test'");
             return;
         }
-        SaveImage(image, filename);
+        saveImage(image, filename);
     }
 
-    private void SaveImage(BufferedImage image, String filename) {
+    private void saveImage(BufferedImage image, String filename) {
         try {
             ImageIO.write(image, FILE_EXTENTION, new File(filename));
         } catch (IOException e) {
-            logger.error("Image: " + image + " filename: " + filename, e);
+            LOGGER.error("Image: " + image + " filename: " + filename, e);
         }
     }
 
     private String getFileName(String className, String methodName, String prefix) {
         String timestamp = System.getProperty("rmt.timestamp");
         if (timestamp == null) {
+            LOGGER.warn("no rmt.timestamp property given ...");
             return null;
         }
         timestamp = timestamp.replace("-", "");
         String description = namingWrapper.getDescription();
         String filename = className + "." + methodName + "-" + timestamp + "[" + description + "]." + FILE_EXTENTION;
-        System.out.println(filename);
         int screenshotNumber = getPrefixNumber(filename);
         if (prefix != null && prefix.length() > 0) {
             filename = prefix + "-_-" + filename;
@@ -104,7 +99,7 @@ public class RMReportScreenshot {
             int type = getType(originalImage);
             resizedImage = resizeImageWithHint(originalImage, type);
         } catch (Exception e) {
-            logger.error("Could not resize screenshot image!", e);
+            LOGGER.error("Could not resize screenshot image!", e);
         }
         return resizedImage;
     }
@@ -113,7 +108,7 @@ public class RMReportScreenshot {
         try {
             return ImageIO.read(scrFile);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         return null;
     }
@@ -171,14 +166,12 @@ public class RMReportScreenshot {
     }
 
     public static synchronized int getPrefixNumber(String filename) {
-        Integer number = filenameNumbers.get(filename);
-        System.out.println("number: " + number);
+        Integer number = FILENAME_NUMBERS.get(filename);
         if (number == null) {
             number = 0;
         }
         number++;
-        filenameNumbers.put(filename, number);
+        FILENAME_NUMBERS.put(filename, number);
         return number;
     }
-
 }
