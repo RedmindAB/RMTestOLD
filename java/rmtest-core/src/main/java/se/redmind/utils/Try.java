@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;
  *
  * One could use it in that way:
  *
- *       return Try.toGet(() -> driver.getTitle().contains(articleId)).defaultTo(() -> false).retry(10, 50);
+ *       return Try.toGet(() -> driver.getTitle().contains(articleId))
+ *                  .defaultTo(() -> false)
+ *                  .delayRetriesBy(50, TimeUnit.MILLISECONDS)
+ *                  .nTimes(10);
  *
  * instead of:
  *       for (int i = 0; i < 10; i++) {
@@ -64,6 +67,16 @@ public final class Try {
             return (SelfType) this;
         }
 
+        public SelfType delayRetriesBy(long sleepLengthInMillisecs) {
+            return delayRetriesBy(sleepLengthInMillisecs, TimeUnit.MILLISECONDS);
+        }
+
+        public SelfType delayRetriesBy(long sleepLength, TimeUnit sleepUnit) {
+            this.sleepLength = sleepLength;
+            this.sleepUnit = sleepUnit;
+            return (SelfType) this;
+        }
+
         protected void handleException(Exception exception) {
             if (onError != null) {
                 onError.accept(this, exception);
@@ -105,18 +118,8 @@ public final class Try {
             return execute();
         }
 
-        public synchronized E retry(int retries, long sleepLengthInMillisecs) {
-            return retry(retries, sleepLengthInMillisecs, TimeUnit.MILLISECONDS);
-        }
-
-        public synchronized E retry(int retries, long sleepLength, TimeUnit sleepUnit) {
-            this.sleepLength = sleepLength;
-            this.sleepUnit = sleepUnit;
-            return retry(retries);
-        }
-
-        public synchronized E retry(int retries) {
-            maxAttempts = retries;
+        public synchronized E nTimes(int maxAttempts) {
+            this.maxAttempts = maxAttempts;
             return execute();
         }
 
@@ -156,20 +159,10 @@ public final class Try {
         }
 
         public void justOnce() {
-            retry(1);
+            nTimes(1);
         }
 
-        public synchronized void retry(int maxAttempts, long sleepLengthInMillisecs) {
-            retry(maxAttempts, sleepLength, TimeUnit.MILLISECONDS);
-        }
-
-        public synchronized void retry(int maxAttempts, long sleepLength, TimeUnit sleepUnit) {
-            this.sleepLength = sleepLength;
-            this.sleepUnit = sleepUnit;
-            retry(maxAttempts);
-        }
-
-        public void retry(int maxAttempts) {
+        public void nTimes(int maxAttempts) {
             this.maxAttempts = maxAttempts;
             execute();
         }

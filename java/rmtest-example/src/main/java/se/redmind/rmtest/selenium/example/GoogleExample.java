@@ -1,7 +1,6 @@
 package se.redmind.rmtest.selenium.example;
 
 import com.google.common.base.Strings;
-import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,8 @@ public class GoogleExample extends RmAllDevice {
 
         String pageTitle = Try.toGet(() -> navPage.getTitle())
             .until(value -> !Strings.isNullOrEmpty(value))
-            .retry(10, 50);
+            .delayRetriesBy(50)
+            .nTimes(10);
 
         logger.info("Page title is: " + pageTitle);
 
@@ -44,7 +44,6 @@ public class GoogleExample extends RmAllDevice {
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("first");
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("after");
         logger.info("Done!");
-
     }
 
     @Test
@@ -55,7 +54,8 @@ public class GoogleExample extends RmAllDevice {
 
         String pageTitle = Try.toGet(() -> navPage.getTitle())
             .until(value -> !Strings.isNullOrEmpty(value))
-            .retry(10, 50);
+            .delayRetriesBy(50)
+            .nTimes(10);
 
         logger.info("Page title is: " + pageTitle);
 
@@ -63,7 +63,6 @@ public class GoogleExample extends RmAllDevice {
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("");
         logger.info("Done!");
-
     }
 
 }

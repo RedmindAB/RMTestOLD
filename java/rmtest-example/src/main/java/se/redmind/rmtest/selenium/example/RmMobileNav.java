@@ -18,7 +18,7 @@ public class RmMobileNav extends HTMLPage {
      */
     public RmMobileNav(WebDriver pDriver, String serverUrl) throws Exception {
         super(pDriver);
-        Try.toExecute(() -> driver.get(MoreObjects.firstNonNull(serverUrl, "http://www.redmind.se"))).retry(10, 500);
+        Try.toExecute(() -> driver.get(MoreObjects.firstNonNull(serverUrl, "http://www.redmind.se"))).delayRetriesBy(500).nTimes(10);
     }
 
     public void openMobileMenu() {

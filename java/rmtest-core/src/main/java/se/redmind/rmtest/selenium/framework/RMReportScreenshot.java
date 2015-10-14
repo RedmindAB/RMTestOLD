@@ -79,7 +79,7 @@ public class RMReportScreenshot {
     private String getFileName(String className, String methodName, String prefix) {
         String timestamp = System.getProperty("rmt.timestamp");
         if (timestamp == null) {
-            LOGGER.warn("no rmt.timestamp property given ...");
+            LOGGER.warn("no rmt.timestamp property given, skipping screenshot ...");
             return null;
         }
         timestamp = timestamp.replace("-", "");
