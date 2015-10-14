@@ -2,6 +2,7 @@ package se.redmind.utils;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,7 @@ import org.slf4j.LoggerFactory;
 /**
  * <pre>
  * this class is just a repeater.
- * 
+ *
  * One could use it in that way:
  *
  *       return Try.toGet(() -> driver.getTitle().contains(articleId)).defaultTo(() -> false).retry(10, 50);
@@ -23,8 +24,7 @@ import org.slf4j.LoggerFactory;
  *           }
  *       }
  *       return false;
- * </pre>
- * @author Jeremy Comte
+ * </pre> @author Jeremy Comte
  */
 public final class Try {
 
@@ -90,9 +90,15 @@ public final class Try {
 
         private final Supplier<E> supplier;
         private Supplier<E> defaultSupplier;
+        private Predicate<E> until;
 
         public SupplierTryer(Supplier<E> supplier) {
             this.supplier = supplier;
+        }
+
+        public synchronized SupplierTryer<E> until(Predicate<E> predicate) {
+            this.until = predicate;
+            return this;
         }
 
         public E justOnce() throws InterruptedException {
@@ -124,13 +130,18 @@ public final class Try {
             for (currentAttempt = 0; currentAttempt < maxAttempts; currentAttempt++) {
                 try {
                     result = supplier.get();
-                    break;
+                    if (until == null || until.test(result)) {
+                        break;
+                    }
                 } catch (Exception e) {
                     handleException(e);
                     if (currentAttempt == maxAttempts - 1 && defaultSupplier != null) {
                         result = defaultSupplier.get();
                     }
                 }
+            }
+            if (until != null && !until.test(result) && defaultSupplier == null) {
+                throw new IllegalStateException("no valid value and no default supplied...");
             }
             return result;
         }

@@ -1,5 +1,7 @@
 package se.redmind.rmtest.selenium.example;
 
+import com.google.common.base.Strings;
+import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +11,7 @@ import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 import se.redmind.rmtest.selenium.grid.RmAllDevice;
+import se.redmind.utils.Try;
 
 @RunWith(Parallelized.class)
 public class GoogleExample extends RmAllDevice {
@@ -28,11 +31,14 @@ public class GoogleExample extends RmAllDevice {
         HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
 
         navPage.getDriver().get("http://www.google.se");
-        // Find the text input element by its name
 
-        logger.info("Page title is: " + navPage.getTitle());
+        String pageTitle = Try.toGet(() -> navPage.getTitle())
+            .until(value -> !Strings.isNullOrEmpty(value))
+            .retry(10, 50);
 
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        logger.info("Page title is: " + pageTitle);
+
+        assertTrue(pageTitle.startsWith("Goo"));
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot(null);
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("first");
@@ -46,11 +52,14 @@ public class GoogleExample extends RmAllDevice {
         HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
 
         navPage.getDriver().get("http://www.google.se");
-        // Find the text input element by its name
 
-        logger.info("Page title is: " + navPage.getTitle());
+        String pageTitle = Try.toGet(() -> navPage.getTitle())
+            .until(value -> !Strings.isNullOrEmpty(value))
+            .retry(10, 50);
 
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        logger.info("Page title is: " + pageTitle);
+
+        assertTrue(pageTitle.startsWith("Goo"));
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("");
         logger.info("Done!");
