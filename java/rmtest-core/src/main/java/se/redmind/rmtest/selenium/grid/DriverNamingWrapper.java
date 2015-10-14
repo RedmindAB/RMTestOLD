@@ -1,10 +1,9 @@
 package se.redmind.rmtest.selenium.grid;
 
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.IOSDriver;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assume;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -19,6 +18,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 import se.redmind.rmtest.selenium.framework.Browser;
 
 public class DriverNamingWrapper {
@@ -74,6 +77,18 @@ public class DriverNamingWrapper {
         return this.driver;
     }
 
+    public AppiumDriver getAppiumDriver() {
+    	AppiumDriver appDriver;
+    	if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
+    		logger.info("I am an android");
+    		appDriver = (AndroidDriver) getDriver();
+		} else {
+			logger.info("I am an apple");
+			appDriver = (IOSDriver) getDriver();
+		}
+        return appDriver;
+    }
+    
     public void ignoreAtNoConnectivityById(String url, String id) {
         ignoreAtNoConnectivityTo(url, By.id(id));
     }
@@ -125,7 +140,7 @@ public class DriverNamingWrapper {
                     while (retryAttempts <= maxRetryAttempts) {
                         try {
                             if (driver != null) {
-                                driver.close();
+								driver.close();
                             }
                             if (capability.getCapability("rmDeviceType") == null) {
                                 driver = new RemoteWebDriver(url, capability);
