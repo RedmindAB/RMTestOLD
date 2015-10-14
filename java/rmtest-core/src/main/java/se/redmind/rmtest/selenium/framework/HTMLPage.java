@@ -1,21 +1,21 @@
 package se.redmind.rmtest.selenium.framework;
 
-import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author petost
  */
 public class HTMLPage {
 
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
 
     /**
@@ -42,25 +42,16 @@ public class HTMLPage {
 
     public FluentWait<WebDriver> driverFluentWait(int timeoutInSeconds) {
         FluentWait<WebDriver> fw = null;
-        int i = 0;
-        PrintStream quietErr;
-        while (i < 10) {
+        for (int i = 0; i < 10; i++) {
             try {
-                /*
-                 * Stops prinouts of ExpectedConditions.findElement()
-                 * This can be removed when printouts are removed
-                 */
-                Logger.getLogger("org.openqa.selenium.support.ui.ExpectedConditions").setLevel(Level.SEVERE);
-
                 fw = new FluentWait<>(this.driver).withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
                 fw.ignoring(WebDriverException.class, ClassCastException.class);
                 fw.ignoring(NoSuchElementException.class);
                 return fw;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("driverFluentWait Failed attempt : " + i + "/n" + e);
+                    logger.warn("driverFluentWait Failed attempt : " + i + "/n" + e);
                 }
-                i++;
             }
         }
         if (fw == null) {
@@ -75,16 +66,14 @@ public class HTMLPage {
      * @param timeoutInSeconds
      */
     public void driverWaitClickable(By locator, int timeoutInSeconds) {
-        int i = 0;
-        while (i < 10) {
+        for (int i = 0; i < 10; i++) {
             try {
                 driverFluentWait(timeoutInSeconds).until(ExpectedConditions.elementToBeClickable(locator));   // changed to driverFluentWait to ignore WebDriverExceptions braking the wait
                 break;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("driverWaitClickable exception: " + e);
+                    logger.error("driverWaitClickable exception: " + e);
                 }
-                i++;
             }
         }
 
@@ -95,20 +84,16 @@ public class HTMLPage {
      * @param timeoutInSeconds
      */
     public boolean driverFluentWaitForCondition(ExpectedCondition<?> condition, int timeoutInSeconds) {
-        int i = 0;
-        while (i < 10) {
+        for (int i = 0; i < 10; i++) {
             try {
                 driverFluentWait(timeoutInSeconds).until(condition);   // changed to driverFluentWait to ignore WebDriverExceptions braking the wait
                 return true;
             } catch (WebDriverException e) {
-                System.out.println("Caught a webdriveresception on driverFluentWaitForCondition try: " + i);
-                System.out.println(e);
-                i++;
+                logger.warn("Caught a WebDriverException on driverFluentWaitForCondition try " + i + ": " + e.getMessage(), e);
             } catch (Exception e) {
-                if (i >= 9) {
-                    System.out.println("This is another exception?" + e);
+                if (i == 9) {
+                    logger.warn("unexpected exception: " + e.getMessage(), e);
                 }
-                i++;
             }
         }
         return false;
@@ -134,92 +119,85 @@ public class HTMLPage {
     }
 
     public void assertPageTitle(String expPageTitle) throws Exception {
-        System.out.println("Try to assert page title: " + expPageTitle);
+        logger.info("Try to assert page title: '" + expPageTitle + "'");
 
         String expPageTitleLow = expPageTitle.toLowerCase();
         String pageTitle = "--- Page not loaded ---";
-        int i = 0;
-        while (i < 10) {
+
+        for (int i = 0; i < 10; i++) {
             try {
                 driverFluentWait(6).until(ExpectedConditions.titleContains(expPageTitle));
                 pageTitle = driver.getTitle().toLowerCase();
-                System.out.println(">>>Compare to page title: " + pageTitle);  // pageTitle
+                logger.info(">>> Compare to page title: " + pageTitle);  // pageTitle
                 break;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("pageTitle: " + pageTitle);
-                    System.out.println("----- AssertPageTitle Exception: " + e);
+                    logger.error("pageTitle: " + pageTitle);
+                    logger.error("----- AssertPageTitle Exception: " + e.getMessage());
                 }
-                i = i + 1;
-                Thread.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             }
         }
         assertTrue(pageTitle.contains(expPageTitleLow));
     }
 
     public boolean pageTitleContains(String expPageTitle) throws Exception {
-        System.out.println("Try to assert page title: " + expPageTitle);
-        int i = 0;
-        while (i < 10) {
+        logger.info("Try to assert page title contains: '" + expPageTitle + "'");
+
+        boolean result = false;
+        for (int i = 0; i < 10; i++) {
             try {
-                System.out.println(">>>Compare to page title: " + driver.getTitle());
-                boolean b = driver.getTitle().contains(expPageTitle);
-                return b;
+                logger.info(">>> Compare to page title: " + driver.getTitle());
+                result = driver.getTitle().contains(expPageTitle);
+                break;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("pageTitleContains exception: " + e);
+                    logger.error("pageTitleContains exception: " + e);
                 }
-                i = i + 1;
-                Thread.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             }
         }
-        return false;
+        return result;
     }
 
     public boolean pageUrlContains(String articleId) throws Exception {
-        System.out.println("Try to assert page url: " + articleId);
-        int i = 0;
-        while (i < 10) {
+        logger.info("Try to assert page url: " + articleId);
+        for (int i = 0; i < 10; i++) {
             try {
-                System.out.println(">>>Compare to page url: ");   // TODO: concatenate articleId
+                logger.info(">>>Compare to page url: ");   // TODO: concatenate articleId
                 boolean b = driver.getTitle().contains(articleId);
                 return b;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("pageTitleContains exception: " + e);
+                    logger.error("pageTitleContains exception: " + e);
                 }
-                i = i + 1;
-                Thread.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             }
         }
         return false;
     }
 
     public void assertPageContains(By locator, String expText) throws Exception {
-        System.out.println("Try to assert page contains: " + expText);
+        logger.info("Try to assert page contains: " + expText);
 
-        int i = 0;
-        while (i < 10) {
+        for (int i = 0; i < 10; i++) {
             try {
                 driverFluentWait(1).until(ExpectedConditions.textToBePresentInElementLocated(locator, expText));
-                driver.findElement(locator).getText().contains(expText);
                 break;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("----- assertPageContains Exception: " + e);
+                    logger.error("----- assertPageContains Exception: " + e);
                 }
-                i = i + 1;
-                Thread.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             }
         }
         assertTrue(driver.findElement(locator).getText().contains(expText));
     }
 
     public void spinnerClickBy(By path) throws Exception {
-        System.out.println("By: " + path);
+        logger.info("By: " + path);
         WebElement menuItem;
-        int i = 0;
-        while (i < 10) {
+        for (int i = 0; i < 10; i++) {
             try {
                 menuItem = driver.findElement(path);
                 menuItem.getLocation();
@@ -229,25 +207,19 @@ public class HTMLPage {
                 break;
             } catch (Exception e) {
                 if (i >= 9) {
-                    System.out.println("spinnerClickBy exception: " + e);
+                    logger.error("spinnerClickBy exception: " + e);
                 }
-                i = i + 1;
-                Thread.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
             }
         }
     }
 
     public void navigateStartUrl() {
-        String bUrl = TestParams.getBaseUrl();
-        driver.get(bUrl);
-        //driverFluentWait(10).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//footer")));
+        driver.get(TestParams.getBaseUrl());
     }
 
     public String getTitle() {
         return driver.getTitle();
     }
 
-    /**
-     * @param fileName Path to filename without extension. example: /tmp/thefilename
-     */
 }

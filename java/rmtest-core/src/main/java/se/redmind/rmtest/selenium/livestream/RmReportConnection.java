@@ -1,87 +1,88 @@
 package se.redmind.rmtest.selenium.livestream;
 
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 public class RmReportConnection {
 
-	private Socket socket;
-	private String rmrLiveAddress;
-	private int rmrLivePort;
-	private PrintWriter out;
-	private boolean isConnected;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final String rmrLiveAddress;
+    private final int rmrLivePort;
+    private Socket socket;
+    private PrintWriter out;
+    private boolean isConnected;
 
-	public RmReportConnection() {
-		final FrameworkConfig config = FrameworkConfig.getConfig();
-		this.rmrLiveAddress = config.getRMRLiveAddress();
-		this.rmrLivePort = config.getRMRLivePort();
-	}
+    public RmReportConnection() {
+        final FrameworkConfig config = FrameworkConfig.getConfig();
+        this.rmrLiveAddress = config.getRMRLiveAddress();
+        this.rmrLivePort = config.getRMRLivePort();
+    }
 
-	public boolean connect(){
-		System.out.println("Connecting to RMReport...");
-		try {
-			socket = new Socket(rmrLiveAddress, rmrLivePort);
-			out = new PrintWriter(socket.getOutputStream());
-		} catch (IOException e) {
-			System.err.println("Could not connect to RMReport with: "+rmrLiveAddress+":"+rmrLivePort);
-			System.err.println("RMReport might not be online or the config is not correct...");
-			return false;
-		}
-		System.out.println("Connection etablished.");
-		isConnected = true;
-		return true;
-	}
+    public boolean connect() {
+        logger.info("Connecting to RMReport...");
+        try {
+            socket = new Socket(rmrLiveAddress, rmrLivePort);
+            out = new PrintWriter(socket.getOutputStream());
+        } catch (IOException e) {
+            logger.error("Could not connect to RMReport with: " + rmrLiveAddress + ":" + rmrLivePort);
+            logger.error("RMReport might not be online or the config is not correct...");
+            return false;
+        }
+        logger.info("Connection etablished.");
+        isConnected = true;
+        return true;
+    }
 
-	public boolean close(){
-		System.out.println("Closing connection to RMReport...");
-		try {
-			socket.close();
-			out.close();
-			System.out.println("Connection closed");
-		} catch (NullPointerException | IOException e) {
-			System.err.println("Could not close socket...");
-			return false;
-		}
-		return true;
-	}
+    public boolean close() {
+        logger.info("Closing connection to RMReport...");
+        try {
+            socket.close();
+            out.close();
+            logger.info("Connection closed");
+        } catch (NullPointerException | IOException e) {
+            logger.error("Could not close socket...", e);
+            return false;
+        }
+        return true;
+    }
 
-	public synchronized void sendMessage(String type, JsonObject message){
-		send(type+"@"+new Gson().toJson(message));
-	}
+    public synchronized void sendMessage(String type, JsonObject message) {
+        send(type + "@" + new Gson().toJson(message));
+    }
 
-	public synchronized void sendMessage(String message){
-		send("message@"+message);
-	}
+    public synchronized void sendMessage(String message) {
+        send("message@" + message);
+    }
 
-	public synchronized void sendMessage(String type, String message){
-		send(type+"@"+message);
-	}
+    public synchronized void sendMessage(String type, String message) {
+        send(type + "@" + message);
+    }
 
-	public synchronized void sendSuiteFinished(){
-		send("!suiteFinished@");
-	}
+    public synchronized void sendSuiteFinished() {
+        send("!suiteFinished@");
+    }
 
-	public synchronized void sendClose(){
-		send("!close@");
-	}
+    public synchronized void sendClose() {
+        send("!close@");
+    }
 
-	private synchronized void send(String message){
-		try {
-			out.println(message);
-			out.flush();
-		} catch (NullPointerException e) {
-			isConnected = false;
-		}
-	}
+    private synchronized void send(String message) {
+        try {
+            out.println(message);
+            out.flush();
+        } catch (NullPointerException e) {
+            isConnected = false;
+        }
+    }
 
-	public boolean isConnected(){
-		return isConnected;
-	}
+    public boolean isConnected() {
+        return isConnected;
+    }
 
 }

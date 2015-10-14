@@ -1,6 +1,6 @@
 package se.redmind.rmtest.selenium.example;
 
-import org.junit.AfterClass;
+import com.google.common.base.Strings;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +10,7 @@ import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 import se.redmind.rmtest.selenium.grid.RmAllDevice;
+import se.redmind.utils.Try;
 
 @RunWith(Parallelized.class)
 public class GoogleExample extends RmAllDevice {
@@ -19,35 +20,30 @@ public class GoogleExample extends RmAllDevice {
         driverWrapper.addDriverConfig(new TestConfig());
     }
 
-    @AfterClass
-    public static void afterTest() {
-//	    	DriverProvider.stopDrivers();
-    }
-
     @Before
     public void before() {
         this.webDriver = driverNamingWrapper.startDriver();
     }
 
-    /*
-     * @rmTest
-     */
     @Test
     public void testGoogle() throws Exception {
         HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
 
         navPage.getDriver().get("http://www.google.se");
-        // Find the text input element by its name
 
-        System.out.println("Page title is: " + navPage.getTitle());
+        String pageTitle = Try.toGet(() -> navPage.getTitle())
+            .until(value -> !Strings.isNullOrEmpty(value))
+            .delayRetriesBy(50)
+            .nTimes(10);
 
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        logger.info("Page title is: " + pageTitle);
+
+        assertTrue(pageTitle.startsWith("Goo"));
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot(null);
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("first");
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("after");
-        System.out.println("Done!");
-
+        logger.info("Done!");
     }
 
     @Test
@@ -55,15 +51,18 @@ public class GoogleExample extends RmAllDevice {
         HTMLPage navPage = new HTMLPage(driverNamingWrapper.getDriver());
 
         navPage.getDriver().get("http://www.google.se");
-        // Find the text input element by its name
 
-        System.out.println("Page title is: " + navPage.getTitle());
+        String pageTitle = Try.toGet(() -> navPage.getTitle())
+            .until(value -> !Strings.isNullOrEmpty(value))
+            .delayRetriesBy(50)
+            .nTimes(10);
 
-        assertTrue(navPage.getTitle().startsWith("Goo"));
+        logger.info("Page title is: " + pageTitle);
+
+        assertTrue(pageTitle.startsWith("Goo"));
 
         new RMReportScreenshot(this.driverNamingWrapper).takeScreenshot("");
-        System.out.println("Done!");
-
+        logger.info("Done!");
     }
 
 }

@@ -1,75 +1,76 @@
 package se.redmind.rmtest.selenium.example;
 
 import java.io.File;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.io.FileUtils;
+import java.util.ArrayList;
+import java.util.Collection;
 import org.junit.Test;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import se.redmind.rmtest.selenium.grid.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.selenium.grid.DriverProvider;
+import se.redmind.rmtest.selenium.grid.Parallelized;
 
 @RunWith(Parallelized.class)
 public class RMExampleMobile {
 
-	private WebDriver tDriver;
-	public final DriverNamingWrapper driverWrapper;
-	public final String driverDescription;
-	public WebDriverWait wait;
-	private String startUrl = TestParams.getBaseUrl();
-	private RmMobileNav tMobNav;
-	File scr;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private WebDriver tDriver;
+    public final DriverNamingWrapper driverWrapper;
+    public final String driverDescription;
+    public WebDriverWait wait;
+    private String startUrl = TestParams.getBaseUrl();
+    private RmMobileNav tMobNav;
+    File scr;
 
-	public RMExampleMobile(final DriverNamingWrapper driverWrapper,
-			final String driverDescription) {
-		this.driverWrapper = driverWrapper;
-		this.driverDescription = driverDescription;
-	}
+    public RMExampleMobile(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+        this.driverWrapper = driverWrapper;
+        this.driverDescription = driverDescription;
+    }
 
-	private static Object[] getDrivers() {
-		return DriverProvider.getDrivers(Platform.MAC, "firefox");
+    private static Object[] getDrivers() {
+        return DriverProvider.getDrivers(Platform.MAC, "firefox");
 
-	}
+    }
 
-	@Parameterized.Parameters(name = "{1}")
-	public static Collection<Object[]> drivers() {
-		ArrayList<Object[]> returnList = new ArrayList<Object[]>();
-		Object[] wrapperList = getDrivers();
-		for (int i = 0; i < wrapperList.length; i++) {
-			returnList.add(new Object[] { wrapperList[i],
-					wrapperList[i].toString() });
-		}
+    @Parameterized.Parameters(name = "{1}")
+    public static Collection<Object[]> drivers() {
+        ArrayList<Object[]> returnList = new ArrayList<>();
+        Object[] wrapperList = getDrivers();
+        for (Object wrapperList1 : wrapperList) {
+            returnList.add(new Object[]{wrapperList1, wrapperList1.toString()});
+        }
 
-		return returnList;
-	}
+        return returnList;
+    }
 
-	@Test
-	public void tpi() throws Exception {
-		tDriver = driverWrapper.getDriver();
-		wait = new WebDriverWait(tDriver, 1);
-		System.out.println("Driver:" + tDriver);
-		tMobNav = new RmMobileNav(tDriver, startUrl);
-		tMobNav.openMobileMenu();
-		
-		tMobNav.driverWaitElementPresent(By.linkText("Tjänster"), 1);
-		// Thread.sleep(500L);
-		tMobNav.openTpi("Tjänster", "TPI™ – Test process improvement");
-		tMobNav.assertPageTitle("TPI™ – Test process improvement");
-		tMobNav.driverFluentWait(2);
-		// Thread.sleep(2000L);
-		System.out.println("Page title is: " + tDriver.getTitle());
-	}
-	/*
+    @Test
+    public void tpi() throws Exception {
+        tDriver = driverWrapper.getDriver();
+        wait = new WebDriverWait(tDriver, 1);
+        logger.info("Driver:" + tDriver);
+        tMobNav = new RmMobileNav(tDriver, startUrl);
+        tMobNav.openMobileMenu();
+
+        tMobNav.driverWaitElementPresent(By.linkText("Tjänster"), 1);
+        // Thread.sleep(500L);
+        tMobNav.openTpi("Tjänster", "TPI™ – Test process improvement");
+        tMobNav.assertPageTitle("TPI™ – Test process improvement");
+        tMobNav.driverFluentWait(2);
+        // Thread.sleep(2000L);
+        logger.info("Page title is: " + tDriver.getTitle());
+    }
+    /*
 	@Test
 	public void management() throws Exception {
 		tDriver = driverWrapper.getDriver();
 		wait = new WebDriverWait(tDriver, 1);
-		System.out.println("Driver:" + tDriver);
+		logger.info("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
@@ -79,7 +80,7 @@ public class RMExampleMobile {
 		tMobNav.openManag("Tjänster", "Management");
 		tMobNav.assertPageTitle("Management");
 		// Thread.sleep(2000L);
-		System.out.println("Page title is: " + tDriver.getTitle());
+		logger.info("Page title is: " + tDriver.getTitle());
 		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(scr, new File(
 				"C://Users/Samoyl3000/Desktop/Screenshot/scr02.png"));
@@ -89,7 +90,7 @@ public class RMExampleMobile {
 	public void rekrytering() throws Exception {
 		tDriver = driverWrapper.getDriver();
 		wait = new WebDriverWait(tDriver, 1);
-		System.out.println("Driver:" + tDriver);
+		logger.info("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
@@ -99,7 +100,7 @@ public class RMExampleMobile {
 		tMobNav.openRyk("Tjänster", "Rekrytering");
 		tMobNav.assertPageTitle("Rekrytering");
 		// Thread.sleep(2000L);
-		System.out.println("Page title is: " + tDriver.getTitle());
+		logger.info("Page title is: " + tDriver.getTitle());
 		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(scr, new File(
 				"C://Users/Samoyl3000/Desktop/Screenshot/scr03.png"));
@@ -109,7 +110,7 @@ public class RMExampleMobile {
 	public void ClientAcademy() throws Exception {
 		tDriver = driverWrapper.getDriver();
 		wait = new WebDriverWait(tDriver, 1);
-		System.out.println("Driver:" + tDriver);
+		logger.info("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
@@ -120,7 +121,7 @@ public class RMExampleMobile {
 
 		tMobNav.assertPageTitle("Client Academy");
 		// Thread.sleep(2000L);
-		System.out.println("Page title is: " + tDriver.getTitle());
+		logger.info("Page title is: " + tDriver.getTitle());
 		File scr = ((TakesScreenshot) tDriver).getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(scr, new File(
 				"C://Users/Samoyl3000/Desktop/Screenshot/scr04.png"));
@@ -130,7 +131,7 @@ public class RMExampleMobile {
 	public void Konsulttjänster() throws Exception {
 		tDriver = driverWrapper.getDriver();
 		wait = new WebDriverWait(tDriver, 1);
-		System.out.println("Driver:" + tDriver);
+		logger.info("Driver:" + tDriver);
 
 		tMobNav = new RmMobileNav(tDriver, startUrl);
 		tMobNav.openMobileMenu();
@@ -146,5 +147,5 @@ public class RMExampleMobile {
 		Thread.sleep(2000L);
 		tDriver.quit();
 	}
-	*/
+     */
 }
