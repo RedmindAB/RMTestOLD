@@ -15,7 +15,7 @@
 	</licenses>
 	<groupId>se.redmind</groupId>
 	<artifactId>rmtest-core</artifactId>
-	<version>1.0</version>
+	<version>1.0.1</version>
 	<name>rmtest -> core</name>
 	<properties>
 		<slf4j.version>1.7.12</slf4j.version>
