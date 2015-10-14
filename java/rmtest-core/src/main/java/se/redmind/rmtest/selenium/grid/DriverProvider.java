@@ -51,10 +51,8 @@ public class DriverProvider {
                     urlCapList.add(driver);
                     allDrivers.add(driver);
                 } catch (MalformedURLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    LOGGER.error(e.getMessage(), e);
                 }
-
             }
         }
     }
