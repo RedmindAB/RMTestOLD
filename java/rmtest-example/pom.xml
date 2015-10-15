@@ -5,7 +5,7 @@
     <parent>
         <groupId>se.redmind</groupId>
         <artifactId>rmtest</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
     <licenses>
         <license>
@@ -16,13 +16,13 @@
     </licenses>
     <artifactId>rmtest-example</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>rmtest -> example</name>
     <dependencies>
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-core</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 </project>
