@@ -40,15 +40,22 @@ public final class Try {
         return new RunnableTryer(runnable);
     }
 
-    public static abstract class Tryer<SelfType> {
+    public static class Tryer<E, SelfType> {
 
         protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+        protected final Supplier<E> supplier;
+        protected Supplier<E> defaultSupplier;
+        protected Predicate<E> until;
         protected int currentAttempt;
         protected int maxAttempts = 1;
         protected TimeUnit sleepUnit;
         protected long sleepLength;
-        protected BiConsumer<Tryer<SelfType>, Exception> onError;
-        protected BiConsumer<Tryer<SelfType>, Exception> onLastError;
+        protected BiConsumer<Tryer<E, SelfType>, Exception> onError;
+        protected BiConsumer<Tryer<E, SelfType>, Exception> onLastError;
+
+        public Tryer(Supplier<E> supplier) {
+            this.supplier = supplier;
+        }
 
         public int maxAttempts() {
             return maxAttempts;
@@ -58,12 +65,12 @@ public final class Try {
             return currentAttempt;
         }
 
-        public SelfType onError(BiConsumer<Tryer<SelfType>, Exception> onError) {
+        public SelfType onError(BiConsumer<Tryer<E, SelfType>, Exception> onError) {
             this.onError = onError;
             return (SelfType) this;
         }
 
-        public SelfType onLastError(BiConsumer<Tryer<SelfType>, Exception> onLastError) {
+        public SelfType onLastError(BiConsumer<Tryer<E, SelfType>, Exception> onLastError) {
             this.onLastError = onLastError;
             return (SelfType) this;
         }
@@ -78,43 +85,6 @@ public final class Try {
             return (SelfType) this;
         }
 
-        protected void handleException(Exception exception) {
-            if (onError != null) {
-                onError.accept(this, exception);
-            } else {
-                logger.warn(exception.getMessage() + " on attempt " + currentAttempt + "/" + maxAttempts);
-            }
-            if (currentAttempt == maxAttempts - 1) {
-                if (onLastError != null) {
-                    onLastError.accept(this, exception);
-                } else {
-                    logger.error(exception.getMessage(), exception);
-                }
-            } else if (sleepLength > 0) {
-                try {
-                    sleepUnit.sleep(sleepLength);
-                } catch (InterruptedException ex) {
-                    logger.error(ex.getMessage(), ex);
-                }
-            }
-        }
-    }
-
-    public static class SupplierTryer<E> extends Tryer<SupplierTryer<E>> {
-
-        private final Supplier<E> supplier;
-        private Supplier<E> defaultSupplier;
-        private Predicate<E> until;
-
-        public SupplierTryer(Supplier<E> supplier) {
-            this.supplier = supplier;
-        }
-
-        public synchronized SupplierTryer<E> until(Predicate<E> predicate) {
-            this.until = predicate;
-            return this;
-        }
-
         public E justOnce() throws InterruptedException {
             return execute();
         }
@@ -124,22 +94,34 @@ public final class Try {
             return execute();
         }
 
-        public SupplierTryer<E> defaultTo(Supplier<E> defaultSupplier) {
-            this.defaultSupplier = defaultSupplier;
-            return this;
-        }
-
         private synchronized E execute() {
             E result = null;
-            for (currentAttempt = 0; currentAttempt < maxAttempts; currentAttempt++) {
+            for (currentAttempt = 1; currentAttempt <= maxAttempts; currentAttempt++) {
                 try {
                     result = supplier.get();
                     if (until == null || until.test(result)) {
                         break;
                     }
-                } catch (Exception e) {
-                    handleException(e);
-                    if (currentAttempt == maxAttempts - 1 && defaultSupplier != null) {
+                } catch (Exception exception) {
+                    if (onError != null) {
+                        onError.accept(this, exception);
+                    } else if(maxAttempts > 1){
+                        logger.warn(exception.toString() + " on attempt " + currentAttempt + "/" + maxAttempts);
+                    }
+                    if (currentAttempt == maxAttempts) {
+                        if (onLastError != null) {
+                            onLastError.accept(this, exception);
+                        } else {
+                            logger.error(exception.toString(), exception);
+                        }
+                    } else if (sleepLength > 0) {
+                        try {
+                            sleepUnit.sleep(sleepLength);
+                        } catch (InterruptedException ex) {
+                            logger.error(ex.toString(), ex);
+                        }
+                    }
+                    if (currentAttempt == maxAttempts && defaultSupplier != null) {
                         result = defaultSupplier.get();
                     }
                 }
@@ -151,32 +133,30 @@ public final class Try {
         }
     }
 
-    public static class RunnableTryer extends Tryer<RunnableTryer> {
+    public static class SupplierTryer<E> extends Tryer<E, SupplierTryer<E>> {
 
-        private final Runnable runnable;
+        public SupplierTryer(Supplier<E> supplier) {
+            super(supplier);
+        }
+
+        public synchronized SupplierTryer<E> until(Predicate<E> predicate) {
+            this.until = predicate;
+            return this;
+        }
+
+        public SupplierTryer<E> defaultTo(Supplier<E> defaultSupplier) {
+            this.defaultSupplier = defaultSupplier;
+            return this;
+        }
+    }
+
+    public static class RunnableTryer extends Tryer<Void, RunnableTryer> {
 
         public RunnableTryer(Runnable runnable) {
-            this.runnable = runnable;
-        }
-
-        public void justOnce() {
-            nTimes(1);
-        }
-
-        public void nTimes(int maxAttempts) {
-            this.maxAttempts = maxAttempts;
-            execute();
-        }
-
-        private synchronized void execute() {
-            for (currentAttempt = 0; currentAttempt < maxAttempts; currentAttempt++) {
-                try {
-                    runnable.run();
-                    break;
-                } catch (Exception e) {
-                    handleException(e);
-                }
-            }
+            super(() -> {
+                runnable.run();
+                return null;
+            });
         }
     }
 }
