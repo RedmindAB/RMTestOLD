@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
@@ -11,6 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
@@ -37,16 +39,14 @@ public class DriverProvider {
         RegistrationRequest nodeReq;
         String description;
 
-        DescriptionBuilder descriptionBuilder = new DescriptionBuilder();
         for (RegistrationRequest nodeList1 : nodeList) {
             nodeReq = nodeList1;
             for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
                 currentCapability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
-                description = descriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
+                description = DescriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
                 URL driverUrl;
                 try {
-                    driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":"
-                        + nodeReq.getConfigAsString("port") + "/wd/hub");
+                    driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
                     DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, currentCapability, description);
                     urlCapList.add(driver);
                     allDrivers.add(driver);
@@ -70,7 +70,7 @@ public class DriverProvider {
                 urlCapList.add(driver);
                 allDrivers.add(driver);
             }
-            if (browser == Browser.Firefox && config.useFirefox()){
+            if (browser == Browser.Firefox && config.useFirefox()) {
                 DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
                 urlCapList.add(driver);
                 allDrivers.add(driver);

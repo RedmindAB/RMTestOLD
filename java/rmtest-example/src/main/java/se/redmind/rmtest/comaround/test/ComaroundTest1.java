@@ -1,11 +1,10 @@
 package se.redmind.rmtest.comaround.test;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +28,7 @@ public class ComaroundTest1 {
 	        this.driverWrapper = driverWrapper;
 	        this.driverDescription = driverDescription;
 	    }
-	    
+
 	    private static Object[] getDrivers() {
 //	        return DriverProvider.getDrivers("rmDeviceType", "mobile");
 //	    	return DriverProvider.getDrivers(Platform.ANDROID);
@@ -39,11 +38,11 @@ public class ComaroundTest1 {
 
 	    @Parameterized.Parameters(name = "{1}")
 	    public static Collection<Object[]> drivers() {
-	        ArrayList<Object[]> returnList = new ArrayList<Object[]>();
+	        ArrayList<Object[]> returnList = new ArrayList<>();
 	        Object[] wrapperList = getDrivers();
-	        for (int i = 0; i < wrapperList.length; i++) {
-	            returnList.add(new Object[]{wrapperList[i], wrapperList[i].toString()});
-	        }
+           for (Object wrapperList1 : wrapperList) {
+               returnList.add(new Object[]{wrapperList1, wrapperList1.toString()});
+           }
 
 	        return returnList;
 	    }
@@ -52,7 +51,7 @@ public class ComaroundTest1 {
 	    public static void afterTest(){
 	    	DriverProvider.stopDrivers();
 	    }
-	    
+
 
 	    @Before
 	    public void beforeTest(){
@@ -64,19 +63,19 @@ public class ComaroundTest1 {
 		cNav.clickComAroundZeroNav();
 		assertEquals("ComAround Zero - ComAround", cNav.getTitle());
 	}
-	
+
 	@Test
 	public void clickKonceptet() {
 		cNav.clickKonceptet();
 		assertEquals("Konceptet - ComAround", cNav.getTitle());
 	}
-	
+
 	@Test
 	public void clickInspiration() {
 		cNav.clickInspiration();
 		assertEquals("Inspiration - ComAround", cNav.getTitle());
 	}
-	
+
 	@Test
 	public void clickReferenser() {
 		cNav.clickReferenser();
@@ -88,7 +87,7 @@ public class ComaroundTest1 {
 		cNav.clickPrismodell();
 		assertEquals("Prismodell - ComAround", cNav.getTitle());
 	}
-	
+
 	@Test
 	public void clickSkapaKonto() {
 		cNav.clickSkapaKonto();

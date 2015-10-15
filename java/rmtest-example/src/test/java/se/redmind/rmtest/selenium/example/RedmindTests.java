@@ -4,6 +4,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 
 @RunWith(Suite.class)

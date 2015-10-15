@@ -1,6 +1,7 @@
 package se.redmind.rmtest.selenium.framework;
 
 import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -17,7 +18,7 @@ public class HTMLPage {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
-
+ 
     /**
      * @param driver WebDriver
      */

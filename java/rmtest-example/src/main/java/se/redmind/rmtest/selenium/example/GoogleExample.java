@@ -1,10 +1,11 @@
 package se.redmind.rmtest.selenium.example;
 
-import com.google.common.base.Strings;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.common.base.Strings;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
@@ -33,7 +34,7 @@ public class GoogleExample extends RmAllDevice {
 
         String pageTitle = Try.toGet(() -> navPage.getTitle())
             .until(value -> !Strings.isNullOrEmpty(value))
-            .delayRetriesBy(50)
+            .delayRetriesBy(500)
             .nTimes(10);
 
         logger.info("Page title is: " + pageTitle);
@@ -54,7 +55,7 @@ public class GoogleExample extends RmAllDevice {
 
         String pageTitle = Try.toGet(() -> navPage.getTitle())
             .until(value -> !Strings.isNullOrEmpty(value))
-            .delayRetriesBy(50)
+            .delayRetriesBy(500)
             .nTimes(10);
 
         logger.info("Page title is: " + pageTitle);

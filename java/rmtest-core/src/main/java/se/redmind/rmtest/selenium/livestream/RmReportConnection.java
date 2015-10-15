@@ -1,12 +1,14 @@
 package se.redmind.rmtest.selenium.livestream;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 public class RmReportConnection {

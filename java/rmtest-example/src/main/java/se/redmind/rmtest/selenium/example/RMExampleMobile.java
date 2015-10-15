@@ -3,6 +3,7 @@ package se.redmind.rmtest.selenium.example;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -12,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
@@ -24,7 +26,7 @@ public class RMExampleMobile {
     public final DriverNamingWrapper driverWrapper;
     public final String driverDescription;
     public WebDriverWait wait;
-    private String startUrl = TestParams.getBaseUrl();
+    private final String startUrl = TestParams.getBaseUrl();
     private RmMobileNav tMobNav;
     File scr;
 
@@ -58,11 +60,9 @@ public class RMExampleMobile {
         tMobNav.openMobileMenu();
 
         tMobNav.driverWaitElementPresent(By.linkText("Tjänster"), 1);
-        // Thread.sleep(500L);
         tMobNav.openTpi("Tjänster", "TPI™ – Test process improvement");
         tMobNav.assertPageTitle("TPI™ – Test process improvement");
         tMobNav.driverFluentWait(2);
-        // Thread.sleep(2000L);
         logger.info("Page title is: " + tDriver.getTitle());
     }
     /*

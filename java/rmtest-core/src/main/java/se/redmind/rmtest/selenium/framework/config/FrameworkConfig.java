@@ -1,11 +1,13 @@
 package se.redmind.rmtest.selenium.framework.config;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.base.Objects;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import java.io.FileInputStream;
-import java.io.IOException;
-import org.apache.commons.io.IOUtils;
 import se.redmind.rmtest.selenium.grid.TestHome;
 
 /**
@@ -19,7 +21,7 @@ public class FrameworkConfig {
         return new FrameworkConfig();
     }
 
-    public FrameworkConfig(final String localConfigFile) {
+    public FrameworkConfig(String localConfigFile) {
         this.localConfig = parse(localConfigFile);
     }
 
@@ -27,7 +29,7 @@ public class FrameworkConfig {
         this(TestHome.main() + "/etc/LocalConfig.json");
     }
 
-    private static JsonObject parse(final String configFile) {
+    private static JsonObject parse(String configFile) {
         try {
             final String json = IOUtils.toString(new FileInputStream(configFile));
             return new Gson().fromJson(json, JsonObject.class);
@@ -36,24 +38,24 @@ public class FrameworkConfig {
         }
     }
 
-    private String getLocalConfigValue(final String configKey) {
+    private String getLocalConfigValue(String configKey) {
         return this.localConfig.getAsJsonObject("configuration").get(configKey).getAsString();
     }
 
     public boolean runOnGrid() {
-        return "true".equalsIgnoreCase(this.getLocalConfigValue("runOnGrid"));
+        return "true".equalsIgnoreCase(getLocalConfigValue("runOnGrid"));
     }
 
     public boolean usePhantomJS() {
-        return "true".equalsIgnoreCase(this.getLocalConfigValue("usePhantomJS"));
+        return "true".equalsIgnoreCase(getLocalConfigValue("usePhantomJS"));
     }
 
     public boolean useFirefox() {
-        return "true".equalsIgnoreCase(this.getLocalConfigValue("useFirefox"));
+        return "true".equalsIgnoreCase(getLocalConfigValue("useFirefox"));
     }
 
     public boolean useChrome() {
-        return "true".equalsIgnoreCase(this.getLocalConfigValue("useChrome"));
+        return "true".equalsIgnoreCase(getLocalConfigValue("useChrome"));
     }
 
     public boolean autoCloseDrivers() {
