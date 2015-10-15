@@ -47,6 +47,7 @@
             <groupId>com.testdroid</groupId>
             <artifactId>testdroid-api</artifactId>
             <version>2.4</version>
+            <scope>compile</scope>
         </dependency>
         <!-- selenium -->
         <dependency>
