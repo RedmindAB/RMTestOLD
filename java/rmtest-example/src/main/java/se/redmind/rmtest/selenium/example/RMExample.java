@@ -1,8 +1,8 @@
 package se.redmind.rmtest.selenium.example;
 
-import com.steadystate.css.parser.Locatable;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +15,8 @@ import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Mouse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.steadystate.css.parser.Locatable;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
@@ -78,7 +80,6 @@ public class RMExample {
                 logger.info("Page title is: " + tDriver.getTitle());
             }
         } else { //desktop
-//	        	tDriver.manage().window().maximize() ;
             tNavPage.clickOnSubmenu("tjanster", "management");
 
             tNavPage.assertPageTitle("Management");
@@ -108,8 +109,8 @@ public class RMExample {
                 logger.info("Page title is: " + tDriver.getTitle());
             }
         } else //Desktop
-        if (driverWrapper.getCapability().getBrowserName() == "safari") {
-	        		//safari-code
+        if ("safari".equals(driverWrapper.getCapability().getBrowserName())) {
+            //safari-code
             //Assume driver initialized properly.
             WebElement element = tDriver.findElement(By.id("Element id"));
             Locatable hoverItem = (Locatable) element;

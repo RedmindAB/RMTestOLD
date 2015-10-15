@@ -1,10 +1,10 @@
 package se.redmind.rmtest.appiumtest.systembolaget;
 
-import io.appium.java_client.android.AndroidDriver;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
+
+import io.appium.java_client.android.AndroidDriver;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;

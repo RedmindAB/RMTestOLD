@@ -3,10 +3,12 @@ package se.redmind.rmtest.selenium.framework;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;

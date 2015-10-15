@@ -8,12 +8,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class MultiThreadFactory implements ThreadFactory{
 
-    static final AtomicInteger poolNumber = new AtomicInteger(1);
-    final AtomicInteger threadNumber = new AtomicInteger(1);
-    final ThreadGroup group;
+    private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
+    private final AtomicInteger threadNumber = new AtomicInteger(1);
+    private final ThreadGroup group;
 
-    MultiThreadFactory(String poolName) {
-        group = new ThreadGroup(poolName + "-" + poolNumber.getAndIncrement());
+    public MultiThreadFactory(String poolName) {
+        group = new ThreadGroup(poolName + "-" + POOL_NUMBER.getAndIncrement());
     }
 
     @Override

@@ -3,11 +3,13 @@ package se.redmind.rmtest.selenium.grid;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
 import org.junit.runners.model.RunnerScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 public class Parallelized extends Parameterized {

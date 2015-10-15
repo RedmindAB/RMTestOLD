@@ -5,6 +5,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
+
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 import se.redmind.rmtest.selenium.grid.AutoCloseListener;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;

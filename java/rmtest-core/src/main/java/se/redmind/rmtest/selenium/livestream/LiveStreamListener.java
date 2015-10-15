@@ -1,7 +1,5 @@
 package se.redmind.rmtest.selenium.livestream;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -10,10 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 public class LiveStreamListener extends RunListener {

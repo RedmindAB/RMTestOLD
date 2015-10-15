@@ -1,34 +1,29 @@
 package se.redmind.rmtest.selenium.grid;
 
-import com.google.common.base.Strings;
-
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import se.redmind.rmtest.selenium.framework.DeviceDescription;
 
-public class DescriptionBuilder {
+import com.google.common.base.Strings;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public final class DescriptionBuilder {
+
+    private DescriptionBuilder() {
+    }
 
     /**
      * @param capabilities
      * @return
      */
-    public String buildDescriptionFromCapabilities(DesiredCapabilities capabilities) {
+    public static String buildDescriptionFromCapabilities(DesiredCapabilities capabilities) {
         String os = getOS(capabilities);
-        String osVer = getOsVersion(capabilities);
+        String osVersion = getOsVersion(capabilities);
         String device = getDevice(capabilities);
         String browser = getBrowser(capabilities);
         String browserVersion = "UNKNOWN";
-
-        String description = new DeviceDescription(os, osVer, device, browser, browserVersion).getDeviceDescription();
-        logger.debug("Description of driver is: " + description);
-        return description;
+        return os + "_" + osVersion + "_" + device + "_" + browser + "_" + browserVersion;
     }
 
-    private String getBrowser(DesiredCapabilities capability) {
+    public static String getBrowser(DesiredCapabilities capability) {
         String browser;
         if (isCapabilitySet("browserName", capability)) {
             browser = getSafeCapability("browserName", capability);
@@ -40,7 +35,7 @@ public class DescriptionBuilder {
         return browser;
     }
 
-    private String getDevice(DesiredCapabilities capability) {
+    public static String getDevice(DesiredCapabilities capability) {
         String device;
         if (isCapabilitySet("deviceName", capability)) {
             device = getSafeCapability("deviceName", capability);
@@ -50,7 +45,7 @@ public class DescriptionBuilder {
         return device;
     }
 
-    private String getOsVersion(DesiredCapabilities capability) {
+    public static String getOsVersion(DesiredCapabilities capability) {
         String osVer;
         if (isCapabilitySet("platformVersion", capability)) {
             osVer = getSafeCapability("platformVersion", capability);
@@ -60,7 +55,7 @@ public class DescriptionBuilder {
         return osVer;
     }
 
-    private String getOS(DesiredCapabilities capability) {
+    public static String getOS(DesiredCapabilities capability) {
         String os;
         if (isCapabilitySet("rmOsName", capability)) {
             os = getSafeCapability("rmOsName", capability);
@@ -76,17 +71,17 @@ public class DescriptionBuilder {
         return os;
     }
 
-    private Boolean isCapabilitySet(String capName, DesiredCapabilities currentCapability) {
+    public static Boolean isCapabilitySet(String capName, DesiredCapabilities currentCapability) {
         return !Strings.isNullOrEmpty(getSafeCapability(capName, currentCapability));
     }
 
-    private String getSafeCapability(String capName, DesiredCapabilities currentCapability) {
-    	if (currentCapability.getCapability(capName) instanceof Platform) {
-    		return currentCapability.getCapability(capName).toString();
-		}else {
-			return (String) currentCapability.getCapability(capName);
-		}
-        
+    public static String getSafeCapability(String capName, DesiredCapabilities currentCapability) {
+        if (currentCapability.getCapability(capName) instanceof Platform) {
+            return currentCapability.getCapability(capName).toString();
+        } else {
+            return (String) currentCapability.getCapability(capName);
+        }
+
     }
 
 }

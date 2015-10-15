@@ -50,14 +50,14 @@ public class DriverNamingWrapper {
 
     private DesiredCapabilities getLocalCapability() {
         switch (browser) {
-            case Chrome:
-                return DesiredCapabilities.chrome();
-            case Firefox:
-                return DesiredCapabilities.firefox();
-            case PhantomJS:
-                return DesiredCapabilities.phantomjs();
-            default:
-                return null;
+        case Chrome:
+            return DesiredCapabilities.chrome();
+        case Firefox:
+            return DesiredCapabilities.firefox();
+        case PhantomJS:
+            return DesiredCapabilities.phantomjs();
+        default:
+            return null;
         }
     }
 
@@ -78,17 +78,17 @@ public class DriverNamingWrapper {
     }
 
     public AppiumDriver getAppiumDriver() {
-    	AppiumDriver appDriver;
-    	if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
-    		logger.info("I am an android");
-    		appDriver = (AndroidDriver) getDriver();
-		} else {
-			logger.info("I am an apple");
-			appDriver = (IOSDriver) getDriver();
-		}
+        AppiumDriver appDriver;
+        if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
+            logger.info("I am an android");
+            appDriver = (AndroidDriver) getDriver();
+        } else {
+            logger.info("I am an apple");
+            appDriver = (IOSDriver) getDriver();
+        }
         return appDriver;
     }
-    
+
     public void ignoreAtNoConnectivityById(String url, String id) {
         ignoreAtNoConnectivityTo(url, By.id(id));
     }
@@ -134,26 +134,32 @@ public class DriverNamingWrapper {
             } else {
                 int maxRetryAttempts = 5;
                 if (imAFailure) {
-                    Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably won't start now ", false);
+                    Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts
+                            + " attempts, it probably won't start now ", false);
                 } else {
                     int retryAttempts = 1;
                     while (retryAttempts <= maxRetryAttempts) {
+                        logger.info("Attempt no: " + retryAttempts + " to start driver.");
                         try {
                             if (driver != null) {
-								driver.close();
+                                driver.close();
                             }
                             if (capability.getCapability("rmDeviceType") == null) {
                                 driver = new RemoteWebDriver(url, capability);
                                 logger.info("This is a RemoteWebDriver");
                             } else {
                                 if ("Android".equalsIgnoreCase((String) capability.getCapability("platformName"))) {
+                                    logger.info(capability.toString());
                                     driver = new AndroidDriver(url, capability);
+                                    logger.info("This is a AndroidDriver");
                                 } else {
+                                    logger.info(capability.toString());
                                     driver = new IOSDriver(url, capability);
                                 }
                                 logger.info("This is a AppiumDriver");
                             }
                             logger.info("Started driver: " + description);
+                            return driver;
                         } catch (Exception e) {
                             logger.warn("Having trouble starting webdriver for device: " + description, e);
                             logger.warn("Attempt " + retryAttempts + " of " + maxRetryAttempts);
@@ -163,7 +169,8 @@ public class DriverNamingWrapper {
                     }
                     if (driver == null) {
                         imAFailure = true;
-                        Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts", false);
+                        Assume.assumeTrue("Driver failed to start properly after " + (retryAttempts - 1) + " attempts",
+                                false);
                     }
                 }
             }
@@ -172,27 +179,26 @@ public class DriverNamingWrapper {
     }
 
     private void setupCapabilities() {
-        driverConfigs.stream()
-            .filter(driverConfig -> driverConfig.eval(capability, description))
-            .forEach(driverConfig -> driverConfig.config(capability));
+        driverConfigs.stream().filter(driverConfig -> driverConfig.eval(capability, description))
+                .forEach(driverConfig -> driverConfig.config(capability));
     }
 
     private WebDriver startLocalDriver(Browser browser) {
         WebDriver driver = null;
         switch (browser) {
-            case Chrome:
-                System.setProperty("webdriver.chrome.driver", getChromePath());
-                driver = new ChromeDriver(capability);
-                break;
-            case Firefox:
-                driver = new FirefoxDriver(capability);
-                break;
-            case PhantomJS:
-                final PhantomJSDesiredCapabalities phantomJS = new PhantomJSDesiredCapabalities();
-                driver = new PhantomJSDriver(phantomJS.createPhantomJSCapabilities());
-                break;
-            default:
-                break;
+        case Chrome:
+            System.setProperty("webdriver.chrome.driver", getChromePath());
+            driver = new ChromeDriver(capability);
+            break;
+        case Firefox:
+            driver = new FirefoxDriver(capability);
+            break;
+        case PhantomJS:
+            final PhantomJSDesiredCapabalities phantomJS = new PhantomJSDesiredCapabalities();
+            driver = new PhantomJSDriver(phantomJS.createPhantomJSCapabilities());
+            break;
+        default:
+            break;
         }
         return driver;
     }

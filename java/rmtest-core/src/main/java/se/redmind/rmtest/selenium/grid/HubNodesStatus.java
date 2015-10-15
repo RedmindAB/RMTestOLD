@@ -1,14 +1,16 @@
 package se.redmind.rmtest.selenium.grid;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Map;
+
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.JsonToBeanConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class HubNodesStatus {
 
@@ -50,7 +52,7 @@ public class HubNodesStatus {
             DesiredCapabilities cap = new JsonToBeanConverter().convert(DesiredCapabilities.class, capabilities.get(i));
             request.addDesiredCapability(cap);
         }
-        
+
         return request;
     }
 
