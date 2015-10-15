@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <pre>
- * this class is just a repeater.
+ * This class is just a repeater.
  *
- * One could use it in that way:
+ * The current implementation is not thread safe as it is not immutable.
+ *
+ * usage example:
  *
  *       return Try.toGet(() -> driver.getTitle().contains(articleId))
  *                  .defaultTo(() -> false)
@@ -28,7 +30,9 @@ import org.slf4j.LoggerFactory;
  *           }
  *       }
  *       return false;
- * </pre> @author Jeremy Comte
+ * </pre>
+ *
+ * @author Jeremy Comte
  */
 public final class Try {
 
@@ -40,55 +44,84 @@ public final class Try {
         return new RunnableTryer(runnable);
     }
 
-    public static class Tryer<E, SelfType> {
+    public abstract static class Tryer<E, SelfType> {
 
-        protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-        protected final Supplier<E> supplier;
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
+        private final Supplier<E> supplier;
+        private int currentAttempt;
+        private int maxAttempts = 1;
+        private TimeUnit sleepUnit;
+        private long sleepLength;
+        private BiConsumer<Tryer<E, SelfType>, Exception> onError;
+        private BiConsumer<Tryer<E, SelfType>, Exception> onLastError;
         protected Supplier<E> defaultSupplier;
         protected Predicate<E> until;
-        protected int currentAttempt;
-        protected int maxAttempts = 1;
-        protected TimeUnit sleepUnit;
-        protected long sleepLength;
-        protected BiConsumer<Tryer<E, SelfType>, Exception> onError;
-        protected BiConsumer<Tryer<E, SelfType>, Exception> onLastError;
 
-        public Tryer(Supplier<E> supplier) {
+        protected Tryer(Supplier<E> supplier) {
             this.supplier = supplier;
         }
 
-        public int maxAttempts() {
-            return maxAttempts;
-        }
-
-        public int currentAttempt() {
-            return currentAttempt;
-        }
-
+        /**
+         * set a specific function to be used when an error is encountered, default will printout a warning
+         *
+         * @param onError
+         * @return
+         */
         public SelfType onError(BiConsumer<Tryer<E, SelfType>, Exception> onError) {
             this.onError = onError;
             return (SelfType) this;
         }
 
+        /**
+         * set a specific function to be used if all the attempts are unsuccessful, default will printout an error
+         *
+         * @param onError
+         * @return
+         */
         public SelfType onLastError(BiConsumer<Tryer<E, SelfType>, Exception> onLastError) {
             this.onLastError = onLastError;
             return (SelfType) this;
         }
 
+        /**
+         * when an error is encountered, delay the next attempt by this delay in milliseconds
+         *
+         * @param sleepLengthInMillisecs
+         * @return
+         */
         public SelfType delayRetriesBy(long sleepLengthInMillisecs) {
             return delayRetriesBy(sleepLengthInMillisecs, TimeUnit.MILLISECONDS);
         }
 
+        /**
+         * when an error is encountered, delay the next attempt by this delay
+         *
+         * @param sleepLength
+         * @param sleepUnit
+         * @return
+         */
         public SelfType delayRetriesBy(long sleepLength, TimeUnit sleepUnit) {
             this.sleepLength = sleepLength;
             this.sleepUnit = sleepUnit;
             return (SelfType) this;
         }
 
+        /**
+         * Try just once to run this code
+         *
+         * @return
+         * @throws InterruptedException
+         */
         public E justOnce() throws InterruptedException {
             return execute();
         }
 
+        /**
+         * Try n times to run this code
+         *
+         * @param maxAttempts
+         * @return
+         */
         public synchronized E nTimes(int maxAttempts) {
             this.maxAttempts = maxAttempts;
             return execute();
@@ -105,7 +138,7 @@ public final class Try {
                 } catch (Exception exception) {
                     if (onError != null) {
                         onError.accept(this, exception);
-                    } else if(maxAttempts > 1){
+                    } else if (maxAttempts > 1) {
                         logger.warn(exception.toString() + " on attempt " + currentAttempt + "/" + maxAttempts);
                     }
                     if (currentAttempt == maxAttempts) {
@@ -139,11 +172,23 @@ public final class Try {
             super(supplier);
         }
 
+        /**
+         * Retry until this predicate is true and that maxAttempts hasn't been reached
+         *
+         * @param predicate
+         * @return
+         */
         public synchronized SupplierTryer<E> until(Predicate<E> predicate) {
             this.until = predicate;
             return this;
         }
 
+        /**
+         * if all the attempts have been unsuccessful, default to this value
+         *
+         * @param defaultSupplier
+         * @return
+         */
         public SupplierTryer<E> defaultTo(Supplier<E> defaultSupplier) {
             this.defaultSupplier = defaultSupplier;
             return this;
