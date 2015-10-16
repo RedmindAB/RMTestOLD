@@ -14,9 +14,9 @@ import se.redmind.utils.LogBackUtil;
 
 public abstract class TestBase {
 
-    static {
-        LogBackUtil.install();
-    }
+//    static {
+//        LogBackUtil.install();
+//    }
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected final DriverNamingWrapper driverNamingWrapper;
