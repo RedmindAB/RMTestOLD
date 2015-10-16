@@ -147,20 +147,21 @@ public final class Try {
                         } else {
                             logger.error(exception.toString(), exception);
                         }
-                    } else if (sleepLength > 0) {
-                        try {
-                            sleepUnit.sleep(sleepLength);
-                        } catch (InterruptedException ex) {
-                            logger.error(ex.toString(), ex);
-                        }
-                    }
-                    if (currentAttempt == maxAttempts && defaultSupplier != null) {
-                        result = defaultSupplier.get();
                     }
                 }
+                if (currentAttempt < maxAttempts && sleepLength > 0) {
+                    try {
+                        sleepUnit.sleep(sleepLength);
+                    } catch (InterruptedException ex) {
+                        logger.error(ex.toString(), ex);
+                    }
+                } else if (defaultSupplier != null) {
+                    result = defaultSupplier.get();
+                }
             }
+
             if (until != null && !until.test(result) && defaultSupplier == null) {
-                throw new IllegalStateException("no valid value and no default supplied...");
+                throw new IllegalStateException("Couldn't get a valid value and no default was supplied...");
             }
             return result;
         }
