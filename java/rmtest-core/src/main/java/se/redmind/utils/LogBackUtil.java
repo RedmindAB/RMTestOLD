@@ -59,13 +59,13 @@ public final class LogBackUtil {
         private String format = "%d{HH:mm:ss.SSS} %-5p [%logger{5}] %msg %n";
 
         public static LoggerContext getLoggerContext() {
-            final long startTime = System.nanoTime();
+            final long startTime = System.currentTimeMillis();
             while (true) {
                 ILoggerFactory iLoggerFactory = LoggerFactory.getILoggerFactory();
                 if (iLoggerFactory instanceof LoggerContext) {
                     return (LoggerContext) iLoggerFactory;
                 }
-                if ((System.nanoTime() - startTime) > 10_000_000) {
+                if ((System.currentTimeMillis() - startTime) > 10_000) {
                     throw new IllegalStateException("Unable to acquire the logger context");
                 }
                 try {
