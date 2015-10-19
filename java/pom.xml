@@ -54,7 +54,7 @@
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>verify</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
@@ -71,6 +71,7 @@
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
+                        <phase>deploy</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -84,8 +85,27 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <phase>deploy</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <rules>
+                        <dependencyConvergence/>
+                    </rules>
+                </configuration>
             </plugin>
         </plugins>
     </build>
