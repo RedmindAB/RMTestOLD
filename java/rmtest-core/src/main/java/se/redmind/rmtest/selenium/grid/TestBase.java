@@ -10,13 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.utils.LogBackUtil;
-
 public abstract class TestBase {
-
-//    static {
-//        LogBackUtil.install();
-//    }
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected final DriverNamingWrapper driverNamingWrapper;

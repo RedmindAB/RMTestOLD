@@ -18,9 +18,9 @@ public class HTMLPage {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     protected WebDriver driver;
- 
+
     /**
-     * @param driver WebDriver
+     * @param pDriver WebDriver
      */
     public HTMLPage(final WebDriver pDriver) {
         this.driver = pDriver;
@@ -81,7 +81,7 @@ public class HTMLPage {
     }
 
     /**
-     * @param locator
+     * @param condition
      * @param timeoutInSeconds
      */
     public boolean driverFluentWaitForCondition(ExpectedCondition<?> condition, int timeoutInSeconds) {
