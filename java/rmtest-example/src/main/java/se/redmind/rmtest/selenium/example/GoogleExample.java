@@ -11,10 +11,15 @@ import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 import se.redmind.rmtest.selenium.grid.RmAllDevice;
+import se.redmind.utils.LogBackUtil;
 import se.redmind.utils.Try;
 
 @RunWith(Parallelized.class)
 public class GoogleExample extends RmAllDevice {
+
+    static {
+        LogBackUtil.ifNotInstalled().install();
+    }
 
     public GoogleExample(final DriverNamingWrapper driverWrapper, final String driverDescription) {
         super(driverWrapper, driverDescription);

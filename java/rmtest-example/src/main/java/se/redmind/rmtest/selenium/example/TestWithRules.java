@@ -20,9 +20,14 @@ import se.redmind.rmtest.selenium.framework.RmTestWatcher;
 import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
+import se.redmind.utils.LogBackUtil;
 
 @RunWith(Parallelized.class)
 public class TestWithRules {
+
+    static {
+        LogBackUtil.ifNotInstalled().install();
+    }
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private WebDriver tDriver;
