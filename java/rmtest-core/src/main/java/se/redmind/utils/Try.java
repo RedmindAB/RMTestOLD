@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory;
  *
  * usage example:
  *
- *       return Try.toGet(() -> driver.getTitle().contains(articleId))
- *                  .defaultTo(() -> false)
+ *       return Try.toGet(() -&gt; driver.getTitle().contains(articleId))
+ *                  .defaultTo(() -&gt; false)
  *                  .delayRetriesBy(50, TimeUnit.MILLISECONDS)
  *                  .nTimes(10);
  *
  * instead of:
- *       for (int i = 0; i < 10; i++) {
+ *       for (int i = 0; i &lt; 10; i++) {
  *           try {
  *               return driver.getTitle().contains(articleId);
  *           } catch (Exception e) {
@@ -75,7 +75,7 @@ public final class Try {
         /**
          * set a specific function to be used if all the attempts are unsuccessful, default will printout an error
          *
-         * @param onError
+         * @param onLastError
          * @return
          */
         public SelfType onLastError(BiConsumer<Tryer<E, SelfType>, Exception> onLastError) {

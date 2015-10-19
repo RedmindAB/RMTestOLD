@@ -123,9 +123,6 @@ public class DriverNamingWrapper {
         new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
     }
 
-    /**
-     * @param filteredUrlCapList
-     */
     public WebDriver startDriver() {
         setupCapabilities();
         if (driver == null) {

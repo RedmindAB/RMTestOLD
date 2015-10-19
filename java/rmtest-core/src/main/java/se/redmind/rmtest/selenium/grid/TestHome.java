@@ -9,9 +9,6 @@ public class TestHome {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestHome.class);
 
-    /**
-     * @param args
-     */
     @SuppressWarnings("CallToPrintStackTrace")
     public static String main() {
         String testHome = null;

@@ -17,13 +17,75 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <name>rmtest</name>
+    <url>https://github.com/RedmindAB/RMTest</url>
+    <scm>
+        <url>https://github.com/RedmindAB/RMTest.git</url>
+    </scm>
     <description>Redmind Auto tests</description>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.6</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -36,4 +98,18 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <slf4j.version>1.7.12</slf4j.version>
     </properties>
+    <developers>
+        <developer>
+            <name>Petter Österling</name>
+            <email>petter.osterling@redmind.se</email>
+        </developer>
+        <developer>
+            <name>Gustave Holfve</name>
+            <email>gustave.holfve@redmind.se</email>
+        </developer>
+        <developer>
+            <name>Jeremy Comte</name>
+            <email>jeremy.comte@redmind.se</email>
+        </developer>
+    </developers>
 </project>
