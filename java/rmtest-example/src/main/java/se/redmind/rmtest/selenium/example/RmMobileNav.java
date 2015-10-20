@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.utils.Try;
 
@@ -20,7 +20,7 @@ public class RmMobileNav extends HTMLPage {
      */
     public RmMobileNav(WebDriver pDriver, String serverUrl) throws Exception {
         super(pDriver);
-        Try.toExecute(() -> driver.get(Objects.firstNonNull(serverUrl, "http://www.redmind.se"))).delayRetriesBy(500).nTimes(10);
+        Try.toExecute(() -> driver.get(MoreObjects.firstNonNull(serverUrl, "http://www.redmind.se"))).delayRetriesBy(500).nTimes(10);
     }
 
     public void openMobileMenu() {
