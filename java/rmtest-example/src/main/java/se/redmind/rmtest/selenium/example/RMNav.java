@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 
 public class RMNav extends HTMLPage {
@@ -20,7 +20,7 @@ public class RMNav extends HTMLPage {
 
         for (int i = 0; i < 10; i++) {
             try {
-                driver.get(Objects.firstNonNull(serverUrl, "http://www.redmind.se"));
+                driver.get(MoreObjects.firstNonNull(serverUrl, "http://www.redmind.se"));
                 break;
             } catch (Exception e) {
                 logger.error(i + " AbMobileNav: " + e.getMessage(), e);
