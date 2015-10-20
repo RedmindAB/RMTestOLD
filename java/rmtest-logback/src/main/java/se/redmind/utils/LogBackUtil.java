@@ -51,12 +51,21 @@ public final class LogBackUtil {
         new LogBackConfigurator().install();
     }
 
+    /**
+     * @see se.redmind.utils.LogBackUtil.LogBackConfigurator#ifNotInstalled()
+     */
+    public static LogBackConfigurator ifNotInstalled() {
+        return new LogBackConfigurator().ifNotInstalled();
+    }
+
     public static class LogBackConfigurator {
 
         private static boolean julLoggersInstalled;
+        private static boolean alreadyInstalled;
         private Level defaultLevel = Level.INFO;
         private final Map<String, Level> loggers = new LinkedHashMap<>();
         private String format = "%d{HH:mm:ss.SSS} %-5p [%logger{5}] %msg %n";
+        private boolean onlyIfNotInstalled;
 
         public static LoggerContext getLoggerContext() {
             final long startTime = System.currentTimeMillis();
@@ -101,6 +110,7 @@ public final class LogBackUtil {
 
         /**
          * Set the format for this console appender
+         *
          * @param format
          * @return the current LogBackConfigurator
          */
@@ -110,42 +120,52 @@ public final class LogBackUtil {
         }
 
         /**
+         * Install the logger only if none has been installed before
+         *
+         * @return the current LogBackConfigurator
+         */
+        public LogBackConfigurator ifNotInstalled() {
+            onlyIfNotInstalled = true;
+            return this;
+        }
+
+        /**
          * Hijack the default java.util.Logger, remove all appenders and (re)install the new logback configuration
          */
         public synchronized void install() {
-            if (!julLoggersInstalled) {
-                SLF4JBridgeHandler.removeHandlersForRootLogger();
-                SLF4JBridgeHandler.install();
-                julLoggersInstalled = true;
+            if (!onlyIfNotInstalled || !alreadyInstalled) {
+                if (!julLoggersInstalled) {
+                    SLF4JBridgeHandler.removeHandlersForRootLogger();
+                    SLF4JBridgeHandler.install();
+                    julLoggersInstalled = true;
+                }
+
+                LoggerContext loggerContext = getLoggerContext();
+                loggerContext.reset();
+
+                Logger root = loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+                root.detachAndStopAllAppenders();
+                root.setLevel(defaultLevel);
+
+                loggers.forEach((pattern, level) -> loggerContext.getLogger(pattern).setLevel(level));
+
+                ConsoleAppender<ILoggingEvent> console = new ConsoleAppender<>();
+                console.setName("STDOUT");
+                console.setContext(loggerContext);
+                console.setTarget("System.out");
+
+                PatternLayout patternLayout = new PatternLayout();
+                patternLayout.setContext(loggerContext);
+                patternLayout.setPattern(format);
+                patternLayout.start();
+
+                console.setLayout(patternLayout);
+                console.start();
+
+                root.addAppender(console);
+
+                loggerContext.start();
             }
-
-            LoggerContext loggerContext = getLoggerContext();
-            loggerContext.reset();
-
-            Logger root = loggerContext.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-            root.detachAndStopAllAppenders();
-            root.setLevel(defaultLevel);
-
-            loggers.forEach((pattern, level) -> loggerContext.getLogger(pattern).setLevel(level));
-
-            ConsoleAppender<ILoggingEvent> console = new ConsoleAppender<>();
-            console.setName("STDOUT");
-            console.setContext(loggerContext);
-            console.setTarget("System.out");
-
-            PatternLayout patternLayout = new PatternLayout();
-            patternLayout.setContext(loggerContext);
-            patternLayout.setPattern(format);
-            patternLayout.start();
-
-            console.setLayout(patternLayout);
-            console.start();
-
-            root.addAppender(console);
-
-            loggerContext.start();
         }
-
     }
-
 }
