@@ -3,7 +3,7 @@
     <parent>
         <groupId>se.redmind</groupId>
         <artifactId>rmtest</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <licenses>
         <license>
@@ -14,7 +14,7 @@
     </licenses>
     <groupId>se.redmind</groupId>
     <artifactId>rmtest-core</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <name>rmtest -> core</name>
     <properties>
         <selenium.version>2.47.2</selenium.version>
