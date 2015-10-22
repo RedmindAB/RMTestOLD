@@ -70,6 +70,15 @@ else
         exit 1
 fi
 
+npm install phantomjs
+if [[ $? -eq 0 ]]
+then
+		echo "PhantomJS seems OK"
+else
+		echo "PhantomJS installation seems to have failed, please fix manually"
+		exit 1
+fi
+
 echo ""
 echo ""
 echo "### Installation finished successfully ###"
