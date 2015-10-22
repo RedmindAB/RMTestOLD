@@ -39,7 +39,11 @@ public class FrameworkConfig {
     }
 
     private String getLocalConfigValue(String configKey) {
-        return this.localConfig.getAsJsonObject("configuration").get(configKey).getAsString();
+    	try {
+    		return this.localConfig.getAsJsonObject("configuration").get(configKey).getAsString();
+		} catch (NullPointerException e) {
+			return null;
+		}
     }
 
     public boolean runOnGrid() {
