@@ -13,6 +13,8 @@ import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -20,6 +22,7 @@ import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 public class LiveStreamListener extends RunListener {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private volatile RmTestResultBuilder resBuilder;
     private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
@@ -119,11 +122,16 @@ public class LiveStreamListener extends RunListener {
         String suitename = resBuilder.getSuiteName();
         String timestamp = resBuilder.getTimestamp();
         String savePath = FrameworkConfig.getConfig().getJsonReportSavePath();
-        new File(savePath).mkdirs();
+        
+        File file = new File(savePath);
+        if(!file.exists()) file.mkdirs();
+        
         String filename = suitename + "-" + timestamp + ".json";
         try {
-            try (PrintWriter writer = new PrintWriter(savePath + "/" + filename, "UTF-8")) {
+            String concatFilename = savePath + "/" + filename;
+			try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
                 writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
+                logger.info("Saved report as Json to: "+concatFilename);
             }
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
