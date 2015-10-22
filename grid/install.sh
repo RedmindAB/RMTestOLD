@@ -66,8 +66,17 @@ if [[ $? -eq 0 ]]
 then
         echo "Appium seems OK"
 else
-        echo "Appium installation seems to have failed, please fix manually"
+        echo "Appium installation seems to have failed, please run [npm install appium] from test home root folder"
         exit 1
+fi
+
+npm install phantomjs
+if [[ $? -eq 0 ]]
+then
+		echo "PhantomJS seems OK"
+else
+		echo "PhantomJS installation seems to have failed, please run [npm install phantomjs] from test home root folder"
+		exit 1
 fi
 
 echo ""
