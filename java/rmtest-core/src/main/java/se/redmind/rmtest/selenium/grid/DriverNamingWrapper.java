@@ -202,7 +202,7 @@ public class DriverNamingWrapper {
 
     private String getChromePath() {
         String osName = System.getProperty("os.name");
-        String _default = TestHome.main() + "/lib/chromedriver";
+        String _default = TestHome.main() + "/node_modules/chromedriver/bin/chromedriver";
         if (osName.startsWith("Mac")) {
             logger.info("Setting default chromedriver");
             return _default;

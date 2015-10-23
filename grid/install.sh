@@ -79,6 +79,15 @@ else
 		exit 1
 fi
 
+npm install chromedriver
+if [[ $? -eq 0 ]]
+	then
+		echo "Chromedriver seems OK"
+	else
+		echo "Chromedriver installation seems to have failed, please install with [npm install chromedriver --verbose] in test home root folder"
+		exit 1
+fi
+
 echo ""
 echo ""
 echo "### Installation finished successfully ###"
