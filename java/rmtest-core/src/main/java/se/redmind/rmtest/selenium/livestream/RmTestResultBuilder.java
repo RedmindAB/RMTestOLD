@@ -2,6 +2,7 @@ package se.redmind.rmtest.selenium.livestream;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -109,10 +110,21 @@ public class RmTestResultBuilder {
         JsonArray tests = new JsonArray();
         keySet.stream().map(key -> testMap.get(key)).forEach(test -> tests.add(test));
         buildObj.add("tests", tests);
+        buildObj.add("properties", getSystemProperties());
         return buildObj;
     }
 
-    public JsonObject getTest(String displayName) {
+    private JsonElement getSystemProperties() {
+    	JsonObject systemProperties = new JsonObject();
+    	Properties properties = System.getProperties();
+    	Set<Object> propertiesKeySet = properties.keySet();
+    	for (Object propertyKey : propertiesKeySet) {
+    		systemProperties.addProperty((String) propertyKey, System.getProperty((String) propertyKey));
+		}
+    	return systemProperties;
+	}
+
+	public JsonObject getTest(String displayName) {
         return testMap.get(displayName);
     }
 

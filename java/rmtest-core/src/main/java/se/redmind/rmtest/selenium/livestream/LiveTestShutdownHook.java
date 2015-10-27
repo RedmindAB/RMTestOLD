@@ -12,7 +12,7 @@ public class LiveTestShutdownHook implements Runnable {
 	public void run() {
 		con.sendSuiteFinished();
 		con.sendClose();
-		con.close();
+		if(con.isConnected()) con.close();
 	}
 
 }

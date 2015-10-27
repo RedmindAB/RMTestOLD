@@ -108,7 +108,7 @@ public class LiveStreamListener extends RunListener {
             JsonObject results = resBuilder.build();
             rmrConnection.sendSuiteFinished();
             rmrConnection.sendClose();
-            rmrConnection.close();
+            if(rmrConnection.isConnected())rmrConnection.close();
             saveReport();
             super.testRunFinished(result);
         }
