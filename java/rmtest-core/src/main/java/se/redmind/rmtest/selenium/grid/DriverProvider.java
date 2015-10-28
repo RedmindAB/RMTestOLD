@@ -13,8 +13,10 @@ import org.openqa.selenium.remote.SessionNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.redmind.rmtest.config.Configuration;
+import se.redmind.rmtest.config.GridConfiguration;
+import se.redmind.rmtest.config.LocalConfiguration;
 import se.redmind.rmtest.selenium.framework.Browser;
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
 
 /**
  * @author petter
@@ -24,53 +26,53 @@ public class DriverProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(DriverProvider.class);
     private static ArrayList<DriverNamingWrapper> urlCapList = new ArrayList<>();
     private static ArrayList<DriverNamingWrapper> allDrivers = new ArrayList<>();
-    private static DesiredCapabilities currentCapability;
 
     private static void updateDrivers() {
-        final FrameworkConfig config = FrameworkConfig.getConfig();
+        Configuration config = Configuration.current();
         urlCapList = new ArrayList<>();
-        if (!config.runOnGrid()) {
-            loadLocalDrivers();
-            return;
-        }
-        HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstants.hubPort);
-        ArrayList<RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
-
-        RegistrationRequest nodeReq;
-        String description;
-
-        for (RegistrationRequest nodeList1 : nodeList) {
-            nodeReq = nodeList1;
-            for (int i = 0; i < nodeReq.getCapabilities().size(); i++) {
-                currentCapability = new DesiredCapabilities(nodeReq.getCapabilities().get(i));
-                description = DescriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
-                URL driverUrl;
-                try {
-                    driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-                    DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, currentCapability, description);
-                    urlCapList.add(driver);
-                    allDrivers.add(driver);
-                } catch (MalformedURLException e) {
-                    LOGGER.error(e.getMessage(), e);
-                }
-            }
+        if (config.runner instanceof LocalConfiguration) {
+            loadLocalDrivers(config.runner.as(LocalConfiguration.class));
+        } else if (config.runner instanceof GridConfiguration) {
+            loadGridDrivers(config.runner.as(GridConfiguration.class));
+        } else {
+            throw new UnsupportedOperationException("unsupported configuration type " + config.runner);
         }
     }
 
-    private static void loadLocalDrivers() {
-        final FrameworkConfig config = FrameworkConfig.getConfig();
+    private static void loadGridDrivers(GridConfiguration config) {
+        HubNodesStatus nodeInfo = new HubNodesStatus(config.hubIp, GridConstants.hubPort);
+        ArrayList<RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
+
+        nodeList.forEach(nodeReq -> {
+            nodeReq.getCapabilities().stream()
+                .map(capability -> new DesiredCapabilities(capability))
+                .forEach(currentCapability -> {
+                    try {
+                        String description = DescriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
+                        URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
+                        DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, currentCapability, description);
+                        urlCapList.add(driver);
+                        allDrivers.add(driver);
+                    } catch (MalformedURLException e) {
+                        LOGGER.error(e.getMessage(), e);
+                    }
+                });
+        });
+    }
+
+    private static void loadLocalDrivers(LocalConfiguration config) {
         for (Browser browser : Browser.values()) {
-            if (browser == Browser.PhantomJS && config.usePhantomJS()) {
+            if (browser == Browser.PhantomJS && config.usePhantomJS) {
                 DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
                 urlCapList.add(driver);
                 allDrivers.add(driver);
             }
-            if (browser == Browser.Chrome && config.useChrome()) {
+            if (browser == Browser.Chrome && config.useChrome) {
                 DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
                 urlCapList.add(driver);
                 allDrivers.add(driver);
             }
-            if (browser == Browser.Firefox && config.useFirefox()) {
+            if (browser == Browser.Firefox && config.useFirefox) {
                 DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
                 urlCapList.add(driver);
                 allDrivers.add(driver);

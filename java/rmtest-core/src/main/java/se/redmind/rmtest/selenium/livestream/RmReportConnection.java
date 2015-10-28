@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+import se.redmind.rmtest.config.Configuration;
 
 public class RmReportConnection {
 
@@ -21,9 +21,9 @@ public class RmReportConnection {
     private boolean isConnected;
 
     public RmReportConnection() {
-        final FrameworkConfig config = FrameworkConfig.getConfig();
-        this.rmrLiveAddress = config.getRMRLiveAddress();
-        this.rmrLivePort = config.getRMRLivePort();
+        Configuration config = Configuration.current();
+        this.rmrLiveAddress = config.rmReportIP;
+        this.rmrLivePort = config.rmReportLivePort;
     }
 
     public boolean connect() {

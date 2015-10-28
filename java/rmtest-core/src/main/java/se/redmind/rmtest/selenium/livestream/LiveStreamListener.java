@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+import se.redmind.rmtest.config.Configuration;
 
 public class LiveStreamListener extends RunListener {
 
@@ -121,11 +121,11 @@ public class LiveStreamListener extends RunListener {
     private void saveReport() {
         String suitename = resBuilder.getSuiteName();
         String timestamp = resBuilder.getTimestamp();
-        String savePath = FrameworkConfig.getConfig().getJsonReportSavePath();
-        
+        String savePath = Configuration.current().jsonReportSavePath;
+
         File file = new File(savePath);
         if(!file.exists()) file.mkdirs();
-        
+
         String filename = suitename + "-" + timestamp + ".json";
         try {
             String concatFilename = savePath + "/" + filename;
