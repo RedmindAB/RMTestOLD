@@ -1,4 +1,4 @@
 autoCloseDrivers: true
 jsonReportSavePath: /some/path/target/RMTReports
-RmReportIP: 127.0.0.1
-RmReportLivePort: 12345
+rmReportIP: 127.0.0.1
+rmReportLivePort: 12345

@@ -53,10 +53,10 @@ public class Configuration {
     @JsonProperty
     public boolean autoCloseDrivers = true;
 
-    @JsonProperty("RmReportIP")
+    @JsonProperty()
     public String rmReportIP = "127.0.0.1";
 
-    @JsonProperty("RmReportLivePort")
+    @JsonProperty()
     public int rmReportLivePort = 12345;
 
     @JsonProperty
