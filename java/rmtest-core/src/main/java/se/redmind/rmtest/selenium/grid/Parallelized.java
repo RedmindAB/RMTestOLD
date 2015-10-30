@@ -10,7 +10,7 @@ import org.junit.runners.model.RunnerScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+import se.redmind.rmtest.config.Configuration;
 
 public class Parallelized extends Parameterized {
 
@@ -56,7 +56,7 @@ public class Parallelized extends Parameterized {
 
     @Override
     public void run(RunNotifier notifier) {
-        if (FrameworkConfig.getConfig().autoCloseDrivers()) {
+        if (Configuration.current().autoCloseDrivers) {
             notifier.addListener(new AutoCloseListener());
         }
         super.run(notifier);

@@ -18,13 +18,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+import se.redmind.rmtest.config.Configuration;
 /**
  * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned.
  * On the RMReport side the behavior is flaky as a noggenfogger, so for the time being the RMReportConnection class will be commented out until the RMReport side is fixed.
  *  
  * @author gustavholfve
  */
+
 public class LiveStreamListener extends RunListener {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -126,11 +127,11 @@ public class LiveStreamListener extends RunListener {
     private void saveReport() {
         String suitename = resBuilder.getSuiteName();
         String timestamp = resBuilder.getTimestamp();
-        String savePath = FrameworkConfig.getConfig().getJsonReportSavePath();
-        
+        String savePath = Configuration.current().jsonReportSavePath;
+
         File file = new File(savePath);
         if(!file.exists()) file.mkdirs();
-        
+
         String filename = suitename + "-" + timestamp + ".json";
         try {
             String concatFilename = savePath + "/" + filename;

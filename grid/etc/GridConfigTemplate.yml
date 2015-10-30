@@ -1,0 +1,8 @@
+runner:
+  type: grid
+  localIp: 127.0.0.1
+  hubIp: 127.0.0.1
+autoCloseDrivers: true
+jsonReportSavePath: /some/path/target/RMTReports
+rmReportIP: 127.0.0.1
+rmReportLivePort: 12345

@@ -134,6 +134,8 @@ public final class Try {
                     result = supplier.get();
                     if (until == null || until.test(result)) {
                         break;
+                    } else {
+                        logger.warn("'" + result + "' doesn't validate on attempt " + currentAttempt + "/" + maxAttempts);
                     }
                 } catch (Exception exception) {
                     if (onError != null) {

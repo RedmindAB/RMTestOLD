@@ -6,14 +6,14 @@ import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
 
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+import se.redmind.rmtest.config.Configuration;
+import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.selenium.grid.AutoCloseListener;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
 
 public class RmSuite extends Suite {
 
     private LiveStreamListener liveStreamListener;
-    private final FrameworkConfig config = FrameworkConfig.getConfig();
 
     public RmSuite(Class<?> klass, RunnerBuilder builder) throws InitializationError {
         super(klass, builder);
@@ -21,11 +21,12 @@ public class RmSuite extends Suite {
 
     @Override
     public void run(RunNotifier notifier) {
-        if (config.enableLiveStream() && config.runOnGrid()) {
+        Configuration config = Configuration.current();
+        if (config.runner instanceof GridConfiguration && config.runner.as(GridConfiguration.class).enableLiveStream) {
             liveStreamListener = new LiveStreamListener();
             notifier.addListener(liveStreamListener);
         }
-        if (config.autoCloseDrivers()) {
+        if (config.autoCloseDrivers) {
             notifier.addListener(new AutoCloseListener());
         }
         notifier.fireTestRunStarted(getDescription());
@@ -34,7 +35,7 @@ public class RmSuite extends Suite {
 
     @Override
     protected void runChild(Runner runner, RunNotifier notifier) {
-        if (config.enableLiveStream() && liveStreamListener != null) {
+        if (liveStreamListener != null) {
             notifier.addListener(liveStreamListener.getSubListener());
         }
         super.runChild(runner, notifier);
