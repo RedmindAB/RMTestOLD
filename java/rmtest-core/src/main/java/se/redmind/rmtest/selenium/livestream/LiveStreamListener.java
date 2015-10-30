@@ -19,12 +19,17 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
-
+/**
+ * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned.
+ * On the RMReport side the behavior is flaky as a noggenfogger, so for the time being the RMReportConnection class will be commented out until the RMReport side is fixed.
+ *  
+ * @author gustavholfve
+ */
 public class LiveStreamListener extends RunListener {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private volatile RmTestResultBuilder resBuilder;
-    private final RmReportConnection rmrConnection;
+//    private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
     private final boolean parrentRunner;
     private final List<LiveStreamListener> listeners;
@@ -35,9 +40,9 @@ public class LiveStreamListener extends RunListener {
         finishedTests = new HashSet<>();
         parrentRunner = true;
         listeners = new ArrayList<>();
-        rmrConnection = new RmReportConnection();
+//        rmrConnection = new RmReportConnection();
         this.testStartTimes = new HashMap<>();
-        addShutdownHook(rmrConnection);
+//        addShutdownHook(rmrConnection);
     }
 
     private LiveStreamListener(RmTestResultBuilder resBuilder, RmReportConnection connection) {
@@ -45,14 +50,14 @@ public class LiveStreamListener extends RunListener {
         this.finishedTests = new HashSet<>();
         this.parrentRunner = false;
         this.listeners = new ArrayList<>();
-        this.rmrConnection = connection;
+//        this.rmrConnection = connection;
     }
 
     @Override
     public void testRunStarted(Description description) throws Exception {
         initSuite(description, 0);
-        rmrConnection.connect();
-        rmrConnection.sendMessage("suite", resBuilder.build());
+//        rmrConnection.connect();
+//        rmrConnection.sendMessage("suite", resBuilder.build());
         super.testRunStarted(description);
     }
 
@@ -61,7 +66,7 @@ public class LiveStreamListener extends RunListener {
         resBuilder.addTest(description.getDisplayName());
         String id = resBuilder.getTest(description.getDisplayName()).get("id").getAsString();
         if (parrentRunner) {
-            rmrConnection.sendMessage("testStart", id);
+//            rmrConnection.sendMessage("testStart", id);
             testStartTimes.put(description.getDisplayName(), System.currentTimeMillis());
         }
         super.testStarted(description);
@@ -75,7 +80,7 @@ public class LiveStreamListener extends RunListener {
         if (parrentRunner) {
             double runTime = (double) (System.currentTimeMillis() - testStartTimes.get(displayName)) / 1000;
             resBuilder.addRunTime(displayName, runTime);
-            rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
+//            rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
         }
         super.testFinished(description);
     }
@@ -97,7 +102,7 @@ public class LiveStreamListener extends RunListener {
     @Override
     public void testIgnored(Description description) throws Exception {
         resBuilder.addIgnoredTest(description.getDisplayName());
-        rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
+//        rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
         super.testIgnored(description);
     }
 
@@ -106,9 +111,9 @@ public class LiveStreamListener extends RunListener {
         if (parrentRunner) {
             resBuilder.setResult(result);
             JsonObject results = resBuilder.build();
-            rmrConnection.sendSuiteFinished();
-            rmrConnection.sendClose();
-            if(rmrConnection.isConnected())rmrConnection.close();
+//            rmrConnection.sendSuiteFinished();
+//            rmrConnection.sendClose();
+//            if(rmrConnection.isConnected())rmrConnection.close();
             saveReport();
             super.testRunFinished(result);
         }
@@ -156,7 +161,7 @@ public class LiveStreamListener extends RunListener {
     }
 
     public LiveStreamListener getSubListener() {
-        LiveStreamListener subListener = new LiveStreamListener(resBuilder, rmrConnection);
+        LiveStreamListener subListener = new LiveStreamListener(resBuilder, null); // this need to be set to the connection in this class.
         listeners.add(subListener);
         return subListener;
     }

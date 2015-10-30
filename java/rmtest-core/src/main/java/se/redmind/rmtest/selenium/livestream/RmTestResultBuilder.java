@@ -18,7 +18,7 @@ import com.google.gson.JsonObject;
 public class RmTestResultBuilder {
 
     private static final String FAILURE_MESSAGE = "failureMessage";
-    private static final String RESULT = "result";
+    public static final String RESULT = "result";
     private final TreeMap<String, JsonObject> testMap;
     private String suiteName;
     private int totalTests;
@@ -135,7 +135,7 @@ public class RmTestResultBuilder {
 
     public void addAssumptionFailure(String description, Failure failure) {
         JsonObject test = testMap.get(description);
-        test.addProperty(RESULT, "failure");
+        test.addProperty(RESULT, "skipped");
         test.addProperty(FAILURE_MESSAGE, failure.getTrace());
     }
 

@@ -13,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import se.redmind.rmtest.selenium.livestream.LiveTestShutdownHook;
 import se.redmind.rmtest.selenium.livestream.RmTestResultBuilder;
 
 public class RmTestResultBuilderTests {
@@ -71,7 +72,19 @@ public class RmTestResultBuilderTests {
 		result = testResult.get("result").getAsString();
 		assertEquals(3, id);
 		assertEquals("skipped", result);
+	}	
+	
+	@Test
+	public void testAssumptionFail(){
+		RmTestResultBuilder resultBuilder = getResultBuilder();
+		String test1 = "testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
+		resultBuilder.addTest(test1);
+		resultBuilder.addAssumptionFailure(test1, new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
+		JsonObject test = resultBuilder.getTest(test1);
+		String result = test.get(RmTestResultBuilder.RESULT).getAsString();
+		assertEquals("skipped", result);
 	}
+	
 
 	private RmTestResultBuilder getResultBuilder(){
 		RmTestResultBuilder rmTestResultBuilder = new RmTestResultBuilder();
