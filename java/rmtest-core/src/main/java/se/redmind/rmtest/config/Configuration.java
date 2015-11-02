@@ -41,6 +41,165 @@ public class Configuration {
     // let's save the latest read config as a singleton, to be able to replicate the behavior of the legacy FrameworkConfig
     // TODO: dependency injection?
     private static Configuration current;
+    /**
+     * @return the last read configuration, if none was read then try to read the default one, then the legacy one
+     */
+    public static Configuration current() {
+        if (current == null) {
+            Configuration configuration;
+            String configFile = null;
+            try {
+                configFile = System.getProperty(CONFIG_SYSTEM_PROPERTY);
+                if (configFile == null) {
+                    configFile = TestHome.main() + DEFAULT_LOCAL_CONFIG;
+                }
+                configuration = read(configFile);
+            } catch (IOException e) {
+                LOGGER.warn("cannot read " + configFile + ", trying legacy config " + DEFAULT_LEGACY_CONFIG);
+                try {
+                    configuration = read(TestHome.main() + DEFAULT_LEGACY_CONFIG);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            current = configuration.applySystemProperties().validate();
+        }
+        return current;
+    }
+    /**
+     * read the file located at filepath
+     *
+     * @param filepath
+     * @return the Configuration
+     * @throws IOException
+     */
+    public static Configuration read(String filepath) throws IOException {
+        return read(new File(filepath));
+    }
+    /**
+     * read the file
+     *
+     * @param file
+     * @return the Configuration
+     * @throws IOException
+     */
+    public static Configuration read(File file) throws IOException {
+        String content = Files.toString(file, Charset.defaultCharset()).trim();
+        Configuration configuration;
+        configuration = from(content);
+        configuration.filePath = file.getAbsolutePath();
+        return configuration;
+    }
+
+    /**
+     * Builds a configuration object from a String
+     * @param content
+     * @return the Configuration
+     */
+    public static Configuration from(String content) {
+        Configuration configuration;
+        if (content.startsWith("{")) {
+            configuration = fromLegacyJson(content);
+        } else {
+            configuration = fromYaml(content);
+        }
+        return configuration;
+    }
+    /**
+     * Builds a configuration object from a YAML String
+     *
+     * @param yaml
+     * @return the Configuration
+     */
+    public static Configuration fromYaml(String yaml) {
+        try {
+            return objectMapper().readValue(yaml, Configuration.class);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    /**
+     * Builds a configuration object from a legacy JSON String
+     *
+     * @param json
+     * @return the Configuration
+     */
+    public static Configuration fromLegacyJson(String json) {
+        JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
+        if (jsonObject.has("configuration")) {
+            JsonObject jsonConfiguration = jsonObject.getAsJsonObject("configuration");
+            Configuration configuration = new Configuration();
+            if (jsonConfiguration.has("runOnGrid") && jsonConfiguration.get("runOnGrid").getAsBoolean()) {
+                GridConfiguration gridConfiguration = new GridConfiguration();
+                if (jsonConfiguration.has("localIp")) {
+                    gridConfiguration.localIp = jsonConfiguration.get("localIp").getAsString();
+                }
+                if (jsonConfiguration.has("hubIp")) {
+                    gridConfiguration.hubIp = jsonConfiguration.get("hubIp").getAsString();
+                }
+                if (jsonConfiguration.has("enableLiveStream")) {
+                    gridConfiguration.enableLiveStream = jsonConfiguration.get("enableLiveStream").getAsBoolean();
+                }
+            } else {
+                LocalConfiguration localConfiguration = new LocalConfiguration();
+                if (jsonConfiguration.has("usePhantomJS")) {
+                    localConfiguration.usePhantomJS = jsonConfiguration.get("usePhantomJS").getAsBoolean();
+                }
+                if (jsonConfiguration.has("useFirefox")) {
+                    localConfiguration.useFirefox = jsonConfiguration.get("useFirefox").getAsBoolean();
+                }
+                if (jsonConfiguration.has("useChrome")) {
+                    localConfiguration.useChrome = jsonConfiguration.get("useChrome").getAsBoolean();
+                }
+                if (jsonConfiguration.has("androidHome")) {
+                    localConfiguration.android = new AndroidConfiguration();
+                    localConfiguration.android.home = jsonConfiguration.get("androidHome").getAsString();
+                    if (jsonConfiguration.has("AndroidBuildtoolsVersion")) {
+                        localConfiguration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
+                    }
+                }
+                configuration.runner = localConfiguration;
+            }
+            if (jsonConfiguration.has("autoCloseDrivers")) {
+                configuration.autoCloseDrivers = jsonConfiguration.get("autoCloseDrivers").getAsBoolean();
+            }
+            if (jsonConfiguration.has("RmReportIP")) {
+                configuration.rmReportIP = jsonConfiguration.get("RmReportIP").getAsString();
+            }
+            if (jsonConfiguration.has("RmReportLivePort")) {
+                configuration.rmReportLivePort = jsonConfiguration.get("RmReportLivePort").getAsInt();
+            }
+            if (jsonConfiguration.has("jsonReportSavePath")) {
+                configuration.jsonReportSavePath = jsonConfiguration.get("jsonReportSavePath").getAsString();
+            }
+            return configuration;
+        }
+        throw new RuntimeException("config doesn't contain any 'configuration' object\ncontent:\n" + json);
+    }
+    /**
+     * singleton of the YAML ObjectMapper
+     *
+     * @return the objectMapper
+     */
+    public static synchronized ObjectMapper objectMapper() {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper(new YAMLFactory());
+            objectMapper.registerSubtypes(LocalConfiguration.class, GridConfiguration.class);
+        }
+        return objectMapper;
+    }
+    /**
+     * singleton of the Validator
+     *
+     * @return the validator
+     */
+    public static synchronized Validator validator() {
+        if (validator == null) {
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            validator = factory.getValidator();
+        }
+        return validator;
+    }
 
     @JsonIgnore
     private String filePath;
@@ -127,158 +286,4 @@ public class Configuration {
         return super.toString();
     }
 
-    /**
-     * @return the last read configuration, if none was read then try to read the default one, then the legacy one
-     */
-    public static Configuration current() {
-        if (current == null) {
-            Configuration configuration;
-            String configFile = null;
-            try {
-                configFile = System.getProperty(CONFIG_SYSTEM_PROPERTY);
-                if (configFile == null) {
-                    configFile = TestHome.main() + DEFAULT_LOCAL_CONFIG;
-                }
-                configuration = read(configFile);
-            } catch (IOException e) {
-                LOGGER.warn("cannot read " + configFile + ", trying legacy config " + DEFAULT_LEGACY_CONFIG);
-                try {
-                    configuration = read(TestHome.main() + DEFAULT_LEGACY_CONFIG);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-            current = configuration.applySystemProperties().validate();
-        }
-        return current;
-    }
-
-    /**
-     * read the file located at filepath
-     *
-     * @param filepath
-     * @return the Configuration
-     * @throws IOException
-     */
-    public static Configuration read(String filepath) throws IOException {
-        return read(new File(filepath));
-    }
-
-    /**
-     * read the file
-     *
-     * @param file
-     * @return the Configuration
-     * @throws IOException
-     */
-    public static Configuration read(File file) throws IOException {
-        String content = Files.toString(file, Charset.defaultCharset()).trim();
-        Configuration configuration;
-        if (content.startsWith("{")) {
-            configuration = fromLegacyJson(content);
-        } else {
-            configuration = fromYaml(content);
-        }
-        configuration.filePath = file.getAbsolutePath();
-        return configuration;
-    }
-
-    /**
-     * Builds a configuration object from a YAML String
-     *
-     * @param yaml
-     * @return
-     */
-    public static Configuration fromYaml(String yaml) {
-        try {
-            return objectMapper().readValue(yaml, Configuration.class);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    /**
-     * Builds a configuration object from a legacy JSON String
-     *
-     * @param json
-     * @return
-     */
-    public static Configuration fromLegacyJson(String json) {
-        JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
-        if (jsonObject.has("configuration")) {
-            JsonObject jsonConfiguration = jsonObject.getAsJsonObject("configuration");
-            Configuration configuration = new Configuration();
-            if (jsonConfiguration.has("runOnGrid") && jsonConfiguration.get("runOnGrid").getAsBoolean()) {
-                GridConfiguration gridConfiguration = new GridConfiguration();
-                if (jsonConfiguration.has("localIp")) {
-                    gridConfiguration.localIp = jsonConfiguration.get("localIp").getAsString();
-                }
-                if (jsonConfiguration.has("hubIp")) {
-                    gridConfiguration.hubIp = jsonConfiguration.get("hubIp").getAsString();
-                }
-                if (jsonConfiguration.has("enableLiveStream")) {
-                    gridConfiguration.enableLiveStream = jsonConfiguration.get("enableLiveStream").getAsBoolean();
-                }
-            } else {
-                LocalConfiguration localConfiguration = new LocalConfiguration();
-                if (jsonConfiguration.has("usePhantomJS")) {
-                    localConfiguration.usePhantomJS = jsonConfiguration.get("usePhantomJS").getAsBoolean();
-                }
-                if (jsonConfiguration.has("useFirefox")) {
-                    localConfiguration.useFirefox = jsonConfiguration.get("useFirefox").getAsBoolean();
-                }
-                if (jsonConfiguration.has("useChrome")) {
-                    localConfiguration.useChrome = jsonConfiguration.get("useChrome").getAsBoolean();
-                }
-                if (jsonConfiguration.has("androidHome")) {
-                    localConfiguration.android = new AndroidConfiguration();
-                    localConfiguration.android.home = jsonConfiguration.get("androidHome").getAsString();
-                    if (jsonConfiguration.has("AndroidBuildtoolsVersion")) {
-                        localConfiguration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
-                    }
-                }
-                configuration.runner = localConfiguration;
-            }
-            if (jsonConfiguration.has("autoCloseDrivers")) {
-                configuration.autoCloseDrivers = jsonConfiguration.get("autoCloseDrivers").getAsBoolean();
-            }
-            if (jsonConfiguration.has("RmReportIP")) {
-                configuration.rmReportIP = jsonConfiguration.get("RmReportIP").getAsString();
-            }
-            if (jsonConfiguration.has("RmReportLivePort")) {
-                configuration.rmReportLivePort = jsonConfiguration.get("RmReportLivePort").getAsInt();
-            }
-            if (jsonConfiguration.has("jsonReportSavePath")) {
-                configuration.jsonReportSavePath = jsonConfiguration.get("jsonReportSavePath").getAsString();
-            }
-            return configuration;
-        }
-        throw new RuntimeException("config doesn't contain any 'configuration' object\ncontent:\n" + json);
-    }
-
-    /**
-     * singleton of the YAML ObjectMapper
-     *
-     * @return the objectMapper
-     */
-    public static synchronized ObjectMapper objectMapper() {
-        if (objectMapper == null) {
-            objectMapper = new ObjectMapper(new YAMLFactory());
-            objectMapper.registerSubtypes(LocalConfiguration.class, GridConfiguration.class);
-        }
-        return objectMapper;
-    }
-
-    /**
-     * singleton of the Validator
-     *
-     * @return the validator
-     */
-    public static synchronized Validator validator() {
-        if (validator == null) {
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            validator = factory.getValidator();
-        }
-        return validator;
-    }
 }
