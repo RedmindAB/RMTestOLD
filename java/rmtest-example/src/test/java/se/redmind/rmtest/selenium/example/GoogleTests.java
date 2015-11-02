@@ -5,9 +5,10 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import se.redmind.rmtest.selenium.framework.RmSuite;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 
-@RunWith(Suite.class)
+@RunWith(RmSuite.class)
 @Suite.SuiteClasses({GoogleExample.class})
 public class GoogleTests {
 

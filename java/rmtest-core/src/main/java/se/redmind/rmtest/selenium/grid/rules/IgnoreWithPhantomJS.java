@@ -1,11 +1,14 @@
 package se.redmind.rmtest.selenium.grid.rules;
 
-import se.redmind.rmtest.selenium.framework.config.FrameworkConfig;
+import se.redmind.rmtest.config.Configuration;
+import se.redmind.rmtest.config.LocalConfiguration;
 
 public class IgnoreWithPhantomJS implements ConditionalRule.IgnoreCondition {
 
     @Override
     public boolean isSatisfied() {
-        return FrameworkConfig.getConfig().usePhantomJS();
+        Configuration configuration = Configuration.current();
+        return configuration.runner instanceof LocalConfiguration && configuration.runner.as(LocalConfiguration.class).usePhantomJS;
     }
+
 }
