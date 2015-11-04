@@ -11,7 +11,8 @@
             "platformVersion":"IOS_VERSION",
 	    "rmDeviceType":"DEVICE_TYPE",
 	    "newCommandTimeout":"300",
-            "launchTimeout" : "30000"
+            "launchTimeout" : "30000",
+            "locationServicesEnabled":"true"
         }
     ],
     "configuration": {
