@@ -41,6 +41,92 @@ public class Configuration {
     // let's save the latest read config as a singleton, to be able to replicate the behavior of the legacy FrameworkConfig
     // TODO: dependency injection?
     private static Configuration current;
+
+    @JsonIgnore
+    private String filePath;
+
+    @JsonProperty
+    @NotNull
+    @Valid
+    public RunnerConfiguration runner;
+
+    @JsonProperty
+    public boolean autoCloseDrivers = true;
+
+    @JsonProperty()
+    public String rmReportIP = "127.0.0.1";
+
+    @JsonProperty()
+    public int rmReportLivePort = 12345;
+
+    @JsonProperty
+    public String jsonReportSavePath = TestHome.main() + DEFAULT_REPORTS_PATH;
+
+    /**
+     * @return the path of the file this configuration is based on
+     */
+    public String getFilePath() {
+        return filePath;
+    }
+
+    /**
+     * Overrides configuration properties with applicable system properties
+     *
+     * @return the current configuration
+     */
+    public Configuration applySystemProperties() {
+        Table<String, Object, Field> fieldsByPathAndDeclaringInstance = Fields.listByPathAndDeclaringInstance(this);
+        fieldsByPathAndDeclaringInstance.cellSet().forEach(cell -> {
+            String value = System.getProperty(cell.getRowKey());
+            if (value != null) {
+                if (value.contains("\\n")) {
+                    value = value.replaceAll("\\\\n", "\n");
+                }
+                LOGGER.info("overriding configuration key '" + cell.getRowKey() + "' with '" + value + "'");
+                try {
+                    Field field = cell.getValue();
+                    field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
+                } catch (IOException | IllegalArgumentException | IllegalAccessException ex) {
+                    LOGGER.error(ex.getMessage(), ex);
+                }
+            }
+        });
+        return this;
+    }
+
+    /**
+     * Validates the configuration
+     *
+     * @return the current configuration
+     */
+    public Configuration validate() {
+        Set<ConstraintViolation<Configuration>> violations = validator().validate(this);
+        if (!violations.isEmpty()) {
+            StringBuilder message = new StringBuilder(violations.size() + " error" + (violations.size() > 1 ? "s" : "") + " in configuration file " + filePath);
+            violations.forEach(violation -> {
+                Path.Node node = Iterators.getLast(violation.getPropertyPath().iterator());
+                try {
+                    Class<?> type = violation.getLeafBean().getClass().getField(node.getName()).getType();
+                    message.append("\n").append(violation.getPropertyPath()).append(" of type ").append(type.getName()).append(" ").append(violation.getMessage());
+                } catch (NoSuchFieldException | SecurityException ex) {
+                    LOGGER.error(ex.getMessage(), ex);
+                }
+            });
+            throw new ValidationException(message.toString());
+        }
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return "# " + filePath + "\n" + objectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
+        return super.toString();
+    }
+
     /**
      * @return the last read configuration, if none was read then try to read the default one, then the legacy one
      */
@@ -66,6 +152,7 @@ public class Configuration {
         }
         return current;
     }
+
     /**
      * read the file located at filepath
      *
@@ -76,6 +163,7 @@ public class Configuration {
     public static Configuration read(String filepath) throws IOException {
         return read(new File(filepath));
     }
+
     /**
      * read the file
      *
@@ -93,6 +181,7 @@ public class Configuration {
 
     /**
      * Builds a configuration object from a String
+     *
      * @param content
      * @return the Configuration
      */
@@ -105,6 +194,7 @@ public class Configuration {
         }
         return configuration;
     }
+
     /**
      * Builds a configuration object from a YAML String
      *
@@ -118,6 +208,7 @@ public class Configuration {
             throw new RuntimeException(ex);
         }
     }
+
     /**
      * Builds a configuration object from a legacy JSON String
      *
@@ -176,6 +267,7 @@ public class Configuration {
         }
         throw new RuntimeException("config doesn't contain any 'configuration' object\ncontent:\n" + json);
     }
+
     /**
      * singleton of the YAML ObjectMapper
      *
@@ -184,10 +276,11 @@ public class Configuration {
     public static synchronized ObjectMapper objectMapper() {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper(new YAMLFactory());
-            objectMapper.registerSubtypes(LocalConfiguration.class, GridConfiguration.class);
+            objectMapper.registerSubtypes(LocalConfiguration.class, GridConfiguration.class, TestDroidConfiguration.class);
         }
         return objectMapper;
     }
+
     /**
      * singleton of the Validator
      *
@@ -200,90 +293,4 @@ public class Configuration {
         }
         return validator;
     }
-
-    @JsonIgnore
-    private String filePath;
-
-    @JsonProperty
-    @NotNull
-    @Valid
-    public RunnerConfiguration runner;
-
-    @JsonProperty
-    public boolean autoCloseDrivers = true;
-
-    @JsonProperty()
-    public String rmReportIP = "127.0.0.1";
-
-    @JsonProperty()
-    public int rmReportLivePort = 12345;
-
-    @JsonProperty
-    public String jsonReportSavePath = TestHome.main() + DEFAULT_REPORTS_PATH;
-
-    /**
-     * @return the path of the file this configuration is based on
-     */
-    public String getFilePath() {
-        return filePath;
-    }
-
-    /**
-     * Overrides configuration properties with applicable system properties
-     *
-     * @return the current configuration
-     */
-    public Configuration applySystemProperties() {
-        Table<String, Object, Field> fieldsByPathAndDeclaringInstance = Fields.listByPathAndDeclaringInstance(this);
-        fieldsByPathAndDeclaringInstance.cellSet().forEach(cell -> {
-            String value = System.getProperty(cell.getRowKey());
-            if (value != null) {
-                if(value.contains("\\n")) {
-                    value = value.replaceAll("\\\\n", "\n");
-                }
-                LOGGER.info("overriding configuration key '" + cell.getRowKey() + "' with '" + value + "'");
-                try {
-                    Field field = cell.getValue();
-                    field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
-                } catch (IOException | IllegalArgumentException | IllegalAccessException ex) {
-                    LOGGER.error(ex.getMessage(), ex);
-                }
-            }
-        });
-        return this;
-    }
-
-    /**
-     * Validates the configuration
-     *
-     * @return the current configuration
-     */
-    public Configuration validate() {
-        Set<ConstraintViolation<Configuration>> violations = validator().validate(this);
-        if (!violations.isEmpty()) {
-            StringBuilder message = new StringBuilder(violations.size() + " error" + (violations.size() > 1 ? "s" : "") + " in configuration file " + filePath);
-            violations.forEach(violation -> {
-                Path.Node node = Iterators.getLast(violation.getPropertyPath().iterator());
-                try {
-                    Class<?> type = violation.getLeafBean().getClass().getField(node.getName()).getType();
-                    message.append("\n").append(violation.getPropertyPath()).append(" of type ").append(type.getName()).append(" ").append(violation.getMessage());
-                } catch (NoSuchFieldException | SecurityException ex) {
-                    LOGGER.error(ex.getMessage(), ex);
-                }
-            });
-            throw new ValidationException(message.toString());
-        }
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        try {
-            return "# " + filePath + "\n" + objectMapper().writeValueAsString(this);
-        } catch (JsonProcessingException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-        return super.toString();
-    }
-
 }

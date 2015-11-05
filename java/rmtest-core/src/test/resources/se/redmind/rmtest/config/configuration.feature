@@ -47,6 +47,19 @@ Feature: RMTest Configuration file
     And that we validate it
     Then we get no error
 
+  Scenario: read and validate a valid testDroid config file
+    When we read the following configuration file:
+      """
+      runner:
+        type: testDroid
+      autoCloseDrivers: true
+      jsonReportSavePath: /some/path/target/RMTReports
+      rmReportIP: 127.0.0.1
+      rmReportLivePort: 12345
+      """
+    And that we validate it
+    Then we get no error
+
   Scenario: read and validate a valid legacy config file
     When we read the following configuration file:
       """
