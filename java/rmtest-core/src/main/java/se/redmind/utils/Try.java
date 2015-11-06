@@ -52,10 +52,10 @@ public final class Try {
         private int maxAttempts = 1;
         private TimeUnit sleepUnit;
         private long sleepLength;
-        private BiConsumer<Tryer<E, SelfType>, Exception> onError;
-        private BiConsumer<Tryer<E, SelfType>, Exception> onLastError;
+        private BiConsumer<Tryer<E, SelfType>, Exception> onError = (t, e) -> logger.warn(e.toString() + " on attempt " + currentAttempt + "/" + maxAttempts);
+        private BiConsumer<Tryer<E, SelfType>, Exception> onLastError = (t, e) -> logger.error(e.toString(), e);
         protected Supplier<E> defaultSupplier;
-        protected Predicate<E> until;
+        protected Predicate<E> until = value -> true;
 
         protected Tryer(Supplier<E> supplier) {
             this.supplier = supplier;
@@ -110,9 +110,8 @@ public final class Try {
          * Try just once to run this code
          *
          * @return
-         * @throws InterruptedException
          */
-        public E justOnce() throws InterruptedException {
+        public E justOnce() {
             return execute();
         }
 
@@ -132,23 +131,17 @@ public final class Try {
             for (currentAttempt = 1; currentAttempt <= maxAttempts; currentAttempt++) {
                 try {
                     result = supplier.get();
-                    if (until == null || until.test(result)) {
+                    if (until.test(result)) {
                         break;
                     } else {
                         logger.warn("'" + result + "' doesn't validate on attempt " + currentAttempt + "/" + maxAttempts);
                     }
                 } catch (Exception exception) {
-                    if (onError != null) {
+                    if (maxAttempts > 1) {
                         onError.accept(this, exception);
-                    } else if (maxAttempts > 1) {
-                        logger.warn(exception.toString() + " on attempt " + currentAttempt + "/" + maxAttempts);
                     }
                     if (currentAttempt == maxAttempts) {
-                        if (onLastError != null) {
-                            onLastError.accept(this, exception);
-                        } else {
-                            logger.error(exception.toString(), exception);
-                        }
+                        onLastError.accept(this, exception);
                     }
                 }
                 if (currentAttempt < maxAttempts && sleepLength > 0) {
@@ -162,7 +155,7 @@ public final class Try {
                 }
             }
 
-            if (until != null && !until.test(result) && defaultSupplier == null) {
+            if (!until.test(result) && defaultSupplier == null) {
                 throw new IllegalStateException("Couldn't get a valid value and no default was supplied...");
             }
             return result;

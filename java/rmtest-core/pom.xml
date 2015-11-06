@@ -3,7 +3,7 @@
     <parent>
         <groupId>se.redmind</groupId>
         <artifactId>rmtest</artifactId>
-        <version>1.0.5</version>
+        <version>1.0.6</version>
     </parent>
     <licenses>
         <license>
@@ -14,7 +14,7 @@
     </licenses>
     <groupId>se.redmind</groupId>
     <artifactId>rmtest-core</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <name>rmtest -> core</name>
     <properties>
         <selenium.version>2.47.2</selenium.version>
@@ -218,6 +218,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson2</artifactId>
+			<version>1.18.0-rc</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
+		</dependency>
         <!-- phantomjs -->
         <dependency>
             <groupId>com.codeborne</groupId>
@@ -238,7 +249,7 @@
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-logback</artifactId>
-            <version>1.0.5</version>
+            <version>1.0.6</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

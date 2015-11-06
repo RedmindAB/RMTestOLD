@@ -1,51 +1,71 @@
 package se.redmind.rmtest.config;
 
-import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Map;
 
-import javax.validation.ValidationException;
+import org.junit.Assert;
+import org.junit.runner.RunWith;
 
-import org.junit.*;
+import cucumber.api.CucumberOptions;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import cucumber.api.junit.Cucumber;
+import se.redmind.utils.Fields;
 
 /**
  * @author Jeremy Comte
  */
+@RunWith(Cucumber.class)
+@CucumberOptions(plugin = {"pretty", "html:target/ConfigurationTest-html-report", "json:target/ConfigurationTest-json-report.json"})
 public class ConfigurationTest {
 
-    @Test(expected = ValidationException.class)
-    public void readAndValidateInvalidConfig() throws IOException {
-        Configuration configuration = Configuration.read("src/test/resources/se/redmind/rmtest/config/invalidConfig.yml");
-        Assert.assertNotNull(configuration);
-        configuration.validate();
-    }
+    public static class Steps {
 
-    @Test
-    public void readAndValidateLocalConfig() throws IOException {
-        Configuration configuration = Configuration.read("src/test/resources/se/redmind/rmtest/config/localConfig.yml");
-        Assert.assertNotNull(configuration);
-        configuration.validate();
-    }
+        private Exception exception;
+        private Configuration configuration;
 
-    @Test
-    public void readAndValidateGridConfig() throws IOException {
-        Configuration configuration = Configuration.read("src/test/resources/se/redmind/rmtest/config/gridConfig.yml");
-        Assert.assertNotNull(configuration);
-        configuration.validate();
-    }
+        @When("^we read the following configuration file:$")
+        public void we_read_the_following_configuration_file(String config) {
+            configuration = Configuration.from(config);
+            Assert.assertNotNull(configuration);
+        }
 
-    @Test
-    public void readLegacy() throws IOException {
-        Configuration configuration = Configuration.read("src/test/resources/se/redmind/rmtest/config/legacyConfig.json");
-        Assert.assertNotNull(configuration);
-        configuration.validate();
-        Assert.assertTrue(configuration.runner instanceof LocalConfiguration);
-    }
+        @When("^that we validate it$")
+        public void that_we_validate_it() {
+            try {
+                configuration.validate();
+            } catch (Exception e) {
+                exception = e;
+            }
+        }
 
-    @Test
-    public void systemPropertyOverride() throws IOException {
-        System.setProperty("runner.useFirefox", "true");
-        Configuration configuration = Configuration.read("src/test/resources/se/redmind/rmtest/config/localConfig.yml").validate();
-        Assert.assertEquals(false, configuration.runner.as(LocalConfiguration.class).useFirefox);
-        configuration.applySystemProperties();
-        Assert.assertEquals(true, configuration.runner.as(LocalConfiguration.class).useFirefox);
+        @Then("^we get a (.*)")
+        public void we_get_a(String exceptionName) {
+            Assert.assertNotNull(exception);
+            Assert.assertEquals(exception.getClass().getSimpleName(), exceptionName);
+        }
+
+        @Then("^we get no error$")
+        public void we_get_no_error() {
+            Assert.assertNull(exception);
+        }
+
+        @Given("^that the system property \"([^\"]*)\" is set to \"([^\"]*)\"$")
+        public void that_the_system_property_is_set_to(String property, Object value) {
+            System.setProperty(property, String.valueOf(value));
+        }
+
+        @When("^that we apply the system properties$")
+        public void that_we_apply_the_system_properties() {
+            configuration.applySystemProperties();
+        }
+
+        @Then("^the configuration property \"([^\"]*)\" is equal to \"([^\"]*)\"")
+        public void the_configuration_property_is_equal_to(String property, Object value) throws IllegalArgumentException, IllegalAccessException {
+            Map.Entry<Object, Field> entry = Fields.listByPathAndDeclaringInstance(configuration).row(property).entrySet().iterator().next();
+            Assert.assertEquals(String.valueOf(value), String.valueOf(entry.getValue().get(entry.getKey())));
+        }
+
     }
 }

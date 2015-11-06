@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.config.LocalConfiguration;
+import se.redmind.rmtest.config.TestDroidConfiguration;
 import se.redmind.rmtest.selenium.framework.Browser;
+import se.redmind.rmtest.selenium.grid.testdroid.TestDroidDriver;
 
 /**
  * @author petter
@@ -34,6 +36,8 @@ public class DriverProvider {
             loadLocalDrivers(config.runner.as(LocalConfiguration.class));
         } else if (config.runner instanceof GridConfiguration) {
             loadGridDrivers(config.runner.as(GridConfiguration.class));
+        } else if (config.runner instanceof TestDroidConfiguration) {
+            loadTestDroidDrivers();
         } else {
             throw new UnsupportedOperationException("unsupported configuration type " + config.runner);
         }
@@ -78,6 +82,12 @@ public class DriverProvider {
                 allDrivers.add(driver);
             }
         }
+    }
+
+    public synchronized static void loadTestDroidDrivers() {
+        DriverNamingWrapper dnw = TestDroidDriver.getTestDroidWrapper();
+        urlCapList.add(dnw);
+        allDrivers.add(dnw);
     }
 
     /**
