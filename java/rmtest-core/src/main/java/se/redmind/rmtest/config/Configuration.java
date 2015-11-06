@@ -231,6 +231,7 @@ public class Configuration {
                 if (jsonConfiguration.has("enableLiveStream")) {
                     gridConfiguration.enableLiveStream = jsonConfiguration.get("enableLiveStream").getAsBoolean();
                 }
+                configuration.runner = gridConfiguration;
             } else {
                 LocalConfiguration localConfiguration = new LocalConfiguration();
                 if (jsonConfiguration.has("usePhantomJS")) {

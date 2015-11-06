@@ -60,7 +60,7 @@ Feature: RMTest Configuration file
     And that we validate it
     Then we get no error
 
-  Scenario: read and validate a valid legacy config file
+  Scenario: read and validate a valid legacy local config file
     When we read the following configuration file:
       """
       {
@@ -83,6 +83,32 @@ Feature: RMTest Configuration file
       """
     And that we validate it
     Then we get no error
+
+    Scenario: read and validate a valid legacy grid config file
+      When we read the following configuration file:
+        """ 
+        {
+         "configuration":
+         {
+           "androidHome": "/Users/oskeke/Library/Android/sdk",
+           "localIp": "10.12.14.82",
+           "hubIp": "10.12.14.82",
+           "AndroidBuildtoolsVersion": "4.4",
+           "runOnGrid": "true",
+           "usePhantomJS":"false",
+           "useChrome":"false",
+           "useFirefox":"false",
+           "autoCloseDrivers":"true",
+           "RmReportIP":"127.0.0.1",
+           "RmReportLivePort":"12345",
+           "enableLiveStream":"false",
+           "jsonReportSavePath":"~/tmp/testReport"
+         }
+        }
+        """
+      And that we validate it
+      Then we get no error
+
 
   Scenario: override a configuration propery by using a system.property
     Given that the system property "runner.useFirefox" is set to "true"
