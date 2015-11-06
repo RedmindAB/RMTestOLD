@@ -7,14 +7,19 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Key;
+import com.testdroid.api.APIDeviceQueryBuilder;
 import com.testdroid.api.http.MultipartFormDataContent;
+import com.testdroid.api.model.APIDevice;
+
 import io.appium.java_client.AppiumDriver;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
+import java.awt.PageAttributes.MediaType;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 
 public class BaseTest {
@@ -50,6 +55,34 @@ public class BaseTest {
         System.out.println("File id:" + appiumResponse.uploadStatus.fileInfo.file);
 
         return appiumResponse.uploadStatus.fileInfo.file;
+
+    }
+    
+    protected static void getAFreeDevice() throws IOException {
+        final HttpHeaders headers = new HttpHeaders().setAcceptEncoding("application/json");
+
+        HttpRequestFactory requestFactory =
+                HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
+                    public void initialize(HttpRequest request) {
+                        request.setParser(new JsonObjectParser(JSON_FACTORY));
+                        request.setHeaders(headers);
+                    }
+                });
+//        APIDevice.OsType.ANDROID;
+//        APIDeviceQueryBuilder devQuery = new APIDeviceQueryBuilder();
+//        devQuery.filterWithDeviceFilters(APIDevice.OsType.ANDROID)
+////        
+
+
+        HttpRequest request = requestFactory.buildGetRequest(new GenericUrl("https://cloud.testdroid.com/api/v2/devices"));
+
+        HttpResponse response = request.execute();
+        System.out.println("response:" + response.parseAsString());
+//
+//        AppiumResponse appiumResponse = request.execute().parseAs(AppiumResponse.class);
+//        System.out.println("File id:" + appiumResponse.uploadStatus.fileInfo.file);
+
+//        return appiumResponse.uploadStatus.fileInfo.file;
 
     }
 
