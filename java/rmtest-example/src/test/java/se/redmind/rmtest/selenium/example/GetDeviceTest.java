@@ -20,7 +20,6 @@ public class GetDeviceTest extends TestdroidBase {
 
     private static final String TARGET_APP_PATH = "/Users/petter/rmauto/AppTest/halebop_v2.1.4.32_20151013_release_dev_hockeyapp.apk";
     private static final String TESTDROID_SERVER = "http://appium.testdroid.com";
-    private static int counter;
     private static String testdroid_username = "petter.osterling@redmind.se";
     private static String testdroid_password = "Redmind1";
     private static APIDevice theDevice;
@@ -64,7 +63,7 @@ public class GetDeviceTest extends TestdroidBase {
 
         System.out.println("Creating Appium session, this may take couple minutes..");
         wd = new AndroidDriver(new URL(TESTDROID_SERVER+"/wd/hub"), capabilities);
-        System.out.println(wd.getContextHandles().toString());
+//        System.out.println(wd.getContextHandles().toString());
 //        System.out.println(wd.getCurrentUrl());
     }
 

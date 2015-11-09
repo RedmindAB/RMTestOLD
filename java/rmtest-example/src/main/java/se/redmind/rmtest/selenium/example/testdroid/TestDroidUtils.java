@@ -24,15 +24,12 @@ public class TestDroidUtils {
 
     public APIDevice getFirstNonLockedDevice() throws APIException {
         APIListResource<APIDevice> devicesResource;
-//        APIDeviceQueryBuilder query = new APIDeviceQueryBuilder().filterWithDeviceFilters(new )
-//                .sort(APIDevice.class, new APISort.SortItem(APISort.Column.SOFTWARE_API_LEVEL, APISort.Type.ASC));
-//        devicesResource = CLIENT.getDevices(query);
-                devicesResource = CLIENT.getDevices(new APIDeviceQueryBuilder().offset(0).limit(10).search("")
+                devicesResource = CLIENT.getDevices(new APIDeviceQueryBuilder().offset(0).limit(1000).search("")
                 .sort(APIDevice.class, new APISort.SortItem(APISort.Column.SOFTWARE_API_LEVEL, APISort.Type.DESC)));
         for (APIDevice device : devicesResource.getEntity().getData()) {
             if (!device.isLocked()) {
                 if (device.getOsType().equals(APIDevice.OsType.ANDROID)) {
-                    if (device.getSoftwareVersion().getApiLevel() > 17) {
+                    if (device.getSoftwareVersion().getApiLevel() > 21) {
                         return device;
                     }
                 }

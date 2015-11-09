@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 //@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SampleAppiumTest  extends BaseTest {
+public class SampleAppiumTest  extends TestdroidBase {
 
     private static final String TARGET_APP_PATH = "/Users/petter/rmauto/AppTest/halebop_v2.1.4.32_20151013_release_dev_hockeyapp.apk";
     private static final String TESTDROID_SERVER = "http://appium.testdroid.com";
