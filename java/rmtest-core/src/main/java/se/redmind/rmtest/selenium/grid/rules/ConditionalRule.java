@@ -13,16 +13,13 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 public class ConditionalRule implements MethodRule {
-
     public interface IgnoreCondition {
-
         boolean isSatisfied();
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
+    @Target({ElementType.METHOD, ElementType.TYPE})
     public @interface ConditionalIgnore {
-
         Class<? extends IgnoreCondition> condition();
     }
 
@@ -61,13 +58,12 @@ public class ConditionalRule implements MethodRule {
                 return cond.newInstance();
             }
         } catch (NoSuchMethodException | SecurityException | InstantiationException |
-            IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
     private static class IgnoreStatement extends Statement {
-
         private final IgnoreCondition condition;
 
         IgnoreStatement(IgnoreCondition condition) {
