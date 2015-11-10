@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test.java.AtlanSuiteHigh(20150921-160750)" time="280.63" tests="88" errors="11" skipped="30" failures="4">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib"/>
+    <property name="java.vm.version" value="25.51-b03"/>
+    <property name="gopherProxySet" value="false"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=":"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="SE"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="/Users/redmind/bamboo-agent-home/xml-data/build-dir/WA-ATF-JOB1"/>
+    <property name="java.runtime.version" value="1.8.0_51-b16"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.CGraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/endorsed"/>
+    <property name="os.arch" value="x86_64"/>
+    <property name="java.io.tmpdir" value="/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/WA-ATF-JOB1"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="os.name" value="Mac OS X"/>
+    <property name="classworlds.conf" value="/usr/local/Cellar/maven31/3.1.1/libexec/bin/m2.conf"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/Users/redmind/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.10.5"/>
+    <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="user.home" value="/Users/redmind"/>
+    <property name="user.timezone" value="Europe/Stockholm"/>
+    <property name="java.awt.printerjob" value="sun.lwawt.macosx.CPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="user.name" value="redmind"/>
+    <property name="java.class.path" value="/usr/local/Cellar/maven31/3.1.1/libexec/boot/plexus-classworlds-2.5.1.jar"/>
+    <property name="org.slf4j.simpleLogger.defaultLogLevel" value="info"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher --batch-mode -Djava.io.tmpdir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/WA-ATF-JOB1 clean test"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="sv"/>
+    <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_51"/>
+    <property name="java.ext.dirs" value="/Users/redmind/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java"/>
+    <property name="sun.boot.class.path" value="/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/jre/classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.awt.headless" value="true"/>
+    <property name="maven.home" value="/usr/local/Cellar/maven31/3.1.1/libexec"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeBig"/>
+    <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
+    <property name="sun.cpu.isalist" value=""/>
+  </properties>
+  <testcase name="makuleraAterstallaSjukintyg[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="11.033"/>
+  <testcase name="makuleraAterstallaSjukintyg[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="1.168"/>
+  <testcase name="makuleraAterstallaFiler[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.531"/>
+  <testcase name="makuleraAterstallaFiler[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="1.054"/>
+  <testcase name="makuleraAterstallaRemisser[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.678"/>
+  <testcase name="makuleraAterstallaRemisser[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="0.505"/>
+  <testcase name="makuleraAterstallaJournal[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.745"/>
+  <testcase name="makuleraAterstallaJournal[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="0.917"/>
+  <testcase name="makuleraJournalWithWrongPassword[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="0.679"/>
+  <testcase name="makuleraJournalWithWrongPassword[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="1.992"/>
+  <testcase name="makuleraAterstallaProver[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="1.4"/>
+  <testcase name="makuleraAterstallaBrev[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.8"/>
+  <testcase name="makuleraAterstallaProver[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="0.547"/>
+  <testcase name="makuleraAterstallaOperationer[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.81"/>
+  <testcase name="makuleraAterstallaBrev[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="1.092"/>
+  <testcase name="makuleraAterstallaDikteringar[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.66"/>
+  <testcase name="makuleraAterstallaOperationer[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="1.041"/>
+  <testcase name="makuleraAterstallaBlanketter[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="3.724"/>
+  <testcase name="makuleraAterstallaDikteringar[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="4.579"/>
+  <testcase name="makuleraAterstallaBlanketter[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.MakuleraJournalHaendelse(20150921-160750)" time="4.793"/>
+  <testcase name="skapaNyAnteckningGrupp[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyAnteckning(20150921-160750)" time="7.818">
+    <error message="no such element&#10;  (Session info: chrome=44.0.2403.155)&#10;  (Driver info: chromedriver=2.8.241036,platform=Mac OS X 10.10.5 x86_64) (WARNING: The server did not provide any stacktrace information)&#10;Command duration or timeout: 25 milliseconds&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;411b314&apos;, time: &apos;2015-07-30 03:03:16&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.chrome.ChromeDriver&#10;Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: e8148d1313b314c3543c196a5c9c5f5b&#10;*** Element info: {Using=name, value=304}&#10;Command duration or timeout: 32 milliseconds&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=e69666b0-a6d5-47b1-b675-d55047514f77, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: e69666b0-a6d5-47b1-b675-d55047514f77&#10;*** Element info: {Using=name, value=304}" type="org.openqa.selenium.NoSuchElementException">org.openqa.selenium.NoSuchElementException: no such element
+  (Session info: chrome=44.0.2403.155)
+  (Driver info: chromedriver=2.8.241036,platform=Mac OS X 10.10.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 25 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e8148d1313b314c3543c196a5c9c5f5b
+*** Element info: {Using=name, value=304}
+Command duration or timeout: 32 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=e69666b0-a6d5-47b1-b675-d55047514f77, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e69666b0-a6d5-47b1-b675-d55047514f77
+*** Element info: {Using=name, value=304}
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:273)
+	at org.openqa.selenium.remote.RemoteWebElement.findElement(RemoteWebElement.java:176)
+	at org.openqa.selenium.remote.RemoteWebElement.findElementByName(RemoteWebElement.java:225)
+	at org.openqa.selenium.By$ByName.findElement(By.java:300)
+	at org.openqa.selenium.remote.RemoteWebElement.findElement(RemoteWebElement.java:172)
+	at se.atlan.webdoc.nav.containers.elements.form.Form.sendKeysByName(Form.java:81)
+	at se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckningGrupp(NyAnteckning.java:129)
+Caused by: org.openqa.selenium.NoSuchElementException: no such element
+  (Session info: chrome=44.0.2403.155)
+  (Driver info: chromedriver=2.8.241036,platform=Mac OS X 10.10.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 25 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e8148d1313b314c3543c196a5c9c5f5b
+*** Element info: {Using=name, value=304}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: RemoteWebDriver
+	at sun.reflect.GeneratedConstructorAccessor10.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebElement.execute(RemoteWebElement.java:273)
+	at org.openqa.selenium.remote.RemoteWebElement.findElement(RemoteWebElement.java:176)
+	at org.openqa.selenium.remote.RemoteWebElement.findElementByName(RemoteWebElement.java:225)
+	at org.openqa.selenium.By$ByName.findElement(By.java:300)
+	at org.openqa.selenium.remote.RemoteWebElement.findElement(RemoteWebElement.java:172)
+	at sun.reflect.GeneratedMethodAccessor35.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$EventFiringWebElement$1.invoke(EventFiringWebDriver.java:332)
+	at com.sun.proxy.$Proxy3.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$EventFiringWebElement.findElement(EventFiringWebDriver.java:403)
+	at sun.reflect.GeneratedMethodAccessor35.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.openqa.selenium.remote.server.KnownElements$1.invoke(KnownElements.java:64)
+	at com.sun.proxy.$Proxy4.findElement(Unknown Source)
+	at org.openqa.selenium.remote.server.handler.FindChildElement.call(FindChildElement.java:44)
+	at org.openqa.selenium.remote.server.handler.FindChildElement.call(FindChildElement.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+</error>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+17010503-0001
+17020503-0000
+se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckningGrupp-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaNyAnteckningGrupp[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyAnteckning(20150921-160750)" time="12.922">
+    <error message="Timed out after 15 seconds waiting for presence of element located by: By.xpath: .//div[contains(@class,&apos;ui-datepicker&apos;) and contains(@style,&apos;display: block;&apos;)]&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=88cf286e-47f3-4016-b89e-0baaf032042e, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: 88cf286e-47f3-4016-b89e-0baaf032042e" type="org.openqa.selenium.TimeoutException"><![CDATA[org.openqa.selenium.TimeoutException: Timed out after 15 seconds waiting for presence of element located by: By.xpath: .//div[contains(@class,'ui-datepicker') and contains(@style,'display: block;')]
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=88cf286e-47f3-4016-b89e-0baaf032042e, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 88cf286e-47f3-4016-b89e-0baaf032042e
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:445)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:358)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at org.openqa.selenium.support.ui.ExpectedConditions.findElement(ExpectedConditions.java:861)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$000(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:181)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:178)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:209)
+	at se.atlan.webdoc.nav.ElementHandler.getElementBy(ElementHandler.java:31)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.getDatePicker(DatePicker.java:47)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.pickDate(DatePicker.java:28)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.pickDate(DatePicker.java:35)
+	at se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckningGrupp(NyAnteckning.java:128)
+Caused by: org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"xpath","selector":".//div[contains(@class,'ui-datepicker') and contains(@style,'display: block;')]"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+	at <anonymous class>.FirefoxDriver.prototype.findElementInternal_(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:10667)
+	at <anonymous class>.FirefoxDriver.prototype.findElement(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:10676)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_/h(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12643)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12648)
+	at <anonymous class>.DelayedCommand.prototype.execute/<(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12590)
+]]></error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckningGrupp-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaNyAnteckning[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyAnteckning(20150921-160750)" time="2.937">
+    <error message="Timed out after 15 seconds waiting for presence of element located by: By.xpath: .//div[contains(@class,&apos;ui-datepicker&apos;) and contains(@style,&apos;display: block;&apos;)]&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=e69666b0-a6d5-47b1-b675-d55047514f77, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: e69666b0-a6d5-47b1-b675-d55047514f77" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Timed out after 15 seconds waiting for presence of element located by: By.xpath: .//div[contains(@class,'ui-datepicker') and contains(@style,'display: block;')]
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=e69666b0-a6d5-47b1-b675-d55047514f77, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e69666b0-a6d5-47b1-b675-d55047514f77
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:445)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:358)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at org.openqa.selenium.support.ui.ExpectedConditions.findElement(ExpectedConditions.java:861)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$000(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:181)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:178)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:209)
+	at se.atlan.webdoc.nav.ElementHandler.getElementBy(ElementHandler.java:31)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.getDatePicker(DatePicker.java:47)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.pickDate(DatePicker.java:28)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.pickDate(DatePicker.java:35)
+	at se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckning(NyAnteckning.java:65)
+Caused by: org.openqa.selenium.NoSuchElementException: no such element
+  (Session info: chrome=44.0.2403.155)
+  (Driver info: chromedriver=2.8.241036,platform=Mac OS X 10.10.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 5 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.oApZLd}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e8148d1313b314c3543c196a5c9c5f5b
+*** Element info: {Using=xpath, value=.//div[contains(@class,'ui-datepicker') and contains(@style,'display: block;')]}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: EventFiringWebDriver
+	at sun.reflect.GeneratedConstructorAccessor10.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:445)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:358)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at sun.reflect.GeneratedMethodAccessor14.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:102)
+	at com.sun.proxy.$Proxy1.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:185)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:48)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+</error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckning-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaNyAnteckning[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyAnteckning(20150921-160750)" time="15.83">
+    <error message="Timed out after 15 seconds waiting for presence of element located by: By.xpath: .//div[contains(@class,&apos;ui-datepicker&apos;) and contains(@style,&apos;display: block;&apos;)]&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=88cf286e-47f3-4016-b89e-0baaf032042e, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: 88cf286e-47f3-4016-b89e-0baaf032042e" type="org.openqa.selenium.TimeoutException"><![CDATA[org.openqa.selenium.TimeoutException: Timed out after 15 seconds waiting for presence of element located by: By.xpath: .//div[contains(@class,'ui-datepicker') and contains(@style,'display: block;')]
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=88cf286e-47f3-4016-b89e-0baaf032042e, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 88cf286e-47f3-4016-b89e-0baaf032042e
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:445)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:358)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at org.openqa.selenium.support.ui.ExpectedConditions.findElement(ExpectedConditions.java:861)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$000(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:181)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:178)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:209)
+	at se.atlan.webdoc.nav.ElementHandler.getElementBy(ElementHandler.java:31)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.getDatePicker(DatePicker.java:47)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.pickDate(DatePicker.java:28)
+	at se.atlan.webdoc.nav.containers.elements.datepicker.DatePicker.pickDate(DatePicker.java:35)
+	at se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckning(NyAnteckning.java:65)
+Caused by: org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"xpath","selector":".//div[contains(@class,'ui-datepicker') and contains(@style,'display: block;')]"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+	at <anonymous class>.FirefoxDriver.prototype.findElementInternal_(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:10667)
+	at <anonymous class>.FirefoxDriver.prototype.findElement(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:10676)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_/h(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12643)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12648)
+	at <anonymous class>.DelayedCommand.prototype.execute/<(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous919845887368261648webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12590)
+]]></error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyAnteckning.skapaNyAnteckning-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="nyttSjukintyg[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyttSjukintyg(20150921-160750)" time="6.426">
+    <error message="Cannot locate element with text: 9000027&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: driver.version: unknown" type="org.openqa.selenium.NoSuchElementException">org.openqa.selenium.NoSuchElementException: Cannot locate element with text: 9000027
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.Select.selectByVisibleText(Select.java:150)
+	at se.atlan.webdoc.nav.containers.elements.form.Form.select(Form.java:127)
+	at se.atlan.webdoc.nav.containers.elements.form.Form.selectOptionByID(Form.java:118)
+	at se.atlan.webdoc.tests.journaler.NyttSjukintyg.nyttSjukintyg(NyttSjukintyg.java:68)
+</error>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+17010503-0001
+17020503-0000
+se.atlan.webdoc.tests.journaler.NyttSjukintyg.nyttSjukintyg-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="nyttSjukintyg[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyttSjukintyg(20150921-160750)" time="8.446">
+    <error message="Cannot locate element with text: 9000027&#10;For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: driver.version: unknown" type="org.openqa.selenium.NoSuchElementException">org.openqa.selenium.NoSuchElementException: Cannot locate element with text: 9000027
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+	at org.openqa.selenium.support.ui.Select.selectByVisibleText(Select.java:150)
+	at se.atlan.webdoc.nav.containers.elements.form.Form.select(Form.java:127)
+	at se.atlan.webdoc.nav.containers.elements.form.Form.selectOptionByID(Form.java:118)
+	at se.atlan.webdoc.tests.journaler.NyttSjukintyg.nyttSjukintyg(NyttSjukintyg.java:68)
+</error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyttSjukintyg.nyttSjukintyg-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="filtreraPerSokfalt[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="10.418"/>
+  <testcase name="filtreraPerSokfalt[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="0.469"/>
+  <testcase name="navigeraITabellsidorna[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="4.917">
+    <failure message="Infromation text does not correspond to selected value. Visar noll av noll resultat (filtrerat från 596 resultat)" type="java.lang.AssertionError">java.lang.AssertionError: Infromation text does not correspond to selected value. Visar noll av noll resultat (filtrerat från 596 resultat)
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at se.atlan.webdoc.tests.journaler.Patientlogg.navigeraITabellsidorna(Patientlogg.java:90)
+</failure>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.Patientlogg.navigeraITabellsidorna-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+se.atlan.webdoc.tests.journaler.Patientlogg.navigeraITabellsidorna-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="navigeraITabellsidorna[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="0.138">
+    <failure message="Infromation text does not correspond to selected value. Visar noll av noll resultat (filtrerat från 596 resultat)" type="java.lang.AssertionError">java.lang.AssertionError: Infromation text does not correspond to selected value. Visar noll av noll resultat (filtrerat från 596 resultat)
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at se.atlan.webdoc.tests.journaler.Patientlogg.navigeraITabellsidorna(Patientlogg.java:90)
+</failure>
+  </testcase>
+  <testcase name="sorteraTabellkolumner[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="sorteraTabellkolumner[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="visaAntal[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="2.571">
+    <failure message="Infromation text does not correspond to selected value." type="java.lang.AssertionError">java.lang.AssertionError: Infromation text does not correspond to selected value.
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at se.atlan.webdoc.tests.journaler.Patientlogg.visaAntal(Patientlogg.java:150)
+</failure>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.Patientlogg.visaAntal-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="visaAntal[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Patientlogg(20150921-160750)" time="3.152">
+    <failure message="Infromation text does not correspond to selected value." type="java.lang.AssertionError">java.lang.AssertionError: Infromation text does not correspond to selected value.
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.assertTrue(Assert.java:41)
+	at se.atlan.webdoc.tests.journaler.Patientlogg.visaAntal(Patientlogg.java:150)
+</failure>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.Patientlogg.visaAntal-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="varningarFiltreraPerTid[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="7.845"/>
+  <testcase name="createNewWarningIllegalLength[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="3.766"/>
+  <testcase name="normalVarning[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="8.733"/>
+  <testcase name="varningarFiltreraPerTid[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="0.171">
+    <error message="Timed out after 15 seconds waiting for presence of element located by: By.id: searchText&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.5tykIS}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=ef3c0caa-3a36-415b-8718-7ed043a34d08, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: ef3c0caa-3a36-415b-8718-7ed043a34d08" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Timed out after 15 seconds waiting for presence of element located by: By.id: searchText
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.5tykIS}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=ef3c0caa-3a36-415b-8718-7ed043a34d08, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: ef3c0caa-3a36-415b-8718-7ed043a34d08
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementById(RemoteWebDriver.java:389)
+	at org.openqa.selenium.By$ById.findElement(By.java:215)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at org.openqa.selenium.support.ui.ExpectedConditions.findElement(ExpectedConditions.java:861)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$000(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:181)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:178)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:209)
+	at se.atlan.webdoc.nav.ElementHandler.getElementBy(ElementHandler.java:31)
+	at se.atlan.webdoc.nav.SideMenu.searchPatient(SideMenu.java:60)
+	at se.atlan.webdoc.tests.journaler.Varningar.varningarFiltreraPerTid(Varningar.java:402)
+Caused by: org.openqa.selenium.NoSuchElementException: no such element
+  (Session info: chrome=44.0.2403.155)
+  (Driver info: chromedriver=2.8.241036,platform=Mac OS X 10.10.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 6 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.5tykIS}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: ff2a5d1ac89b8206347dd8b00ef07ac0
+*** Element info: {Using=id, value=searchText}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: EventFiringWebDriver
+	at sun.reflect.GeneratedConstructorAccessor10.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementById(RemoteWebDriver.java:389)
+	at org.openqa.selenium.By$ById.findElement(By.java:215)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at sun.reflect.GeneratedMethodAccessor14.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:102)
+	at com.sun.proxy.$Proxy1.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:185)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:48)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+</error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.Varningar.varningarFiltreraPerTid-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="createNewWarningIllegalLength[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="4.964"/>
+  <testcase name="varningarFiltreravarningarMedSoktraff[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="1.938"/>
+  <testcase name="normalVarning[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="8.495"/>
+  <testcase name="overkannsligVarning[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="2.205"/>
+  <testcase name="varningarFiltreravarningarMedSoktraff[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="2.516"/>
+  <testcase name="overkannsligVarning[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="8.186"/>
+  <testcase name="internVarning[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="1.238"/>
+  <testcase name="varningarNavigeraSidorITabell[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="varningarSorteraPerKolumn[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[T-chrome-MAC
+]]></system-out>
+  </testcase>
+  <testcase name="internVarning[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="1.539"/>
+  <testcase name="varningarNavigeraSidorITabell[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="varningarSorteraPerKolumn[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="createNewHypersensitivityWarningWithoutCode[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="1.271"/>
+  <testcase name="createNewHypersensitivityWarningWithoutCode[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Varningar(20150921-160750)" time="3.259"/>
+  <testcase name="utforEnBesoksbetalning[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.besokskassa.Besoekskassa(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+17010503-0001
+]]></system-out>
+  </testcase>
+  <testcase name="utforEnBesoksfakturering[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.besokskassa.Besoekskassa(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="utforEnSkadeanmalan[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.besokskassa.Besoekskassa(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="utforEnBesoksbetalning[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.besokskassa.Besoekskassa(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[17020503-0000
+]]></system-out>
+  </testcase>
+  <testcase name="utforEnBesoksfakturering[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.besokskassa.Besoekskassa(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="utforEnSkadeanmalan[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.besokskassa.Besoekskassa(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="skapaNyAvvikelserapport[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Avvikelserapporter(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+17010503-0001
+]]></system-out>
+  </testcase>
+  <testcase name="vidarerapporteraAvvikelse[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Avvikelserapporter(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="skapaNyAvvikelserapport[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Avvikelserapporter(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[17020503-0000
+]]></system-out>
+  </testcase>
+  <testcase name="vidarerapporteraAvvikelse[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Avvikelserapporter(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="markeraBefintligtDiktatSomSkrivet[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+17010503-0001
+]]></system-out>
+  </testcase>
+  <testcase name="markeraBefintligtDiktatSomSkrivet[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[17020503-0000
+]]></system-out>
+  </testcase>
+  <testcase name="navigeraITabellen[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="5.13"/>
+  <testcase name="navigeraITabellen[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="0.776"/>
+  <testcase name="sokEfterBefintligtDiktqt[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="4.642"/>
+  <testcase name="sokEfterBefintligtDiktqt[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="0.724"/>
+  <testcase name="visa11rader[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="2.12"/>
+  <testcase name="visa11rader[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Diktering(20150921-160750)" time="3.307"/>
+  <testcase name="filtreraVardgivare[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+17010503-0001
+]]></system-out>
+  </testcase>
+  <testcase name="filtreraBesokstyp[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraFritext[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraDatum[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="navigeraTillKoppladJournal[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraNyckelord[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraVardgivare[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+    <system-out><![CDATA[17020503-0000
+]]></system-out>
+  </testcase>
+  <testcase name="filtreraBesokstyp[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraFritext[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraDatum[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="navigeraTillKoppladJournal[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="filtreraNyckelord[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.Journaloversikt(20150921-160750)" time="0">
+    <skipped/>
+  </testcase>
+  <testcase name="skapaNyttBesok[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyttBesok(20150921-160750)" time="30.284">
+    <error message="Timed out after 15 seconds waiting for presence of element located by: By.id: NotSignedText&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=e414de3a-7897-4791-9b7f-4d8a399bf727, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: e414de3a-7897-4791-9b7f-4d8a399bf727" type="org.openqa.selenium.TimeoutException"><![CDATA[org.openqa.selenium.TimeoutException: Timed out after 15 seconds waiting for presence of element located by: By.id: NotSignedText
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=e414de3a-7897-4791-9b7f-4d8a399bf727, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e414de3a-7897-4791-9b7f-4d8a399bf727
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementById(RemoteWebDriver.java:389)
+	at org.openqa.selenium.By$ById.findElement(By.java:215)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at org.openqa.selenium.support.ui.ExpectedConditions.findElement(ExpectedConditions.java:861)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$000(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:181)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:178)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:209)
+	at se.atlan.webdoc.nav.ElementHandler.getElementBy(ElementHandler.java:31)
+	at se.atlan.webdoc.utils.Tools.isSigned(Tools.java:38)
+	at se.atlan.webdoc.tests.journaler.NyttBesok.skapaNyttBesok(NyttBesok.java:111)
+Caused by: org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"id","selector":"NotSignedText"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: unknown
+	at <anonymous class>.FirefoxDriver.prototype.findElementInternal_(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous2175094999185414755webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:10667)
+	at <anonymous class>.FirefoxDriver.prototype.findElement(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous2175094999185414755webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:10676)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_/h(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous2175094999185414755webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12643)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous2175094999185414755webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12648)
+	at <anonymous class>.DelayedCommand.prototype.execute/<(file:///var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/anonymous2175094999185414755webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:12590)
+]]></error>
+    <system-out><![CDATA[Accounts available: 15
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_chrome_UNKNOWN
+17010503-0001
+17020503-0000
+Test1dev5L Test1dev5L
+Test2dev5L Test2dev5L
+se.atlan.webdoc.tests.journaler.NyttBesok.skapaNyttBesok-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaNyttBesok[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyttBesok(20150921-160750)" time="0.365">
+    <error message="Timed out after 15 seconds waiting for presence of element located by: By.id: NotSignedText&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.MxFTMW}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=6abb7cc7-064b-4923-b894-6fdef2718470, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: 6abb7cc7-064b-4923-b894-6fdef2718470" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Timed out after 15 seconds waiting for presence of element located by: By.id: NotSignedText
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.MxFTMW}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=6abb7cc7-064b-4923-b894-6fdef2718470, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 6abb7cc7-064b-4923-b894-6fdef2718470
+	at sun.reflect.GeneratedConstructorAccessor18.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementById(RemoteWebDriver.java:389)
+	at org.openqa.selenium.By$ById.findElement(By.java:215)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at org.openqa.selenium.support.ui.ExpectedConditions.findElement(ExpectedConditions.java:861)
+	at org.openqa.selenium.support.ui.ExpectedConditions.access$000(ExpectedConditions.java:41)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:181)
+	at org.openqa.selenium.support.ui.ExpectedConditions$6.apply(ExpectedConditions.java:178)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:209)
+	at se.atlan.webdoc.nav.ElementHandler.getElementBy(ElementHandler.java:31)
+	at se.atlan.webdoc.utils.Tools.isSigned(Tools.java:38)
+	at se.atlan.webdoc.tests.journaler.NyttBesok.skapaNyttBesok(NyttBesok.java:111)
+Caused by: org.openqa.selenium.NoSuchElementException: no such element
+  (Session info: chrome=44.0.2403.155)
+  (Driver info: chromedriver=2.8.241036,platform=Mac OS X 10.10.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 5 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: '411b314', time: '2015-07-30 03:03:16'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.MxFTMW}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 18adaff306fbd6a2f240688d8d82c69c
+*** Element info: {Using=id, value=NotSignedText}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: driver.version: EventFiringWebDriver
+	at sun.reflect.GeneratedConstructorAccessor10.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:595)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:348)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementById(RemoteWebDriver.java:389)
+	at org.openqa.selenium.By$ById.findElement(By.java:215)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:340)
+	at sun.reflect.GeneratedMethodAccessor14.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:102)
+	at com.sun.proxy.$Proxy1.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:185)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:48)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:1)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+</error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyttBesok.skapaNyttBesok-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaBesokMedVarning[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyttBesok(20150921-160750)" time="10.015">
+    <error message="Timed out after 10 seconds waiting for visibility of element located by By.id: patientDiv&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=e414de3a-7897-4791-9b7f-4d8a399bf727, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: e414de3a-7897-4791-9b7f-4d8a399bf727" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Timed out after 10 seconds waiting for visibility of element located by By.id: patientDiv
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=true, rotatable=false, handlesAlerts=true, databaseEnabled=true, version=37.0.2, platform=MAC, nativeEvents=false, acceptSslCerts=true, webdriver.remote.sessionid=e414de3a-7897-4791-9b7f-4d8a399bf727, webStorageEnabled=true, locationContextEnabled=true, browserName=firefox, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: e414de3a-7897-4791-9b7f-4d8a399bf727
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229)
+	at se.atlan.webdoc.nav.SideMenu.searchPatient(SideMenu.java:63)
+	at se.atlan.webdoc.tests.journaler.NyttBesok.skapaBesokMedVarning(NyttBesok.java:124)
+</error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyttBesok.skapaBesokMedVarning-20150921160750[OSX_UNKNOWN_AnApple_firefox_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaBesokMedVarning[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.journaler.NyttBesok(20150921-160750)" time="11.62">
+    <error message="Timed out after 10 seconds waiting for visibility of element located by By.id: patientDiv&#10;Build info: version: &apos;2.47.1&apos;, revision: &apos;unknown&apos;, time: &apos;2015-07-30 11:02:44&apos;&#10;System info: host: &apos;Autos-Mac-mini.local&apos;, ip: &apos;172.27.59.10&apos;, os.name: &apos;Mac OS X&apos;, os.arch: &apos;x86_64&apos;, os.version: &apos;10.10.5&apos;, java.version: &apos;1.8.0_51&apos;&#10;Driver info: org.openqa.selenium.remote.RemoteWebDriver&#10;Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.MxFTMW}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=6abb7cc7-064b-4923-b894-6fdef2718470, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]&#10;Session ID: 6abb7cc7-064b-4923-b894-6fdef2718470" type="org.openqa.selenium.TimeoutException">org.openqa.selenium.TimeoutException: Timed out after 10 seconds waiting for visibility of element located by By.id: patientDiv
+Build info: version: '2.47.1', revision: 'unknown', time: '2015-07-30 11:02:44'
+System info: host: 'Autos-Mac-mini.local', ip: '172.27.59.10', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.5', java.version: '1.8.0_51'
+Driver info: org.openqa.selenium.remote.RemoteWebDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, chrome={userDataDir=/var/folders/2x/zmm80ym10qs59yh2j1kwsrpm0000gp/T/.org.chromium.Chromium.MxFTMW}, takesHeapSnapshot=true, databaseEnabled=false, handlesAlerts=true, version=44.0.2403.155, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, webdriver.remote.sessionid=6abb7cc7-064b-4923-b894-6fdef2718470, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true}]
+Session ID: 6abb7cc7-064b-4923-b894-6fdef2718470
+	at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:80)
+	at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:229)
+	at se.atlan.webdoc.nav.SideMenu.searchPatient(SideMenu.java:63)
+	at se.atlan.webdoc.tests.journaler.NyttBesok.skapaBesokMedVarning(NyttBesok.java:124)
+</error>
+    <system-out><![CDATA[se.atlan.webdoc.tests.journaler.NyttBesok.skapaBesokMedVarning-20150921160750[OSX_UNKNOWN_AnApple_chrome_UNKNOWN].png
+number: null
+Mac OS X
+We're on a unixy system
+TESTHOME=/Users/redmind/Documents/redmind/RMTest
+/Users/redmind/Documents/redmind/RMTest
+]]></system-out>
+  </testcase>
+  <testcase name="skapaNyOrdination[OSX_UNKNOWN_AnApple_firefox_UNKNOWN]" classname="se.atlan.webdoc.tests.nyaprover.NyaProver(20150921-160750)" time="10.638"/>
+  <testcase name="skapaNyOrdination[OSX_UNKNOWN_AnApple_chrome_UNKNOWN]" classname="se.atlan.webdoc.tests.nyaprover.NyaProver(20150921-160750)" time="12.091"/>
+</testsuite>

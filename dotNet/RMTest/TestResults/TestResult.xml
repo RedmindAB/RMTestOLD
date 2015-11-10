@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" start-time="2015-11-06 11:40:28Z" end-time="2015-11-06 11:41:37Z" duration="69.108952">
+  <environment nunit-version="3.0.5767.14879" clr-version="4.0.30319.42000" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="C:\Program\nunit.org\bin" machine-name="WIN7_32BIT" user="xtompe" user-domain="Win7_32bit" culture="sv-SE" uiculture="sv-SE" os-architecture="x86" />
+  <command-line><![CDATA[nunit-console.exe  ""C:\Repositories\RMTest\RMTest\dotNet\RMTest"\RMTest.Tests\bin\Debug"\RMTest.Tests.dll --domain=Multiple --process=Multiple --workers=4 --work=""C:\Repositories\RMTest\RMTest\dotNet\RMTest"\TestResults" --debug]]></command-line>
+  <settings>
+    <setting name="ProcessModel" value="Multiple" />
+    <setting name="DomainUsage" value="Multiple" />
+    <setting name="WorkDirectory" value="C:\Repositories\RMTest\RMTest\dotNet\RMTest\TestResults" />
+    <setting name="NumberOfTestWorkers" value="4" />
+    <setting name="DebugTests" value="True" />
+  </settings>
+  <test-suite type="Assembly" id="1-1006" name="RMTest.Tests.dll" fullname="C:\Repositories\RMTest\RMTest\dotNet\RMTest\RMTest.Tests\bin\Debug\RMTest.Tests.dll" runstate="Runnable" testcasecount="3" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:41:37Z" duration="66.058526" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="_PID" value="3332" />
+      <property name="_APPDOMAIN" value="test-domain-RMTest.Tests.dll" />
+    </properties>
+    <test-suite type="TestSuite" id="1-1007" name="RMTest" fullname="RMTest" runstate="Runnable" testcasecount="3" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:41:37Z" duration="66.050525" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestSuite" id="1-1008" name="Tests" fullname="RMTest.Tests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:41:37Z" duration="66.050459" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestFixture" id="1-1000" name="MyNumbers_Test" fullname="RMTest.Tests.MyNumbers_Test" classname="RMTest.Tests.MyNumbers_Test" runstate="Runnable" testcasecount="0" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:40:31Z" duration="0.001989" total="0" passed="0" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties>
+            <property name="ParallelScope" value="Children" />
+          </properties>
+        </test-suite>
+        <test-suite type="TestFixture" id="1-1001" name="UnitTest1" fullname="RMTest.Tests.UnitTest1" classname="RMTest.Tests.UnitTest1" runstate="Runnable" testcasecount="3" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:41:37Z" duration="66.044295" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties>
+            <property name="ParallelScope" value="Children" />
+          </properties>
+          <test-suite type="ParameterizedMethod" id="1-1005" name="NavigateToUrlWithFirstDriver" fullname="RMTest.Tests.UnitTest1.NavigateToUrlWithFirstDriver" runstate="Runnable" testcasecount="3" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:41:37Z" duration="66.043280" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <test-case id="1-1002" name="CHROME: (Android_5.0.1_GT-I9505_Chrome_UNKNOWN)" fullname="RMTest.Tests.UnitTest1.CHROME: (Android_5.0.1_GT-I9505_Chrome_UNKNOWN)" methodname="NavigateToUrlWithFirstDriver" classname="RMTest.Tests.UnitTest1" runstate="Runnable" seed="798259755" result="Passed" start-time="2015-11-06 11:40:31Z" end-time="2015-11-06 11:41:24Z" duration="53.213612" asserts="0">
+              <properties>
+                <property name="Category" value="TestCases" />
+              </properties>
+              <output><![CDATA[This is an AppiumDriver
+Started driver: Android_5.0.1_GT-I9505_Chrome_UNKNOWN
+url loaded! 
+driver quit 
+]]></output>
+            </test-case>
+            <test-case id="1-1003" name="FIREFOX: (OSX_UNKNOWN_AnApple_firefox_UNKNOWN)" fullname="RMTest.Tests.UnitTest1.FIREFOX: (OSX_UNKNOWN_AnApple_firefox_UNKNOWN)" methodname="NavigateToUrlWithFirstDriver" classname="RMTest.Tests.UnitTest1" runstate="Runnable" seed="1156821481" result="Passed" start-time="2015-11-06 11:41:24Z" end-time="2015-11-06 11:41:30Z" duration="6.668831" asserts="0">
+              <properties>
+                <property name="Category" value="TestCases" />
+              </properties>
+              <output><![CDATA[This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_firefox_UNKNOWN
+url loaded! 
+driver quit 
+]]></output>
+            </test-case>
+            <test-case id="1-1004" name="SAFARI: (OSX_UNKNOWN_AnApple_safari_UNKNOWN)" fullname="RMTest.Tests.UnitTest1.SAFARI: (OSX_UNKNOWN_AnApple_safari_UNKNOWN)" methodname="NavigateToUrlWithFirstDriver" classname="RMTest.Tests.UnitTest1" runstate="Runnable" seed="684361726" result="Passed" start-time="2015-11-06 11:41:30Z" end-time="2015-11-06 11:41:37Z" duration="6.157322" asserts="0">
+              <properties>
+                <property name="Category" value="TestCases" />
+              </properties>
+              <output><![CDATA[This is a RemoteWebDriver
+Started driver: OSX_UNKNOWN_AnApple_safari_UNKNOWN
+url loaded! 
+driver quit 
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

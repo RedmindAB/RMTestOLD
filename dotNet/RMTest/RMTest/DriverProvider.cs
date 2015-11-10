@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenQA.Selenium.Support;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,15 +8,200 @@ using System.Collections;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using System.Runtime.CompilerServices;
 
 namespace RMTest
 {
 	public class DriverProvider 
 	{
-		private static List<DriverNamingWrapper> driverList = new List<DriverNamingWrapper>();
-		private static Boolean isInitialized = false;
-    
-		public static void startDrivers()
+        private static List<DriverNamingWrapper> urlCapList = new List<DriverNamingWrapper>();
+        private static List<DriverNamingWrapper> allDrivers = new List<DriverNamingWrapper>();
+        private static DesiredCapabilities currentCapability;
+
+        /**
+         *
+         */
+        private static void updateDrivers()
+        {
+            FrameworkConfig config = FrameworkConfig.getConfig();
+            urlCapList = new List<DriverNamingWrapper>();
+            if (!config.runOnGrid())
+            {
+                loadLocalDrivers();
+                return;
+            }
+            HubNodesStatus nodeInfo = new HubNodesStatus(config.getHubIp(), GridConstants.hubPort);
+            List<RegistrationRequest> nodeList = nodeInfo.GetNodesAsRegReqs();
+
+            RegistrationRequest nodeReq;
+            String description;
+
+
+            DescriptionBuilder descriptionBuilder = new DescriptionBuilder();
+            foreach (RegistrationRequest nodeList1 in nodeList)
+            {
+                nodeReq = nodeList1;
+                foreach (DesiredCapabilities currCap in nodeReq.getCapabilities()) //int i = 0; i < nodeReq.getCapabilities().Count; i++)
+                {
+
+                    currentCapability = currCap; // new DesiredCapabilities((Dictionary<String, Object>)cap);
+                    description = descriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
+                    Uri driverUrl;
+                    try
+                    {
+                        driverUrl = new Uri("http://" + nodeReq.getConfigAsString("host") + ":"
+                            + nodeReq.getConfigAsString("port") + "/wd/hub");
+                        DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, currentCapability, description);
+                        urlCapList.Add(driver);
+                        allDrivers.Add(driver);
+                    }
+                    catch (System.UriFormatException e)
+                    {
+                        // TODO Auto-generated catch block
+                        //e.StackTrace(); // e.printStackTrace();
+                        throw e;
+                    }
+
+                }
+            }
+        }
+
+        private static void loadLocalDrivers()
+        {
+            FrameworkConfig config = FrameworkConfig.getConfig();
+
+            foreach (Browser browser in Enum.GetValues(typeof(Browser)))
+            {
+                if (browser == Browser.PhantomJS && !config.usePhantomJS())
+                {
+                    continue;
+                }
+                if (browser == Browser.Chrome && !config.useChrome())
+                {
+                    continue;
+                }
+                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.ToString());
+                urlCapList.Add(driver);
+                allDrivers.Add(driver);
+            }
+        }
+
+
+        /**
+         *
+         */
+        public static void stopDrivers()
+        {
+            foreach(DriverNamingWrapper allDriver in allDrivers)
+            {
+                System.Console.WriteLine("Closing driver: " + allDriver.getDescription());
+                try
+                {
+                    if (allDriver.getDriver() != null)
+                    {
+                        allDriver.getDriver().Quit();
+                    }
+                }
+                /*
+                catch (OpenQA.Selenium.Remote SessionNotFoundException e)
+                {
+                    System.Console.WriteLine("For some reason a session was gone while quitting");
+                    System.Console.WriteLine(e);
+                }
+                */
+                catch (WebDriverException)
+                {
+                    System.Console.WriteLine("Crached webdriver, continue to closing drivers");
+                }
+            }
+            allDrivers = new List<DriverNamingWrapper>();
+        }
+
+        /**
+         *
+         * @return
+         */
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static Object[] getDrivers()
+        {
+            updateDrivers();
+            return urlCapList.ToArray();
+        }
+
+        /**
+         * @param pPlatform
+         * @return
+         */
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static Object[] getDrivers(Platform pPlatform)
+        {
+            updateDrivers();
+            return urlCapList.FindAll(x => x.getCapabilities().Platform == pPlatform).ToArray();
+                //.filter(urlCapList1->urlCapList1.getCapability().getPlatform().is(pPlatform))
+                //.collect(Collectors.toList()).toArray();
+        }
+
+        /**
+         * @param pPlatform1
+         * @param pPlatform2
+         * @return
+         */
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2)
+        {
+            updateDrivers();
+            return urlCapList.FindAll(x => x.getCapabilities().Platform == pPlatform1 || x.getCapabilities().Platform == pPlatform2).ToArray();
+            //getCapabilities().Platform == pPlatform1 || x.getCapability().getPlatform().is(pPlatform2))
+            //    .collect(Collectors.toList()).toArray();
+        }
+
+        /**
+         * @param pPlatform
+         * @param pBrowserName
+         * @return
+         */
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static Object[] getDrivers(Platform pPlatform, String pBrowserName)
+        {
+            updateDrivers();
+            return urlCapList.FindAll(x => x.getCapabilities().Platform == pPlatform || x.getCapabilities().BrowserName.Contains(pBrowserName)).ToArray();
+                //.collect(Collectors.toList()).toArray();
+        }
+
+        /**
+         * get drivers that match capability key,value pair
+         *
+         * @param capKey
+         * @param capValue
+         * @return
+         */
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static Object[] getDrivers(String capKey, String capValue)
+        {
+            updateDrivers();
+            List<DriverNamingWrapper> filteredUrlCapList = new List<DriverNamingWrapper>();
+            String currCapValue;
+            foreach (DriverNamingWrapper urlCapList1 in urlCapList)
+            {
+                currCapValue = (String)urlCapList1.getCapabilities().GetCapability(capKey);
+                if (currCapValue == null)
+                {
+                    currCapValue = "";
+                }
+                if (currCapValue.ToLower().Equals(capValue.ToLower()))
+                {
+                    filteredUrlCapList.Add(urlCapList1);
+                }
+            }
+            return filteredUrlCapList.ToArray();
+        }
+
+
+
+        // private static List<DriverNamiWrapper> driverList = new List<DriverNamingWrapper>();
+        // private static Boolean isInitialized = false;
+
+        /* public static void startDrivers()
 		{
 			RmConfig config = new RmConfig();
 			String hubHost = config.getHubIp();
@@ -91,21 +277,22 @@ namespace RMTest
 				isInitialized = true;
 			}
 		}
-    
-		//public static void cleanStaleDrivers() {
-		//	for (int driverNr = 0; driverNr < driverList.size(); driverNr++) {
-		//		try {
-		//			System.out.println(driverList.get(driverNr).toString());
-		//			driverList.get(driverNr).getDriver();
-		//		} catch (Exception e) {
-		//			// TODO: handle exception
-		//			e.printStackTrace();
-		//		}
+*/
 
-		//	}
-		//}
+        //public static void cleanStaleDrivers() {
+        //	for (int driverNr = 0; driverNr < driverList.size(); driverNr++) {
+        //		try {
+        //			System.out.println(driverList.get(driverNr).toString());
+        //			driverList.get(driverNr).getDriver();
+        //		} catch (Exception e) {
+        //			// TODO: handle exception
+        //			e.printStackTrace();
+        //		}
 
-		public static void stopDrivers()
+        //	}
+        //}
+
+        /* public static void stopDrivers()
 		{
 			//DriverNamingWrapper DriveWrap;
 			for (int i = 0; i < driverList.Count; i++)
@@ -116,12 +303,14 @@ namespace RMTest
 
 			}
 		}
+        */
 
-		/**
+        /**
 		 * 
 		 * @return 
 		 */
-		public static void getDrivers() {
+
+        /* public static void getDrivers() {
 			startDrivers();
 			for (int i = 0; i < driverList.Count; i++)
 			{
@@ -141,77 +330,78 @@ namespace RMTest
 	//	 * 
 	//	 * @return 
 	//	 */
-	//	public synchronized static Object[] getDrivers(Platform pPlatform) {
-	//		startDrivers();
-	//		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
-	//		for (int i = 0; i < driverList.size(); i++) {
-	//			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform)) {
-	//				filteredDriverList.add(driverList.get(i));
-	//			}
-	//		}
-	//		return filteredDriverList.toArray();
-	//	}
-    
-	//	/**
-	//	 * 
-	//	 * @return 
-	//	 */
-	//	public synchronized static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2) {
-	//		startDrivers();
-	//		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
-	//		for (int i = 0; i < driverList.size(); i++) {
-	//			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform1)) {
-	//				filteredDriverList.add(driverList.get(i));
-	//			}
-	//			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform2)) {
-	//				filteredDriverList.add(driverList.get(i));
-	//			}
-	//		}
-	//		return filteredDriverList.toArray();
-	//	}
-    
-	//	/**
-	//	 * 
-	//	 * @return 
-	//	 */
-	//	public synchronized static Object[] getDrivers(Platform pPlatform, String pBrowserName) {
-	//		startDrivers();
-	//		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
-	//		for (int i = 0; i < driverList.size(); i++) {
-	//			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform)) {
-	//				if (driverList.get(i).getCapabilities().getBrowserName().contains(pBrowserName)) {
-	////                    System.out.println("Choosen driver: " + driverList.get(i));
-	//					filteredDriverList.add(driverList.get(i));
-	//				}
-	//			}
-	//		}
-	////        System.out.println("Number of drivers: " + filteredDriverList.size());
-	//		return filteredDriverList.toArray();
-	//	}
-    
-  
-	//	/**
-	//	 * get drivers that match capability key,value pair
-	//	 * @param capKey
-	//	 * @param capValue
-	//	 * @return
-	//	 */
-	//	public synchronized static Object[] getDrivers(String capKey, String capValue) {
-	//		startDrivers();
-	//		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
-	//		String currCap;
-	//		for (int i = 0; i < driverList.size(); i++) {
-	//			currCap = (String) driverList.get(i).getCapabilities().getCapability(capKey);
-	//			if (currCap == null) {
-	//				currCap = "";
-	//			}
-	//			if (currCap.equalsIgnoreCase(capValue)) {
-	//				filteredDriverList.add(driverList.get(i));
-	//			}
-	//		}
-	//		return filteredDriverList.toArray();
-	//	}
-    
-    
-	}
+
+        //	public synchronized static Object[] getDrivers(Platform pPlatform) {
+        //		startDrivers();
+        //		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
+        //		for (int i = 0; i < driverList.size(); i++) {
+        //			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform)) {
+        //				filteredDriverList.add(driverList.get(i));
+        //			}
+        //		}
+        //		return filteredDriverList.toArray();
+        //	}
+
+        //	/**
+        //	 * 
+        //	 * @return 
+        //	 */
+        //	public synchronized static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2) {
+        //		startDrivers();
+        //		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
+        //		for (int i = 0; i < driverList.size(); i++) {
+        //			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform1)) {
+        //				filteredDriverList.add(driverList.get(i));
+        //			}
+        //			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform2)) {
+        //				filteredDriverList.add(driverList.get(i));
+        //			}
+        //		}
+        //		return filteredDriverList.toArray();
+        //	}
+
+        //	/**
+        //	 * 
+        //	 * @return 
+        //	 */
+        //	public synchronized static Object[] getDrivers(Platform pPlatform, String pBrowserName) {
+        //		startDrivers();
+        //		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
+        //		for (int i = 0; i < driverList.size(); i++) {
+        //			if (driverList.get(i).getCapabilities().getPlatform().is(pPlatform)) {
+        //				if (driverList.get(i).getCapabilities().getBrowserName().contains(pBrowserName)) {
+        ////                    System.out.println("Choosen driver: " + driverList.get(i));
+        //					filteredDriverList.add(driverList.get(i));
+        //				}
+        //			}
+        //		}
+        ////        System.out.println("Number of drivers: " + filteredDriverList.size());
+        //		return filteredDriverList.toArray();
+        //	}
+
+
+        //	/**
+        //	 * get drivers that match capability key,value pair
+        //	 * @param capKey
+        //	 * @param capValue
+        //	 * @return
+        //	 */
+        //	public synchronized static Object[] getDrivers(String capKey, String capValue) {
+        //		startDrivers();
+        //		ArrayList <DriverNamingWrapper> filteredDriverList = new ArrayList<DriverNamingWrapper>();
+        //		String currCap;
+        //		for (int i = 0; i < driverList.size(); i++) {
+        //			currCap = (String) driverList.get(i).getCapabilities().getCapability(capKey);
+        //			if (currCap == null) {
+        //				currCap = "";
+        //			}
+        //			if (currCap.equalsIgnoreCase(capValue)) {
+        //				filteredDriverList.add(driverList.get(i));
+        //			}
+        //		}
+        //		return filteredDriverList.toArray();
+        //	}
+
+
+    }
 }
