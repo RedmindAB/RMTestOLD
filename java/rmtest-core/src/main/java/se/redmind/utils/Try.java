@@ -62,6 +62,20 @@ public final class Try {
         }
 
         /**
+         * @return the current attempt number
+         */
+        public int currentAttempt() {
+            return currentAttempt;
+        }
+
+        /**
+         * @return the max attempts number
+         */
+        public int maxAttempts() {
+            return maxAttempts;
+        }
+
+        /**
          * set a specific function to be used when an error is encountered, default will printout a warning
          *
          * @param onError

@@ -3,12 +3,15 @@ package se.redmind.rmtest.config;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.*;
-import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import se.redmind.rmtest.selenium.grid.TestHome;
 import se.redmind.utils.Fields;
+import se.redmind.utils.ReflectionsUtils;
 
 /**
  * @author Jeremy Comte
@@ -46,9 +50,9 @@ public class Configuration {
     private String filePath;
 
     @JsonProperty
-    @NotNull
+    @NotEmpty
     @Valid
-    public RunnerConfiguration runner;
+    public List<DriverConfiguration<?>> drivers = new ArrayList<>();
 
     @JsonProperty
     public boolean autoCloseDrivers = true;
@@ -61,6 +65,9 @@ public class Configuration {
 
     @JsonProperty
     public String jsonReportSavePath = TestHome.main() + DEFAULT_REPORTS_PATH;
+
+    @JsonProperty
+    public AndroidConfiguration android;
 
     /**
      * @return the path of the file this configuration is based on
@@ -153,6 +160,10 @@ public class Configuration {
         return current;
     }
 
+    public static void setCurrent(Configuration current) {
+        Configuration.current = current;
+    }
+
     /**
      * read the file located at filepath
      *
@@ -222,35 +233,30 @@ public class Configuration {
             Configuration configuration = new Configuration();
             if (jsonConfiguration.has("runOnGrid") && jsonConfiguration.get("runOnGrid").getAsBoolean()) {
                 GridConfiguration gridConfiguration = new GridConfiguration();
-                if (jsonConfiguration.has("localIp")) {
-                    gridConfiguration.localIp = jsonConfiguration.get("localIp").getAsString();
-                }
                 if (jsonConfiguration.has("hubIp")) {
                     gridConfiguration.hubIp = jsonConfiguration.get("hubIp").getAsString();
                 }
                 if (jsonConfiguration.has("enableLiveStream")) {
                     gridConfiguration.enableLiveStream = jsonConfiguration.get("enableLiveStream").getAsBoolean();
                 }
-                configuration.runner = gridConfiguration;
+                configuration.drivers.add(gridConfiguration);
             } else {
-                LocalConfiguration localConfiguration = new LocalConfiguration();
-                if (jsonConfiguration.has("usePhantomJS")) {
-                    localConfiguration.usePhantomJS = jsonConfiguration.get("usePhantomJS").getAsBoolean();
+                if (jsonConfiguration.has("usePhantomJS") && jsonConfiguration.get("usePhantomJS").getAsBoolean()) {
+                    configuration.drivers.add(new PhantomJSConfiguration());
                 }
-                if (jsonConfiguration.has("useFirefox")) {
-                    localConfiguration.useFirefox = jsonConfiguration.get("useFirefox").getAsBoolean();
+                if (jsonConfiguration.has("useFirefox") && jsonConfiguration.get("useFirefox").getAsBoolean()) {
+                    configuration.drivers.add(new FirefoxConfiguration());
                 }
-                if (jsonConfiguration.has("useChrome")) {
-                    localConfiguration.useChrome = jsonConfiguration.get("useChrome").getAsBoolean();
+                if (jsonConfiguration.has("useChrome") && jsonConfiguration.get("useChrome").getAsBoolean()) {
+                    configuration.drivers.add(new ChromeConfiguration());
                 }
                 if (jsonConfiguration.has("androidHome")) {
-                    localConfiguration.android = new AndroidConfiguration();
-                    localConfiguration.android.home = jsonConfiguration.get("androidHome").getAsString();
+                    configuration.android = new AndroidConfiguration();
+                    configuration.android.home = jsonConfiguration.get("androidHome").getAsString();
                     if (jsonConfiguration.has("AndroidBuildtoolsVersion")) {
-                        localConfiguration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
+                        configuration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
                     }
                 }
-                configuration.runner = localConfiguration;
             }
             if (jsonConfiguration.has("autoCloseDrivers")) {
                 configuration.autoCloseDrivers = jsonConfiguration.get("autoCloseDrivers").getAsBoolean();
@@ -277,7 +283,9 @@ public class Configuration {
     public static synchronized ObjectMapper objectMapper() {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper(new YAMLFactory());
-            objectMapper.registerSubtypes(LocalConfiguration.class, GridConfiguration.class, TestDroidConfiguration.class);
+            ReflectionsUtils.current().getSubTypesOf(DriverConfiguration.class).stream()
+                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+                .forEach(clazz -> objectMapper.registerSubtypes(clazz));
         }
         return objectMapper;
     }

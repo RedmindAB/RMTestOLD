@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +14,12 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 
-import io.appium.java_client.android.AndroidDriver;
-import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import io.appium.java_client.AppiumDriver;
+import se.redmind.rmtest.AppiumDriverWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * <pre>
@@ -32,12 +33,12 @@ import se.redmind.rmtest.selenium.grid.Parallelized;
 @RunWith(Parallelized.class)
 public class AppiumTest {
 
-    private AndroidDriver androidDriver;
-    private final DriverNamingWrapper urlContainer;
+    private AppiumDriver<WebElement> androidDriver;
+    private final AppiumDriverWrapper driverWrapper;
     private final String driverDescription;
 
-    public AppiumTest(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-        this.urlContainer = driverWrapper;
+    public AppiumTest(final AppiumDriverWrapper driverWrapper, final String driverDescription) {
+        this.driverWrapper = driverWrapper;
         this.driverDescription = driverDescription;
     }
 
@@ -59,7 +60,7 @@ public class AppiumTest {
 
     @Before
     public void beforeTest() {
-        this.androidDriver = (AndroidDriver) this.urlContainer.startDriver();
+        this.androidDriver = this.driverWrapper.getDriver();
     }
 
     @Before

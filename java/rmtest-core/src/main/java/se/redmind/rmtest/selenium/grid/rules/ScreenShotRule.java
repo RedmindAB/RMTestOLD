@@ -5,8 +5,8 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
-import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 
 /**
  * Created by johgri on 15-06-22.
@@ -15,15 +15,14 @@ public class ScreenShotRule extends TestWatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScreenShotRule.class);
 
-    private DriverNamingWrapper driverContainer;
+    private DriverWrapper<?> driverContainer;
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public ScreenShotRule() {
-        this.driverContainer = setDriverWrapper(driverContainer);
         LOG.debug("Initializing ScreenShotRule");
     }
 
-    public DriverNamingWrapper setDriverWrapper(DriverNamingWrapper driverWrapper) {
+    public DriverWrapper<?> setDriverWrapper(DriverWrapper<?> driverWrapper) {
         this.driverContainer = driverWrapper;
         return driverWrapper;
     }

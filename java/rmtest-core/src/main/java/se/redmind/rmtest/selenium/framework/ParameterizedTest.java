@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 
-import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 
@@ -17,10 +17,10 @@ import se.redmind.rmtest.selenium.grid.Parallelized;
 public class ParameterizedTest {
 
     protected WebDriver tDriver;
-    protected final DriverNamingWrapper driverWrapper;
+    protected final DriverWrapper<?> driverWrapper;
     protected final String driverDescription;
 
-    public ParameterizedTest(final DriverNamingWrapper driverWrapper, final String driverDescription) {
+    public ParameterizedTest(DriverWrapper<?> driverWrapper, final String driverDescription) {
         this.driverWrapper = driverWrapper;
         this.driverDescription = driverDescription;
     }

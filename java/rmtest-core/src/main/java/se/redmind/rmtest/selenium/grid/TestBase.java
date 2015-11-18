@@ -10,14 +10,16 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.redmind.rmtest.DriverWrapper;
+
 public abstract class TestBase {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected final DriverNamingWrapper driverNamingWrapper;
+    protected final DriverWrapper<?> driverWrapper;
     protected WebDriver webDriver;
 
-    public TestBase(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-        this.driverNamingWrapper = driverWrapper;
+    public TestBase(DriverWrapper<?> driverWrapper, final String driverDescription) {
+        this.driverWrapper = driverWrapper;
     }
 
     private static List<Object> getDrivers() {

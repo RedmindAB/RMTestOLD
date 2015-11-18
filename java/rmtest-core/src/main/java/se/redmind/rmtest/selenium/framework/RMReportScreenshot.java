@@ -12,11 +12,10 @@ import javax.imageio.ImageIO;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.grid.TestHome;
 
 public class RMReportScreenshot {
@@ -26,12 +25,10 @@ public class RMReportScreenshot {
     private static final String FILE_EXTENTION = "png";
     private static final HashMap<String, Integer> FILENAME_NUMBERS = new HashMap<>();
 
-    private final DriverNamingWrapper namingWrapper;
-    private final WebDriver driver;
+    private final DriverWrapper<?> driverWrapper;
 
-    public RMReportScreenshot(DriverNamingWrapper namingWrapper) {
-        this.driver = namingWrapper.getDriver();
-        this.namingWrapper = namingWrapper;
+    public RMReportScreenshot(DriverWrapper<?> driverWrapper) {
+        this.driverWrapper = driverWrapper;
     }
 
     /**
@@ -59,7 +56,7 @@ public class RMReportScreenshot {
      * prefix the oldest file will be over written
      */
     public void takeScreenshot(String className, String methodName, String prefix) {
-        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        File scrFile = ((TakesScreenshot) driverWrapper.getDriver()).getScreenshotAs(OutputType.FILE);
         BufferedImage image = fileToImage(scrFile);
         if (isResizeNecessary(image)) {
             image = resizeImage(image);
@@ -86,7 +83,7 @@ public class RMReportScreenshot {
             return null;
         }
         timestamp = timestamp.replace("-", "");
-        String description = namingWrapper.getDescription();
+        String description = driverWrapper.getDescription();
         String filename = className + "." + methodName + "-" + timestamp + "[" + description + "]." + FILE_EXTENTION;
         int screenshotNumber = getPrefixNumber(filename);
         if (prefix != null && prefix.length() > 0) {

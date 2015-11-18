@@ -1,24 +1,17 @@
 package se.redmind.rmtest.selenium.grid;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.SessionNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.config.Configuration;
-import se.redmind.rmtest.config.GridConfiguration;
-import se.redmind.rmtest.config.LocalConfiguration;
-import se.redmind.rmtest.config.TestDroidConfiguration;
-import se.redmind.rmtest.selenium.framework.Browser;
-import se.redmind.rmtest.selenium.grid.testdroid.TestDroidDriver;
 
 /**
  * @author petter
@@ -26,96 +19,34 @@ import se.redmind.rmtest.selenium.grid.testdroid.TestDroidDriver;
 public class DriverProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DriverProvider.class);
-    private static ArrayList<DriverNamingWrapper> urlCapList = new ArrayList<>();
-    private static ArrayList<DriverNamingWrapper> allDrivers = new ArrayList<>();
+    private static final ArrayList<DriverWrapper<?>> CURRENT_DRIVERS = new ArrayList<>();
+    private static final ArrayList<DriverWrapper<?>> ALL_DRIVERS = new ArrayList<>();
 
     private static void updateDrivers() {
-        Configuration config = Configuration.current();
-        urlCapList = new ArrayList<>();
-        if (config.runner instanceof LocalConfiguration) {
-            loadLocalDrivers(config.runner.as(LocalConfiguration.class));
-        } else if (config.runner instanceof GridConfiguration) {
-            loadGridDrivers(config.runner.as(GridConfiguration.class));
-        } else if (config.runner instanceof TestDroidConfiguration) {
-            loadTestDroidDrivers();
-        } else {
-            throw new UnsupportedOperationException("unsupported configuration type " + config.runner);
-        }
+        List<DriverWrapper<?>> drivers = new ArrayList<>();
+        Configuration.current().drivers.forEach(driverConfiguration -> drivers.addAll(driverConfiguration.wrappers()));
+        CURRENT_DRIVERS.clear();
+        CURRENT_DRIVERS.addAll(drivers);
+        ALL_DRIVERS.addAll(drivers);
     }
 
-    private static void loadGridDrivers(GridConfiguration config) {
-        HubNodesStatus nodeInfo = new HubNodesStatus(config.hubIp, GridConstants.hubPort);
-        ArrayList<RegistrationRequest> nodeList = nodeInfo.getNodesAsRegReqs();
-
-        nodeList.forEach(nodeReq -> {
-            nodeReq.getCapabilities().stream()
-                .map(capability -> new DesiredCapabilities(capability))
-                .forEach(currentCapability -> {
-                    try {
-                        String description = DescriptionBuilder.buildDescriptionFromCapabilities(currentCapability);
-                        URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-                        DriverNamingWrapper driver = new DriverNamingWrapper(driverUrl, currentCapability, description);
-                        urlCapList.add(driver);
-                        allDrivers.add(driver);
-                    } catch (MalformedURLException e) {
-                        LOGGER.error(e.getMessage(), e);
-                    }
-                });
-        });
-    }
-
-    private static void loadLocalDrivers(LocalConfiguration config) {
-        for (Browser browser : Browser.values()) {
-            if (browser == Browser.PhantomJS && config.usePhantomJS) {
-                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
-                urlCapList.add(driver);
-                allDrivers.add(driver);
-            }
-            if (browser == Browser.Chrome && config.useChrome) {
-                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
-                urlCapList.add(driver);
-                allDrivers.add(driver);
-            }
-            if (browser == Browser.Firefox && config.useFirefox) {
-                DriverNamingWrapper driver = new DriverNamingWrapper(browser, browser.toString());
-                urlCapList.add(driver);
-                allDrivers.add(driver);
-            }
-        }
-    }
-
-    public synchronized static void loadTestDroidDrivers() {
-        DriverNamingWrapper dnw = TestDroidDriver.getTestDroidWrapper();
-        urlCapList.add(dnw);
-        allDrivers.add(dnw);
-    }
-
-    /**
-     *
-     */
     public static void stopDrivers() {
-        allDrivers.stream().forEach(allDriver -> {
-            LOGGER.info("Closing driver: " + allDriver.getDescription());
+        ALL_DRIVERS.stream().forEach(driverInstance -> {
+            LOGGER.info("Closing driver: " + driverInstance.getDescription());
             try {
-                if (allDriver.getDriver() != null) {
-                    allDriver.getDriver().quit();
-                }
+                driverInstance.stopDriver();
             } catch (SessionNotFoundException e) {
                 LOGGER.error("For some reason a session was gone while quitting", e);
             } catch (WebDriverException e) {
                 LOGGER.error("Crached webdriver, continue to closing drivers");
             }
         });
-        allDrivers = new ArrayList<>();
+        ALL_DRIVERS.clear();
     }
 
-    /**
-     *
-     * @return
-     */
     public synchronized static Object[] getDrivers() {
         updateDrivers();
-        return urlCapList.toArray();
+        return CURRENT_DRIVERS.toArray();
     }
 
     /**
@@ -124,8 +55,8 @@ public class DriverProvider {
      */
     public synchronized static Object[] getDrivers(Platform pPlatform) {
         updateDrivers();
-        return urlCapList.stream()
-            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform))
+        return CURRENT_DRIVERS.stream()
+            .filter(driver -> driver.getCapability().getPlatform().is(pPlatform))
             .collect(Collectors.toList()).toArray();
     }
 
@@ -136,8 +67,8 @@ public class DriverProvider {
      */
     public synchronized static Object[] getDrivers(Platform pPlatform1, Platform pPlatform2) {
         updateDrivers();
-        return urlCapList.stream()
-            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform1) || urlCapList1.getCapability().getPlatform().is(pPlatform2))
+        return CURRENT_DRIVERS.stream()
+            .filter(driver -> driver.getCapability().getPlatform().is(pPlatform1) || driver.getCapability().getPlatform().is(pPlatform2))
             .collect(Collectors.toList()).toArray();
     }
 
@@ -148,13 +79,13 @@ public class DriverProvider {
      */
     public synchronized static Object[] getDrivers(Platform pPlatform, String pBrowserName) {
         updateDrivers();
-        return urlCapList.stream()
-            .filter(urlCapList1 -> urlCapList1.getCapability().getPlatform().is(pPlatform) || urlCapList1.getCapability().getBrowserName().contains(pBrowserName))
+        return CURRENT_DRIVERS.stream()
+            .filter(driver -> driver.getCapability().getPlatform().is(pPlatform) || driver.getCapability().getBrowserName().contains(pBrowserName))
             .collect(Collectors.toList()).toArray();
     }
 
     /**
-     * get drivers that match capability key,value pair
+     * get drivers that match getCapability key,value pair
      *
      * @param capKey
      * @param capValue
@@ -162,15 +93,15 @@ public class DriverProvider {
      */
     public synchronized static Object[] getDrivers(String capKey, String capValue) {
         updateDrivers();
-        ArrayList<DriverNamingWrapper> filteredUrlCapList = new ArrayList<>();
+        ArrayList<DriverWrapper<?>> filteredUrlCapList = new ArrayList<>();
         String currCap;
-        for (DriverNamingWrapper urlCapList1 : urlCapList) {
-            currCap = (String) urlCapList1.getCapability().getCapability(capKey);
+        for (DriverWrapper<?> driver : CURRENT_DRIVERS) {
+            currCap = (String) driver.getCapability().getCapability(capKey);
             if (currCap == null) {
                 currCap = "";
             }
             if (currCap.equalsIgnoreCase(capValue)) {
-                filteredUrlCapList.add(urlCapList1);
+                filteredUrlCapList.add(driver);
             }
         }
         return filteredUrlCapList.toArray();

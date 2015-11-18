@@ -14,10 +14,10 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.framework.RmTestWatcher;
-import se.redmind.rmtest.selenium.grid.DriverNamingWrapper;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 
@@ -26,14 +26,14 @@ public class TestWithRules {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private WebDriver tDriver;
-    private final DriverNamingWrapper urlContainer;
+    private final DriverWrapper<?> driverWrapper;
     private final String driverDescription;
     private final RMReportScreenshot rmrScreenshot;
 
-    public TestWithRules(final DriverNamingWrapper driverWrapper, final String driverDescription) {
-        this.urlContainer = driverWrapper;
+    public TestWithRules(DriverWrapper<?> driverWrapper, String driverDescription) {
+        this.driverWrapper = driverWrapper;
         this.driverDescription = driverDescription;
-        this.rmrScreenshot = new RMReportScreenshot(urlContainer);
+        this.rmrScreenshot = new RMReportScreenshot(driverWrapper);
     }
 
     private static Object[] getDrivers() {
@@ -57,7 +57,7 @@ public class TestWithRules {
 
     @Before
     public void beforeTest() {
-        ruleExample.setDriver(this.urlContainer);
+        ruleExample.setDriver(this.driverWrapper);
     }
 
     @Test
@@ -72,16 +72,16 @@ public class TestWithRules {
 
         assertTrue(navPage.getTitle().startsWith("Z"));
 
-        new RMReportScreenshot(urlContainer).takeScreenshot(null);
-        new RMReportScreenshot(urlContainer).takeScreenshot("first");
-        new RMReportScreenshot(urlContainer).takeScreenshot("after");
+        new RMReportScreenshot(driverWrapper).takeScreenshot(null);
+        new RMReportScreenshot(driverWrapper).takeScreenshot("first");
+        new RMReportScreenshot(driverWrapper).takeScreenshot("after");
         logger.info("Done!");
     }
 
     @Test
     public void testGoogle2() throws Exception {
         logger.info("StartOfTest");
-        HTMLPage navPage = new HTMLPage(this.urlContainer.getDriver());
+        HTMLPage navPage = new HTMLPage(this.driverWrapper.getDriver());
 
         navPage.getDriver().get("http://www.comaround.se");
         assertTrue(false);
