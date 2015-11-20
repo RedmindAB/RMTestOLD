@@ -33,7 +33,7 @@ public class TestDroidConfiguration extends AppiumConfiguration {
         Preconditions.checkArgument(username != null && password != null, "testdroid requires the credentials to be given in the configuration");
         capabilities.setCapability("testdroid_username", username);
         capabilities.setCapability("testdroid_password", password);
-        return new TestDroidDriverWrapper(new DefaultAPIClient(cloudUrl, username, password), maxDevices, baseCapabilities, "TESTDROID",
+        return new TestDroidDriverWrapper(this, new DefaultAPIClient(cloudUrl, username, password), baseCapabilities, "TESTDROID",
             (otherCapabilities) -> {
                 otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
                 if ("Android".equalsIgnoreCase((String) capabilities.getCapability("platformName"))) {

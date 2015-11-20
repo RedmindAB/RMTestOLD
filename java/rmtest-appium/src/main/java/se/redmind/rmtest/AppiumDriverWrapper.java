@@ -17,13 +17,20 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Key;
 import io.appium.java_client.AppiumDriver;
+import se.redmind.rmtest.config.AppiumConfiguration;
 
 public class AppiumDriverWrapper extends DriverWrapper<AppiumDriver<WebElement>> {
 
     private static final AtomicInteger SCREENSHOT_COUNTER = new AtomicInteger();
+    private final AppiumConfiguration configuration;
 
-    public AppiumDriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, AppiumDriver<WebElement>> function) {
+    public AppiumDriverWrapper(AppiumConfiguration configuration, DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, AppiumDriver<WebElement>> function) {
         super(capabilities, description, function);
+        this.configuration = configuration;
+    }
+
+    public AppiumConfiguration getConfiguration() {
+        return configuration;
     }
 
     public static String uploadFile(String appPath, String serverURL, String username, String password) throws IOException {
@@ -45,7 +52,7 @@ public class AppiumDriverWrapper extends DriverWrapper<AppiumDriver<WebElement>>
             .set("Content-Disposition", "form-data; name=\"file\"; filename=\"" + fileContent.getFile().getName() + "\""), fileContent);
         multipartContent.addPart(filePart);
 
-        HttpRequest request = requestFactory.buildPostRequest(new GenericUrl(serverURL + "/upload"), multipartContent);
+        HttpRequest request = requestFactory.buildPostRequest(new GenericUrl(serverURL), multipartContent);
 
         HttpResponse response = request.execute();
 

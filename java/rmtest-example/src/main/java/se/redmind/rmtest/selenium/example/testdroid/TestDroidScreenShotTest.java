@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.testdroid.api.APIException;
 import com.testdroid.api.model.APIDevice;
 import se.redmind.rmtest.TestDroidDriverWrapper;
+import se.redmind.rmtest.config.TestDroidConfiguration;
 import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 
@@ -25,17 +26,11 @@ import se.redmind.rmtest.selenium.grid.Parallelized;
 public class TestDroidScreenShotTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestDroidScreenShotTest.class);
-    private static final String TARGET_APP_PATH = "/Users/jeremy/ClonyBird/output/clonybird.apk";
-    private static final String TESTDROID_SERVER = "https://appium.testdroid.com";
-    private static final String TESTDROID_USERNAME = "petter.osterling@redmind.se";
-    private static final String TESTDROID_PASSWORD = "Redmind1";
 
     private final TestDroidDriverWrapper wrapper;
-    private final String driverDescription;
 
-    public TestDroidScreenShotTest(TestDroidDriverWrapper wrapper, String driverDescription) {
+    public TestDroidScreenShotTest(TestDroidDriverWrapper wrapper) {
         this.wrapper = wrapper;
-        this.driverDescription = driverDescription;
     }
 
     @BeforeClass
@@ -45,8 +40,9 @@ public class TestDroidScreenShotTest {
         if (potentialDevice.isPresent()) {
             APIDevice device = potentialDevice.get();
             LOGGER.info("found testdroid device: " + device.getDisplayName());
-            String fileUUID = wrapper.uploadFile(TARGET_APP_PATH, TESTDROID_SERVER, TESTDROID_USERNAME, TESTDROID_PASSWORD);
-
+            TestDroidConfiguration configuration = wrapper.getConfiguration();
+            String fileUUID = TestDroidDriverWrapper.uploadFile(configuration.appPath, configuration.serverUrl + "/upload", configuration.username, configuration.password);
+            
             wrapper.getCapability().setCapability("platformName", "Android");
             wrapper.getCapability().setCapability("testdroid_target", "Android");
             wrapper.getCapability().setCapability("deviceName", "Android Device");
@@ -66,7 +62,7 @@ public class TestDroidScreenShotTest {
     public static Collection<Object[]> drivers() {
         return Arrays.asList(DriverProvider.getDrivers()).stream()
             .filter(driver -> driver instanceof TestDroidDriverWrapper)
-            .map(driver -> new Object[]{driver, driver.toString()})
+            .map(driver -> new Object[]{driver})
             .collect(Collectors.toList());
     }
 

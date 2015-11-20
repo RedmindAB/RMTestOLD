@@ -51,7 +51,7 @@ public class AppiumConfiguration extends DriverConfiguration<AppiumDriver<WebEle
     }
 
     protected AppiumDriverWrapper createDriver(URL url, DesiredCapabilities capabilities) {
-        return new AppiumDriverWrapper(baseCapabilities, "Appium", (otherCapabilities) -> {
+        return new AppiumDriverWrapper(this, baseCapabilities, "Appium", (otherCapabilities) -> {
             otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
             if ("Android".equalsIgnoreCase((String) capabilities.getCapability("platformName"))) {
                 return new AndroidDriver<>(url, capabilities);
