@@ -60,4 +60,9 @@ public class ConfigurationTestSteps {
         Assert.assertEquals(String.valueOf(value), String.valueOf(entry.getValue().get(entry.getKey())));
     }
 
+    @Then("^the configuration is:$")
+    public void the_configuration_is(String value) {
+        Assert.assertEquals(Configuration.from(value).toString(), configuration.toString());
+    }
+
 }

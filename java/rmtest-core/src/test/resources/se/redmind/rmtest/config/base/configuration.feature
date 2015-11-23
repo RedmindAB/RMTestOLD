@@ -55,13 +55,13 @@ Feature: RMTest Configuration file
           "hubIp": "127.0.0.1",
           "AndroidBuildtoolsVersion": "4.4",
           "runOnGrid": "false",
-          "usePhantomJS":"true",
-          "useChrome":"true",
-          "useFirefox":"false",
-          "autoCloseDrivers":"true",
-          "RmReportIP":"127.0.0.1",
-          "RmReportLivePort":"12345",
-          "enableLiveStream":"false"
+          "usePhantomJS": "true",
+          "useChrome": "true",
+          "useFirefox": "false",
+          "autoCloseDrivers": "true",
+          "RmReportIP": "127.0.0.1",
+          "RmReportLivePort" : "12345",
+          "enableLiveStream": "false"
         }
       }
       """
@@ -79,27 +79,31 @@ Feature: RMTest Configuration file
          "hubIp": "10.12.14.82",
          "AndroidBuildtoolsVersion": "4.4",
          "runOnGrid": "true",
-         "usePhantomJS":"false",
-         "useChrome":"false",
-         "useFirefox":"false",
-         "autoCloseDrivers":"true",
-         "RmReportIP":"127.0.0.1",
-         "RmReportLivePort":"12345",
-         "enableLiveStream":"false",
-         "jsonReportSavePath":"~/tmp/testReport"
+         "usePhantomJS": "false",
+         "useChrome": "false",
+         "useFirefox": "false",
+         "autoCloseDrivers": "true",
+         "RmReportIP":" 127.0.0.1",
+         "RmReportLivePort": "12345",
+         "enableLiveStream": "false",
+         "jsonReportSavePath": "~/tmp/testReport"
        }
       }
       """
     And that we validate it
     Then we get no error
 
-#  Scenario: override a configuration propery by using a system.property
-#    Given that the system property "runner.useFirefox" is set to "true"
-#    When we read the following configuration file:
-#      """
-#      drivers:
-#        - type: firefox
-#      """
-#    Then the configuration property "runner.useFirefox" is equal to "false"
-#    Given that we apply the system properties
-#    Then the configuration property "runner.useFirefox" is equal to "true"
+  Scenario: override a configuration propery by using a system.property
+    Given that the system property "drivers" is set to "- type: firefox\n- type: chrome"
+    When we read the following configuration file:
+      """
+      drivers:
+       - type: phantomjs
+      """
+    Given that we apply the system properties
+    Then the configuration is:
+      """
+      drivers:
+        - type: firefox
+        - type: chrome
+      """

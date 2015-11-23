@@ -11,6 +11,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  * @author Jeremy Comte
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public abstract class DriverConfiguration<DriverType extends WebDriver> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());

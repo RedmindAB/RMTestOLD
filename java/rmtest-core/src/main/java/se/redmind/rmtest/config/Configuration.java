@@ -2,8 +2,7 @@ package se.redmind.rmtest.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
@@ -32,9 +33,10 @@ import se.redmind.utils.ReflectionsUtils;
 /**
  * @author Jeremy Comte
  */
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Configuration {
 
-    private static final String CONFIG_SYSTEM_PROPERTY = "rmtestConfig";
+    private static final String CONFIG_SYSTEM_PROPERTY = "config";
     private static final String DEFAULT_REPORTS_PATH = "/target/RMTReports";
     private static final String DEFAULT_LOCAL_CONFIG = "/etc/LocalConfig.yml";
     private static final String DEFAULT_LEGACY_CONFIG = "/etc/LocalConfig.json";
@@ -57,10 +59,10 @@ public class Configuration {
     @JsonProperty
     public boolean autoCloseDrivers = true;
 
-    @JsonProperty()
+    @JsonProperty
     public String rmReportIP = "127.0.0.1";
 
-    @JsonProperty()
+    @JsonProperty
     public int rmReportLivePort = 12345;
 
     @JsonProperty
@@ -89,16 +91,40 @@ public class Configuration {
                 if (value.contains("\\n")) {
                     value = value.replaceAll("\\\\n", "\n");
                 }
+                Field field = cell.getValue();
                 LOGGER.info("overriding configuration key '" + cell.getRowKey() + "' with '" + value + "'");
                 try {
-                    Field field = cell.getValue();
-                    field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
+                    if (field.getType().equals(List.class)) {
+                        field.set(cell.getColumnKey(), objectMapper().readValue(value, getParametizedList(field)));
+                    } else {
+                        field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
+                    }
+
                 } catch (IOException | IllegalArgumentException | IllegalAccessException ex) {
                     LOGGER.error(ex.getMessage(), ex);
                 }
             }
         });
         return this;
+    }
+
+    private static JavaType getParametizedList(Field field) {
+        ParameterizedType type = (ParameterizedType) field.getGenericType();
+        JavaType parameterType = Configuration.objectMapper().getTypeFactory().constructType(type.getActualTypeArguments()[0]);
+        JavaType listType = Configuration.objectMapper().getTypeFactory().constructParametrizedType(ArrayList.class, List.class, parameterType);
+        return listType;
+    }
+
+    public static Class<?> getLastParametizedType(Type type) {
+        //Recursively extract until we are out of the generic loop of doom
+        while (type instanceof ParameterizedType) {
+            //Last generic type defined, fits Map<Key,Value>, ArrayList<Value>, Value ...
+            type = ((ParameterizedType) type).getActualTypeArguments()[((ParameterizedType) type).getActualTypeArguments().length - 1];
+        }
+        if (type instanceof TypeVariable) {
+            type = (Type) ((TypeVariable) type).getGenericDeclaration();
+        }
+        return (Class<?>) type;
     }
 
     /**
@@ -127,7 +153,7 @@ public class Configuration {
     @Override
     public String toString() {
         try {
-            return "# " + filePath + "\n" + objectMapper().writeValueAsString(this);
+            return (filePath != null ? "# " + filePath + "\n" : "") + objectMapper().writeValueAsString(this);
         } catch (JsonProcessingException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
