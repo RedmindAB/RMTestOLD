@@ -4,6 +4,7 @@ import se.redmind.rmtest.DriverWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.junit.Assume;
 import org.openqa.selenium.WebDriver;
@@ -18,11 +19,13 @@ import se.redmind.utils.Try;
 public abstract class LocalConfiguration<DriverType extends WebDriver> extends DriverConfiguration<DriverType> {
 
     private boolean imAFailure;
+    private final Function<DesiredCapabilities, DriverType> function;
 
-    public LocalConfiguration(DesiredCapabilities baseCapabilities) {
+    public LocalConfiguration(DesiredCapabilities baseCapabilities, Function<DesiredCapabilities, DriverType> function) {
         super(baseCapabilities);
+        this.function = function;
     }
- 
+
     @Override
     protected List<DriverWrapper<DriverType>> createDrivers() {
         int maxRetryAttempts = 5;
@@ -30,7 +33,7 @@ public abstract class LocalConfiguration<DriverType extends WebDriver> extends D
             Assume.assumeTrue("Since driver didn't start after  " + maxRetryAttempts + " attempts, it probably won't start now ", false);
         } else {
             DriverWrapper<DriverType> driver = Try
-                .toGet(() -> createDriver())
+                .toGet(() -> new DriverWrapper<>(generateCapabilities(), generateDescription(), function))
                 .onError((t, e) -> {
                     logger.warn("Having trouble starting webdriver for device: ", e);
                     logger.warn("Attempt " + t.currentAttempt() + " of " + t.maxAttempts());
@@ -48,7 +51,5 @@ public abstract class LocalConfiguration<DriverType extends WebDriver> extends D
         }
         return new ArrayList<>();
     }
-
-    protected abstract DriverWrapper<DriverType> createDriver();
 
 }

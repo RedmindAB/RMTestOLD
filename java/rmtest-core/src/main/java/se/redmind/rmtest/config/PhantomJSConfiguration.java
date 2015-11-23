@@ -1,7 +1,5 @@
 package se.redmind.rmtest.config;
 
-import se.redmind.rmtest.DriverWrapper;
-
 import java.util.ArrayList;
 
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -9,7 +7,6 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.grid.TestHome;
 
 /**
@@ -19,12 +16,7 @@ import se.redmind.rmtest.selenium.grid.TestHome;
 public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> {
 
     public PhantomJSConfiguration() {
-        super(createPhantomJSCapabilities());
-    }
-
-    @Override
-    protected DriverWrapper<PhantomJSDriver> createDriver() {
-        return new DriverWrapper<>(baseCapabilities, Browser.PhantomJS.toString(), (capabilities) -> new PhantomJSDriver(capabilities));
+        super(createPhantomJSCapabilities(), capabilities -> new PhantomJSDriver(capabilities));
     }
 
     public static DesiredCapabilities createPhantomJSCapabilities() {

@@ -1,15 +1,14 @@
 package se.redmind.rmtest.config;
 
-import se.redmind.rmtest.DriverWrapper;
-
 import java.io.File;
+import java.util.List;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import se.redmind.rmtest.selenium.framework.Browser;
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.grid.TestHome;
 
 /**
@@ -22,13 +21,13 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
     public String chromedriver;
 
     public ChromeConfiguration() {
-        super(DesiredCapabilities.chrome());
+        super(DesiredCapabilities.chrome(), capabilities -> new ChromeDriver(capabilities));
     }
 
     @Override
-    protected DriverWrapper<ChromeDriver> createDriver() {
+    protected List<DriverWrapper<ChromeDriver>> createDrivers() {
         System.setProperty("webdriver.chrome.driver", getChromePath());
-        return new DriverWrapper<>(baseCapabilities, Browser.Chrome.toString(), (capabilities) -> new ChromeDriver(capabilities));
+        return super.createDrivers();
     }
 
     private String getChromePath() {
@@ -55,5 +54,4 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
         }
         return chromePath;
     }
-
 }

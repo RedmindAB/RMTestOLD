@@ -44,15 +44,14 @@ public class AppiumConfiguration extends DriverConfiguration<AppiumDriver<WebEle
     @Override
     protected List<DriverWrapper<AppiumDriver<WebElement>>> createDrivers() {
         try {
-            return Lists.newArrayList(createDriver(new URL(serverUrl + "/wd/hub"), new DesiredCapabilities()));
+            return Lists.newArrayList(createDriver(new URL(serverUrl + "/wd/hub")));
         } catch (MalformedURLException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    protected AppiumDriverWrapper createDriver(URL url, DesiredCapabilities capabilities) {
-        return new AppiumDriverWrapper(this, baseCapabilities, "Appium", (otherCapabilities) -> {
-            otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
+    protected AppiumDriverWrapper createDriver(URL url) {
+        return new AppiumDriverWrapper(this, generateCapabilities(), generateDescription(), capabilities -> {
             if ("Android".equalsIgnoreCase((String) capabilities.getCapability("platformName"))) {
                 return new AndroidDriver<>(url, capabilities);
             } else {

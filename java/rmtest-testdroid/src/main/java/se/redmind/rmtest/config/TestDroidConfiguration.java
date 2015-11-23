@@ -29,11 +29,12 @@ public class TestDroidConfiguration extends AppiumConfiguration {
     }
 
     @Override
-    protected TestDroidDriverWrapper createDriver(URL url, DesiredCapabilities capabilities) {
+    protected TestDroidDriverWrapper createDriver(URL url) {
         Preconditions.checkArgument(username != null && password != null, "testdroid requires the credentials to be given in the configuration");
+        DesiredCapabilities capabilities = generateCapabilities();
         capabilities.setCapability("testdroid_username", username);
         capabilities.setCapability("testdroid_password", password);
-        return new TestDroidDriverWrapper(this, new DefaultAPIClient(cloudUrl, username, password), baseCapabilities, "TESTDROID",
+        return new TestDroidDriverWrapper(this, new DefaultAPIClient(cloudUrl, username, password), capabilities, generateDescription(),
             (otherCapabilities) -> {
                 otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
                 if ("Android".equalsIgnoreCase((String) capabilities.getCapability("platformName"))) {

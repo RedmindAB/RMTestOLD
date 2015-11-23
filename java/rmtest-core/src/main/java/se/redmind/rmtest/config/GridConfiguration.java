@@ -46,7 +46,7 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
                     try {
                         String driverDescription = DescriptionBuilder.buildDescriptionFromCapabilities(capabilities);
                         URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-                        instances.add(new DriverWrapper<>(baseCapabilities, driverDescription, (otherCapabilities) -> {
+                        instances.add(new DriverWrapper<>(generateCapabilities(), driverDescription, (otherCapabilities) -> {
                             otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
                             return new RemoteWebDriver(driverUrl, capabilities);
                         }));

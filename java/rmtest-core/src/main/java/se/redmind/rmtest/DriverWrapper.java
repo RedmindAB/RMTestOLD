@@ -23,9 +23,10 @@ import se.redmind.rmtest.selenium.grid.DriverConfig;
 public class DriverWrapper<DriverType extends WebDriver> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final String description;
+
     private final Function<DesiredCapabilities, DriverType> function;
     private final DesiredCapabilities capabilities;
+    private final String description;
     private DriverType driver;
 
     public DriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, DriverType> function) {

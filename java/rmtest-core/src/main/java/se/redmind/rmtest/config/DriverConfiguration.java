@@ -23,19 +23,34 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 public abstract class DriverConfiguration<DriverType extends WebDriver> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected final DesiredCapabilities baseCapabilities;
+    private final DesiredCapabilities baseCapabilities;
     private List<DriverWrapper<DriverType>> wrappers;
 
+    @JsonProperty
+    public String description;
+
     @JsonProperty("capabilities")
-    public Map<String, ?> configurationCapabilities = new LinkedHashMap<>();
+    public Map<String, Object> configurationCapabilities = new LinkedHashMap<>();
 
     protected DriverConfiguration(DesiredCapabilities baseCapabilities) {
         this.baseCapabilities = baseCapabilities;
-        configurationCapabilities.forEach((key, value) -> this.baseCapabilities.setCapability(key, value));
     }
 
     public <SubType extends DriverConfiguration<?>> SubType as(Class<SubType> clazz) {
         return (SubType) this;
+    }
+
+    public DesiredCapabilities generateCapabilities() {
+        DesiredCapabilities capabilities = new DesiredCapabilities(baseCapabilities);
+        configurationCapabilities.forEach((key, value) -> capabilities.setCapability(key, value));
+        return capabilities;
+    }
+
+    public String generateDescription() {
+        if (description != null) {
+            return description;
+        }
+        return this.getClass().getSimpleName().replaceAll("Configuration", "");
     }
 
     public List<DriverWrapper<DriverType>> wrappers() {
