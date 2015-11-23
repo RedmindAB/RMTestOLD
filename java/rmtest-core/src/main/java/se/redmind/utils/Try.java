@@ -148,7 +148,8 @@ public final class Try {
                     if (until.test(result)) {
                         break;
                     } else {
-                        logger.warn("'" + result + "' doesn't validate on attempt " + currentAttempt + "/" + maxAttempts);
+                        logger.warn("'" + result + "' doesn't validate on attempt " + currentAttempt + "/" + maxAttempts
+                            + (currentAttempt < maxAttempts ? " ... retrying in " + sleepLength + " " + sleepUnit.toString().toLowerCase() : ""));
                     }
                 } catch (Exception exception) {
                     if (maxAttempts > 1) {
