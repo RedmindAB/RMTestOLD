@@ -32,7 +32,6 @@ public class DriverProvider {
 
     public static void stopDrivers() {
         ALL_DRIVERS.stream().forEach(driverInstance -> {
-            LOGGER.info("Closing driver: " + driverInstance.getDescription());
             try {
                 driverInstance.stopDriver();
             } catch (SessionNotFoundException e) {

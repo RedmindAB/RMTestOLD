@@ -56,13 +56,14 @@ public class DriverWrapper<DriverType extends WebDriver> {
     public synchronized DriverType getDriver() {
         if (driver == null) {
             driver = function.apply(capabilities);
-            logger.info("Started driver: " + description);
+            logger.info("Started driver [" + description + "]");
         }
         return driver;
     }
 
     public void stopDriver() {
         if (isStarted()) {
+            logger.info("Closing driver [" + description + "]");
             driver.quit();
         }
     }
