@@ -1,5 +1,7 @@
 package se.redmind.rmtest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -28,6 +30,7 @@ public class DriverWrapper<DriverType extends WebDriver> {
     private final DesiredCapabilities capabilities;
     private final String description;
     private DriverType driver;
+    private final List<Consumer<DriverType>> postConfigurations = new ArrayList<>();
 
     public DriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, DriverType> function) {
         this.capabilities = capabilities;
@@ -45,6 +48,11 @@ public class DriverWrapper<DriverType extends WebDriver> {
         }
     }
 
+    public void addPostConfiguration(Consumer<DriverType> postConfiguration) {
+        postConfigurations.add(postConfiguration);
+    }
+
+
     public String getDescription() {
         return description;
     }
@@ -56,6 +64,7 @@ public class DriverWrapper<DriverType extends WebDriver> {
     public synchronized DriverType getDriver() {
         if (driver == null) {
             driver = function.apply(capabilities);
+            postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
             logger.info("Started driver [" + description + "]");
         }
         return driver;

@@ -13,13 +13,26 @@ import se.redmind.utils.Try;
 import se.redmind.rmtest.DriverWrapper;
 
 import static org.junit.Assert.assertTrue;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.CapabilityType;
 
 @RunWith(Parallelized.class)
 public class GoogleExample extends RmAllDevice {
 
     public GoogleExample(DriverWrapper<?> driverWrapper, final String driverDescription) {
         super(driverWrapper, driverDescription);
-        driverWrapper.addDriverConfig(new TestConfig());
+        driverWrapper.addCapabilities(
+            (capabilities, description) -> capabilities.getBrowserName().equals("firefox"),
+            capabilities -> {
+                FirefoxProfile ffp = new FirefoxProfile();
+                ffp.setPreference("webdriver.load.strategy", "unstable");
+                capabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "none");
+                capabilities.setCapability(FirefoxDriver.PROFILE, ffp);
+            });
+        driverWrapper.addPostConfiguration(driver -> {
+            logger.info("this will be executed only once");
+        });
     }
 
     @Test
