@@ -33,5 +33,10 @@
             <artifactId>rmtest-logback</artifactId>
             <version>1.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>se.redmind</groupId>
+            <artifactId>rmtest-cucumber</artifactId>
+            <version>1.0.7</version>
+        </dependency>
     </dependencies>
 </project>
