@@ -3,7 +3,7 @@
     <parent>
         <groupId>se.redmind</groupId>
         <artifactId>rmtest</artifactId>
-        <version>1.0.7</version>
+        <version>2.0.0</version>
     </parent>
     <licenses>
         <license>
@@ -14,7 +14,7 @@
     </licenses>
     <groupId>se.redmind</groupId>
     <artifactId>rmtest-core</artifactId>
-    <version>1.0.7</version>
+    <version>2.0.0</version>
     <name>rmtest -> core</name>
     <dependencies>
         <dependency>
@@ -148,7 +148,7 @@
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-logback</artifactId>
-            <version>1.0.7</version>
+            <version>2.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
