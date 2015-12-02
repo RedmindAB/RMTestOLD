@@ -1,6 +1,8 @@
 package se.redmind.rmtest.selenium.grid;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,10 @@ public class DriverProvider {
             }
         });
         ALL_DRIVERS.clear();
+    }
+
+    public static Collection<Object[]> getDriversAsParameters() {
+        return Arrays.asList(getDrivers()).stream().map(obj -> new Object[]{obj}).collect(Collectors.toList());
     }
 
     public synchronized static Object[] getDrivers() {

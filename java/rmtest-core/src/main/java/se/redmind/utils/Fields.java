@@ -1,6 +1,9 @@
 package se.redmind.utils;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,8 @@ import com.google.common.collect.Table;
  * @author Jeremy Comte
  */
 public final class Fields {
+
+    private static final Map<Class<?>, Map<String, Field>> cache = new HashMap<>();
 
     private Fields() {
     }
@@ -37,6 +42,46 @@ public final class Fields {
                     listByPathAndInstance(field.get(instance), fieldsByPathAndDeclaringInstance, currentPath + field.getName() + ".");
                 }
             }
+        }
+    }
+
+    public static <E> E getValue(Object instance, String fieldName) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Field field = getFieldsByNameOf(instance.getClass()).get(fieldName);
+        if (field == null) {
+            throw new NoSuchFieldException(fieldName + " doesn't exist on " + instance.getClass().getName());
+        }
+        return (E) field.get(instance);
+    }
+
+    public static Field getField(Class<?> clazz, String name) throws NoSuchFieldException {
+        Field field = getFieldsByNameOf(clazz).get(name);
+        if (field == null) {
+            throw new NoSuchFieldException(name + " doesn't exist on " + clazz.getName());
+        }
+        return field;
+    }
+
+    public static Map<String, Field> getFieldsByNameOf(Class<?> clazz) {
+        Map<String, Field> fieldCache = cache.get(clazz);
+        if (fieldCache == null) {
+            fieldCache = new LinkedHashMap<>();
+            recursivelyCacheFieldsOf(clazz, fieldCache);
+            cache.put(clazz, fieldCache);
+        }
+        return fieldCache;
+    }
+
+    private static void recursivelyCacheFieldsOf(Class<?> clazz, Map<String, Field> fields) {
+        for (Field field : clazz.getDeclaredFields()) {
+            if (!fields.containsKey(field.getName())) {
+                if (!field.isAccessible()) {
+                    field.setAccessible(true);
+                }
+                fields.put(field.getName(), field);
+            }
+        }
+        if (clazz.getSuperclass() != null) {
+            recursivelyCacheFieldsOf(clazz.getSuperclass(), fields);
         }
     }
 
