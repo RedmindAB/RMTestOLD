@@ -5,16 +5,14 @@ import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
-import se.redmind.rmtest.selenium.grid.DriverProvider;
 import se.redmind.utils.Try;
 
 /**
@@ -22,14 +20,12 @@ import se.redmind.utils.Try;
  */
 public class WebDriverSteps {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final DriverWrapper<WebDriver> wrapper;
+    private final DriverWrapper<WebDriver> driverWrapper;
     private final HTMLPage page;
 
-    public WebDriverSteps() {
-        logger.info("new me");
-        wrapper = (DriverWrapper<WebDriver>) DriverProvider.getDrivers()[0];
-        page = new HTMLPage(wrapper.getDriver());
+    public WebDriverSteps(DriverWrapper<WebDriver> driverWrapper) {
+        this.driverWrapper = driverWrapper;
+        page = new HTMLPage(driverWrapper.getDriver());
     }
 
     @When("^we navigate to the url \"([^\"]*)\"$")
@@ -59,6 +55,11 @@ public class WebDriverSteps {
             .delayRetriesBy(500)
             .nTimes(10);
         Assert.assertEquals(expectedValue, realValue);
+    }
+
+    @After
+    public void stopDriver() {
+        driverWrapper.stopDriver();
     }
 
 }

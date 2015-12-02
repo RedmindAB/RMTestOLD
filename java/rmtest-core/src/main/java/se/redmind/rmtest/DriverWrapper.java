@@ -74,6 +74,7 @@ public class DriverWrapper<DriverType extends WebDriver> {
         if (isStarted()) {
             logger.info("Closing driver [" + description + "]");
             driver.quit();
+            driver = null;
         }
     }
 

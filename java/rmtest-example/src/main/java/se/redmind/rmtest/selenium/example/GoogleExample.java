@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 
 import com.google.common.base.Strings;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
-import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.grid.Parallelized;
 import se.redmind.rmtest.selenium.grid.RmAllDevice;
 import se.redmind.utils.Try;
@@ -50,8 +49,6 @@ public class GoogleExample extends RmAllDevice {
 
         assertTrue(pageTitle.startsWith("Goo"));
 
-        new RMReportScreenshot(this.driverWrapper).takeScreenshot("first");
-        new RMReportScreenshot(this.driverWrapper).takeScreenshot("after");
         logger.info("Done!");
     }
 
