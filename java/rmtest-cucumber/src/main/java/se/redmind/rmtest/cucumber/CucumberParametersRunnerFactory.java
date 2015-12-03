@@ -25,6 +25,7 @@ import se.redmind.utils.Fields;
 
 /**
  * Here we are just injecting our parameters in the picocontainer instance of this test
+ *
  * @author Jeremy Comte
  */
 public class CucumberParametersRunnerFactory implements ParametersRunnerFactory {
@@ -34,15 +35,14 @@ public class CucumberParametersRunnerFactory implements ParametersRunnerFactory 
         try {
             return new Cucumber(test.getTestClass().getJavaClass()) {
 
-                private boolean isInjected;
-
                 @Override
                 protected Runtime createRuntime(ResourceLoader resourceLoader, ClassLoader classLoader, RuntimeOptions runtimeOptions) throws InitializationError, IOException {
                     return new Runtime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions) {
+
                         @Override
                         public void buildBackendWorlds(Reporter reporter, Set<Tag> tags, Scenario gherkinScenario) {
                             PicoFactory picoFactory = getPicoFactory();
-                            picoFactory.addInstance(test.getParameters().get(0));
+                            test.getParameters().forEach(parameter -> picoFactory.addInstance(parameter));
                             super.buildBackendWorlds(reporter, tags, gherkinScenario);
                         }
 

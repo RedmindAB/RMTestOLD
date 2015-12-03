@@ -14,41 +14,10 @@ import se.redmind.rmtest.config.Configuration;
 
 public class Parallelized extends Parameterized {
 
-    int noThreads = getChildren().size();
-
-    private static class ThreadPoolScheduler implements RunnerScheduler {
-
-        private final static Logger LOGGER = LoggerFactory.getLogger(ThreadPoolScheduler.class);
-
-        private final ExecutorService executor;
-
-        public ThreadPoolScheduler(int numChildren) {
-            String threads = System.getProperty("junit.parallel.threads", String.valueOf(numChildren));
-            LOGGER.info("Number of treads executing in parrallel: " + numChildren);
-            int numThreads = Integer.parseInt(threads);
-            executor = Executors.newFixedThreadPool(numThreads);
-        }
-
-        @Override
-        public void finished() {
-            executor.shutdown();
-            try {
-                executor.awaitTermination(20, TimeUnit.MINUTES);
-            } catch (InterruptedException exc) {
-                throw new RuntimeException(exc);
-            }
-        }
-
-        @Override
-        public void schedule(Runnable childStatement) {
-            executor.submit(childStatement);
-        }
-    }
-
     public Parallelized(Class<?> klass) throws Throwable {
         super(klass);
         try {
-            setScheduler(new ThreadPoolScheduler(noThreads));
+            setScheduler(new ThreadPoolScheduler());
         } catch (IllegalArgumentException e) {
             LoggerFactory.getLogger(this.getClass()).error("No drivers found with current filter");
         }
@@ -60,5 +29,40 @@ public class Parallelized extends Parameterized {
             notifier.addListener(new AutoCloseListener());
         }
         super.run(notifier);
+    }
+
+    private static class ThreadPoolScheduler implements RunnerScheduler {
+
+        private final static Logger LOGGER = LoggerFactory.getLogger(ThreadPoolScheduler.class);
+
+        private final ExecutorService executor;
+
+        public ThreadPoolScheduler() {
+            String threads = System.getProperty("junit.parallel.threads");
+            int nThreads;
+            if (threads != null && threads.matches("[0-9]+")) {
+                nThreads = Integer.parseInt(threads);
+            } else {
+                nThreads = (Runtime.getRuntime().availableProcessors() / 2) + 1;
+            }
+            LOGGER.info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parrallel:");
+            executor = Executors.newFixedThreadPool(nThreads);
+        }
+
+        @Override
+        public void finished() {
+            executor.shutdown();
+            try {
+                executor.awaitTermination(1, TimeUnit.DAYS);
+            } catch (InterruptedException exc) {
+                throw new RuntimeException(exc);
+            }
+            DriverProvider.stopDrivers();
+        }
+
+        @Override
+        public void schedule(Runnable runnable) {
+            executor.submit(runnable);
+        }
     }
 }

@@ -99,16 +99,15 @@ public class DriverProvider {
     public synchronized static Object[] getDrivers(String capKey, String capValue) {
         updateDrivers();
         ArrayList<DriverWrapper<?>> filteredUrlCapList = new ArrayList<>();
-        String currCap;
-        for (DriverWrapper<?> driver : CURRENT_DRIVERS) {
-            currCap = (String) driver.getCapability().getCapability(capKey);
+        CURRENT_DRIVERS.forEach(driver -> {
+            String currCap = (String) driver.getCapability().getCapability(capKey);
             if (currCap == null) {
                 currCap = "";
             }
             if (currCap.equalsIgnoreCase(capValue)) {
                 filteredUrlCapList.add(driver);
             }
-        }
+        });
         return filteredUrlCapList.toArray();
     }
 }

@@ -5,33 +5,26 @@ import org.junit.runner.RunWith;
 
 import com.google.common.base.Strings;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
-import se.redmind.rmtest.selenium.grid.Parallelized;
-import se.redmind.rmtest.selenium.grid.RmAllDevice;
 import se.redmind.utils.Try;
 
 import se.redmind.rmtest.DriverWrapper;
 
 import static org.junit.Assert.assertTrue;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.remote.CapabilityType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@RunWith(Parallelized.class)
-public class GoogleExample extends RmAllDevice {
+import se.redmind.rmtest.runners.Parallelize;
+import se.redmind.rmtest.runners.RmTestRunner;
 
-    public GoogleExample(DriverWrapper<?> driverWrapper, final String driverDescription) {
-        super(driverWrapper, driverDescription);
-        driverWrapper.addCapabilities(
-            (capabilities, description) -> capabilities.getBrowserName().equals("firefox"),
-            capabilities -> {
-                FirefoxProfile ffp = new FirefoxProfile();
-                ffp.setPreference("webdriver.load.strategy", "unstable");
-                capabilities.setCapability(CapabilityType.PAGE_LOAD_STRATEGY, "none");
-                capabilities.setCapability(FirefoxDriver.PROFILE, ffp);
-            });
-        driverWrapper.addPostConfiguration(driver -> {
-            logger.info("this will be executed only once");
-        });
+@RunWith(RmTestRunner.class)
+@Parallelize
+public class GoogleExample {
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final DriverWrapper<?> driverWrapper;
+
+    public GoogleExample(DriverWrapper<?> driverWrapper) {
+        this.driverWrapper = driverWrapper;
     }
 
     @Test
