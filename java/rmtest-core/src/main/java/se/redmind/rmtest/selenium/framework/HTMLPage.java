@@ -215,10 +215,6 @@ public class HTMLPage {
         }
     }
 
-    public void navigateStartUrl() {
-        driver.get(TestParams.getBaseUrl());
-    }
-
     public String getTitle() {
         return driver.getTitle();
     }

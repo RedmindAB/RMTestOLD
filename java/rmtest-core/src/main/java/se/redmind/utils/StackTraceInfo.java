@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.framework;
+package se.redmind.utils;
 
 /* Utility class: Getting the name of the current executing method
  * http://stackoverflow.com/questions/442747/getting-the-name-of-the-current-executing-method

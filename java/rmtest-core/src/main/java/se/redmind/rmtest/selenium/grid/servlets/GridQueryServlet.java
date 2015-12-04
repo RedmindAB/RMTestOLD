@@ -17,9 +17,6 @@ import com.google.gson.JsonObject;
 
 public class GridQueryServlet extends RegistryBasedServlet {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -1975392591408983229L;
 
     public GridQueryServlet() {

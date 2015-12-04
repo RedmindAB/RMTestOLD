@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.*;
 
@@ -18,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
@@ -26,8 +26,10 @@ import com.google.common.collect.Table;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import se.redmind.rmtest.selenium.grid.TestHome;
+import se.redmind.rmtest.DriverWrapper;
+import se.redmind.utils.TestHome;
 import se.redmind.utils.Fields;
+import se.redmind.utils.JavaTypes;
 import se.redmind.utils.ReflectionsUtils;
 
 /**
@@ -41,6 +43,7 @@ public class Configuration {
     private static final String DEFAULT_LOCAL_CONFIG = "/etc/LocalConfig.yml";
     private static final String DEFAULT_LEGACY_CONFIG = "/etc/LocalConfig.json";
     private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
+    private static final List<DriverWrapper<?>> WRAPPERS = new ArrayList<>();
     private static ObjectMapper objectMapper;
     private static Validator validator;
 
@@ -66,7 +69,7 @@ public class Configuration {
     public int rmReportLivePort = 12345;
 
     @JsonProperty
-    public String jsonReportSavePath = TestHome.main() + DEFAULT_REPORTS_PATH;
+    public String jsonReportSavePath = TestHome.get() + DEFAULT_REPORTS_PATH;
 
     @JsonProperty
     public AndroidConfiguration android;
@@ -95,7 +98,7 @@ public class Configuration {
                 LOGGER.info("overriding configuration key '" + cell.getRowKey() + "' with '" + value + "'");
                 try {
                     if (field.getType().equals(List.class)) {
-                        field.set(cell.getColumnKey(), objectMapper().readValue(value, getParametizedList(field)));
+                        field.set(cell.getColumnKey(), objectMapper().readValue(value, JavaTypes.getParametizedList(field)));
                     } else {
                         field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
                     }
@@ -106,25 +109,6 @@ public class Configuration {
             }
         });
         return this;
-    }
-
-    private static JavaType getParametizedList(Field field) {
-        ParameterizedType type = (ParameterizedType) field.getGenericType();
-        JavaType parameterType = Configuration.objectMapper().getTypeFactory().constructType(type.getActualTypeArguments()[0]);
-        JavaType listType = Configuration.objectMapper().getTypeFactory().constructParametrizedType(ArrayList.class, List.class, parameterType);
-        return listType;
-    }
-
-    public static Class<?> getLastParametizedType(Type type) {
-        //Recursively extract until we are out of the generic loop of doom
-        while (type instanceof ParameterizedType) {
-            //Last generic type defined, fits Map<Key,Value>, ArrayList<Value>, Value ...
-            type = ((ParameterizedType) type).getActualTypeArguments()[((ParameterizedType) type).getActualTypeArguments().length - 1];
-        }
-        if (type instanceof TypeVariable) {
-            type = (Type) ((TypeVariable) type).getGenericDeclaration();
-        }
-        return (Class<?>) type;
     }
 
     /**
@@ -150,6 +134,21 @@ public class Configuration {
         return this;
     }
 
+    public List<Object[]> createWrappersParameters() {
+        return createWrappers().stream().map(obj -> new Object[]{obj}).collect(Collectors.toList());
+    }
+
+    public List<DriverWrapper<?>> createWrappers() {
+        return drivers.stream()
+            .map(driverConfiguration -> driverConfiguration.wrappers())
+            .flatMap(wrappers -> wrappers.stream())
+            .collect(Collectors.toList());
+    }
+
+    public void stopAllDrivers() {
+        WRAPPERS.forEach(driverWrapper -> driverWrapper.stopDriver());
+    }
+
     @Override
     public String toString() {
         try {
@@ -170,18 +169,27 @@ public class Configuration {
             try {
                 configFile = System.getProperty(CONFIG_SYSTEM_PROPERTY);
                 if (configFile == null) {
-                    configFile = TestHome.main() + DEFAULT_LOCAL_CONFIG;
+                    configFile = TestHome.get() + DEFAULT_LOCAL_CONFIG;
                 }
                 configuration = read(configFile);
             } catch (IOException e) {
                 LOGGER.warn("cannot read " + configFile + ", trying legacy config " + DEFAULT_LEGACY_CONFIG);
                 try {
-                    configuration = read(TestHome.main() + DEFAULT_LEGACY_CONFIG);
+                    configuration = read(TestHome.get() + DEFAULT_LEGACY_CONFIG);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
             current = configuration.applySystemProperties().validate();
+            // this will close all the drivers and the jvm goes down
+            if (current.autoCloseDrivers) {
+                Runtime.getRuntime().addShutdownHook(new Thread() {
+                    @Override
+                    public void run() {
+                        current.stopAllDrivers();
+                    }
+                });
+            }
         }
         return current;
     }

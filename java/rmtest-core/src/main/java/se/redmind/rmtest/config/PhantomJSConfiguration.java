@@ -7,7 +7,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import se.redmind.rmtest.selenium.grid.TestHome;
+import se.redmind.utils.TestHome;
 
 /**
  * @author Jeremy Comte
@@ -28,7 +28,7 @@ public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> 
         cliArgs.add("--remote-debugger-autorun=yes");
         cliArgs.add("--remote-debugger-port=6666");
         capabilities.setCapability("takesScreenshot", true);
-        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.main() + "/node_modules/phantomjs/bin/phantomjs");
+        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.get() + "/node_modules/phantomjs/bin/phantomjs");
         capabilities.setCapability("phantomjs.page.settings.userAgent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36 s");
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgs);
         return capabilities;

@@ -1,5 +1,7 @@
 package se.redmind.rmtest.selenium.framework;
 
+import se.redmind.utils.StackTraceInfo;
+
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -16,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.selenium.grid.TestHome;
+import se.redmind.utils.TestHome;
 
 public class RMReportScreenshot {
 
@@ -159,7 +161,7 @@ public class RMReportScreenshot {
     }
 
     private String getSavePath(String timestamp) {
-        String path = TestHome.main() + "/RMR-Screenshots/" + timestamp + "/";
+        String path = TestHome.get() + "/RMR-Screenshots/" + timestamp + "/";
         File file = new File(path);
         file.mkdirs();
         return path;

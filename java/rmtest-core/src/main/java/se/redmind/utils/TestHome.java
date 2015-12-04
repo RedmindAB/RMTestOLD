@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.grid;
+package se.redmind.utils;
 
 import java.io.*;
 
@@ -11,7 +11,7 @@ public class TestHome {
     private static String testHome;
 
     @SuppressWarnings("CallToPrintStackTrace")
-    public static String main() {
+    public static String get() {
         if (testHome == null) {
             if (isWindows()) {
                 if (LOGGER.isDebugEnabled()) {

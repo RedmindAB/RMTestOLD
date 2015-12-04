@@ -9,7 +9,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.selenium.grid.TestHome;
+import se.redmind.utils.TestHome;
 
 /**
  * @author Jeremy Comte
@@ -37,11 +37,11 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
         } else {
             String osName = System.getProperty("os.name");
             if (osName.startsWith("Mac")) {
-                chromePath = TestHome.main() + "/node_modules/chromedriver/bin/chromedriver";
+                chromePath = TestHome.get() + "/node_modules/chromedriver/bin/chromedriver";
             } else if (osName.startsWith("Linux")) {
-                chromePath = TestHome.main() + "/lib/linux/chromedriver";
+                chromePath = TestHome.get() + "/lib/linux/chromedriver";
             } else if (osName.startsWith("Windows")) {
-                chromePath = TestHome.main() + "/windows/chromedriver.exe";
+                chromePath = TestHome.get() + "/windows/chromedriver.exe";
             } else {
                 throw new RuntimeException("Unsupported platform: '" + osName + "'");
             }

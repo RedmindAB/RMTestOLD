@@ -1,7 +1,7 @@
 package se.redmind.rmtest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.redmind.rmtest.selenium.grid.DriverConfig;
+import se.redmind.utils.ThrowingRunnable;
 
 /**
  * @author Jeremy Comte
@@ -30,7 +31,8 @@ public class DriverWrapper<DriverType extends WebDriver> {
     private final DesiredCapabilities capabilities;
     private final String description;
     private DriverType driver;
-    private final List<Consumer<DriverType>> postConfigurations = new ArrayList<>();
+    private final Set<ThrowingRunnable> preConfigurations = new LinkedHashSet<>();
+    private final Set<Consumer<DriverType>> postConfigurations = new LinkedHashSet<>();
 
     public DriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, DriverType> function) {
         this.capabilities = capabilities;
@@ -48,10 +50,13 @@ public class DriverWrapper<DriverType extends WebDriver> {
         }
     }
 
+    public void addPreConfiguration(ThrowingRunnable preConfiguration) {
+        preConfigurations.add(preConfiguration);
+    }
+
     public void addPostConfiguration(Consumer<DriverType> postConfiguration) {
         postConfigurations.add(postConfiguration);
     }
-
 
     public String getDescription() {
         return description;
@@ -63,6 +68,13 @@ public class DriverWrapper<DriverType extends WebDriver> {
 
     public synchronized DriverType getDriver() {
         if (driver == null) {
+            preConfigurations.forEach(preConfiguration -> {
+                try {
+                    preConfiguration.run();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
             driver = function.apply(capabilities);
             postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
             logger.info("Started driver [" + description + "]");

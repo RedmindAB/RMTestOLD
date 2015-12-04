@@ -19,16 +19,17 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import se.redmind.rmtest.config.Configuration;
+
 /**
- * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned.
- * On the RMReport side the behavior is flaky as a noggenfogger, so for the time being the RMReportConnection class will be commented out until the RMReport side is fixed.
- *  
+ * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned. On the RMReport side the
+ * behavior is flaky as a noggenfogger, so for the time being the RMReportConnection class will be commented out until the RMReport side is fixed.
+ *
  * @author gustavholfve
  */
 
 public class LiveStreamListener extends RunListener {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private volatile RmTestResultBuilder resBuilder;
 //    private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
@@ -130,14 +131,16 @@ public class LiveStreamListener extends RunListener {
         String savePath = Configuration.current().jsonReportSavePath;
 
         File file = new File(savePath);
-        if(!file.exists()) file.mkdirs();
+        if (!file.exists()) {
+            file.mkdirs();
+        }
 
         String filename = suitename + "-" + timestamp + ".json";
         try {
             String concatFilename = savePath + "/" + filename;
-			try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
+            try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
                 writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
-                logger.info("Saved report as Json to: "+concatFilename);
+                logger.info("Saved report as Json to: " + concatFilename);
             }
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();

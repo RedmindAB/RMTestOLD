@@ -15,7 +15,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import se.redmind.rmtest.selenium.grid.DescriptionBuilder;
-import se.redmind.rmtest.selenium.grid.GridConstants;
 import se.redmind.rmtest.selenium.grid.HubNodesStatus;
 
 /**
@@ -29,6 +28,9 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
     public String hubIp;
 
     @JsonProperty
+    public int hubPort = 4444;
+
+    @JsonProperty
     public boolean enableLiveStream;
 
     public GridConfiguration() {
@@ -38,7 +40,7 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
     @Override
     protected List<DriverWrapper<RemoteWebDriver>> createDrivers() {
         List<DriverWrapper<RemoteWebDriver>> instances = new ArrayList<>();
-        HubNodesStatus nodeInfo = new HubNodesStatus(hubIp, GridConstants.hubPort);
+        HubNodesStatus nodeInfo = new HubNodesStatus(hubIp, hubPort);
         nodeInfo.getNodesAsRegReqs().forEach(nodeReq -> {
             nodeReq.getCapabilities().stream()
                 .map(capabilities -> new DesiredCapabilities(capabilities))

@@ -115,16 +115,16 @@ public class RmTestResultBuilder {
     }
 
     private JsonElement getSystemProperties() {
-    	JsonObject systemProperties = new JsonObject();
-    	Properties properties = System.getProperties();
-    	Set<Object> propertiesKeySet = properties.keySet();
-    	for (Object propertyKey : propertiesKeySet) {
-    		systemProperties.addProperty((String) propertyKey, System.getProperty((String) propertyKey));
-		}
-    	return systemProperties;
-	}
+        JsonObject systemProperties = new JsonObject();
+        Properties properties = System.getProperties();
+        Set<Object> propertiesKeySet = properties.keySet();
+        for (Object propertyKey : propertiesKeySet) {
+            systemProperties.addProperty((String) propertyKey, System.getProperty((String) propertyKey));
+        }
+        return systemProperties;
+    }
 
-	public JsonObject getTest(String displayName) {
+    public JsonObject getTest(String displayName) {
         return testMap.get(displayName);
     }
 

@@ -4,13 +4,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-import se.redmind.rmtest.selenium.grid.*;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
 import org.junit.runners.model.FrameworkField;
@@ -24,10 +23,14 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.config.Configuration;
+import se.redmind.rmtest.config.GridConfiguration;
+import se.redmind.rmtest.selenium.framework.Browser;
+import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
 
 public class RmTestRunner extends Parameterized {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(RmTestRunner.class);
+    private LiveStreamListener liveStreamListener;
 
     public RmTestRunner(Class<?> klass) throws Throwable {
         super(klass);
@@ -47,10 +50,20 @@ public class RmTestRunner extends Parameterized {
 
     @Override
     public void run(RunNotifier notifier) {
-        if (Configuration.current().autoCloseDrivers) {
-            notifier.addListener(new AutoCloseListener());
+        if (Configuration.current().drivers.stream().anyMatch(driver -> driver instanceof GridConfiguration && driver.as(GridConfiguration.class).enableLiveStream)) {
+            liveStreamListener = new LiveStreamListener();
+            notifier.addListener(liveStreamListener);
         }
+        notifier.fireTestRunStarted(getDescription());
         super.run(notifier);
+    }
+
+    @Override
+    protected void runChild(Runner runner, RunNotifier notifier) {
+        if (liveStreamListener != null) {
+            notifier.addListener(liveStreamListener.getSubListener());
+        }
+        super.runChild(runner, notifier);
     }
 
     @Override
@@ -100,9 +113,13 @@ public class RmTestRunner extends Parameterized {
             FilterDrivers filterDrivers = getTestClass().getJavaClass().getAnnotation(FilterDrivers.class);
             Set<Platform> platforms = Sets.newHashSet(filterDrivers.platforms());
             Set<Capability> capabilities = Sets.newHashSet(filterDrivers.capabilities());
-            drivers = Arrays.asList(DriverProvider.getDrivers()).stream()
-                .map(driver -> (DriverWrapper<?>) driver)
+            Set<Class<? extends DriverWrapper<?>>> types = Sets.newHashSet(filterDrivers.types());
+            Set<Browser> browsers = Sets.newHashSet(filterDrivers.browsers());
+
+            drivers = Configuration.current().createWrappers().stream()
                 .filter(driver -> platforms.isEmpty() || platforms.contains(driver.getCapability().getPlatform()))
+                .filter(driver -> types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driver.getClass()))
+                .filter(driver -> browsers.isEmpty() || browsers.contains(Browser.valueOf(driver.getCapability().getBrowserName())))
                 .filter(driver -> capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {
                     String currCap = (String) driver.getCapability().getCapability(capability.name());
                     if (currCap == null) {
@@ -115,7 +132,7 @@ public class RmTestRunner extends Parameterized {
                 LOGGER.warn("we didn't find any driver matching our filter " + filterDrivers);
             }
         } else {
-            drivers = DriverProvider.getDriversAsParameters();
+            drivers = Configuration.current().createWrappersParameters();
             if (drivers.isEmpty()) {
                 LOGGER.warn("we didn't find any driver");
             }

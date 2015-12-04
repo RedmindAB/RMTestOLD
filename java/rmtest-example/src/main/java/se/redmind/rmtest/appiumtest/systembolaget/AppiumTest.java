@@ -1,23 +1,23 @@
 package se.redmind.rmtest.appiumtest.systembolaget;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 
 import io.appium.java_client.AppiumDriver;
 import se.redmind.rmtest.AppiumDriverWrapper;
-import se.redmind.rmtest.selenium.grid.DriverProvider;
-import se.redmind.rmtest.selenium.grid.Parallelized;
+
+import static org.junit.Assert.assertEquals;
+
+import se.redmind.rmtest.config.Configuration;
+import se.redmind.rmtest.runners.FilterDrivers;
+import se.redmind.rmtest.runners.RmTestRunner;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,37 +30,22 @@ import static org.junit.Assert.assertEquals;
  *
  * @author gustavholfve
  */
-@RunWith(Parallelized.class)
+@RunWith(RmTestRunner.class)
+@FilterDrivers(platforms = Platform.ANDROID)
 public class AppiumTest {
 
     private AppiumDriver<WebElement> androidDriver;
     private final AppiumDriverWrapper driverWrapper;
-    private final String driverDescription;
 
-    public AppiumTest(final AppiumDriverWrapper driverWrapper, final String driverDescription) {
+    public AppiumTest(AppiumDriverWrapper driverWrapper) {
         this.driverWrapper = driverWrapper;
-        this.driverDescription = driverDescription;
-    }
+        this.androidDriver = this.driverWrapper.getDriver();
 
-    private static Object[] getDrivers() {
-        return DriverProvider.getDrivers(Platform.ANDROID);
-    }
-
-    @Parameterized.Parameters(name = "{1}")
-    public static Collection<Object[]> drivers() {
-        return Arrays.asList(getDrivers()).stream()
-            .map(driver -> new Object[]{driver, driver.toString()})
-            .collect(Collectors.toList());
     }
 
     @AfterClass
     public static void afterTest() {
-        DriverProvider.stopDrivers();
-    }
-
-    @Before
-    public void beforeTest() {
-        this.androidDriver = this.driverWrapper.getDriver();
+        Configuration.current().stopAllDrivers();
     }
 
     @Before

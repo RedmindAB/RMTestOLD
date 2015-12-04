@@ -7,6 +7,10 @@ import java.lang.annotation.Target;
 
 import org.openqa.selenium.Platform;
 
+import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.selenium.framework.Browser;
+
+
 /**
  * @author Jeremy Comte
  */
@@ -17,5 +21,9 @@ public @interface FilterDrivers {
     Platform[] platforms() default {};
 
     Capability[] capabilities() default {};
+
+    Browser[] browsers() default {};
+
+    Class<? extends DriverWrapper<?>>[] types() default {};
 
 }
