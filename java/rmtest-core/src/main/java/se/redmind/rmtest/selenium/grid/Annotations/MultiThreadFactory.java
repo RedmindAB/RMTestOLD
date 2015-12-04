@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by johgri on 15-09-24.
  */
-public class MultiThreadFactory implements ThreadFactory{
+public class MultiThreadFactory implements ThreadFactory {
 
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
     private final AtomicInteger threadNumber = new AtomicInteger(1);

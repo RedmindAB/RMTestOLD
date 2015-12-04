@@ -10,7 +10,6 @@ import org.openqa.selenium.Platform;
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.framework.Browser;
 
-
 /**
  * @author Jeremy Comte
  */

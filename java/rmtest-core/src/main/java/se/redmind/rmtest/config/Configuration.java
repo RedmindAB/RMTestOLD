@@ -7,7 +7,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.*;
 
@@ -22,11 +24,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.openqa.selenium.Platform;
 import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.runners.Capability;
+import se.redmind.rmtest.runners.FilterDrivers;
+import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.utils.TestHome;
 import se.redmind.utils.Fields;
 import se.redmind.utils.JavaTypes;
@@ -136,6 +143,20 @@ public class Configuration {
 
     public List<Object[]> createWrappersParameters() {
         return createWrappers().stream().map(obj -> new Object[]{obj}).collect(Collectors.toList());
+    }
+
+    public List<Object[]> createWrappersParameters(FilterDrivers filterDrivers) {
+        return createWrappers().stream()
+            .filter(Configuration.filter(filterDrivers))
+            .map(obj -> new Object[]{obj}).collect(Collectors.toList());
+    }
+
+    public List<Object[]> createWrappersParameters(Predicate<DriverWrapper<?>>... predicates) {
+        Stream<DriverWrapper<?>> wrappers = createWrappers().stream();
+        for (Predicate<DriverWrapper<?>> predicate : predicates) {
+            wrappers = wrappers.filter(predicate);
+        }
+        return wrappers.map(obj -> new Object[]{obj}).collect(Collectors.toList());
     }
 
     public List<DriverWrapper<?>> createWrappers() {
@@ -335,5 +356,46 @@ public class Configuration {
             validator = factory.getValidator();
         }
         return validator;
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(FilterDrivers filterDrivers) {
+        return filter(filterDrivers.platforms())
+            .and(filter(filterDrivers.types()))
+            .and(filter(filterDrivers.browsers()))
+            .and(filter(filterDrivers.capabilities()));
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Platform[] values) {
+        return driver -> {
+            Set<Platform> platforms = Sets.newHashSet(values);
+            return platforms.isEmpty() || platforms.contains(driver.getCapability().getPlatform());
+        };
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Class<? extends DriverWrapper<?>>[] values) {
+        return driver -> {
+            Set<Class<? extends DriverWrapper<?>>> types = Sets.newHashSet(values);
+            return types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driver.getClass());
+        };
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Browser[] values) {
+        return driver -> {
+            Set<Browser> browsers = Sets.newHashSet(values);
+            return browsers.isEmpty() || browsers.contains(Browser.valueOf(driver.getCapability().getBrowserName()));
+        };
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Capability[] values) {
+        return driver -> {
+            Set<Capability> capabilities = Sets.newHashSet(values);
+            return capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {
+                String currCap = (String) driver.getCapability().getCapability(capability.name());
+                if (currCap == null) {
+                    currCap = "";
+                }
+                return currCap.equalsIgnoreCase(capability.value());
+            });
+        };
     }
 }

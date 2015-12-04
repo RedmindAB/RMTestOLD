@@ -35,15 +35,15 @@ public class MultiThreadedSuite extends Suite {
             public Runner runnerForClass(Class<?> testClass) throws Throwable {
                 List<RunnerBuilder> builders = Arrays.asList(
                     new RunnerBuilder() {
-                    @Override
-                    public Runner runnerForClass(Class<?> testClass) throws Throwable {
-                        Concurrent annotation = testClass.getAnnotation(Concurrent.class);
-                        if (annotation != null) {
-                            return new MultiThreadedRunner(testClass);
+                        @Override
+                        public Runner runnerForClass(Class<?> testClass) throws Throwable {
+                            Concurrent annotation = testClass.getAnnotation(Concurrent.class);
+                            if (annotation != null) {
+                                return new MultiThreadedRunner(testClass);
+                            }
+                            return null;
                         }
-                        return null;
-                    }
-                },
+                    },
                     ignoredBuilder(),
                     annotatedBuilder(),
                     suiteMethodBuilder(),
@@ -61,8 +61,8 @@ public class MultiThreadedSuite extends Suite {
         setScheduler(new RunnerScheduler() {
             ExecutorService executorService = Executors.newFixedThreadPool(
                 klass.isAnnotationPresent(Concurrent.class)
-                ? klass.getAnnotation(Concurrent.class).threads()
-                : (int) (Runtime.getRuntime().availableProcessors() * 1.5),
+                    ? klass.getAnnotation(Concurrent.class).threads()
+                    : (int) (Runtime.getRuntime().availableProcessors() * 1.5),
                 new MultiThreadFactory(klass.getSimpleName()));
             CompletionService<Void> completionService = new ExecutorCompletionService<>(executorService);
             Queue<Future<Void>> tasks = new LinkedList<>();
