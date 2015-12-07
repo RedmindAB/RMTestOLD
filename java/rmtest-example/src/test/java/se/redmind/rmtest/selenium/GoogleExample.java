@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.example;
+package se.redmind.rmtest.selenium;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +9,6 @@ import se.redmind.utils.Try;
 
 import se.redmind.rmtest.DriverWrapper;
 
-import static org.junit.Assert.assertTrue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,15 +22,14 @@ import static org.junit.Assert.assertTrue;
 public class GoogleExample {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected final DriverWrapper<?> driverWrapper;
+    protected final HTMLPage navPage;
 
     public GoogleExample(DriverWrapper<?> driverWrapper) {
-        this.driverWrapper = driverWrapper;
+        navPage = new HTMLPage(driverWrapper.getDriver());
     }
 
     @Test
     public void testGoogle() throws Exception {
-        HTMLPage navPage = new HTMLPage(driverWrapper.getDriver());
 
         navPage.getDriver().get("http://www.google.se");
 

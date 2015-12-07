@@ -76,7 +76,7 @@ public class AppiumDriverWrapper extends DriverWrapper<AppiumDriver<WebElement>>
         try {
             File testScreenshot = new File(name);
             FileUtils.copyFile(scrFile, testScreenshot);
-            logger.info("Screenshot stored to " + testScreenshot.getAbsolutePath());
+            logger.info("Screenshot saved as " + testScreenshot.getAbsolutePath());
             return testScreenshot;
         } catch (IOException e) {
             logger.error(e.getMessage(), e);

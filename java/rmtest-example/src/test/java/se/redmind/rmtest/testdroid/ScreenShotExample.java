@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.example.testdroid;
+package se.redmind.rmtest.testdroid;
 
 import org.junit.Test;
 
@@ -17,12 +17,12 @@ import se.redmind.rmtest.runners.DriverRunner;
 
 @RunWith(DriverRunner.class)
 @FilterDrivers(types = TestDroidDriverWrapper.class)
-public class TestDroidScreenShotTest {
+public class ScreenShotExample {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TestDroidScreenShotTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScreenShotExample.class);
     private final TestDroidDriverWrapper wrapper;
 
-    public TestDroidScreenShotTest(TestDroidDriverWrapper wrapper) {
+    public ScreenShotExample(TestDroidDriverWrapper wrapper) {
         this.wrapper = wrapper;
         this.wrapper.addPreConfiguration(() -> {
             Optional<APIDevice> potentialDevice = wrapper.getFirstNonLockedDevice(APIDevice.OsType.ANDROID, 21);

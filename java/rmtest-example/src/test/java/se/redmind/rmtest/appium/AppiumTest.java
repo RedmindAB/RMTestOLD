@@ -1,9 +1,8 @@
-package se.redmind.rmtest.appiumtest.systembolaget;
+package se.redmind.rmtest.appium;
 
 import java.util.List;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,14 +12,9 @@ import org.openqa.selenium.WebElement;
 import io.appium.java_client.AppiumDriver;
 import se.redmind.rmtest.AppiumDriverWrapper;
 
-import static org.junit.Assert.assertEquals;
-
-import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.runners.DriverRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -36,18 +30,12 @@ import static org.junit.Assert.assertEquals;
 @FilterDrivers(platforms = Platform.ANDROID)
 public class AppiumTest {
 
-    private AppiumDriver<WebElement> androidDriver;
+    private final AppiumDriver<WebElement> androidDriver;
     private final AppiumDriverWrapper driverWrapper;
 
     public AppiumTest(AppiumDriverWrapper driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.androidDriver = this.driverWrapper.getDriver();
-
-    }
-
-    @AfterClass
-    public static void afterTest() {
-        Configuration.current().stopAllDrivers();
     }
 
     @Before
