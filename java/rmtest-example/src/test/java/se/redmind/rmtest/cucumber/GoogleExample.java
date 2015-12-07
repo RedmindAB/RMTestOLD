@@ -1,11 +1,10 @@
 package se.redmind.rmtest.cucumber;
 
+import cucumber.api.CucumberOptions;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import cucumber.api.CucumberOptions;
-import se.redmind.rmtest.runners.Parallelize;
 import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.runners.Parallelize;
 
 /**
  * @author Jeremy Comte
@@ -13,7 +12,7 @@ import se.redmind.rmtest.runners.DriverRunner;
 @RunWith(DriverRunner.class)
 @Parallelize
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
-@CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", plugin = "pretty")
+@CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", plugin = "gherkin.formatter.NonRepeatingFormatter")
 public class GoogleExample {
 
 }
