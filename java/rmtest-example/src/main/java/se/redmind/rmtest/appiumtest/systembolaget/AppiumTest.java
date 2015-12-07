@@ -17,8 +17,10 @@ import static org.junit.Assert.assertEquals;
 
 import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.runners.FilterDrivers;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -30,7 +32,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author gustavholfve
  */
-@RunWith(RmTestRunner.class)
+@RunWith(DriverRunner.class)
 @FilterDrivers(platforms = Platform.ANDROID)
 public class AppiumTest {
 

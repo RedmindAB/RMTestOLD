@@ -22,12 +22,16 @@ import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
 
-public class RmTestRunner extends Parameterized {
+/**
+ * Parameterized runner that will pick up all the drivers configuration and inject our test classes automatically
+ * @author Jeremy Comte
+ */
+public class DriverRunner extends Parameterized {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(RmTestRunner.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(DriverRunner.class);
     private LiveStreamListener liveStreamListener;
 
-    public RmTestRunner(Class<?> klass) throws Throwable {
+    public DriverRunner(Class<?> klass) throws Throwable {
         super(klass);
         if (klass.isAnnotationPresent(Parallelize.class)) {
             String threads = System.getProperty("junit.parallel.threads");
@@ -65,12 +69,12 @@ public class RmTestRunner extends Parameterized {
     protected TestClass createTestClass(Class<?> testClass) {
         return new TestClass(testClass) {
 
-            private final TestClass runnerAsTestClass = new TestClass(RmTestRunner.this.getClass()) {
+            private final TestClass runnerAsTestClass = new TestClass(DriverRunner.this.getClass()) {
                 @Override
                 protected void scanAnnotatedMembers(Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations,
                                                     Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
                     try {
-                        addToAnnotationLists(new FrameworkMethod(RmTestRunner.this.getClass().getMethod("getDriversAsParameters")) {
+                        addToAnnotationLists(new FrameworkMethod(DriverRunner.this.getClass().getMethod("getDriversAsParameters")) {
 
                             @Override
                             protected int getModifiers() {
@@ -79,7 +83,7 @@ public class RmTestRunner extends Parameterized {
 
                             @Override
                             public Object invokeExplosively(Object target, Object... params) throws Throwable {
-                                return super.invokeExplosively(RmTestRunner.this, params);
+                                return super.invokeExplosively(DriverRunner.this, params);
                             }
 
                         }, methodsForAnnotations);

@@ -14,9 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.redmind.rmtest.runners.Parallelize;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 
-@RunWith(RmTestRunner.class)
+import static org.junit.Assert.assertTrue;
+
+@RunWith(DriverRunner.class)
 @Parallelize
 public class GoogleExample {
 

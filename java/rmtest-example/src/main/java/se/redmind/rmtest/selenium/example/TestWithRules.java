@@ -9,14 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.framework.RmTestWatcher;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(RmTestRunner.class)
+@RunWith(DriverRunner.class)
 public class TestWithRules {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

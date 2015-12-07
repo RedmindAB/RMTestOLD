@@ -1,5 +1,7 @@
 package se.redmind.rmtest.config;
 
+import java.util.Collection;
+
 import se.redmind.rmtest.DriverWrapper;
 
 import java.util.LinkedHashMap;
@@ -42,7 +44,20 @@ public abstract class DriverConfiguration<DriverType extends WebDriver> {
 
     public DesiredCapabilities generateCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities(baseCapabilities);
-        configurationCapabilities.forEach((key, value) -> capabilities.setCapability(key, value));
+        configurationCapabilities.forEach((key, value) -> {
+            Object currentValue = capabilities.getCapability(key);
+            if (currentValue == null) {
+                capabilities.setCapability(key, value);
+            } else if (currentValue instanceof Collection && value instanceof Collection) {
+                ((Collection) currentValue).addAll((Collection) value);
+            } else if (currentValue instanceof Map && value instanceof Map) {
+                ((Map) currentValue).putAll((Map) value);
+            } else if (currentValue.getClass().equals(value.getClass())) {
+                capabilities.setCapability(key, value);
+            } else {
+                throw new RuntimeException("can't override or merge " + currentValue + " with " + value);
+            }
+        });
         return capabilities;
     }
 

@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.steadystate.css.parser.Locatable;
 import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 
-@RunWith(RmTestRunner.class)
+@RunWith(DriverRunner.class)
 public class RMExample {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.runners.FilterDrivers;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 import se.redmind.rmtest.selenium.framework.Browser;
 
-@RunWith(RmTestRunner.class)
+@RunWith(DriverRunner.class)
 @FilterDrivers(browsers = Browser.Firefox, platforms = Platform.MAC)
 public class RMExampleMobile {
 

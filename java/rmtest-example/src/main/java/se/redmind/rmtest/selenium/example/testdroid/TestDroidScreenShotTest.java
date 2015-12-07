@@ -13,9 +13,9 @@ import com.testdroid.api.model.APIDevice;
 import se.redmind.rmtest.TestDroidDriverWrapper;
 import se.redmind.rmtest.config.TestDroidConfiguration;
 import se.redmind.rmtest.runners.FilterDrivers;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 
-@RunWith(RmTestRunner.class)
+@RunWith(DriverRunner.class)
 @FilterDrivers(types = TestDroidDriverWrapper.class)
 public class TestDroidScreenShotTest {
 

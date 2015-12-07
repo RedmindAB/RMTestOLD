@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.runners.Parallelize;
-import se.redmind.rmtest.runners.RmTestRunner;
+import se.redmind.rmtest.runners.DriverRunner;
 
-@RunWith(RmTestRunner.class)
+@RunWith(DriverRunner.class)
 @Parallelize
 public class ComaroundTest1 {
 
