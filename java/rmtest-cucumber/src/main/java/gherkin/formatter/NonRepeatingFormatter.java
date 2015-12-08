@@ -127,7 +127,7 @@ public class NonRepeatingFormatter implements Reporter, Formatter {
             return;
         }
         if (!printing) {
-            if (statement instanceof Scenario) {
+            if (statement instanceof Scenario || statement instanceof ScenarioOutline) {
                 printing = true;
             } else {
                 return;

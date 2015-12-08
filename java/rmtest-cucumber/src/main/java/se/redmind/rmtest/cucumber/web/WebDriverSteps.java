@@ -3,12 +3,10 @@ package se.redmind.rmtest.cucumber.web;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,29 +28,39 @@ public class WebDriverSteps {
     private static final String THAT = "(?:that )?";
     private static final String THE_USER = "(?:.*)?";
     private static final String THE_ELEMENT = "(?:the ?(?:button|element|field)?)?";
-    private static final String IDENTIFIED_BY = "(?:with )?(named|id|xpath|class|css|(?:partial )?link|tag)? \"([^\"]*)\"";
+    private static final String IDENTIFIED_BY = "(?:with )?(named|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
+
+    private static final String STRING_ASSERT = "(reads|returns|is|equals|contains|starts with|ends with|links to)";
+    private static final String STRING_CONTENT = "\"([^\"]*)\"";
+
+    public static final int TIMEOUT_IN_SECONDS = 5;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Map<String, By> aliases = new LinkedHashMap<>();
     private final DriverWrapper<WebDriver> driverWrapper;
     private final HTMLPage page;
-    private WebElement currentElement;
+    private WebElement element;
 
     public WebDriverSteps(DriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
         page = new HTMLPage(driverWrapper.getDriver());
     }
 
+    @After
+    public void stopDriver() {
+        driverWrapper.stopDriver();
+    }
+
     // Helpers
-    @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as \"([^\"]*)\"$")
+    @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + STRING_CONTENT + "$")
     public void that_we_know_the_element_named_as(String type, String id, String alias) {
         aliases.put(alias, by(type, id));
     }
 
     // Actions
-    @When("^" + THAT + THE_USER + " navigate to the url \"([^\"]*)\"$")
-    public void we_navigate_to_the_url(String url) {
+    @When("^" + THAT + THE_USER + " navigate(?:s)? to " + STRING_CONTENT + "$")
+    public void we_navigate_to(String url) {
         page.getDriver().get(url);
     }
 
@@ -63,44 +71,43 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " input(?:s)? \"([^\"]*)\" in " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void we_input_in_the_field_identified_by(String content, String type, String id) {
-        find(by(type, id));
-        currentElement.sendKeys(content);
+        find(by(type, id)).sendKeys(content);
     }
 
     @When("^" + THAT + THE_USER + " (?:press|enter)(?:[es])? (.*)$")
     public void that_we_press(Keys keys) {
-        currentElement.sendKeys(keys);
+        element.sendKeys(keys);
     }
 
     @When("^" + THAT + THE_USER + " click(?:s)? on " + THE_ELEMENT_IDENTIFIED_BY + "$")
-    public void that_we_click_on_the_button_identified_by(String type, String id) {
-        find(by(type, id));
-        currentElement.click();
+    public void that_we_click_on_the_element_identified_by(String type, String id) {
+        find(by(type, id)).click();
     }
 
-    @Then("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
+    @When("^" + THAT + THE_USER + " clear(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + "$")
+    public void that_we_clear_the_element_identified_by(String type, String id) {
+        find(by(type, id)).clear();
+    }
+
+    @When("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
     public void we_wait(int amount, TimeUnit timeUnit) throws InterruptedException {
         timeUnit.sleep(amount);
     }
 
-    // Assertions
-    @Then("^the title contains \"([^\"]*)\"$")
-    public void the_title_contains(String expectedTitle) {
-        String pageTitle = Try.toGet(() -> page.getTitle())
-            .until(value -> !Strings.isNullOrEmpty(value))
-            .delayRetriesBy(500)
-            .nTimes(10);
-        Assert.assertTrue(pageTitle.startsWith(expectedTitle));
+    @When("^" + THAT + THE_USER + " select(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + "$")
+    public void we_select_the_element_identified_by(String type, String id) {
+        find(by(type, id));
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is \"([^\"]*)\"$")
-    public void that_the_element_at_id_is(String type, String id, String expectedValue) {
-        find(by(type, id));
-        String realValue = Try.toGet(() -> currentElement.getText())
-            .until(value -> !Strings.isNullOrEmpty(value))
-            .delayRetriesBy(500)
-            .nTimes(10);
-        Assert.assertEquals(expectedValue, realValue);
+    // Assertions
+    @Then("^the title " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    public void the_title_matches(String assertType, String expectedValue) {
+        assertString(assertType, get(() -> page.getTitle()), expectedValue);
+    }
+
+    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    public void that_the_element_at_id_matches(String type, String id, String assertType, String expectedValue) {
+        assertElement(assertType, find(by(type, id)), expectedValue);
     }
 
     @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is present$")
@@ -108,21 +115,69 @@ public class WebDriverSteps {
         find(by(type, id));
     }
 
+    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is displayed")
+    public void the_element_with_id_is_displayed(String type, String id) {
+        Assert.assertTrue(find(by(type, id)).isDisplayed());
+    }
+
+    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is enabled")
+    public void the_element_with_id_is_enabled(String type, String id) {
+        Assert.assertTrue(find(by(type, id)).isEnabled());
+    }
+
+    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is selected")
+    public void the_element_with_id_is_selected(String type, String id) {
+        Assert.assertTrue(find(by(type, id)).isSelected());
+    }
+
+    @Then("^the current url " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    public void the_current_url_ends_with(String assertType, String expectedValue) {
+        assertString(assertType, page.getDriver().getCurrentUrl(), expectedValue);
+    }
+
+    @Then("^executing \"([^\"]*)\" " + STRING_ASSERT + " \"?(.+)\"?$")
+    public void executing_returns(String javascript, String assertType, String expectedValue) {
+        String value = String.valueOf(((JavascriptExecutor) page.getDriver()).executeScript("return window.scrollY;"));
+        assertString(assertType, value, expectedValue);
+    }
+
+    @Then("^this element " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    public void this_element_matches(String assertType, String expectedValue) throws Throwable {
+        assertElement(assertType, element, expectedValue);
+    }
+
+    @Then("^this element attribute \"([^\"]*)\" " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    public void this_element_attribute_matches(String attribute, String assertType, String expectedValue) {
+        assertString(assertType, element.getAttribute(attribute), expectedValue);
+    }
+
+    @Then("^this element property \"([^\"]*)\" " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    public void this_element_property_matches(String property, String assertType, String expectedValue) {
+        assertString(assertType, element.getCssValue(property), expectedValue);
+    }
+
+    // privates
     private WebElement find(By elementLocation) {
-        page.driverFluentWait(15).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
-        currentElement = page.getDriver().findElement(elementLocation);
-        return currentElement;
+        page.driverFluentWait(TIMEOUT_IN_SECONDS).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
+        element = page.getDriver().findElement(elementLocation);
+        return element;
     }
 
-    @After
-    public void stopDriver() {
-        driverWrapper.stopDriver();
+    private String get(Supplier<String> supplier) {
+        return Try.toGet(supplier)
+            .until(value -> !Strings.isNullOrEmpty(value))
+            .delayRetriesBy(500)
+            .nTimes(10);
     }
 
-    public By by(String type, String value) {
+    private By by(String type, String value) {
         Preconditions.checkArgument(value != null);
         if (type == null) {
-            return aliases.get(value);
+            if (aliases.containsKey(value)) {
+                return aliases.get(value);
+            } else {
+                throw new IllegalArgumentException("unknown alias: " + value);
+            }
         } else {
             switch (type) {
                 case "named":
@@ -135,17 +190,48 @@ public class WebDriverSteps {
                     return By.className(value);
                 case "css":
                     return By.cssSelector(value);
-                case "link":
+                case "link text":
                     return By.linkText(value);
-                case "partial link":
+                case "partial link text":
                     return By.partialLinkText(value);
                 case "tag":
                     return By.tagName(value);
                 default:
-                    throw new IllegalArgumentException("unknowm parameter '" + type + "'");
+                    throw new IllegalArgumentException("unknown parameter type: " + type + " value: " + value);
             }
         }
+    }
 
+    private void assertElement(String assertType, WebElement element, String expected) {
+        switch (assertType) {
+            case "links to":
+                Assert.assertEquals(expected, element.getAttribute("href"));
+                break;
+            default:
+                assertString(assertType, get(() -> element.getText()), expected);
+        }
+    }
+
+    private void assertString(String assertType, String value, String expected) {
+        switch (assertType) {
+            case "reads":
+            case "returns":
+            case "is":
+            case "equals":
+                Assert.assertEquals(expected, value);
+                break;
+            case "contains":
+                Assert.assertTrue("'" + value + "' doesn't contain '" + expected + "'", value.contains(expected));
+                break;
+            case "starts with":
+                Assert.assertTrue("'" + value + "' doesn't start with '" + expected + "'", value.startsWith(expected));
+                break;
+            case "ends with":
+                Assert.assertTrue("'" + value + "' doesn't end with '" + expected + "'", value.endsWith(expected));
+                break;
+            default:
+                throw new IllegalArgumentException("unknown assert type " + assertType);
+        }
     }
 
 }
