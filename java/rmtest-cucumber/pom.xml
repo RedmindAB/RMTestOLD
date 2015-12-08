@@ -46,7 +46,7 @@
                 <version>2.19</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <config>src/test/resources/browser.yml</config>
+                        <config>src/test/resources/browser</config>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
