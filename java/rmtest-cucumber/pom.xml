@@ -47,6 +47,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <config>src/test/resources/browser</config>
+                        <java.util.logging.config.file>src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

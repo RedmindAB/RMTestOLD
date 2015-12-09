@@ -1,2 +1,4 @@
 drivers:
   - type: phantomjs
+    capabilities:
+        phantomjs.cli.args: ["--webdriver-loglevel=ERROR"]

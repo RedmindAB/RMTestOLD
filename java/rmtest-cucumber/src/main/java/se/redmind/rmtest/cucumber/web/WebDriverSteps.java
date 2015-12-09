@@ -18,6 +18,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
+import se.redmind.rmtest.utils.Methods;
 import se.redmind.utils.Try;
 
 /**
@@ -27,12 +28,15 @@ public class WebDriverSteps {
 
     private static final String THAT = "(?:that )?";
     private static final String THE_USER = "(?:.*)?";
-    private static final String THE_ELEMENT = "(?:the ?(?:button|element|field)?)?";
+    private static final String THE_ELEMENT = "(?:the ?(?:button|element|field|checkbox|radio)?)?";
+    private static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
+    private static final String INPUT = "(input|type)(?:s? (?:on|in))?";
     private static final String IDENTIFIED_BY = "(?:with )?(named|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
+    private static final String THIS_ELEMENT = "(?:this element|it(?:s)?)";
 
-    private static final String STRING_ASSERT = "(reads|returns|is|equals|contains|starts with|ends with|links to)";
-    private static final String STRING_CONTENT = "\"([^\"]*)\"";
+    private static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
+    private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
     public static final int TIMEOUT_IN_SECONDS = 5;
 
@@ -53,15 +57,29 @@ public class WebDriverSteps {
     }
 
     // Helpers
-    @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + STRING_CONTENT + "$")
+    @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
     public void that_we_know_the_element_named_as(String type, String id, String alias) {
         aliases.put(alias, by(type, id));
     }
 
-    // Actions
-    @When("^" + THAT + THE_USER + " navigate(?:s)? to " + STRING_CONTENT + "$")
+    // Navigates
+    @When("^" + THAT + THE_USER + " navigate(?:s)? to " + QUOTED_CONTENT + "$")
     public void we_navigate_to(String url) {
-        page.getDriver().get(url);
+        page.getDriver().navigate().to(url);
+    }
+
+    @When("^" + THAT + THE_USER + " (?:(?:go(?:es) )?(back|forward|refresh(?:es)?))$")
+    public void we_navigate(String action) {
+        Methods.invoke(page.getDriver().navigate(), action);
+    }
+
+    // Actions
+    @When("^" + THAT + THE_USER + " " + DO_SOMETHING + " " + THE_ELEMENT_IDENTIFIED_BY + "$")
+    public void that_we_do_something_on_the_element_identified_by(String action, String type, String id) {
+        find(by(type, id));
+        if (!"select".equals(action)) {
+            Methods.invoke(element, action);
+        }
     }
 
     @When("^" + THAT + "the window is maximized$")
@@ -69,24 +87,9 @@ public class WebDriverSteps {
         page.getDriver().manage().window().maximize();
     }
 
-    @When("^" + THAT + THE_USER + " input(?:s)? \"([^\"]*)\" in " + THE_ELEMENT_IDENTIFIED_BY + "$")
-    public void we_input_in_the_field_identified_by(String content, String type, String id) {
-        find(by(type, id)).sendKeys(content);
-    }
-
-    @When("^" + THAT + THE_USER + " (?:press|enter)(?:[es])? (.*)$")
+    @When("^" + THAT + THE_USER + " (?:press[es]?)(?:[es])? (.*)$")
     public void that_we_press(Keys keys) {
         element.sendKeys(keys);
-    }
-
-    @When("^" + THAT + THE_USER + " click(?:s)? on " + THE_ELEMENT_IDENTIFIED_BY + "$")
-    public void that_we_click_on_the_element_identified_by(String type, String id) {
-        find(by(type, id)).click();
-    }
-
-    @When("^" + THAT + THE_USER + " clear(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + "$")
-    public void that_we_clear_the_element_identified_by(String type, String id) {
-        find(by(type, id)).clear();
     }
 
     @When("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
@@ -94,18 +97,13 @@ public class WebDriverSteps {
         timeUnit.sleep(amount);
     }
 
-    @When("^" + THAT + THE_USER + " select(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + "$")
-    public void we_select_the_element_identified_by(String type, String id) {
-        find(by(type, id));
-    }
-
     // Assertions
-    @Then("^the title " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    @Then("^the title " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_title_matches(String assertType, String expectedValue) {
-        assertString(assertType, get(() -> page.getTitle()), expectedValue);
+        assertString(assertType, getNotNullOrEmpty(() -> page.getTitle()), expectedValue);
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void that_the_element_at_id_matches(String type, String id, String assertType, String expectedValue) {
         assertElement(assertType, find(by(type, id)), expectedValue);
     }
@@ -130,33 +128,50 @@ public class WebDriverSteps {
         Assert.assertTrue(find(by(type, id)).isSelected());
     }
 
-    @Then("^the current url " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    @Then("^the current url " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_current_url_ends_with(String assertType, String expectedValue) {
         assertString(assertType, page.getDriver().getCurrentUrl(), expectedValue);
     }
 
-    @Then("^executing \"([^\"]*)\" " + STRING_ASSERT + " \"?(.+)\"?$")
+    @Then("^executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
     public void executing_returns(String javascript, String assertType, String expectedValue) {
         String value = String.valueOf(((JavascriptExecutor) page.getDriver()).executeScript("return window.scrollY;"));
         assertString(assertType, value, expectedValue);
     }
 
-    @Then("^this element " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void this_element_matches(String assertType, String expectedValue) throws Throwable {
         assertElement(assertType, element, expectedValue);
     }
 
-    @Then("^this element attribute \"([^\"]*)\" " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    @Then("^" + THAT + THIS_ELEMENT + " is selected$")
+    public void this_element_is_selected() throws Throwable {
+        Assert.assertTrue(element.isSelected());
+    }
+
+    @Then("^" + THAT + THIS_ELEMENT + " attribute \"([^\"]*)\" " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void this_element_attribute_matches(String attribute, String assertType, String expectedValue) {
         assertString(assertType, element.getAttribute(attribute), expectedValue);
     }
 
-    @Then("^this element property \"([^\"]*)\" " + STRING_ASSERT + " " + STRING_CONTENT + "$")
+    @Then("^the attribute " + QUOTED_CONTENT + " of " + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_attribute_of_the_element_identified_by_matches(String attribute, String type, String id, String assertType, String expectedValue) {
+        find(by(type, id));
+        this_element_attribute_matches(attribute, assertType, expectedValue);
+    }
+
+    @Then("^" + THAT + THIS_ELEMENT + " property \"([^\"]*)\" " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void this_element_property_matches(String property, String assertType, String expectedValue) {
         assertString(assertType, element.getCssValue(property), expectedValue);
     }
 
-    // privates
+    @Then("^the property " + QUOTED_CONTENT + " of " + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_property_of_the_element_identified_by_matches(String property, String type, String id, String assertType, String expectedValue) {
+        find(by(type, id));
+        this_element_property_matches(property, assertType, expectedValue);
+    }
+
+    // private helpers
     private WebElement find(By elementLocation) {
         page.driverFluentWait(TIMEOUT_IN_SECONDS).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
         element = page.getDriver().findElement(elementLocation);
@@ -164,6 +179,12 @@ public class WebDriverSteps {
     }
 
     private String get(Supplier<String> supplier) {
+        return Try.toGet(supplier)
+            .delayRetriesBy(500)
+            .nTimes(10);
+    }
+
+    private String getNotNullOrEmpty(Supplier<String> supplier) {
         return Try.toGet(supplier)
             .until(value -> !Strings.isNullOrEmpty(value))
             .delayRetriesBy(500)
@@ -208,7 +229,7 @@ public class WebDriverSteps {
                 Assert.assertEquals(expected, element.getAttribute("href"));
                 break;
             default:
-                assertString(assertType, get(() -> element.getText()), expected);
+                assertString(assertType, getNotNullOrEmpty(() -> element.getText()), expected);
         }
     }
 
@@ -219,6 +240,9 @@ public class WebDriverSteps {
             case "is":
             case "equals":
                 Assert.assertEquals(expected, value);
+                break;
+            case "matches":
+                Assert.assertTrue("'" + value + "' doesn't match '" + expected + "'", value.matches(expected));
                 break;
             case "contains":
                 Assert.assertTrue("'" + value + "' doesn't contain '" + expected + "'", value.contains(expected));
