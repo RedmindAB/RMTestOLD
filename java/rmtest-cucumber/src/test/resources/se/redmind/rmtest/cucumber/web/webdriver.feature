@@ -1,11 +1,9 @@
 Feature: WebDriver functionalities
-  The functions are grouped in Scenarios because having one Scenario per function
+  The functions are grouped in big scenarios because having one Scenario per function
   would cause the webdriver to start over and over again, making this test really slow.
 
-  Background:
-    Given that we navigate to "http://anvoz.github.io/bootstrap-tldr/"
-
   Scenario: basic functions and assertions of element
+    Given that we navigate to "http://anvoz.github.io/bootstrap-tldr/"
     # string predicates
     Then the title reads "Bootstrap TLDR"
     And the title contains "oots"
@@ -51,4 +49,18 @@ Feature: WebDriver functionalities
     # regex
     Then the current url matches "http://.+#css"
 
-
+ Scenario: cookies
+    Given that we navigate to "http://localhost:4567/"
+    And that we add those cookies:
+      | name          | value                 |
+      | Authorization | base64(user:password) |
+      | base          | something cool        |
+      | sessionid     | 1lknsdf912lk12eas90   |
+    When we navigate to "http://localhost:4567/cookie/valueOf/Authorization"
+    Then the page content is "base64(user:password)"
+    Given that we delete the cookie "Authorization"
+    When we navigate to "http://localhost:4567/cookie/valueOf/Authorization"
+    Then the page content is "null"
+    Given that we delete all the cookies
+    When we navigate to "http://localhost:4567/cookie/valueOf/sessionid"
+    Then the page content is "null"

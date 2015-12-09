@@ -1,6 +1,8 @@
 package se.redmind.rmtest.cucumber.web;
 
+import java.sql.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import cucumber.api.java.After;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.DriverWrapper;
@@ -37,6 +40,9 @@ public class WebDriverSteps {
 
     private static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
+
+    private static final String TEXT_PREFIX = "<html><head></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">";
+    private static final String TEXT_SUFFIX = "</pre></body></html>";
 
     public static final int TIMEOUT_IN_SECONDS = 5;
 
@@ -73,6 +79,40 @@ public class WebDriverSteps {
         Methods.invoke(page.getDriver().navigate(), action);
     }
 
+    // Cookie Options
+    @Given("^" + THAT + THE_USER + " add(?:s)? th(?:is|ose) cookie(?:s)?:$")
+    public void that_we_add_those_cookies(List<Map<String, String>> data) {
+        data.forEach(cookieAsMap -> {
+            Cookie.Builder builder = new Cookie.Builder(cookieAsMap.get("name"), cookieAsMap.get("value"));
+            if (cookieAsMap.containsKey("domain")) {
+                builder.domain(cookieAsMap.get("domain"));
+            }
+            if (cookieAsMap.containsKey("path")) {
+                builder.path(cookieAsMap.get("path"));
+            }
+            if (cookieAsMap.containsKey("expiry")) {
+                builder.expiresOn(Date.valueOf(cookieAsMap.get("expiry")));
+            }
+            if (cookieAsMap.containsKey("isSecure")) {
+                builder.isSecure(Boolean.valueOf(cookieAsMap.get("isSecure")));
+            }
+            if (cookieAsMap.containsKey("isHttpOnly")) {
+                builder.isHttpOnly(Boolean.valueOf(cookieAsMap.get("isHttpOnly")));
+            }
+            page.getDriver().manage().addCookie(builder.build());
+        });
+    }
+
+    @Given("^" + THAT + THE_USER + " delete(?:s)? the cookie \"([^\"]*)\"$")
+    public void that_we_delete_the_cookie(String name) {
+        page.getDriver().manage().deleteCookieNamed(name);
+    }
+
+    @Given("^" + THAT + THE_USER + " delete(?:s)? all the cookies$")
+    public void that_we_delete_all_the_cookies() {
+        page.getDriver().manage().deleteAllCookies();
+    }
+
     // Actions
     @When("^" + THAT + THE_USER + " " + DO_SOMETHING + " " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void that_we_do_something_on_the_element_identified_by(String action, String type, String id) {
@@ -101,6 +141,11 @@ public class WebDriverSteps {
     @Then("^the title " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_title_matches(String assertType, String expectedValue) {
         assertString(assertType, getNotNullOrEmpty(() -> page.getTitle()), expectedValue);
+    }
+
+    @Then("^the page content " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_page_content_is(String assertType, String expectedValue) {
+        assertString(assertType, page.getDriver().getPageSource().replaceAll(TEXT_PREFIX, "").replaceAll(TEXT_SUFFIX, ""), expectedValue);
     }
 
     @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
@@ -140,12 +185,12 @@ public class WebDriverSteps {
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void this_element_matches(String assertType, String expectedValue) throws Throwable {
+    public void this_element_matches(String assertType, String expectedValue) {
         assertElement(assertType, element, expectedValue);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " is selected$")
-    public void this_element_is_selected() throws Throwable {
+    public void this_element_is_selected() {
         Assert.assertTrue(element.isSelected());
     }
 
