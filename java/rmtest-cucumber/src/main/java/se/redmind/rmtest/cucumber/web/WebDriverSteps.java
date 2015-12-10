@@ -74,7 +74,6 @@ public class WebDriverSteps {
 
     @Given("^th(?:is|ose|ese) alias(?:es)?:$")
     public void these_aliases(List<Map<String, String>> newAliases) {
-        logger.info(newAliases.toString());
         newAliases.forEach(alias -> aliases.put(alias.get("value"), by(alias.get("type"), alias.get("id"))));
     }
 
@@ -343,8 +342,16 @@ public class WebDriverSteps {
                 Assert.assertEquals(expected, element.getAttribute("href"));
                 break;
             default:
-                assertString(assertType, getNotNullOrEmpty(() -> element.getText()), expected);
+                String value;
+                if (element.getTagName().equals("input")) {
+                    value = element.getAttribute("value");
+                } else {
+                    value = getNotNullOrEmpty(() -> element.getText());
+                }
+                assertString(assertType, value, expected);
+                break;
         }
+
     }
 
     private void assertString(String assertType, String value, String expected) {

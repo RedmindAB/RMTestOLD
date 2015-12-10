@@ -28,8 +28,8 @@ Feature: WebDriver functionalities
     And executing "return window.scrollY;" returns 0
     # select an element
     Given this alias:
-      | type  | id                                                                | value         |
-      | xpath | /html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2]  | Success box   |
+      | type  | id                                                               | value       |
+      | xpath | /html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2] | Success box |
     When we select the "Success box"
     # assert the current element
     Then it reads "Indicates a successful or positive action"
@@ -55,10 +55,10 @@ Feature: WebDriver functionalities
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
     When we click the element "input.form-control"
     And that we input "test"
-#    Then this element reads "test"
-#    Then we wait 10 seconds
+    Then this element reads "test"
 
- Scenario: cookies
+  #    Then we wait 10 seconds
+  Scenario: cookies
     Given that we navigate to "http://localhost:4567/"
     And that we add those cookies:
       | name          | value                 |
@@ -73,5 +73,3 @@ Feature: WebDriver functionalities
     Given that we delete all the cookies
     When we navigate to "http://localhost:4567/cookie/valueOf/sessionid"
     Then the page content is "null"
-
-Scenario:

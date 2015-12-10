@@ -24,11 +24,11 @@ public class WebDriverStepsTest {
     public static synchronized void createTestServer() {
         if (!isServerRunning) {
             isServerRunning = true;
-            get("/", (request, response) -> "hello!");
             get("/cookie/valueOf/:name", (request, response) -> {
                 response.type("text/plain");
                 return String.valueOf(request.cookie(request.params("name")));
             });
         }
     }
+
 }
