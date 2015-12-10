@@ -36,13 +36,10 @@ public class WebDriverSteps {
     private static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     private static final String IDENTIFIED_BY = "(?:with )?(named|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
-    private static final String THIS_ELEMENT = "(?:this element(?:s)?|it(?:s)?)";
+    private static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
 
     private static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
-
-    private static final String TEXT_PREFIX = "<html><head></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">";
-    private static final String TEXT_SUFFIX = "</pre></body></html>";
 
     public static final int TIMEOUT_IN_SECONDS = 5;
 
@@ -130,6 +127,11 @@ public class WebDriverSteps {
     @When("^" + THAT + THE_USER + " " + DO_SOMETHING + " " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void that_we_do_something_on_the_element_identified_by(String action, String type, String id) {
         find(by(type, id));
+        that_we_do_something_on_the_element_identified_by(action);
+    }
+
+    @When("^" + THAT + THE_USER + " " + DO_SOMETHING + " " + THIS_ELEMENT + "$")
+    public void that_we_do_something_on_the_element_identified_by(String action) {
         switch (action) {
             case "click":
                 action().moveToElement(element).click().perform();
