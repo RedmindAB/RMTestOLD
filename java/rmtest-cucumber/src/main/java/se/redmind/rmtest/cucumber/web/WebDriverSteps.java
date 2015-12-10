@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
-import se.redmind.rmtest.utils.Methods;
 import se.redmind.utils.Try;
 
 /**
@@ -33,10 +33,10 @@ public class WebDriverSteps {
     private static final String THE_USER = "(?:.*)?";
     private static final String THE_ELEMENT = "(?:the ?(?:button|element|field|checkbox|radio)?)?";
     private static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
-    private static final String INPUT = "(input|type)(?:s? (?:on|in))?";
+    private static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     private static final String IDENTIFIED_BY = "(?:with )?(named|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
-    private static final String THIS_ELEMENT = "(?:this element|it(?:s)?)";
+    private static final String THIS_ELEMENT = "(?:this element(?:s)?|it(?:s)?)";
 
     private static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
@@ -49,12 +49,15 @@ public class WebDriverSteps {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Map<String, By> aliases = new LinkedHashMap<>();
     private final DriverWrapper<WebDriver> driverWrapper;
+    private final WebDriver driver;
     private final HTMLPage page;
     private WebElement element;
+    private By elementLocation;
 
     public WebDriverSteps(DriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
-        page = new HTMLPage(driverWrapper.getDriver());
+        this.driver = driverWrapper.getDriver();
+        page = new HTMLPage(driver);
     }
 
     @After
@@ -76,7 +79,17 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " (?:(?:go(?:es) )?(back|forward|refresh(?:es)?))$")
     public void we_navigate(String action) {
-        Methods.invoke(page.getDriver().navigate(), action);
+        switch (action) {
+            case "back":
+                driver.navigate().back();
+                break;
+            case "forward":
+                driver.navigate().forward();
+                break;
+            case "refresh":
+                driver.navigate().refresh();
+                break;
+        }
     }
 
     // Cookie Options
@@ -117,19 +130,46 @@ public class WebDriverSteps {
     @When("^" + THAT + THE_USER + " " + DO_SOMETHING + " " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void that_we_do_something_on_the_element_identified_by(String action, String type, String id) {
         find(by(type, id));
-        if (!"select".equals(action)) {
-            Methods.invoke(element, action);
+        switch (action) {
+            case "click":
+                action().moveToElement(element).click().perform();
+                break;
+            case "clear":
+                element.clear();
+                break;
+            case "submit":
+                element.submit();
+                break;
         }
     }
 
+    @Given("^" + THAT + THE_USER + " maximize(?:s)? the window$")
+    public void that_we_maximize_the_window() throws InterruptedException {
+        the_window_is_maximized();
+
+    }
+
     @When("^" + THAT + "the window is maximized$")
-    public void the_window_is_maximized() {
+    public void the_window_is_maximized() throws InterruptedException {
         page.getDriver().manage().window().maximize();
+        if (System.getProperty("os.name").startsWith("Mac")) {
+            driverWrapper.getDriver().manage().window().setSize(new Dimension(1280, 950));
+        }
     }
 
     @When("^" + THAT + THE_USER + " (?:press[es]?)(?:[es])? (.*)$")
     public void that_we_press(Keys keys) {
         element.sendKeys(keys);
+    }
+
+    @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + "$")
+    public void that_we_input(String content) {
+        element.sendKeys(content);
+    }
+
+    @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + " in " + THE_ELEMENT_IDENTIFIED_BY + "$")
+    public void that_we_input_in_the_element_identified_by(String content, String type, String id) {
+        find(by(type, id)).sendKeys(content);
     }
 
     @When("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
@@ -145,7 +185,7 @@ public class WebDriverSteps {
 
     @Then("^the page content " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_page_content_is(String assertType, String expectedValue) {
-        assertString(assertType, page.getDriver().getPageSource().replaceAll(TEXT_PREFIX, "").replaceAll(TEXT_SUFFIX, ""), expectedValue);
+        assertString(assertType, find(By.tagName("body")).findElement(By.tagName("pre")).getText(), expectedValue);
     }
 
     @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
@@ -186,6 +226,7 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void this_element_matches(String assertType, String expectedValue) {
+        refreshElement();
         assertElement(assertType, element, expectedValue);
     }
 
@@ -218,9 +259,18 @@ public class WebDriverSteps {
 
     // private helpers
     private WebElement find(By elementLocation) {
+        this.elementLocation = elementLocation;
         page.driverFluentWait(TIMEOUT_IN_SECONDS).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
         element = page.getDriver().findElement(elementLocation);
         return element;
+    }
+
+    private void refreshElement() {
+        find(elementLocation);
+    }
+
+    private Actions action() {
+        return new Actions(page.getDriver());
     }
 
     private String get(Supplier<String> supplier) {

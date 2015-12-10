@@ -1,7 +1,7 @@
 Feature: This is an example of an HTML test in gherkin
 
   Background:
-    Given that we navigate to the url "http://www.google.com"
+    Given that we navigate to "http://www.google.com"
     And that we know the element named "q" as "search box"
     And that we know the element named "btnG" as "search button"
     And that we know the element with id "ires" as "search result"

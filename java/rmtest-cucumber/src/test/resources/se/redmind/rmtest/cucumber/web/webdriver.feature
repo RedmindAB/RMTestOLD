@@ -4,6 +4,7 @@ Feature: WebDriver functionalities
 
   Scenario: basic functions and assertions of element
     Given that we navigate to "http://anvoz.github.io/bootstrap-tldr/"
+    And that we maximize the window
     # string predicates
     Then the title reads "Bootstrap TLDR"
     And the title contains "oots"
@@ -16,7 +17,7 @@ Feature: WebDriver functionalities
     Then the element with css "body > div.container > div > div.col-md-9 > blockquote > p" reads "Bootstrap TLDR"
     Then the element with link text "Typography" links to "http://anvoz.github.io/bootstrap-tldr/#typography"
     Then the element with partial link text "Typo" links to "http://anvoz.github.io/bootstrap-tldr/#typography"
-    And we select the element with tag "html"
+    And we select the element with tag "body"
     # alias
     Given that we know the element with xpath "//*[@id="sidebar"]/a" as "Back to top"
     # click
@@ -48,6 +49,10 @@ Feature: WebDriver functionalities
     Then we refresh
     # regex
     Then the current url matches "http://.+#css"
+    When we click the element with xpath "/html/body/div[2]/div/div[1]/div[14]/form/div[1]/input"
+    And that we input "test"
+#    Then this element reads "test"
+#    Then we wait 10 seconds
 
  Scenario: cookies
     Given that we navigate to "http://localhost:4567/"
