@@ -1,11 +1,15 @@
 package se.redmind.rmtest.cucumber.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.openqa.selenium.*;
@@ -15,13 +19,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.io.Files;
+import cucumber.api.DataTable;
 import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.utils.Try;
 
 /**
@@ -47,14 +53,12 @@ public class WebDriverSteps {
     private final Map<String, By> aliases = new LinkedHashMap<>();
     private final DriverWrapper<WebDriver> driverWrapper;
     private final WebDriver driver;
-    private final HTMLPage page;
     private WebElement element;
     private By elementLocation;
 
     public WebDriverSteps(DriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.driver = driverWrapper.getDriver();
-        page = new HTMLPage(driver);
     }
 
     @After
@@ -68,10 +72,24 @@ public class WebDriverSteps {
         aliases.put(alias, by(type, id));
     }
 
+    @Given("^th(?:is|ose|ese) alias(?:es)?:$")
+    public void these_aliases(List<Map<String, String>> newAliases) {
+        logger.info(newAliases.toString());
+        newAliases.forEach(alias -> aliases.put(alias.get("value"), by(alias.get("type"), alias.get("id"))));
+    }
+
+    @Given("^the aliases defined in the file \"([^\"]*)\"$")
+    public void the_aliases_defined_in_the_file(String fileName) throws IOException {
+        Splitter splitter = Splitter.on("|").trimResults().omitEmptyStrings();
+        List<String> lines = Files.readLines(new File(fileName), Charset.defaultCharset());
+        List<List<String>> rows = lines.stream().map(line -> splitter.splitToList(line)).collect(Collectors.toList());
+        these_aliases(DataTable.create(rows).asMaps(String.class, String.class));
+    }
+
     // Navigates
     @When("^" + THAT + THE_USER + " navigate(?:s)? to " + QUOTED_CONTENT + "$")
     public void we_navigate_to(String url) {
-        page.getDriver().navigate().to(url);
+        driver.navigate().to(url);
     }
 
     @When("^" + THAT + THE_USER + " (?:(?:go(?:es) )?(back|forward|refresh(?:es)?))$")
@@ -109,18 +127,18 @@ public class WebDriverSteps {
             if (cookieAsMap.containsKey("isHttpOnly")) {
                 builder.isHttpOnly(Boolean.valueOf(cookieAsMap.get("isHttpOnly")));
             }
-            page.getDriver().manage().addCookie(builder.build());
+            driver.manage().addCookie(builder.build());
         });
     }
 
     @Given("^" + THAT + THE_USER + " delete(?:s)? the cookie \"([^\"]*)\"$")
     public void that_we_delete_the_cookie(String name) {
-        page.getDriver().manage().deleteCookieNamed(name);
+        driver.manage().deleteCookieNamed(name);
     }
 
     @Given("^" + THAT + THE_USER + " delete(?:s)? all the cookies$")
     public void that_we_delete_all_the_cookies() {
-        page.getDriver().manage().deleteAllCookies();
+        driver.manage().deleteAllCookies();
     }
 
     // Actions
@@ -148,12 +166,11 @@ public class WebDriverSteps {
     @Given("^" + THAT + THE_USER + " maximize(?:s)? the window$")
     public void that_we_maximize_the_window() throws InterruptedException {
         the_window_is_maximized();
-
     }
 
     @When("^" + THAT + "the window is maximized$")
     public void the_window_is_maximized() throws InterruptedException {
-        page.getDriver().manage().window().maximize();
+        driver.manage().window().maximize();
         if (System.getProperty("os.name").startsWith("Mac")) {
             driverWrapper.getDriver().manage().window().setSize(new Dimension(1280, 950));
         }
@@ -182,7 +199,7 @@ public class WebDriverSteps {
     // Assertions
     @Then("^the title " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_title_matches(String assertType, String expectedValue) {
-        assertString(assertType, getNotNullOrEmpty(() -> page.getTitle()), expectedValue);
+        assertString(assertType, getNotNullOrEmpty(() -> driver.getTitle()), expectedValue);
     }
 
     @Then("^the page content " + MATCHES + " " + QUOTED_CONTENT + "$")
@@ -195,7 +212,7 @@ public class WebDriverSteps {
         assertElement(assertType, find(by(type, id)), expectedValue);
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is present$")
+    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " (?:is present|exists)$")
     public void the_element_with_id_is_present(String type, String id) {
         find(by(type, id));
     }
@@ -217,12 +234,12 @@ public class WebDriverSteps {
 
     @Then("^the current url " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_current_url_ends_with(String assertType, String expectedValue) {
-        assertString(assertType, page.getDriver().getCurrentUrl(), expectedValue);
+        assertString(assertType, driver.getCurrentUrl(), expectedValue);
     }
 
     @Then("^executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
     public void executing_returns(String javascript, String assertType, String expectedValue) {
-        String value = String.valueOf(((JavascriptExecutor) page.getDriver()).executeScript("return window.scrollY;"));
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return window.scrollY;"));
         assertString(assertType, value, expectedValue);
     }
 
@@ -262,8 +279,8 @@ public class WebDriverSteps {
     // private helpers
     private WebElement find(By elementLocation) {
         this.elementLocation = elementLocation;
-        page.driverFluentWait(TIMEOUT_IN_SECONDS).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
-        element = page.getDriver().findElement(elementLocation);
+        driverWrapper.driverFluentWait(TIMEOUT_IN_SECONDS).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
+        element = driver.findElement(elementLocation);
         return element;
     }
 
@@ -272,7 +289,7 @@ public class WebDriverSteps {
     }
 
     private Actions action() {
-        return new Actions(page.getDriver());
+        return new Actions(driver);
     }
 
     private String get(Supplier<String> supplier) {
@@ -288,34 +305,34 @@ public class WebDriverSteps {
             .nTimes(10);
     }
 
-    private By by(String type, String value) {
-        Preconditions.checkArgument(value != null);
+    private By by(String type, String id) {
+        Preconditions.checkArgument(id != null);
         if (type == null) {
-            if (aliases.containsKey(value)) {
-                return aliases.get(value);
+            if (aliases.containsKey(id)) {
+                return aliases.get(id);
             } else {
-                throw new IllegalArgumentException("unknown alias: " + value);
+                throw new IllegalArgumentException("unknown alias: " + id);
             }
         } else {
             switch (type) {
                 case "named":
-                    return By.name(value);
+                    return By.name(id);
                 case "id":
-                    return By.id(value);
+                    return By.id(id);
                 case "xpath":
-                    return By.xpath(value);
+                    return By.xpath(id);
                 case "class":
-                    return By.className(value);
+                    return By.className(id);
                 case "css":
-                    return By.cssSelector(value);
+                    return By.cssSelector(id);
                 case "link text":
-                    return By.linkText(value);
+                    return By.linkText(id);
                 case "partial link text":
-                    return By.partialLinkText(value);
+                    return By.partialLinkText(id);
                 case "tag":
-                    return By.tagName(value);
+                    return By.tagName(id);
                 default:
-                    throw new IllegalArgumentException("unknown parameter type: " + type + " value: " + value);
+                    throw new IllegalArgumentException("unknown parameter type: " + type + " value: " + id);
             }
         }
     }

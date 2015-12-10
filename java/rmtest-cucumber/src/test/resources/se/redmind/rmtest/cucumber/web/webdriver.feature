@@ -27,7 +27,9 @@ Feature: WebDriver functionalities
     # javascript
     And executing "return window.scrollY;" returns 0
     # select an element
-    Given that we know the element with xpath "/html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2]" as "Success box"
+    Given this alias:
+      | type  | id                                                                | value         |
+      | xpath | /html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2]  | Success box   |
     When we select the "Success box"
     # assert the current element
     Then it reads "Indicates a successful or positive action"
@@ -49,7 +51,9 @@ Feature: WebDriver functionalities
     Then we refresh
     # regex
     Then the current url matches "http://.+#css"
-    When we click the element with xpath "/html/body/div[2]/div/div[1]/div[14]/form/div[1]/input"
+    # loading aliases from an external file
+    Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
+    When we click the element "input.form-control"
     And that we input "test"
 #    Then this element reads "test"
 #    Then we wait 10 seconds
@@ -69,3 +73,5 @@ Feature: WebDriver functionalities
     Given that we delete all the cookies
     When we navigate to "http://localhost:4567/cookie/valueOf/sessionid"
     Then the page content is "null"
+
+Scenario:

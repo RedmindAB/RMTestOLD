@@ -2,17 +2,16 @@ package se.redmind.rmtest;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.junit.Assume;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,6 +112,27 @@ public class DriverWrapper<DriverType extends WebDriver> {
 
     public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
         new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
+    }
+
+    public FluentWait<DriverType> driverFluentWait(int timeoutInSeconds) {
+        FluentWait<DriverType> fw = null;
+        for (int i = 0; i < 10; i++) {
+            try {
+                fw = new FluentWait<>(getDriver()).withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
+                fw.ignoring(WebDriverException.class, ClassCastException.class);
+                fw.ignoring(NoSuchElementException.class);
+                return fw;
+            } catch (Exception e) {
+                if (i >= 9) {
+                    logger.warn("driverFluentWait Failed attempt : " + i + "/n" + e);
+                }
+            }
+        }
+        if (fw == null) {
+            throw new WebDriverException("driverFluentWait failed after ten attempts");
+        } else {
+            return fw;
+        }
     }
 
     @Override

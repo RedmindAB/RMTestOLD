@@ -271,12 +271,10 @@ public class NonRepeatingFormatter implements Reporter, Formatter {
 
     public void table(List<? extends Row> rows) {
         prepareTable(rows);
-        if (!executing) {
-            rows.forEach(row -> {
-                row(row.createResults("skipped"));
-                nextRow();
-            });
-        }
+        rows.forEach(row -> {
+            row(row.createResults("skipped"));
+            nextRow();
+        });
     }
 
     private void prepareTable(List<? extends Row> rows) {
