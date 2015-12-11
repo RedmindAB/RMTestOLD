@@ -365,28 +365,28 @@ public class Configuration {
             .and(filter(filterDrivers.capabilities()));
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Platform[] values) {
+    public static Predicate<DriverWrapper<?>> filter(Platform... values) {
         return driver -> {
             Set<Platform> platforms = Sets.newHashSet(values);
             return platforms.isEmpty() || platforms.contains(driver.getCapability().getPlatform());
         };
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Class<? extends DriverWrapper<?>>[] values) {
+    public static Predicate<DriverWrapper<?>> filter(Class<? extends DriverWrapper<?>>... values) {
         return driver -> {
             Set<Class<? extends DriverWrapper<?>>> types = Sets.newHashSet(values);
             return types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driver.getClass());
         };
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Browser[] values) {
+    public static Predicate<DriverWrapper<?>> filter(Browser... values) {
         return driver -> {
-            Set<Browser> browsers = Sets.newHashSet(values);
-            return browsers.isEmpty() || browsers.contains(Browser.valueOf(driver.getCapability().getBrowserName()));
+            Set<String> browsers = Sets.newHashSet(values).stream().map(value -> value.toString().toLowerCase()).collect(Collectors.toSet());
+            return browsers.isEmpty() || browsers.contains(driver.getCapability().getBrowserName());
         };
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Capability[] values) {
+    public static Predicate<DriverWrapper<?>> filter(Capability... values) {
         return driver -> {
             Set<Capability> capabilities = Sets.newHashSet(values);
             return capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {

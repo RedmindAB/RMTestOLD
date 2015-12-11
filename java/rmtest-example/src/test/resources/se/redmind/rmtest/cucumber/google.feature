@@ -7,6 +7,7 @@ Feature: This is an example of an HTML test in gherkin
     And that we know the element with id "ires" as "search result"
 
   Scenario: verify the title of the page
+    Given that we send a rocket named "love" to the moon
     Then the title contains "Goo"
 
   Scenario: search for something using the keyboard, names and ids

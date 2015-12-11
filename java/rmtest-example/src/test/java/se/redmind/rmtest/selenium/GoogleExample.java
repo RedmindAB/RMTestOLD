@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.common.base.Strings;
-import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.utils.Try;
 
 import se.redmind.rmtest.DriverWrapper;
@@ -22,18 +21,18 @@ import static org.junit.Assert.assertTrue;
 public class GoogleExample {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected final HTMLPage navPage;
+    protected final DriverWrapper<?> wrapper;
 
     public GoogleExample(DriverWrapper<?> driverWrapper) {
-        navPage = new HTMLPage(driverWrapper.getDriver());
+        this.wrapper = driverWrapper;
     }
 
     @Test
     public void testGoogle() throws Exception {
 
-        navPage.getDriver().get("http://www.google.se");
+        wrapper.getDriver().get("http://www.google.se");
 
-        String pageTitle = Try.toGet(() -> navPage.getTitle())
+        String pageTitle = Try.toGet(() -> wrapper.getDriver().getTitle())
             .until(value -> !Strings.isNullOrEmpty(value))
             .delayRetriesBy(500)
             .nTimes(10);
