@@ -162,6 +162,7 @@ public class Configuration {
     public List<DriverWrapper<?>> createWrappers() {
         return drivers.stream()
             .map(driverConfiguration -> driverConfiguration.wrappers())
+            .peek(wrappers -> WRAPPERS.addAll(wrappers))
             .flatMap(wrappers -> wrappers.stream())
             .collect(Collectors.toList());
     }
