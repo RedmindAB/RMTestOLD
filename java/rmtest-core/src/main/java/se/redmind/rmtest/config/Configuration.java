@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,16 +22,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.openqa.selenium.Platform;
 import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.Capability;
 import se.redmind.rmtest.runners.FilterDrivers;
-import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.utils.TestHome;
 import se.redmind.utils.Fields;
 import se.redmind.utils.JavaTypes;
@@ -50,7 +44,7 @@ public class Configuration {
     private static final String DEFAULT_LOCAL_CONFIG = "/etc/LocalConfig.yml";
     private static final String DEFAULT_LEGACY_CONFIG = "/etc/LocalConfig.json";
     private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
-    private static final List<DriverWrapper<?>> WRAPPERS = new ArrayList<>();
+    private static final Set<DriverWrapper<?>> WRAPPERS = new LinkedHashSet<>();
     private static ObjectMapper objectMapper;
     private static Validator validator;
 
@@ -151,7 +145,8 @@ public class Configuration {
             .map(obj -> new Object[]{obj}).collect(Collectors.toList());
     }
 
-    public List<Object[]> createWrappersParameters(Predicate<DriverWrapper<?>>... predicates) {
+    @SafeVarargs
+    public final List<Object[]> createWrappersParameters(Predicate<DriverWrapper<?>>... predicates) {
         Stream<DriverWrapper<?>> wrappers = createWrappers().stream();
         for (Predicate<DriverWrapper<?>> predicate : predicates) {
             wrappers = wrappers.filter(predicate);
@@ -168,7 +163,7 @@ public class Configuration {
     }
 
     public void stopAllDrivers() {
-        WRAPPERS.forEach(driverWrapper -> driverWrapper.stopDriver());
+        WRAPPERS.forEach(driverWrapper -> driverWrapper.stopAllDrivers());
     }
 
     @Override

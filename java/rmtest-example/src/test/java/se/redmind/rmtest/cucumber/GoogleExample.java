@@ -1,5 +1,7 @@
 package se.redmind.rmtest.cucumber;
 
+
+
 import cucumber.api.CucumberOptions;
 
 import org.junit.runner.RunWith;
@@ -17,7 +19,7 @@ import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
  * @author Jeremy Comte
  */
 @RunWith(DriverRunner.class)
-@Parallelize
+@Parallelize()
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
 @CucumberOptions(glue = {"se.redmind.rmtest.cucumber"}, plugin = "gherkin.formatter.NonRepeatingFormatter")
 @ReuseDriverBetweenTests
@@ -25,8 +27,8 @@ public class GoogleExample {
 
     public static class Steps {
 
-        private Logger logger = LoggerFactory.getLogger(this.getClass());
-        private DriverWrapper<?> driverWrapper;
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
+        private final DriverWrapper<?> driverWrapper;
 
         public Steps(DriverWrapper<?> driverWrapper) {
             this.driverWrapper = driverWrapper;
@@ -35,7 +37,6 @@ public class GoogleExample {
         @Given("^that we send a rocket named \"([^\"]*)\" to the moon$")
         public void that_we_send_a_rocket_named_to_the_moon(String name) {
             logger.info("roger ... the " + name + " rocket has landed and we have a " + driverWrapper.getDriver());
-
         }
     }
 

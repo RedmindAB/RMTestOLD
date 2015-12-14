@@ -1,7 +1,5 @@
 package se.redmind.rmtest.config;
 
-import se.redmind.rmtest.DriverWrapper;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -11,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.common.collect.Lists;
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.utils.Try;
 
 /**
@@ -27,6 +26,7 @@ public abstract class LocalConfiguration<DriverType extends WebDriver> extends D
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected List<DriverWrapper<DriverType>> createDrivers() {
         int maxRetryAttempts = 5;
         if (imAFailure) {

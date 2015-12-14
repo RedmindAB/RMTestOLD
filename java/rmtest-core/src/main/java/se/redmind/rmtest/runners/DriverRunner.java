@@ -1,14 +1,11 @@
 package se.redmind.rmtest.runners;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -26,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.redmind.rmtest.DriverWrapper;
-
 import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;

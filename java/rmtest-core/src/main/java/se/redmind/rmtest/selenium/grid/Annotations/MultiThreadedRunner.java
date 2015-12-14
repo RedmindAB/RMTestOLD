@@ -8,12 +8,14 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerScheduler;
 
+import se.redmind.rmtest.runners.Parallelize;
+
 public class MultiThreadedRunner extends BlockJUnit4ClassRunner {
 
     public MultiThreadedRunner(final Class<?> klass) throws InitializationError {
         super(klass);
-        int threadCount = klass.isAnnotationPresent(MultiThreadedSuite.Concurrent.class)
-            ? klass.getAnnotation(MultiThreadedSuite.Concurrent.class).threads()
+        int threadCount = klass.isAnnotationPresent(Parallelize.class)
+            ? klass.getAnnotation(Parallelize.class).threads()
             : (int) (Runtime.getRuntime().availableProcessors() * 1.5);
         setScheduler(new RunnerScheduler() {
             ExecutorService executorService = Executors.newFixedThreadPool(threadCount, new MultiThreadFactory(klass.getSimpleName()));

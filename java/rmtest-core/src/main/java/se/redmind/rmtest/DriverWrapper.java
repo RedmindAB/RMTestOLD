@@ -36,7 +36,29 @@ public class DriverWrapper<DriverType extends WebDriver> {
     private final Function<DesiredCapabilities, DriverType> function;
     private final DesiredCapabilities capabilities;
     private final String description;
-    private DriverType driver;
+
+    private final Set<DriverType> openDrivers = new LinkedHashSet<>();
+    private final ThreadLocal<Boolean> isStarted = ThreadLocal.withInitial(() -> false);
+    private final ThreadLocal<DriverType> driverInstance = new ThreadLocal<DriverType>() {
+
+        @Override
+        protected DriverType initialValue() {
+            preConfigurations.forEach(preConfiguration -> {
+                try {
+                    preConfiguration.run();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            DriverType driver = function.apply(capabilities);
+            postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
+            isStarted.set(true);
+            logger.info("Started driver [" + description + "]");
+            openDrivers.add(driver);
+            return driver;
+        }
+
+    };
     private final Set<ThrowingRunnable> preConfigurations = new LinkedHashSet<>();
     private final Set<Consumer<DriverType>> postConfigurations = new LinkedHashSet<>();
 
@@ -69,35 +91,35 @@ public class DriverWrapper<DriverType extends WebDriver> {
     }
 
     public boolean isStarted() {
-        return driver != null;
+        synchronized (driverInstance) {
+            return isStarted.get();
+        }
     }
 
-    public synchronized DriverType getDriver() {
-        if (driver == null) {
-            preConfigurations.forEach(preConfiguration -> {
-                try {
-                    preConfiguration.run();
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-            driver = function.apply(capabilities);
-            postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
-            logger.info("Started driver [" + description + "]");
+    public DriverType getDriver() {
+        synchronized (driverInstance) {
+            return driverInstance.get();
         }
-        return driver;
     }
 
     public void stopDriver() {
-        if (isStarted()) {
-            logger.info("Closing driver [" + description + "]");
-            try {
-                driver.quit();
-            } catch (UnreachableBrowserException e) {
-                logger.error(e.getMessage());
+        synchronized (driverInstance) {
+            if (isStarted.get()) {
+                openDrivers.remove(driverInstance.get());
+                logger.info("Closing driver [" + description + "]");
+                try {
+                    driverInstance.get().quit();
+                } catch (UnreachableBrowserException e) {
+                    logger.error(e.getMessage());
+                }
+                driverInstance.remove();
+                isStarted.remove();
             }
-            driver = null;
         }
+    }
+
+    public void stopAllDrivers() {
+        openDrivers.forEach(driver -> driver.quit());
     }
 
     public void ignoreAtNoConnectivityById(String url, String id) {
@@ -163,31 +185,33 @@ public class DriverWrapper<DriverType extends WebDriver> {
     }
 
     public static Predicate<DriverWrapper<?>> filter(Platform... values) {
-        return driver -> {
+        return driverWrapper -> {
             Set<Platform> platforms = Sets.newHashSet(values);
-            return platforms.isEmpty() || platforms.contains(driver.getCapability().getPlatform());
+            return platforms.isEmpty() || platforms.contains(driverWrapper.getCapability().getPlatform());
         };
     }
 
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
     public static Predicate<DriverWrapper<?>> filter(Class<? extends DriverWrapper<?>>... values) {
-        return driver -> {
+        return driverWrapper -> {
             Set<Class<? extends DriverWrapper<?>>> types = Sets.newHashSet(values);
-            return types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driver.getClass());
+            return types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driverWrapper.getClass());
         };
     }
 
     public static Predicate<DriverWrapper<?>> filter(Browser... values) {
-        return driver -> {
+        return driverWrapper -> {
             Set<String> browsers = Sets.newHashSet(values).stream().map(value -> value.toString().toLowerCase()).collect(Collectors.toSet());
-            return browsers.isEmpty() || browsers.contains(driver.getCapability().getBrowserName());
+            return browsers.isEmpty() || browsers.contains(driverWrapper.getCapability().getBrowserName());
         };
     }
 
     public static Predicate<DriverWrapper<?>> filter(Capability... values) {
-        return driver -> {
+        return driverWrapper -> {
             Set<Capability> capabilities = Sets.newHashSet(values);
             return capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {
-                String currCap = (String) driver.getCapability().getCapability(capability.name());
+                String currCap = (String) driverWrapper.getCapability().getCapability(capability.name());
                 if (currCap == null) {
                     currCap = "";
                 }

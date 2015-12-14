@@ -14,4 +14,8 @@ public @interface Parallelize {
 
     int threads() default -1;
 
+    boolean drivers() default true;
+
+    boolean tests() default false;
+
 }

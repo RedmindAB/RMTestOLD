@@ -3,10 +3,6 @@ package se.redmind.rmtest.selenium.grid.Annotations;
 /**
  * Created by johgri on 15-09-23.
  */
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,14 +16,9 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
 import org.junit.runners.model.RunnerScheduler;
 
+import se.redmind.rmtest.runners.Parallelize;
+
 public class MultiThreadedSuite extends Suite {
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.TYPE})
-    public @interface Concurrent {
-
-        int threads() default 5;
-    }
 
     public MultiThreadedSuite(final Class<?> klass) throws InitializationError {
         super(klass, new AllDefaultPossibilitiesBuilder(true) {
@@ -37,8 +28,7 @@ public class MultiThreadedSuite extends Suite {
                     new RunnerBuilder() {
                         @Override
                         public Runner runnerForClass(Class<?> testClass) throws Throwable {
-                            Concurrent annotation = testClass.getAnnotation(Concurrent.class);
-                            if (annotation != null) {
+                            if (testClass.isAnnotationPresent(Parallelize.class)) {
                                 return new MultiThreadedRunner(testClass);
                             }
                             return null;
@@ -60,8 +50,8 @@ public class MultiThreadedSuite extends Suite {
         });
         setScheduler(new RunnerScheduler() {
             ExecutorService executorService = Executors.newFixedThreadPool(
-                klass.isAnnotationPresent(Concurrent.class)
-                    ? klass.getAnnotation(Concurrent.class).threads()
+                klass.isAnnotationPresent(Parallelize.class)
+                    ? klass.getAnnotation(Parallelize.class).threads()
                     : (int) (Runtime.getRuntime().availableProcessors() * 1.5),
                 new MultiThreadFactory(klass.getSimpleName()));
             CompletionService<Void> completionService = new ExecutorCompletionService<>(executorService);

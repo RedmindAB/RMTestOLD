@@ -38,10 +38,12 @@ public abstract class DriverConfiguration<DriverType extends WebDriver> {
         this.baseCapabilities = baseCapabilities;
     }
 
+    @SuppressWarnings("unchecked")
     public <SubType extends DriverConfiguration<?>> SubType as(Class<SubType> clazz) {
         return (SubType) this;
     }
 
+    @SuppressWarnings("unchecked")
     public DesiredCapabilities generateCapabilities() {
         DesiredCapabilities capabilities = new DesiredCapabilities(baseCapabilities);
         configurationCapabilities.forEach((key, value) -> {
@@ -85,11 +87,5 @@ public abstract class DriverConfiguration<DriverType extends WebDriver> {
             stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
         }
         return stringBuilder.append("]").toString();
-    }
-
-    public void stopDriver() {
-        if (wrappers != null) {
-            wrappers.stream().forEach(wrapper -> wrapper.stopDriver());
-        }
     }
 }
