@@ -13,7 +13,7 @@ import se.redmind.rmtest.selenium.framework.Browser;
 /**
  * @author Jeremy Comte
  */
-@Target(value = ElementType.TYPE)
+@Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface FilterDrivers {
 

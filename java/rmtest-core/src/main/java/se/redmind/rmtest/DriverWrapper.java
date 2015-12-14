@@ -6,16 +6,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.junit.Assume;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Sets;
+import se.redmind.rmtest.runners.Capability;
+import se.redmind.rmtest.runners.FilterDrivers;
+import se.redmind.rmtest.selenium.framework.Browser;
 import se.redmind.rmtest.selenium.grid.DriverConfig;
 import se.redmind.utils.ThrowingRunnable;
 
@@ -84,7 +91,11 @@ public class DriverWrapper<DriverType extends WebDriver> {
     public void stopDriver() {
         if (isStarted()) {
             logger.info("Closing driver [" + description + "]");
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (UnreachableBrowserException e) {
+                logger.error(e.getMessage());
+            }
             driver = null;
         }
     }
@@ -142,6 +153,47 @@ public class DriverWrapper<DriverType extends WebDriver> {
 
     public DesiredCapabilities getCapability() {
         return capabilities;
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(FilterDrivers filterDrivers) {
+        return filter(filterDrivers.platforms())
+            .and(filter(filterDrivers.types()))
+            .and(filter(filterDrivers.browsers()))
+            .and(filter(filterDrivers.capabilities()));
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Platform... values) {
+        return driver -> {
+            Set<Platform> platforms = Sets.newHashSet(values);
+            return platforms.isEmpty() || platforms.contains(driver.getCapability().getPlatform());
+        };
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Class<? extends DriverWrapper<?>>... values) {
+        return driver -> {
+            Set<Class<? extends DriverWrapper<?>>> types = Sets.newHashSet(values);
+            return types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driver.getClass());
+        };
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Browser... values) {
+        return driver -> {
+            Set<String> browsers = Sets.newHashSet(values).stream().map(value -> value.toString().toLowerCase()).collect(Collectors.toSet());
+            return browsers.isEmpty() || browsers.contains(driver.getCapability().getBrowserName());
+        };
+    }
+
+    public static Predicate<DriverWrapper<?>> filter(Capability... values) {
+        return driver -> {
+            Set<Capability> capabilities = Sets.newHashSet(values);
+            return capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {
+                String currCap = (String) driver.getCapability().getCapability(capability.name());
+                if (currCap == null) {
+                    currCap = "";
+                }
+                return currCap.equalsIgnoreCase(capability.value());
+            });
+        };
     }
 
 }

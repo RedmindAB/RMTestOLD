@@ -40,7 +40,7 @@ public class WebDriverSteps {
     private static final String THE_ELEMENT = "(?:the ?(?:button|element|field|checkbox|radio)?)?";
     private static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
     private static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
-    private static final String IDENTIFIED_BY = "(?:with )?(named|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
+    private static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
     private static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
 
@@ -59,11 +59,6 @@ public class WebDriverSteps {
     public WebDriverSteps(DriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.driver = driverWrapper.getDriver();
-    }
-
-    @After
-    public void stopDriver() {
-        driverWrapper.stopDriver();
     }
 
     // Helpers

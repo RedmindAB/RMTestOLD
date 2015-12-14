@@ -1,23 +1,17 @@
 package se.redmind.rmtest.selenium;
 
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import com.google.common.base.Strings;
-import se.redmind.utils.Try;
-
-import se.redmind.rmtest.DriverWrapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.runners.Parallelize;
+import com.google.common.base.Strings;
+import se.redmind.rmtest.DriverWrapper;
 import se.redmind.rmtest.runners.DriverRunner;
-
-import static org.junit.Assert.assertTrue;
+import se.redmind.utils.Try;
 
 @RunWith(DriverRunner.class)
-@Parallelize
 public class GoogleExample {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -29,7 +23,6 @@ public class GoogleExample {
 
     @Test
     public void testGoogle() throws Exception {
-
         wrapper.getDriver().get("http://www.google.se");
 
         String pageTitle = Try.toGet(() -> wrapper.getDriver().getTitle())

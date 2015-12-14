@@ -1,29 +1,40 @@
 package se.redmind.rmtest.runners;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
+import org.junit.runner.Description;
 import org.junit.runner.Runner;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.NoTestsRemainException;
+import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.RunnerScheduler;
 import org.junit.runners.model.TestClass;
+import org.junit.runners.parameterized.BlockJUnit4ClassRunnerWithParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import se.redmind.rmtest.DriverWrapper;
 
 import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
+import se.redmind.utils.Fields;
 
 /**
  * Parameterized runner that will pick up all the drivers configuration and inject our test classes automatically
+ *
  * @author Jeremy Comte
  */
 public class DriverRunner extends Parameterized {
@@ -59,10 +70,68 @@ public class DriverRunner extends Parameterized {
 
     @Override
     protected void runChild(Runner runner, RunNotifier notifier) {
+        Optional<DriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
+
+        if (driverWrapper.isPresent()) {
+            try {
+                ((BlockJUnit4ClassRunnerWithParameters) runner).filter(new Filter() {
+                    @Override
+                    public boolean shouldRun(Description description) {
+                        FilterDrivers filterDrivers = description.getAnnotation(FilterDrivers.class);
+                        if (filterDrivers != null) {
+                            if (!DriverWrapper.filter(filterDrivers).test(driverWrapper.get())) {
+                                notifier.fireTestIgnored(description);
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public String describe() {
+                        return "FilterDrivers";
+                    }
+                });
+            } catch (NoTestsRemainException ex) {
+                return;
+            }
+
+            if (!getTestClass().getJavaClass().isAnnotationPresent(ReuseDriverBetweenTests.class)) {
+                notifier.addListener(new RunListener() {
+
+                    @Override
+                    public void testFinished(Description description) throws Exception {
+                        driverWrapper.get().stopDriver();
+                    }
+
+                });
+            }
+        }
+
         if (liveStreamListener != null) {
             notifier.addListener(liveStreamListener.getSubListener());
         }
+
         super.runChild(runner, notifier);
+        if (driverWrapper.isPresent() && Configuration.current().autoCloseDrivers) {
+            driverWrapper.get().stopDriver();
+        }
+    }
+
+    protected Optional<DriverWrapper<?>> getCurrentDriverWrapper(Runner runner) {
+        if (runner instanceof BlockJUnit4ClassRunnerWithParameters) {
+            try {
+                Object[] parameters = Fields.getValue(runner, "parameters");
+                for (Object parameter : parameters) {
+                    if (parameter instanceof DriverWrapper) {
+                        return Optional.of((DriverWrapper<?>) parameter);
+                    }
+                }
+            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+                LOGGER.error(ex.getMessage(), ex);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override

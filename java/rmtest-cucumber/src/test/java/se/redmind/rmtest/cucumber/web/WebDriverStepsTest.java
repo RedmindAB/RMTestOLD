@@ -4,9 +4,12 @@ import org.junit.BeforeClass;
 import org.junit.runners.Parameterized;
 
 import cucumber.api.CucumberOptions;
+
 import org.junit.runner.RunWith;
+
 import se.redmind.rmtest.cucumber.CucumberParametersRunnerFactory;
 import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 
 import static spark.Spark.*;
 
@@ -16,6 +19,7 @@ import static spark.Spark.*;
 @RunWith(DriverRunner.class)
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
 @CucumberOptions(plugin = "gherkin.formatter.NonRepeatingFormatter")
+@ReuseDriverBetweenTests
 public class WebDriverStepsTest {
 
     private static boolean isServerRunning;
