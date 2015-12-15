@@ -5,13 +5,13 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 
 
 public class RmTestWatcher extends TestWatcher {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private DriverWrapper<?> driverWrapper;
+    private WebDriverWrapper<?> driverWrapper;
 
     @Override
     protected void failed(Throwable e, Description description) {
@@ -23,7 +23,7 @@ public class RmTestWatcher extends TestWatcher {
         new RMReportScreenshot(driverWrapper).takeScreenshot(description.getClassName(), methodName, "FailedTestcase");
     }
 
-    public void setDriver(DriverWrapper<?> driverWrapper) {
+    public void setDriver(WebDriverWrapper<?> driverWrapper) {
         this.driverWrapper = driverWrapper;
     }
 }

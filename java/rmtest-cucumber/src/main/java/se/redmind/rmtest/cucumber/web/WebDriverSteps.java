@@ -23,11 +23,10 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import cucumber.api.DataTable;
-import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.utils.Try;
 
 /**
@@ -35,28 +34,27 @@ import se.redmind.utils.Try;
  */
 public class WebDriverSteps {
 
-    private static final String THAT = "(?:that )?";
-    private static final String THE_USER = "(?:.*)?";
-    private static final String THE_ELEMENT = "(?:the ?(?:button|element|field|checkbox|radio)?)?";
-    private static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
-    private static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
-    private static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
-    private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
-    private static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
-
-    private static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
-    private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
+    public static final String THAT = "(?:that )?";
+    public static final String THE_USER = "(?:.*)?";
+    public static final String THE_ELEMENT = "(?:the ?(?:button|element|field|checkbox|radio)?)?";
+    public static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
+    public static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
+    public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
+    public static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
+    public static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
+    public static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
+    public static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
     public static final int TIMEOUT_IN_SECONDS = 5;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Map<String, By> aliases = new LinkedHashMap<>();
-    private final DriverWrapper<WebDriver> driverWrapper;
+    private final WebDriverWrapper<WebDriver> driverWrapper;
     private final WebDriver driver;
     private WebElement element;
     private By elementLocation;
 
-    public WebDriverSteps(DriverWrapper<WebDriver> driverWrapper) {
+    public WebDriverSteps(WebDriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.driver = driverWrapper.getDriver();
     }

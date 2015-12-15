@@ -13,8 +13,11 @@ import io.appium.java_client.AppiumDriver;
 import se.redmind.rmtest.AppiumDriverWrapper;
 
 import se.redmind.rmtest.runners.FilterDrivers;
-import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.runners.WebDriverRunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -26,7 +29,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @author gustavholfve
  */
-@RunWith(DriverRunner.class)
+@RunWith(WebDriverRunner.class)
 @FilterDrivers(platforms = Platform.ANDROID)
 public class AppiumTest {
 

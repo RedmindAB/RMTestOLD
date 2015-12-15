@@ -17,7 +17,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.utils.TestHome;
 
 public class RMReportScreenshot {
@@ -27,9 +27,9 @@ public class RMReportScreenshot {
     private static final String FILE_EXTENTION = "png";
     private static final HashMap<String, Integer> FILENAME_NUMBERS = new HashMap<>();
 
-    private final DriverWrapper<?> driverWrapper;
+    private final WebDriverWrapper<?> driverWrapper;
 
-    public RMReportScreenshot(DriverWrapper<?> driverWrapper) {
+    public RMReportScreenshot(WebDriverWrapper<?> driverWrapper) {
         this.driverWrapper = driverWrapper;
     }
 

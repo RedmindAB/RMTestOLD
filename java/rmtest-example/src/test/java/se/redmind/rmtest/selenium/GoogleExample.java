@@ -7,20 +7,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
-import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 import se.redmind.utils.Try;
 
-@RunWith(DriverRunner.class)
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(WebDriverRunner.class)
 //@Parallelize(tests = true, drivers = false)
 @ReuseDriverBetweenTests
 public class GoogleExample {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-    protected final DriverWrapper<?> wrapper;
+    protected final WebDriverWrapper<?> wrapper;
 
-    public GoogleExample(DriverWrapper<?> driverWrapper) {
+    public GoogleExample(WebDriverWrapper<?> driverWrapper) {
         this.wrapper = driverWrapper;
     }
 

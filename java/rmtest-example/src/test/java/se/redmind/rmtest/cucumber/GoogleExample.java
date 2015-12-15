@@ -10,15 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cucumber.api.java.en.Given;
-import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.runners.Parallelize;
 import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 
 /**
  * @author Jeremy Comte
  */
-@RunWith(DriverRunner.class)
+@RunWith(WebDriverRunner.class)
 @Parallelize()
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
 @CucumberOptions(glue = {"se.redmind.rmtest.cucumber"}, plugin = "gherkin.formatter.NonRepeatingFormatter")
@@ -28,9 +28,9 @@ public class GoogleExample {
     public static class Steps {
 
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
-        private final DriverWrapper<?> driverWrapper;
+        private final WebDriverWrapper<?> driverWrapper;
 
-        public Steps(DriverWrapper<?> driverWrapper) {
+        public Steps(WebDriverWrapper<?> driverWrapper) {
             this.driverWrapper = driverWrapper;
         }
 

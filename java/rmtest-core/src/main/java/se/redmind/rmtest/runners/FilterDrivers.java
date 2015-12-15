@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 import org.openqa.selenium.Platform;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.selenium.framework.Browser;
 
 /**
@@ -23,6 +23,6 @@ public @interface FilterDrivers {
 
     Browser[] browsers() default {};
 
-    Class<? extends DriverWrapper<?>>[] types() default {};
+    Class<? extends WebDriverWrapper<?>>[] types() default {};
 
 }

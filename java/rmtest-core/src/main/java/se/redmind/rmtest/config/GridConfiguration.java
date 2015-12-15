@@ -1,6 +1,6 @@
 package se.redmind.rmtest.config;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,8 +38,8 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
     }
 
     @Override
-    protected List<DriverWrapper<RemoteWebDriver>> createDrivers() {
-        List<DriverWrapper<RemoteWebDriver>> instances = new ArrayList<>();
+    protected List<WebDriverWrapper<RemoteWebDriver>> createDrivers() {
+        List<WebDriverWrapper<RemoteWebDriver>> instances = new ArrayList<>();
         HubNodesStatus nodeInfo = new HubNodesStatus(hubIp, hubPort);
         nodeInfo.getNodesAsRegReqs().forEach(nodeReq -> {
             nodeReq.getCapabilities().stream()
@@ -48,7 +48,7 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
                     try {
                         String driverDescription = DescriptionBuilder.buildDescriptionFromCapabilities(capabilities);
                         URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-                        instances.add(new DriverWrapper<>(generateCapabilities(), driverDescription, (otherCapabilities) -> {
+                        instances.add(new WebDriverWrapper<>(generateCapabilities(), driverDescription, (otherCapabilities) -> {
                             otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
                             return new RemoteWebDriver(driverUrl, capabilities);
                         }));

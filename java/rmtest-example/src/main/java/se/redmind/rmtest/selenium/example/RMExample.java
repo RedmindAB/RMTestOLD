@@ -13,19 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.steadystate.css.parser.Locatable;
-import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.WebDriverRunner;
 
-@RunWith(DriverRunner.class)
+@RunWith(WebDriverRunner.class)
 public class RMExample {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final DriverWrapper<?> driverWrapper;
+    private final WebDriverWrapper<?> driverWrapper;
     private final WebDriver driver;
     private final RMNav tNavPage;
     private final RmMobileNav tMobNav;
 
-    public RMExample(DriverWrapper<?> driverWrapper) throws Exception {
+    public RMExample(WebDriverWrapper<?> driverWrapper) throws Exception {
         this.driverWrapper = driverWrapper;
         String startUrl = "http://www.redmind.se";
         driver = driverWrapper.getDriver();

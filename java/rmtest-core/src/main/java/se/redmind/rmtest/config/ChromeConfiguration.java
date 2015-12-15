@@ -8,7 +8,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.utils.TestHome;
 
 /**
@@ -25,7 +25,7 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
     }
 
     @Override
-    protected List<DriverWrapper<ChromeDriver>> createDrivers() {
+    protected List<WebDriverWrapper<ChromeDriver>> createDrivers() {
         System.setProperty("webdriver.chrome.driver", getChromePath());
         return super.createDrivers();
     }

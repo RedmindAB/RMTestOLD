@@ -29,20 +29,20 @@ import se.redmind.utils.ThrowingRunnable;
 /**
  * @author Jeremy Comte
  */
-public class DriverWrapper<DriverType extends WebDriver> {
+public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final Function<DesiredCapabilities, DriverType> function;
+    private final Function<DesiredCapabilities, WebDriverType> function;
     private final DesiredCapabilities capabilities;
     private final String description;
 
-    private final Set<DriverType> openDrivers = new LinkedHashSet<>();
+    private final Set<WebDriverType> openDrivers = new LinkedHashSet<>();
     private final ThreadLocal<Boolean> isStarted = ThreadLocal.withInitial(() -> false);
-    private final ThreadLocal<DriverType> driverInstance = new ThreadLocal<DriverType>() {
+    private final ThreadLocal<WebDriverType> driverInstance = new ThreadLocal<WebDriverType>() {
 
         @Override
-        protected DriverType initialValue() {
+        protected WebDriverType initialValue() {
             preConfigurations.forEach(preConfiguration -> {
                 try {
                     preConfiguration.run();
@@ -50,7 +50,7 @@ public class DriverWrapper<DriverType extends WebDriver> {
                     throw new RuntimeException(ex);
                 }
             });
-            DriverType driver = function.apply(capabilities);
+            WebDriverType driver = function.apply(capabilities);
             postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
             isStarted.set(true);
             logger.info("Started driver [" + description + "]");
@@ -60,9 +60,9 @@ public class DriverWrapper<DriverType extends WebDriver> {
 
     };
     private final Set<ThrowingRunnable> preConfigurations = new LinkedHashSet<>();
-    private final Set<Consumer<DriverType>> postConfigurations = new LinkedHashSet<>();
+    private final Set<Consumer<WebDriverType>> postConfigurations = new LinkedHashSet<>();
 
-    public DriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, DriverType> function) {
+    public WebDriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, WebDriverType> function) {
         this.capabilities = capabilities;
         this.description = description;
         this.function = function;
@@ -82,7 +82,7 @@ public class DriverWrapper<DriverType extends WebDriver> {
         preConfigurations.add(preConfiguration);
     }
 
-    public void addPostConfiguration(Consumer<DriverType> postConfiguration) {
+    public void addPostConfiguration(Consumer<WebDriverType> postConfiguration) {
         postConfigurations.add(postConfiguration);
     }
 
@@ -96,7 +96,7 @@ public class DriverWrapper<DriverType extends WebDriver> {
         }
     }
 
-    public DriverType getDriver() {
+    public WebDriverType getDriver() {
         synchronized (driverInstance) {
             return driverInstance.get();
         }
@@ -147,8 +147,8 @@ public class DriverWrapper<DriverType extends WebDriver> {
         new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
     }
 
-    public FluentWait<DriverType> driverFluentWait(int timeoutInSeconds) {
-        FluentWait<DriverType> fw = null;
+    public FluentWait<WebDriverType> driverFluentWait(int timeoutInSeconds) {
+        FluentWait<WebDriverType> fw = null;
         for (int i = 0; i < 10; i++) {
             try {
                 fw = new FluentWait<>(getDriver()).withTimeout(timeoutInSeconds, TimeUnit.SECONDS);
@@ -177,14 +177,14 @@ public class DriverWrapper<DriverType extends WebDriver> {
         return capabilities;
     }
 
-    public static Predicate<DriverWrapper<?>> filter(FilterDrivers filterDrivers) {
+    public static Predicate<WebDriverWrapper<?>> filter(FilterDrivers filterDrivers) {
         return filter(filterDrivers.platforms())
             .and(filter(filterDrivers.types()))
             .and(filter(filterDrivers.browsers()))
             .and(filter(filterDrivers.capabilities()));
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Platform... values) {
+    public static Predicate<WebDriverWrapper<?>> filter(Platform... values) {
         return driverWrapper -> {
             Set<Platform> platforms = Sets.newHashSet(values);
             return platforms.isEmpty() || platforms.contains(driverWrapper.getCapability().getPlatform());
@@ -193,21 +193,21 @@ public class DriverWrapper<DriverType extends WebDriver> {
 
     @SafeVarargs
     @SuppressWarnings("unchecked")
-    public static Predicate<DriverWrapper<?>> filter(Class<? extends DriverWrapper<?>>... values) {
+    public static Predicate<WebDriverWrapper<?>> filter(Class<? extends WebDriverWrapper<?>>... values) {
         return driverWrapper -> {
-            Set<Class<? extends DriverWrapper<?>>> types = Sets.newHashSet(values);
-            return types.isEmpty() || types.contains((Class<? extends DriverWrapper<?>>) driverWrapper.getClass());
+            Set<Class<? extends WebDriverWrapper<?>>> types = Sets.newHashSet(values);
+            return types.isEmpty() || types.contains((Class<? extends WebDriverWrapper<?>>) driverWrapper.getClass());
         };
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Browser... values) {
+    public static Predicate<WebDriverWrapper<?>> filter(Browser... values) {
         return driverWrapper -> {
             Set<String> browsers = Sets.newHashSet(values).stream().map(value -> value.toString().toLowerCase()).collect(Collectors.toSet());
             return browsers.isEmpty() || browsers.contains(driverWrapper.getCapability().getBrowserName());
         };
     }
 
-    public static Predicate<DriverWrapper<?>> filter(Capability... values) {
+    public static Predicate<WebDriverWrapper<?>> filter(Capability... values) {
         return driverWrapper -> {
             Set<Capability> capabilities = Sets.newHashSet(values);
             return capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {

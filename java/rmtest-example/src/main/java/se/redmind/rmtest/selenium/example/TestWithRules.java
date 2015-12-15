@@ -8,24 +8,38 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.DriverWrapper;
-import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.selenium.framework.HTMLPage;
 import se.redmind.rmtest.selenium.framework.RMReportScreenshot;
 import se.redmind.rmtest.selenium.framework.RmTestWatcher;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
-@RunWith(DriverRunner.class)
+@RunWith(WebDriverRunner.class)
 public class TestWithRules {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private WebDriver tDriver;
-    private final DriverWrapper<?> driverWrapper;
+    private final WebDriverWrapper<?> driverWrapper;
     private final RMReportScreenshot rmrScreenshot;
 
-    public TestWithRules(DriverWrapper<?> driverWrapper) {
+    public TestWithRules(WebDriverWrapper<?> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.rmrScreenshot = new RMReportScreenshot(driverWrapper);
     }

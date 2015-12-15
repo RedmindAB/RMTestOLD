@@ -59,17 +59,17 @@ Feature: WebDriver functionalities
 
   #    Then we wait 10 seconds
   Scenario: cookies
-    Given that we navigate to "http://localhost:4567/"
+    Given that we navigate to our local spark at "/"
     And that we add those cookies:
       | name          | value                 |
       | Authorization | base64(user:password) |
       | base          | something cool        |
       | sessionid     | 1lknsdf912lk12eas90   |
-    When we navigate to "http://localhost:4567/cookie/valueOf/Authorization"
+    When we navigate to our local spark at "/cookie/valueOf/Authorization"
     Then the page content is "base64(user:password)"
     Given that we delete the cookie "Authorization"
-    When we navigate to "http://localhost:4567/cookie/valueOf/Authorization"
+    When we navigate to our local spark at "/cookie/valueOf/Authorization"
     Then the page content is "null"
     Given that we delete all the cookies
-    When we navigate to "http://localhost:4567/cookie/valueOf/sessionid"
+    When we navigate to our local spark at "/cookie/valueOf/sessionid"
     Then the page content is "null"

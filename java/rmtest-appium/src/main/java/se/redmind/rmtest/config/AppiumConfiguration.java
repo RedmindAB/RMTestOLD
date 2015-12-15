@@ -16,7 +16,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import se.redmind.rmtest.AppiumDriverWrapper;
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 
 /**
  * @author Jeremy Comte
@@ -42,7 +42,7 @@ public class AppiumConfiguration extends DriverConfiguration<AppiumDriver<WebEle
     }
 
     @Override
-    protected List<DriverWrapper<AppiumDriver<WebElement>>> createDrivers() {
+    protected List<WebDriverWrapper<AppiumDriver<WebElement>>> createDrivers() {
         try {
             return Lists.newArrayList(createDriver(new URL(serverUrl + "/wd/hub")));
         } catch (MalformedURLException ex) {

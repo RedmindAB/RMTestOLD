@@ -2,10 +2,10 @@ package se.redmind.rmtest.runners;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
@@ -16,13 +16,12 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.RunnerScheduler;
 import org.junit.runners.model.TestClass;
 import org.junit.runners.parameterized.BlockJUnit4ClassRunnerWithParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
@@ -33,25 +32,14 @@ import se.redmind.utils.Fields;
  *
  * @author Jeremy Comte
  */
-public class DriverRunner extends Parameterized {
+public class WebDriverRunner extends Parameterized implements Parallelizable {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(DriverRunner.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(WebDriverRunner.class);
     private LiveStreamListener liveStreamListener;
 
-    public DriverRunner(Class<?> klass) throws Throwable {
+    public WebDriverRunner(Class<?> klass) throws Throwable {
         super(klass);
-        if (klass.isAnnotationPresent(Parallelize.class)) {
-            String threads = System.getProperty("junit.parallel.threads");
-            int nThreads;
-            if (threads != null && threads.matches("[0-9]+")) {
-                nThreads = Integer.parseInt(threads);
-            } else {
-                Parallelize parallelize = klass.getAnnotation(Parallelize.class);
-                nThreads = parallelize.threads() > -1 ? parallelize.threads() : (Runtime.getRuntime().availableProcessors() / 2) + 1;
-            }
-            LOGGER.info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parallel");
-            setScheduler(new ThreadPoolScheduler(nThreads));
-        }
+        parallelize();
     }
 
     @Override
@@ -66,7 +54,7 @@ public class DriverRunner extends Parameterized {
 
     @Override
     protected void runChild(Runner runner, RunNotifier notifier) {
-        Optional<DriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
+        Optional<WebDriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
 
         if (driverWrapper.isPresent()) {
             try {
@@ -75,7 +63,7 @@ public class DriverRunner extends Parameterized {
                     public boolean shouldRun(Description description) {
                         FilterDrivers filterDrivers = description.getAnnotation(FilterDrivers.class);
                         if (filterDrivers != null) {
-                            if (!DriverWrapper.filter(filterDrivers).test(driverWrapper.get())) {
+                            if (!WebDriverWrapper.filter(filterDrivers).test(driverWrapper.get())) {
                                 notifier.fireTestIgnored(description);
                                 return false;
                             }
@@ -114,13 +102,13 @@ public class DriverRunner extends Parameterized {
         }
     }
 
-    protected Optional<DriverWrapper<?>> getCurrentDriverWrapper(Runner runner) {
+    protected Optional<WebDriverWrapper<?>> getCurrentDriverWrapper(Runner runner) {
         if (runner instanceof BlockJUnit4ClassRunnerWithParameters) {
             try {
                 Object[] parameters = Fields.getValue(runner, "parameters");
                 for (Object parameter : parameters) {
-                    if (parameter instanceof DriverWrapper) {
-                        return Optional.of((DriverWrapper<?>) parameter);
+                    if (parameter instanceof WebDriverWrapper) {
+                        return Optional.of((WebDriverWrapper<?>) parameter);
                     }
                 }
             } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
@@ -134,12 +122,12 @@ public class DriverRunner extends Parameterized {
     protected TestClass createTestClass(Class<?> testClass) {
         return new TestClass(testClass) {
 
-            private final TestClass runnerAsTestClass = new TestClass(DriverRunner.this.getClass()) {
+            private final TestClass runnerAsTestClass = new TestClass(WebDriverRunner.this.getClass()) {
                 @Override
                 protected void scanAnnotatedMembers(Map<Class<? extends Annotation>, List<FrameworkMethod>> methodsForAnnotations,
                                                     Map<Class<? extends Annotation>, List<FrameworkField>> fieldsForAnnotations) {
                     try {
-                        addToAnnotationLists(new FrameworkMethod(DriverRunner.this.getClass().getMethod("getDriversAsParameters")) {
+                        addToAnnotationLists(new FrameworkMethod(WebDriverRunner.this.getClass().getMethod("getDriversAsParameters")) {
 
                             @Override
                             protected int getModifiers() {
@@ -148,7 +136,7 @@ public class DriverRunner extends Parameterized {
 
                             @Override
                             public Object invokeExplosively(Object target, Object... params) throws Throwable {
-                                return super.invokeExplosively(DriverRunner.this, params);
+                                return super.invokeExplosively(WebDriverRunner.this, params);
                             }
 
                         }, methodsForAnnotations);
@@ -187,29 +175,5 @@ public class DriverRunner extends Parameterized {
         }
 
         return drivers;
-    }
-
-    private static class ThreadPoolScheduler implements RunnerScheduler {
-
-        private final ExecutorService executor;
-
-        public ThreadPoolScheduler(int nThreads) {
-            executor = Executors.newFixedThreadPool(nThreads);
-        }
-
-        @Override
-        public void finished() {
-            executor.shutdown();
-            try {
-                executor.awaitTermination(1, TimeUnit.DAYS);
-            } catch (InterruptedException exc) {
-                throw new RuntimeException(exc);
-            }
-        }
-
-        @Override
-        public void schedule(Runnable runnable) {
-            executor.submit(runnable);
-        }
     }
 }

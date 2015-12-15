@@ -19,7 +19,7 @@ import com.google.api.client.util.Key;
 import io.appium.java_client.AppiumDriver;
 import se.redmind.rmtest.config.AppiumConfiguration;
 
-public class AppiumDriverWrapper extends DriverWrapper<AppiumDriver<WebElement>> {
+public class AppiumDriverWrapper extends WebDriverWrapper<AppiumDriver<WebElement>> {
 
     private static final AtomicInteger SCREENSHOT_COUNTER = new AtomicInteger();
     private final AppiumConfiguration configuration;

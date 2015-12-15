@@ -2,9 +2,13 @@ package se.redmind.rmtest.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,12 +30,12 @@ import com.google.common.collect.Table;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.FilterDrivers;
-import se.redmind.utils.TestHome;
 import se.redmind.utils.Fields;
 import se.redmind.utils.JavaTypes;
 import se.redmind.utils.ReflectionsUtils;
+import se.redmind.utils.TestHome;
 
 /**
  * @author Jeremy Comte
@@ -44,7 +48,7 @@ public class Configuration {
     private static final String DEFAULT_LOCAL_CONFIG = "/etc/LocalConfig.yml";
     private static final String DEFAULT_LEGACY_CONFIG = "/etc/LocalConfig.json";
     private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
-    private static final Set<DriverWrapper<?>> WRAPPERS = new LinkedHashSet<>();
+    private static final Set<WebDriverWrapper<?>> WRAPPERS = new LinkedHashSet<>();
     private static ObjectMapper objectMapper;
     private static Validator validator;
 
@@ -141,20 +145,20 @@ public class Configuration {
 
     public List<Object[]> createWrappersParameters(FilterDrivers filterDrivers) {
         return createWrappers().stream()
-            .filter(DriverWrapper.filter(filterDrivers))
+            .filter(WebDriverWrapper.filter(filterDrivers))
             .map(obj -> new Object[]{obj}).collect(Collectors.toList());
     }
 
     @SafeVarargs
-    public final List<Object[]> createWrappersParameters(Predicate<DriverWrapper<?>>... predicates) {
-        Stream<DriverWrapper<?>> wrappers = createWrappers().stream();
-        for (Predicate<DriverWrapper<?>> predicate : predicates) {
+    public final List<Object[]> createWrappersParameters(Predicate<WebDriverWrapper<?>>... predicates) {
+        Stream<WebDriverWrapper<?>> wrappers = createWrappers().stream();
+        for (Predicate<WebDriverWrapper<?>> predicate : predicates) {
             wrappers = wrappers.filter(predicate);
         }
         return wrappers.map(obj -> new Object[]{obj}).collect(Collectors.toList());
     }
 
-    public List<DriverWrapper<?>> createWrappers() {
+    public List<WebDriverWrapper<?>> createWrappers() {
         return drivers.stream()
             .map(driverConfiguration -> driverConfiguration.wrappers())
             .peek(wrappers -> WRAPPERS.addAll(wrappers))

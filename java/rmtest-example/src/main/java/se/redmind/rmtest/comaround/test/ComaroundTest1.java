@@ -4,18 +4,18 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.Parallelize;
-import se.redmind.rmtest.runners.DriverRunner;
+import se.redmind.rmtest.runners.WebDriverRunner;
 
-@RunWith(DriverRunner.class)
+@RunWith(WebDriverRunner.class)
 @Parallelize
 public class ComaroundTest1 {
 
-    private final DriverWrapper<?> driverWrapper;
+    private final WebDriverWrapper<?> driverWrapper;
     private final ComarounHeaderdNav nav;
 
-    public ComaroundTest1(DriverWrapper<?> driverWrapper) {
+    public ComaroundTest1(WebDriverWrapper<?> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.nav = new ComarounHeaderdNav(driverWrapper.getDriver());
     }

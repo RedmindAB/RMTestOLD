@@ -2,7 +2,7 @@ package se.redmind.rmtest.config;
 
 import java.util.Collection;
 
-import se.redmind.rmtest.DriverWrapper;
+import se.redmind.rmtest.WebDriverWrapper;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,11 +22,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-public abstract class DriverConfiguration<DriverType extends WebDriver> {
+public abstract class DriverConfiguration<WebDriverType extends WebDriver> {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final DesiredCapabilities baseCapabilities;
-    private List<DriverWrapper<DriverType>> wrappers;
+    private List<WebDriverWrapper<WebDriverType>> wrappers;
 
     @JsonProperty
     public String description;
@@ -70,14 +70,14 @@ public abstract class DriverConfiguration<DriverType extends WebDriver> {
         return this.getClass().getSimpleName().replaceAll("Configuration", "");
     }
 
-    public List<DriverWrapper<DriverType>> wrappers() {
+    public List<WebDriverWrapper<WebDriverType>> wrappers() {
         if (wrappers == null) {
             wrappers = createDrivers();
         }
         return wrappers;
     }
 
-    protected abstract List<DriverWrapper<DriverType>> createDrivers();
+    protected abstract List<WebDriverWrapper<WebDriverType>> createDrivers();
 
     @Override
     public String toString() {
