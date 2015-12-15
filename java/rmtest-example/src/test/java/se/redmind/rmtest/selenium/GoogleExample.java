@@ -1,6 +1,5 @@
 package se.redmind.rmtest.selenium;
 
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -13,15 +12,11 @@ import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 import se.redmind.utils.Try;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
+
+import se.redmind.rmtest.runners.Parallelize;
 
 @RunWith(WebDriverRunner.class)
-//@Parallelize(tests = true, drivers = false)
+@Parallelize
 @ReuseDriverBetweenTests
 public class GoogleExample {
 

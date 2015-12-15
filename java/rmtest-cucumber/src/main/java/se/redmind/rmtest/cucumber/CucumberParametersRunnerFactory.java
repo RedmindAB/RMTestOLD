@@ -35,6 +35,8 @@ public class CucumberParametersRunnerFactory implements ParametersRunnerFactory 
         try {
             return new Cucumber(test.getTestClass().getJavaClass()) {
 
+                private final Object[] parameters = test.getParameters().toArray();
+
                 @Override
                 protected Runtime createRuntime(ResourceLoader resourceLoader, ClassLoader classLoader, RuntimeOptions runtimeOptions) throws InitializationError, IOException {
                     return new Runtime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions) {

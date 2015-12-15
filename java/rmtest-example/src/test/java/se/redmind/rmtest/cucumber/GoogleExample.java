@@ -19,7 +19,7 @@ import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
  * @author Jeremy Comte
  */
 @RunWith(WebDriverRunner.class)
-@Parallelize()
+@Parallelize
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
 @CucumberOptions(glue = {"se.redmind.rmtest.cucumber"}, plugin = "gherkin.formatter.NonRepeatingFormatter")
 @ReuseDriverBetweenTests

@@ -14,6 +14,7 @@ import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Parameterized;
+import org.junit.runners.ParentRunner;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
@@ -55,10 +56,9 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
     @Override
     protected void runChild(Runner runner, RunNotifier notifier) {
         Optional<WebDriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
-
         if (driverWrapper.isPresent()) {
             try {
-                ((BlockJUnit4ClassRunnerWithParameters) runner).filter(new Filter() {
+                ((ParentRunner<?>) runner).filter(new Filter() {
                     @Override
                     public boolean shouldRun(Description description) {
                         FilterDrivers filterDrivers = description.getAnnotation(FilterDrivers.class);
@@ -103,17 +103,15 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
     }
 
     protected Optional<WebDriverWrapper<?>> getCurrentDriverWrapper(Runner runner) {
-        if (runner instanceof BlockJUnit4ClassRunnerWithParameters) {
-            try {
-                Object[] parameters = Fields.getValue(runner, "parameters");
-                for (Object parameter : parameters) {
-                    if (parameter instanceof WebDriverWrapper) {
-                        return Optional.of((WebDriverWrapper<?>) parameter);
-                    }
+        try {
+            Object[] parameters = Fields.getValue(runner, "parameters");
+            for (Object parameter : parameters) {
+                if (parameter instanceof WebDriverWrapper) {
+                    return Optional.of((WebDriverWrapper<?>) parameter);
                 }
-            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
-                LOGGER.error(ex.getMessage(), ex);
             }
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+            LOGGER.error(ex.getMessage(), ex);
         }
         return Optional.empty();
     }
