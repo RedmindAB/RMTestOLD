@@ -62,6 +62,8 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     private final Set<ThrowingRunnable> preConfigurations = new LinkedHashSet<>();
     private final Set<Consumer<WebDriverType>> postConfigurations = new LinkedHashSet<>();
 
+    private boolean reuseDriverBetweenTests;
+
     public WebDriverWrapper(DesiredCapabilities capabilities, String description, Function<DesiredCapabilities, WebDriverType> function) {
         this.capabilities = capabilities;
         this.description = description;
@@ -100,6 +102,14 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
         synchronized (driverInstance) {
             return driverInstance.get();
         }
+    }
+
+    public boolean reuseDriverBetweenTests() {
+        return reuseDriverBetweenTests;
+    }
+
+    public void setReuseDriverBetweenTests(boolean reuseDriverBetweenTests) {
+        this.reuseDriverBetweenTests = reuseDriverBetweenTests;
     }
 
     public void stopDriver() {

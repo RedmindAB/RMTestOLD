@@ -1,7 +1,5 @@
 package se.redmind.rmtest.cucumber;
 
-
-
 import cucumber.api.CucumberOptions;
 
 import org.junit.runner.RunWith;
@@ -13,7 +11,6 @@ import cucumber.api.java.en.Given;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.runners.Parallelize;
-import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 
 /**
  * @author Jeremy Comte
@@ -22,7 +19,6 @@ import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 @Parallelize
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
 @CucumberOptions(glue = {"se.redmind.rmtest.cucumber"}, plugin = "gherkin.formatter.NonRepeatingFormatter")
-@ReuseDriverBetweenTests
 public class GoogleExample {
 
     public static class Steps {

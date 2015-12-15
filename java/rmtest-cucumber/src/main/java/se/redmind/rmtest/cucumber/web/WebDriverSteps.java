@@ -23,6 +23,7 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
 import cucumber.api.DataTable;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -57,6 +58,13 @@ public class WebDriverSteps {
     public WebDriverSteps(WebDriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.driver = driverWrapper.getDriver();
+    }
+
+    @After
+    public void after() {
+        if (!driverWrapper.reuseDriverBetweenTests()) {
+            driverWrapper.stopDriver();
+        }
     }
 
     // Helpers

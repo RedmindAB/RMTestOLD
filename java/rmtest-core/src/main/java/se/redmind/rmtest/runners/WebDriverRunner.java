@@ -13,12 +13,12 @@ import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.Parameterized;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.FrameworkField;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.TestClass;
-import org.junit.runners.parameterized.BlockJUnit4ClassRunnerWithParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,38 +57,44 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
     protected void runChild(Runner runner, RunNotifier notifier) {
         Optional<WebDriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
         if (driverWrapper.isPresent()) {
-            try {
-                ((ParentRunner<?>) runner).filter(new Filter() {
-                    @Override
-                    public boolean shouldRun(Description description) {
-                        FilterDrivers filterDrivers = description.getAnnotation(FilterDrivers.class);
-                        if (filterDrivers != null) {
-                            if (!WebDriverWrapper.filter(filterDrivers).test(driverWrapper.get())) {
-                                notifier.fireTestIgnored(description);
-                                return false;
-                            }
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public String describe() {
-                        return "FilterDrivers";
-                    }
-                });
-            } catch (NoTestsRemainException ex) {
-                return;
+            if (getTestClass().getJavaClass().isAnnotationPresent(ReuseDriverBetweenTests.class)) {
+                driverWrapper.get().setReuseDriverBetweenTests(true);
             }
 
-            if (!getTestClass().getJavaClass().isAnnotationPresent(ReuseDriverBetweenTests.class)) {
-                notifier.addListener(new RunListener() {
+            if (runner instanceof BlockJUnit4ClassRunner) {
+                try {
+                    ((ParentRunner<?>) runner).filter(new Filter() {
+                        @Override
+                        public boolean shouldRun(Description description) {
+                            FilterDrivers filterDrivers = description.getAnnotation(FilterDrivers.class);
+                            if (filterDrivers != null) {
+                                if (!WebDriverWrapper.filter(filterDrivers).test(driverWrapper.get())) {
+                                    notifier.fireTestIgnored(description);
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
 
-                    @Override
-                    public void testFinished(Description description) throws Exception {
-                        driverWrapper.get().stopDriver();
-                    }
+                        @Override
+                        public String describe() {
+                            return "FilterDrivers";
+                        }
+                    });
+                } catch (NoTestsRemainException ex) {
+                    return;
+                }
 
-                });
+                if (!driverWrapper.get().reuseDriverBetweenTests()) {
+                    notifier.addListener(new RunListener() {
+
+                        @Override
+                        public void testFinished(Description description) throws Exception {
+                            driverWrapper.get().stopDriver();
+                        }
+
+                    });
+                }
             }
         }
 

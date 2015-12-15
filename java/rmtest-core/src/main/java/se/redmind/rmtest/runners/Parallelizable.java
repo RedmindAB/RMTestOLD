@@ -24,7 +24,7 @@ public interface Parallelizable {
                 Parallelize parallelize = clazz.getAnnotation(Parallelize.class);
                 nThreads = parallelize.threads() > -1 ? parallelize.threads() : (Runtime.getRuntime().availableProcessors() / 2) + 1;
             }
-            LoggerFactory.getLogger(this.getClass()).info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parallel");
+            LoggerFactory.getLogger(this.getClass()).info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parallel on " + this.toString());
             setScheduler(new Scheduler(nThreads));
         }
     }
