@@ -23,6 +23,7 @@ import com.google.common.collect.Sets;
 import se.redmind.rmtest.runners.Capability;
 import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.selenium.framework.Browser;
+import se.redmind.rmtest.selenium.grid.DescriptionBuilder;
 import se.redmind.rmtest.selenium.grid.DriverConfig;
 import se.redmind.utils.ThrowingRunnable;
 
@@ -180,7 +181,7 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
     @Override
     public String toString() {
-        return description;
+        return DescriptionBuilder.buildDescriptionFromCapabilities(capabilities);
     }
 
     public DesiredCapabilities getCapability() {

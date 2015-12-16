@@ -162,7 +162,7 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
         };
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{0}")
     public Collection<Object[]> getDriversAsParameters() {
         Collection<Object[]> drivers;
         if (getTestClass().getJavaClass().isAnnotationPresent(FilterDrivers.class)) {
