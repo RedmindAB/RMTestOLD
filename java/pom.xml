@@ -9,9 +9,10 @@
         <module>rmtest-core</module>
         <module>rmtest-logback</module>
         <module>rmtest-example</module>
-        <module>rmtest-cucumber</module>
         <module>rmtest-appium</module>
         <module>rmtest-testdroid</module>
+        <module>rmtest-cucumber</module>
+        <module>rmtest-cucumber-standalone</module>
     </modules>
     <licenses>
         <license>
