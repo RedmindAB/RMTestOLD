@@ -79,6 +79,9 @@ public class Configuration {
     @JsonProperty
     public AndroidConfiguration android;
 
+    @JsonProperty
+    public boolean reuseDriverBetweenTests;
+
     /**
      * @return the path of the file this configuration is based on
      */
@@ -163,6 +166,7 @@ public class Configuration {
             .map(driverConfiguration -> driverConfiguration.wrappers())
             .peek(wrappers -> WRAPPERS.addAll(wrappers))
             .flatMap(wrappers -> wrappers.stream())
+            .peek(driverWrapper -> driverWrapper.setReuseDriverBetweenTests(reuseDriverBetweenTests))
             .collect(Collectors.toList());
     }
 
