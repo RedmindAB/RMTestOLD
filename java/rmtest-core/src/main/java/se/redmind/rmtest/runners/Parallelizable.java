@@ -15,15 +15,15 @@ public interface Parallelizable {
 
     default void parallelize() {
         Class<?> clazz = getTestClass().getJavaClass();
-        if (clazz.isAnnotationPresent(Parallelize.class)) {
-            String threads = System.getProperty("junit.parallel.threads");
-            int nThreads;
-            if (threads != null && threads.matches("[0-9]+")) {
-                nThreads = Integer.parseInt(threads);
-            } else {
-                Parallelize parallelize = clazz.getAnnotation(Parallelize.class);
-                nThreads = parallelize.threads() > -1 ? parallelize.threads() : (Runtime.getRuntime().availableProcessors() / 2) + 1;
-            }
+        int nThreads = 1;
+        String threads = System.getProperty("junit.parallel.threads");
+        if (threads != null && threads.matches("[0-9]+")) {
+            nThreads = Integer.parseInt(threads);
+        } else if (clazz.isAnnotationPresent(Parallelize.class)) {
+            Parallelize parallelize = clazz.getAnnotation(Parallelize.class);
+            nThreads = parallelize.threads() > -1 ? parallelize.threads() : (Runtime.getRuntime().availableProcessors() / 2) + 1;
+        }
+        if (nThreads > 1) {
             LoggerFactory.getLogger(this.getClass()).info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parallel on " + this.toString());
             setScheduler(new Scheduler(nThreads));
         }
