@@ -6,7 +6,6 @@ Feature: This is an example of an HTML test in gherkin
     And that we know the element named "btnG" as "search button"
     And that we know the element with id "ires" as "search result"
 
-  @title
   Scenario: verify the title of the page
     Given that we send a rocket named "love" to the moon
     Then the title contains "Goo"
