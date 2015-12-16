@@ -57,7 +57,12 @@ Feature: WebDriver functionalities
     And that we input "test"
     Then this element reads "test"
 
-  #    Then we wait 10 seconds
+  @parameterized
+  Scenario: Given that the <user> logs in with <password>
+    When we login with <user> and <password>
+    And do all the things that should be done
+    Then we check all the stuff that should be true
+
   Scenario: cookies
     Given that we navigate to our local spark at "/"
     And that we add those cookies:

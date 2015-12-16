@@ -21,6 +21,7 @@ import cucumber.runtime.java.picocontainer.PicoFactory;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.Scenario;
 import gherkin.formatter.model.Tag;
+import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
 
 /**
@@ -29,6 +30,11 @@ import se.redmind.utils.Fields;
  * @author Jeremy Comte
  */
 public class CucumberParametersRunnerFactory implements ParametersRunnerFactory {
+
+    static {
+        Tags.addIgnoreToSystemProperties();
+        Tags.addParameterizedToSystemProperties();
+    }
 
     @Override
     public Runner createRunnerForTestWithParameters(TestWithParameters test) throws InitializationError {
