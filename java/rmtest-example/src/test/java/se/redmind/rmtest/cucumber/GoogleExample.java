@@ -18,7 +18,7 @@ import se.redmind.rmtest.runners.Parallelize;
 @RunWith(WebDriverRunner.class)
 @Parallelize
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
-@CucumberOptions(glue = {"se.redmind.rmtest.cucumber"}, plugin = "gherkin.formatter.NonRepeatingFormatter")
+@CucumberOptions(glue = "se.redmind.rmtest.cucumber", plugin = "pretty")
 public class GoogleExample {
 
     public static class Steps {

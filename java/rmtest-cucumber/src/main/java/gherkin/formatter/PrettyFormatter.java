@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 /**
  * copied and modified from gherkin.formatter.PrettyFormatter
  */
-public class NonRepeatingFormatter implements Reporter, Formatter {
+public class PrettyFormatter implements Reporter, Formatter {
 
     private final StepPrinter stepPrinter = new StepPrinter();
     private final NiceAppendable out;
@@ -37,10 +37,10 @@ public class NonRepeatingFormatter implements Reporter, Formatter {
     private boolean backgroundHasBeenPrinted;
     private boolean printing = true;
 
-    public NonRepeatingFormatter(Appendable out) {
+    public PrettyFormatter(Appendable out, boolean monochrome, boolean executing) {
         this.out = new NiceAppendable(out);
-        this.executing = true;
-        setMonochrome(false);
+        this.executing = executing;
+        setMonochrome(monochrome);
     }
 
     public void setMonochrome(boolean monochrome) {

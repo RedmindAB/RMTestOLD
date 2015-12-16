@@ -35,7 +35,7 @@ public class Main {
 
     @RunWith(WebDriverRunner.class)
     @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
-    @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "gherkin.formatter.NonRepeatingFormatter")
+    @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "pretty")
     public static class Test {
 
     }

@@ -23,7 +23,7 @@ import spark.webserver.JettySparkServer;
  */
 @RunWith(WebDriverRunner.class)
 @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
-@CucumberOptions(plugin = {"gherkin.formatter.NonRepeatingFormatter", "json:target/BaseConfigurationTest-json-report.json"})
+@CucumberOptions(plugin = {"pretty", "json:target/BaseConfigurationTest-json-report.json"})
 @ReuseDriverBetweenTests
 public class WebDriverStepsTest {
 
