@@ -17,6 +17,8 @@ import se.redmind.utils.TestHome;
 @JsonTypeName("chrome")
 public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
 
+    private static final String CHROMEDRIVER_SYSTEM_PROPERTY = "webdriver.chrome.driver";
+
     @JsonProperty
     public String chromedriver;
 
@@ -26,7 +28,9 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
 
     @Override
     protected List<WebDriverWrapper<ChromeDriver>> createDrivers() {
-        System.setProperty("webdriver.chrome.driver", getChromePath());
+        if (System.getProperty(CHROMEDRIVER_SYSTEM_PROPERTY) == null) {
+            System.setProperty(CHROMEDRIVER_SYSTEM_PROPERTY, getChromePath());
+        }
         return super.createDrivers();
     }
 
