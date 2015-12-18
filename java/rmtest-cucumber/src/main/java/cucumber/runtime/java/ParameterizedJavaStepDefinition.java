@@ -3,6 +3,8 @@ package cucumber.runtime.java;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
+import org.slf4j.LoggerFactory;
+
 import cucumber.api.java.ObjectFactory;
 import cucumber.runtime.Runtime;
 import cucumber.runtime.java.picocontainer.PicoFactory;
@@ -30,7 +32,8 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
     public static ParameterizedJavaStepDefinition from(CucumberTagStatement statement, JUnitReporter jUnitReporter, Runtime runtime) {
         PicoFactory objectFactory = ParameterizedCucumber.getPicoFactory(runtime);
         TagStatement tagStatement = Fields.getSafeValue(statement, "statement");
-        String name = tagStatement.getName().replaceAll("(?:\\w+) (.*)", "$1");
+        String name = tagStatement.getName().replaceAll("(Given|When|Then|And)", "");
+
         // let's parse the regex and write down the parameters names
         StringBuilder patternBuilder = new StringBuilder();
         StringBuilder parameterBuilder = new StringBuilder();
@@ -77,7 +80,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         Class<?>[] parametersClasses = new Class<?>[parametersCount];
 
         for (int i = 0; i < parametersCount; i++) {
-            if (parametersBuilder.length() > 13) {
+            if (parametersBuilder.length() > 0) {
                 parametersBuilder.append(", ");
                 parametersListBuilder.append(", ");
             }
@@ -100,16 +103,15 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
             ctClass.addField(CtField.make("public static cucumber.runtime.java.WrapperReporter REPORTER;", ctClass));
             ctClass.addField(CtField.make("public static cucumber.runtime.Runtime RUNTIME;", ctClass));
 
-            CtMethod ctMethod = CtNewMethod.make(""
+            String methodSource = ""
                 + "public void accept(" + parametersBuilder.toString() + ") {\n"
                 + "     cucumber.runtime.model.ParameterizedStepContainer parameterizedStepContainer = "
-                + "         new cucumber.runtime.model.ParameterizedStepContainer(STEPCONTAINER, " + parametersNamesBuilder.toString() + ", " + parametersListBuilder.toString() + ");"
+                + "new cucumber.runtime.model.ParameterizedStepContainer(STEPCONTAINER, " + parametersNamesBuilder.toString() + ", " + parametersListBuilder.toString() + ");\n"
                 + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"format\", new Object[] { REPORTER });\n"
                 + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"runSteps\", new Object[] { REPORTER, RUNTIME });\n"
-                + "}",
-                ctClass);
+                + "}";
 
-            ctClass.addMethod(ctMethod);
+            ctClass.addMethod(CtNewMethod.make(methodSource, ctClass));
             Class<?> clazz = ctClass.toClass();
             clazz.getDeclaredField("STEPCONTAINER").set(null, statement);
             clazz.getDeclaredField("REPORTER").set(null, new WrapperReporter(jUnitReporter));

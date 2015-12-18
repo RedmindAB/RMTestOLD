@@ -9,6 +9,7 @@ import cucumber.runtime.junit.JUnitReporter;
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
+import se.redmind.utils.Fields;
 
 /**
  * @author Jeremy Comte
@@ -16,10 +17,12 @@ import gherkin.formatter.model.*;
 public class WrapperReporter implements Formatter, Reporter {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final JUnitReporter reporter;
+    private final Reporter reporter;
+    private final Formatter formatter;
 
     public WrapperReporter(JUnitReporter reporter) {
-        this.reporter = reporter;
+        this.formatter = Fields.getSafeValue(reporter, "formatter");
+        this.reporter = Fields.getSafeValue(reporter, "reporter");
     }
 
     @Override
@@ -64,8 +67,7 @@ public class WrapperReporter implements Formatter, Reporter {
 
     @Override
     public void step(Step step) {
-        logger.info("running " + step.getName());
-//        reporter.step(step);
+        formatter.step(step);
     }
 
     @Override
@@ -105,7 +107,7 @@ public class WrapperReporter implements Formatter, Reporter {
 
     @Override
     public void match(Match match) {
-//        reporter.match(match);
+      //  reporter.match(match);
     }
 
     @Override
@@ -115,7 +117,6 @@ public class WrapperReporter implements Formatter, Reporter {
 
     @Override
     public void write(String text) {
-        reporter.write(text);
     }
 
 }

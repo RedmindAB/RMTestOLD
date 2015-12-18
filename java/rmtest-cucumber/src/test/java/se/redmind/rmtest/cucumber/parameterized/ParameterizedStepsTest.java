@@ -28,8 +28,9 @@ public class ParameterizedStepsTest {
             count = value.length();
         }
 
-        @Then("^I do some other stuff$")
-        public void i_do_some_other_stuff() {
+        @Then("^I multiply it by (\\d+)$")
+        public void i_multiply_it_by(int factor) {
+            count *= factor;
         }
 
     }
