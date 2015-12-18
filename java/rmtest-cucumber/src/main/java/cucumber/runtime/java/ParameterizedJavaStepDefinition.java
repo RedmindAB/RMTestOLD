@@ -10,10 +10,15 @@ import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.model.TagStatement;
 import javassist.*;
-import se.redmind.rmtest.runners.ParameterizedCucumberRunnerFactory;
+import se.redmind.rmtest.runners.ParameterizedCucumber;
 import se.redmind.utils.Fields;
 
 /**
+ * Cucumber java doesn't allow us to call Scenarios in a Scenario like in Ruby.
+ *
+ * This class is there to enable us to do that. if a Scenario is annotated with @parameterized we will create a dynamic JavaStepDefinition that will encapsulate
+ * the scenario and run it when a specific step definition is called from within another scenario.
+ *
  * @author Jeremy Comte
  */
 public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
@@ -23,10 +28,9 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
     }
 
     public static ParameterizedJavaStepDefinition from(CucumberTagStatement statement, JUnitReporter jUnitReporter, Runtime runtime) {
-        PicoFactory objectFactory = ParameterizedCucumberRunnerFactory.getPicoFactory(runtime);
+        PicoFactory objectFactory = ParameterizedCucumber.getPicoFactory(runtime);
         TagStatement tagStatement = Fields.getSafeValue(statement, "statement");
         String name = tagStatement.getName().replaceAll("(?:\\w+) (.*)", "$1");
-
         // let's parse the regex and write down the parameters names
         StringBuilder patternBuilder = new StringBuilder();
         StringBuilder parameterBuilder = new StringBuilder();

@@ -2,6 +2,13 @@ package cucumber.runtime;
 
 import java.util.LinkedList;
 
+/**
+ * the version from cucumber would throw a nullpointer if the stopwatch is called twice
+ *
+ * this one will stack and unstack the duration nicely
+ *
+ * @author Jeremy Comte
+ */
 public interface StopWatch {
 
     void start();
@@ -26,8 +33,7 @@ public interface StopWatch {
 
         @Override
         public long stop() {
-            Long duration = System.nanoTime() - start.get().removeLast();
-            return duration;
+            return System.nanoTime() - start.get().removeLast();
         }
     };
 

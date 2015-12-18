@@ -8,9 +8,9 @@ import org.picocontainer.PicoBuilder;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-
 /**
  * Originally from cucumber-picocontainer but we needed to be able to add instances
+ *
  * @author Jeremy Comte
  */
 public class PicoFactory implements ObjectFactory {
