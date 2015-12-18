@@ -1,5 +1,7 @@
 package se.redmind.rmtest.cucumber;
 
+import se.redmind.rmtest.runners.ParameterizedCucumberRunnerFactory;
+
 import org.junit.experimental.results.PrintableResult;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -34,7 +36,7 @@ public class Main {
     }
 
     @RunWith(WebDriverRunner.class)
-    @Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
+    @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
     @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "pretty")
     public static class Test {
 

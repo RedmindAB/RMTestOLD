@@ -1,7 +1,6 @@
 package se.redmind.utils;
 
 /**
- *
  * @author http://www.gamlor.info/wordpress/2010/02/throwing-checked-excpetions-like-unchecked-exceptions-in-java/
  */
 public final class UncheckedThrow {
@@ -11,7 +10,7 @@ public final class UncheckedThrow {
 
     // Now this returns an exception, so that you can satisfy the compiler by throwing it.
     // But in reality we throw the given exception!
-    public static RuntimeException throwUnchecked(final Exception ex) {
+    public static RuntimeException throwUnchecked(final Throwable ex) {
         // Now we use the 'generic' method. Normally the type T is inferred
         // from the parameters. However you can specify the type also explicit!
         // Now we du just that! We use the RuntimeException as type!
@@ -26,7 +25,7 @@ public final class UncheckedThrow {
     /**
      * Remember, Generics are erased in Java. So this basically throws an Exception. The real Type of T is lost during the compilation
      */
-    public static <T extends Exception> void throwsUnchecked(Exception toThrow) throws T {
+    public static <T extends Throwable> void throwsUnchecked(Throwable toThrow) throws T {
         // Since the type is erased, this cast actually does nothing!!!
         // we can throw any exception
         throw (T) toThrow;

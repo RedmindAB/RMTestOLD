@@ -16,15 +16,4 @@ public class Tags {
         }
     }
 
-    public static void addParameterizedToSystemProperties() {
-        String property = System.getProperty("cucumber.options");
-        if (property == null) {
-            property = "";
-        }
-        if (!property.contains("~@parameterized")) {
-            property += " --tags ~@parameterized";
-            System.setProperty("cucumber.options", property);
-        }
-    }
-
 }

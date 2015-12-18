@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,7 @@ import com.google.common.collect.Table;
  */
 public final class Fields {
 
-    private static final Map<Class<?>, Map<String, Field>> cache = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Field>> FIELD_CACHE = new LinkedHashMap<>();
 
     private Fields() {
     }
@@ -45,6 +47,15 @@ public final class Fields {
         }
     }
 
+    public static <E> E getSafeValue(Object instance, String fieldName) {
+        try {
+            return getValue(instance, fieldName);
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+            Logger.getLogger(Fields.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public static <E> E getValue(Object instance, String fieldName) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         Field field = getFieldsByNameOf(instance.getClass()).get(fieldName);
         if (field == null) {
@@ -62,11 +73,11 @@ public final class Fields {
     }
 
     public static Map<String, Field> getFieldsByNameOf(Class<?> clazz) {
-        Map<String, Field> fieldCache = cache.get(clazz);
+        Map<String, Field> fieldCache = FIELD_CACHE.get(clazz);
         if (fieldCache == null) {
             fieldCache = new LinkedHashMap<>();
             recursivelyCacheFieldsOf(clazz, fieldCache);
-            cache.put(clazz, fieldCache);
+            FIELD_CACHE.put(clazz, fieldCache);
         }
         return fieldCache;
     }

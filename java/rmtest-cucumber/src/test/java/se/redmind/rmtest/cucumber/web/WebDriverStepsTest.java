@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized;
 import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Given;
 import se.redmind.rmtest.WebDriverWrapper;
-import se.redmind.rmtest.cucumber.CucumberParametersRunnerFactory;
+import se.redmind.rmtest.runners.ParameterizedCucumberRunnerFactory;
 import static se.redmind.rmtest.cucumber.web.WebDriverSteps.*;
 import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 import se.redmind.rmtest.runners.WebDriverRunner;
@@ -22,8 +22,8 @@ import spark.webserver.JettySparkServer;
  * @author Jeremy Comte
  */
 @RunWith(WebDriverRunner.class)
-@Parameterized.UseParametersRunnerFactory(CucumberParametersRunnerFactory.class)
-@CucumberOptions(plugin = {"pretty", "json:target/BaseConfigurationTest-json-report.json"})
+@Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
+@CucumberOptions(plugin = {"pretty", "json:target/WebDriverStepsTest-json-report.json"})
 @ReuseDriverBetweenTests
 public class WebDriverStepsTest {
 
@@ -59,7 +59,6 @@ public class WebDriverStepsTest {
         public void that_we_navigate_to_our_local_spark_at(String path) {
             wrapper.getDriver().navigate().to("http://localhost:" + localPort + "/" + path);
         }
-
     }
 
 }
