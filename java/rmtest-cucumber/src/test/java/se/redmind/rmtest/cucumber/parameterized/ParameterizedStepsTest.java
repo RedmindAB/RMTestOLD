@@ -23,12 +23,12 @@ public class ParameterizedStepsTest {
             Assert.assertEquals(count, this.count);
         }
 
-        @Then("^we write down the amount of letters in \"([^\"]*)\"$")
+        @Then("^that we write down the amount of letters in \"([^\"]*)\"$")
         public void we_write_down_the_amount_of_letters_in_value(String value) {
             count = value.length();
         }
 
-        @Then("^I multiply it by (\\d+)$")
+        @Then("^that we multiply it by (\\d+)$")
         public void i_multiply_it_by(int factor) {
             count *= factor;
         }

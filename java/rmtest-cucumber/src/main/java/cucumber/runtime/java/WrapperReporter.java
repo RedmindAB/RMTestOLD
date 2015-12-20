@@ -27,67 +27,67 @@ public class WrapperReporter implements Formatter, Reporter {
 
     @Override
     public void syntaxError(String state, String event, List<String> legalEvents, String uri, Integer line) {
-//        reporter.syntaxError(state, event, legalEvents, uri, line);
+//        formatter.syntaxError(state, event, legalEvents, uri, line);
     }
 
     @Override
     public void uri(String uri) {
-//        reporter.uri(uri);
+//        formatter.uri(uri);
     }
 
     @Override
     public void feature(Feature feature) {
-//        reporter.feature(feature);
+//        formatter.feature(feature);
     }
 
     @Override
     public void scenarioOutline(ScenarioOutline scenarioOutline) {
-//        reporter.scenarioOutline(scenarioOutline);
+//        formatter.scenarioOutline(scenarioOutline);
     }
 
     @Override
     public void examples(Examples examples) {
-//        reporter.examples(examples);
+//        formatter.examples(examples);
     }
 
     @Override
     public void startOfScenarioLifeCycle(Scenario scenario) {
-//        reporter.startOfScenarioLifeCycle(scenario);
+//        formatter.startOfScenarioLifeCycle(scenario);
     }
 
     @Override
     public void background(Background background) {
-//        reporter.background(background);
+//        formatter.background(background);
     }
 
     @Override
     public void scenario(Scenario scenario) {
-//        reporter.scenario(scenario);
+    //    formatter.scenario(scenario);
     }
 
     @Override
     public void step(Step step) {
-        formatter.step(step);
+//        formatter.step(step);
     }
 
     @Override
     public void endOfScenarioLifeCycle(Scenario scenario) {
-//        reporter.endOfScenarioLifeCycle(scenario);
+//        formatter.endOfScenarioLifeCycle(scenario);
     }
 
     @Override
     public void done() {
-//        reporter.done();
+//        formatter.done();
     }
 
     @Override
     public void close() {
-//        reporter.done();
+//        formatter.done();
     }
 
     @Override
     public void eof() {
-//        reporter.eof();
+//        formatter.eof();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class WrapperReporter implements Formatter, Reporter {
 
     @Override
     public void match(Match match) {
-      //  reporter.match(match);
+//        reporter.match(match);
     }
 
     @Override
@@ -117,6 +117,7 @@ public class WrapperReporter implements Formatter, Reporter {
 
     @Override
     public void write(String text) {
+//        reporter.write(text);
     }
 
 }
