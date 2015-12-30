@@ -25,7 +25,11 @@ public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> 
         cliArgs.add("--ignore-ssl-errors=true");
         cliArgs.add("--ssl-protocol=any");
         capabilities.setCapability("takesScreenshot", true);
-        capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.get() + "/node_modules/phantomjs/bin/phantomjs");
+        if (!TestHome.isWindows()) {
+            capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.get() + "/node_modules/phantomjs/bin/phantomjs");
+        } else {
+            capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.get() + "/node_modules/phantomjs/lib/phantom/phantomjs.exe");
+        }
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "loadImages", true);
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "javascriptEnabled", true);
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "userAgent",
