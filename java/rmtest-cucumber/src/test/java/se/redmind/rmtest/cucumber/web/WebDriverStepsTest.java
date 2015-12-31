@@ -35,6 +35,9 @@ public class WebDriverStepsTest {
         if (!isServerRunning) {
             isServerRunning = true;
             Spark.port(0);
+            get("/", (request, response) -> {
+                return "hello!";
+            });
             get("/cookie/valueOf/:name", (request, response) -> {
                 response.type("text/plain");
                 return String.valueOf(request.cookie(request.params("name")));

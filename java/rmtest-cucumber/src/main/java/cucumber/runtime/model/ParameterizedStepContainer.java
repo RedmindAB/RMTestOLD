@@ -1,6 +1,5 @@
 package cucumber.runtime.model;
 
-
 import gherkin.formatter.model.Step;
 import se.redmind.utils.Fields;
 
@@ -17,12 +16,11 @@ public class ParameterizedStepContainer extends StepContainer {
         });
     }
 
-    private String replacePlaceHolders(String name, String[] names, Object[] parameters) {
+    public static String replacePlaceHolders(String name, String[] names, Object[] parameters) {
         for (int i = 0; i < names.length; i++) {
             name = name.replaceAll("<" + names[i] + ">", String.valueOf(parameters[i]));
         }
         return name;
-
     }
 
 }

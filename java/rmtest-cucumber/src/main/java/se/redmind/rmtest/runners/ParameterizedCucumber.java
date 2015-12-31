@@ -1,13 +1,16 @@
 package se.redmind.rmtest.runners;
 
-import cucumber.api.junit.Cucumber;
-
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
 
+import cucumber.api.junit.Cucumber;
 import cucumber.runtime.Backend;
 import cucumber.runtime.Runtime;
 import cucumber.runtime.RuntimeGlue;
@@ -21,11 +24,14 @@ import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.CucumberFeature;
 import cucumber.runtime.model.CucumberTagStatement;
+import cucumber.runtime.model.ParameterizedStep;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.Scenario;
+import gherkin.formatter.model.Step;
 import gherkin.formatter.model.Tag;
 import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
+import se.redmind.utils.Methods;
 
 /**
  * @author Jeremy Comte
@@ -40,11 +46,6 @@ public class ParameterizedCucumber extends Cucumber {
         super(clazz);
     }
 
-    /**
-     * Get the children from the parent class and intercept any parameterized scenario, wrap them and add them to the glue
-     *
-     * @return the children
-     */
     @Override
     public List<FeatureRunner> getChildren() {
         List<FeatureRunner> children = super.getChildren();
@@ -53,28 +54,71 @@ public class ParameterizedCucumber extends Cucumber {
         JUnitReporter jUnitReporter = Fields.getSafeValue(this, "jUnitReporter");
         RuntimeGlue glue = (RuntimeGlue) runtime.getGlue();
 
+        Map<Pattern, Pair<CucumberTagStatement, ParameterizedJavaStepDefinition>> parameterizedScenarios = new LinkedHashMap<>();
+
+        // 1. Get the children from the parent class and intercept any parameterized scenario, wrap them and add them to the glue
         children.forEach(child -> {
             CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
             List<ParentRunner<?>> runners = Fields.getSafeValue(child, "children");
             List<CucumberTagStatement> statements = feature.getFeatureElements();
             for (int i = 0; i < statements.size(); i++) {
                 CucumberTagStatement statement = statements.get(i);
-                if (statement.getGherkinModel().getTags().stream().anyMatch(tag -> "@parameterized".equals(tag.getName()))) {
-                    glue.addStepDefinition(ParameterizedJavaStepDefinition.from(statement, jUnitReporter, runtime));
-                    statements.remove(i);
+                if (Tags.isParameterized(statement)) {
+                    ParameterizedJavaStepDefinition parameterizedJavaStepDefinition = ParameterizedJavaStepDefinition.from(statement, jUnitReporter, runtime);
+                    glue.addStepDefinition(parameterizedJavaStepDefinition);
+                    parameterizedScenarios.put(Pattern.compile(parameterizedJavaStepDefinition.getPattern()), Pair.of(statements.remove(i), parameterizedJavaStepDefinition));
                     runners.remove(i);
                     i--;
                 }
             }
         });
 
+        // 2. Iterate over all the normal steps, and if the scenario is not quiet, rewrite and add the parameterized steps as normal steps.
+        if (!parameterizedScenarios.isEmpty()) {
+            PicoFactory picoFactory = getPicoFactory(runtime);
+            picoFactory.addInstance(this);
+            glue.addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory, new String[0]));
+            children.forEach(child -> {
+                CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
+                List<CucumberTagStatement> statements = feature.getFeatureElements();
+                statements.forEach(statement -> {
+                    for (int i = 0; i < statement.getSteps().size(); i++) {
+                        Step step = statement.getSteps().get(i);
+                        for (Map.Entry<Pattern, Pair<CucumberTagStatement, ParameterizedJavaStepDefinition>> parameterizedScenario : parameterizedScenarios.entrySet()) {
+                            Matcher matcher = parameterizedScenario.getKey().matcher(step.getName());
+                            if (matcher.matches() && !Tags.isQuiet(parameterizedScenario.getValue().getLeft())) {
+                                statement.getSteps().set(i, ParameterizedStep.startOf(step));
+                                String[] names = parameterizedScenario.getValue().getRight().parameters();
+                                Object[] parameters = new Object[names.length];
+                                for (int k = 0; k < names.length; k++) {
+                                    parameters[k] = matcher.group(k + 1);
+                                }
+                                List<Step> newSteps = parameterizedScenario.getValue().getLeft().getSteps().stream()
+                                    .map(parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, parameters))
+                                    .collect(Collectors.toList());
+                                statement.getSteps().addAll(i + 1, newSteps);
+                                i += newSteps.size();
+                                statement.getSteps().add(++i, ParameterizedStep.endOf(step));
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
         return children;
     }
 
     /**
-     * The way the Runtime is created by Cucumber prevents us to extract properly what would be a ParameterizedRuntime classes.
-     * Indeed, the Runtime is created in the constructor of the Cucumber instance, so any local member would not be initialized when we need it. For that
-     * reason, we rely here on using the effectively final parameter "optionalParameters".
+     * this method is used as a target for the end of a parameterized scenario
+     */
+    public void endOfParameterizedScenario() {
+    }
+
+    /**
+     * The way the Runtime is created by Cucumber prevents us to extract properly what would be a ParameterizedRuntime classes. Indeed, the Runtime is created
+     * in the constructor of the Cucumber instance, so any local member would not be initialized when we need it. For that reason, we rely here on using the
+     * effectively final parameter "optionalParameters".
      */
     public static ParameterizedCucumber create(Class<?> clazz, Object... optionalParameters) throws InitializationError {
         try {

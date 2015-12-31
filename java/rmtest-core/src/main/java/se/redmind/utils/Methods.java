@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +48,7 @@ public final class Methods {
         return method;
     }
 
-    private static Method findMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
+    public static Method findMethod(Class<?> clazz, String name, Class<?>... parameterTypes) {
         Method method = null;
         for (Method declaredMethod : clazz.getDeclaredMethods()) {
             if (declaredMethod.getName().equals(name)) {

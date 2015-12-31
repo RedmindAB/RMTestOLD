@@ -251,7 +251,7 @@ public class PrettyFormatter implements Reporter, Formatter {
         buffer.append(textFormat.text(step.getKeyword()));
 
         stepPrinter.writeStep(new NiceAppendable(buffer), textFormat, argFormat, step.getName(), arguments);
-//        buffer.append(indentedLocation(location));
+        buffer.append(indentedLocation(location));
 
         out.println(buffer);
         if (step.getRows() != null) {

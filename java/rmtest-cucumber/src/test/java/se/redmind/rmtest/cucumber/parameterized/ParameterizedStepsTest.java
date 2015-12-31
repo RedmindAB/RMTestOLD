@@ -11,7 +11,7 @@ import se.redmind.rmtest.runners.ParameterizedCucumber;
  * @author Jeremy Comte
  */
 @RunWith(ParameterizedCucumber.class)
-@CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json"})
+@CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json", "html:target/ParameterizedStepsTest-hmtl-report"})
 public class ParameterizedStepsTest {
 
     public static class Steps {
