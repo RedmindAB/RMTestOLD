@@ -81,28 +81,40 @@ public class ParameterizedCucumber extends Cucumber {
             children.forEach(child -> {
                 CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
                 List<CucumberTagStatement> statements = feature.getFeatureElements();
-                statements.forEach(statement -> {
-                    for (int i = 0; i < statement.getSteps().size(); i++) {
-                        Step step = statement.getSteps().get(i);
-                        for (Map.Entry<Pattern, Pair<CucumberTagStatement, ParameterizedJavaStepDefinition>> parameterizedScenario : parameterizedScenarios.entrySet()) {
-                            Matcher matcher = parameterizedScenario.getKey().matcher(step.getName());
-                            if (matcher.matches() && !Tags.isQuiet(parameterizedScenario.getValue().getLeft())) {
-                                statement.getSteps().set(i, ParameterizedStep.startOf(step));
-                                String[] names = parameterizedScenario.getValue().getRight().parameters();
-                                Object[] parameters = new Object[names.length];
-                                for (int k = 0; k < names.length; k++) {
-                                    parameters[k] = matcher.group(k + 1);
+                int modifiedSteps;
+                // we need to keep trying as long as we find new parameterizable steps in order to support composite sub scenarios
+                do {
+                    modifiedSteps = 0;
+                    for (CucumberTagStatement statement : statements) {
+                        for (int i = 0; i < statement.getSteps().size(); i++) {
+                            Step step = statement.getSteps().get(i);
+                            if (step instanceof ParameterizedStep) {
+                                if (((ParameterizedStep) step).getType() != ParameterizedStep.Type.Parameterized) {
+                                    continue;
                                 }
-                                List<Step> newSteps = parameterizedScenario.getValue().getLeft().getSteps().stream()
-                                    .map(parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, parameters))
-                                    .collect(Collectors.toList());
-                                statement.getSteps().addAll(i + 1, newSteps);
-                                i += newSteps.size();
-                                statement.getSteps().add(++i, ParameterizedStep.endOf(step));
+                            }
+
+                            for (Map.Entry<Pattern, Pair<CucumberTagStatement, ParameterizedJavaStepDefinition>> parameterizedScenario : parameterizedScenarios.entrySet()) {
+                                Matcher matcher = parameterizedScenario.getKey().matcher(step.getName());
+                                if (matcher.matches() && !Tags.isQuiet(parameterizedScenario.getValue().getLeft())) {
+                                    statement.getSteps().set(i, ParameterizedStep.startOf(step));
+                                    String[] names = parameterizedScenario.getValue().getRight().parameters();
+                                    Object[] parameters = new Object[names.length];
+                                    for (int k = 0; k < names.length; k++) {
+                                        parameters[k] = matcher.group(k + 1);
+                                    }
+                                    List<Step> newSteps = parameterizedScenario.getValue().getLeft().getSteps().stream()
+                                        .map(parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, parameters))
+                                        .collect(Collectors.toList());
+                                    statement.getSteps().addAll(i + 1, newSteps);
+                                    i += newSteps.size();
+                                    statement.getSteps().add(++i, ParameterizedStep.endOf(step));
+                                    modifiedSteps++;
+                                }
                             }
                         }
                     }
-                });
+                } while (modifiedSteps > 0);
             });
         }
 

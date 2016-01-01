@@ -13,6 +13,7 @@ import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.model.TagStatement;
 import javassist.*;
 import se.redmind.rmtest.cucumber.utils.Tags;
+import se.redmind.rmtest.cucumber.web.WebDriverSteps;
 import se.redmind.rmtest.runners.ParameterizedCucumber;
 import se.redmind.utils.Fields;
 
@@ -28,6 +29,7 @@ import se.redmind.utils.Fields;
  */
 public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
+    private static final String PARAMETER_PATTERN = "([0-9]+|[0-9]*\\.[0-9]+|\".*\")";
     private final String[] parameters;
 
     public ParameterizedJavaStepDefinition(Method method, Pattern pattern, long timeoutMillis, ObjectFactory objectFactory, String[] parameters) {
@@ -40,13 +42,13 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
     }
 
     public static ParameterizedJavaStepDefinition from(CucumberTagStatement statement, JUnitReporter jUnitReporter, Runtime runtime) {
-        boolean quiet = Tags.isQuiet(statement);
+        boolean isQuiet = Tags.isQuiet(statement);
         PicoFactory objectFactory = ParameterizedCucumber.getPicoFactory(runtime);
         TagStatement tagStatement = Fields.getSafeValue(statement, "statement");
         String name = tagStatement.getName().replaceAll("(Given|When|Then|And)", "");
 
         // let's parse the regex and write down the parameters names
-        StringBuilder patternBuilder = new StringBuilder();
+        StringBuilder patternBuilder = new StringBuilder("^" + WebDriverSteps.THAT);
         StringBuilder parameterBuilder = new StringBuilder();
         StringBuilder parametersNamesBuilder = new StringBuilder("new String[]{");
         List<String> parametersNames = new ArrayList<>();
@@ -61,7 +63,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                     }
                     inParameter = true;
                     parametersCount++;
-                    patternBuilder.append("(.*)");
+                    patternBuilder.append(PARAMETER_PATTERN);
                     break;
                 case '>':
                     if (!inParameter) {
@@ -84,7 +86,12 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                     break;
             }
         }
-        
+
+        if (!isQuiet) {
+            patternBuilder.append("(?: \\{)?");
+        }
+        patternBuilder.append("$");
+
         Pattern pattern = Pattern.compile(patternBuilder.toString());
         parametersNamesBuilder.append("}");
 
@@ -115,7 +122,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
             String methodSource;
 
-            if (quiet) {
+            if (isQuiet) {
                 ctClass.addField(CtField.make("public static cucumber.runtime.model.StepContainer STEPCONTAINER;", ctClass));
                 ctClass.addField(CtField.make("public static cucumber.runtime.Runtime RUNTIME;", ctClass));
 
@@ -134,7 +141,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
             ctClass.addMethod(CtNewMethod.make(methodSource, ctClass));
             Class<?> clazz = ctClass.toClass();
 
-            if (quiet) {
+            if (isQuiet) {
                 clazz.getDeclaredField("STEPCONTAINER").set(null, statement);
                 clazz.getDeclaredField("RUNTIME").set(null, runtime);
             }

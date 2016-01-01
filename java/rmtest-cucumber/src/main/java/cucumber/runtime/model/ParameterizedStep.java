@@ -14,6 +14,15 @@ import static cucumber.runtime.model.ParameterizedStepContainer.replacePlaceHold
  */
 public class ParameterizedStep extends Step {
 
+    private static final ThreadLocal<Integer> depth = new ThreadLocal<Integer>() {
+
+        @Override
+        protected Integer initialValue() {
+            return 0;
+        }
+
+    };
+
     public static enum Type {
 
         Start, Parameterized, End
@@ -48,14 +57,28 @@ public class ParameterizedStep extends Step {
 
     @Override
     public String getKeyword() {
+        String keyword;
         switch (type) {
-            case Parameterized:
-                return "  " + super.getKeyword();
+            case Start:
+                keyword = addDepthTabs(super.getKeyword(), depth.get());
+                depth.set(depth.get() + 1);
+                break;
             case End:
-                return "";
+                depth.set(depth.get() - 1);
+                keyword = addDepthTabs("", depth.get());
+                break;
             default:
-                return super.getKeyword();
+                keyword = addDepthTabs(super.getKeyword(), depth.get());
         }
+        return keyword;
+    }
+
+    private String addDepthTabs(String input, int depthValue) {
+        StringBuilder output = new StringBuilder(input);
+        for (int i = 0; i < depthValue; i++) {
+            output.insert(0, "  ");
+        }
+        return output.toString();
     }
 
     public String getOriginalKeyword() {
