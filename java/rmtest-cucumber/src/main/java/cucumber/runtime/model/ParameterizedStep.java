@@ -6,6 +6,7 @@ import gherkin.formatter.model.Comment;
 import gherkin.formatter.model.DataTableRow;
 import gherkin.formatter.model.DocString;
 import gherkin.formatter.model.Step;
+import se.redmind.rmtest.cucumber.utils.Tags;
 
 import static cucumber.runtime.model.ParameterizedStepContainer.replacePlaceHolders;
 
@@ -25,7 +26,7 @@ public class ParameterizedStep extends Step {
 
     public static enum Type {
 
-        Start, SubStep, Parameterized, End
+        Start, SubStep, Parameterized, Quiet, End
     }
 
     private final Type type;
@@ -85,8 +86,12 @@ public class ParameterizedStep extends Step {
         return super.getKeyword();
     }
 
+    public static ParameterizedStep asQuiet(Step step) {
+        return new ParameterizedStep(step.getComments(), step.getKeyword(), step.getName().replaceAll(Tags.QUIET, "").trim(), step.getLine(), step.getRows(), step.getDocString(), Type.Quiet);
+    }
+
     public static ParameterizedStep startOf(Step step) {
-        return new ParameterizedStep(step.getComments(), step.getKeyword(), step.getName(), step.getLine(), step.getRows(), step.getDocString(), Type.Start);
+        return new ParameterizedStep(step.getComments(), step.getKeyword(), step.getName().replaceAll(Tags.FULL, "").trim(), step.getLine(), step.getRows(), step.getDocString(), Type.Start);
     }
 
     public static ParameterizedStep asSubStep(Step step, String[] names, Object[] parameters) {
@@ -100,7 +105,7 @@ public class ParameterizedStep extends Step {
     }
 
     public static ParameterizedStep endOf(Step step) {
-        return new ParameterizedStep(step.getComments(), step.getKeyword(), step.getName(), step.getLine(), step.getRows(), step.getDocString(), Type.End);
+        return new ParameterizedStep(step.getComments(), step.getKeyword(), step.getName().replaceAll(Tags.FULL, "").trim(), step.getLine(), step.getRows(), step.getDocString(), Type.End);
     }
 
 }

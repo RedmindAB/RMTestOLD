@@ -9,6 +9,7 @@ public class Tags {
 
     public static final String PARAMETERIZED = "@parameterized";
     public static final String QUIET = "@quiet";
+    public static final String FULL = "@full";
     public static final String IGNORE = "@ignore";
 
     public static void addIgnoreToSystemProperties() {
