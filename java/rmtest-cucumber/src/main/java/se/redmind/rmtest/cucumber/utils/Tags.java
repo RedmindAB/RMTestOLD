@@ -23,14 +23,14 @@ public class Tags {
     }
 
     public static boolean isParameterized(CucumberTagStatement statement) {
-        return is(statement, PARAMETERIZED);
+        return has(statement, PARAMETERIZED);
     }
 
     public static boolean isQuiet(CucumberTagStatement statement) {
-        return is(statement, QUIET);
+        return has(statement, QUIET);
     }
 
-    public static boolean is(CucumberTagStatement statement, String tagName) {
+    public static boolean has(CucumberTagStatement statement, String tagName) {
         return statement.getGherkinModel().getTags().stream().anyMatch(tag -> tagName.equals(tag.getName()));
     }
 

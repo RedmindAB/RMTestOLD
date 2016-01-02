@@ -41,8 +41,10 @@ Feature: WebDriver functionalities
     # selection
     When we click on the checkbox with xpath "/html/body/div[2]/div/div[1]/div[16]/form/div[4]/div/div/label/input"
     Then this element is selected
+    # alias on value
+    Given that we know "http://anvoz.github.io/bootstrap-tldr/#css" as "The CSS page"
     # navigation
-    When we navigate to "http://anvoz.github.io/bootstrap-tldr/#css"
+    When we navigate to "The CSS page"
     Then the current url ends with "#css"
     When we go back
     Then the current url ends with "#top"

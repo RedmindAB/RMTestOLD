@@ -37,7 +37,7 @@ public class WebDriverSteps {
 
     public static final String THAT = "(?:that )?";
     public static final String THE_USER = "(?:.*)?";
-    public static final String THE_ELEMENT = "(?:the ?(?:button|element|field|checkbox|radio)?)?";
+    public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?)?";
     public static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
     public static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
@@ -49,7 +49,8 @@ public class WebDriverSteps {
     public static final int TIMEOUT_IN_SECONDS = 5;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final Map<String, By> aliases = new LinkedHashMap<>();
+    private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
+    private final Map<String, String> aliasedValues = new LinkedHashMap<>();
     private final WebDriverWrapper<WebDriver> driverWrapper;
     private final WebDriver driver;
     private WebElement element;
@@ -70,12 +71,16 @@ public class WebDriverSteps {
     // Helpers
     @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
     public void that_we_know_the_element_named_as(String type, String id, String alias) {
-        aliases.put(alias, by(type, id));
+        if (type != null && !type.equals("value")) {
+            aliasedLocations.put(alias, by(type, id));
+        } else {
+            aliasedValues.put(alias, id);
+        }
     }
 
     @Given("^th(?:is|ose|ese) alias(?:es)?:$")
     public void these_aliases(List<Map<String, String>> newAliases) {
-        newAliases.forEach(alias -> aliases.put(alias.get("value"), by(alias.get("type"), alias.get("id"))));
+        newAliases.forEach(alias -> aliasedLocations.put(alias.get("value"), by(alias.get("type"), alias.get("id"))));
     }
 
     @Given("^the aliases defined in the file \"([^\"]*)\"$")
@@ -89,7 +94,7 @@ public class WebDriverSteps {
     // Navigates
     @When("^" + THAT + THE_USER + " navigate(?:s)? to " + QUOTED_CONTENT + "$")
     public void we_navigate_to(String url) {
-        driver.navigate().to(url);
+        driver.navigate().to(valueOf(url));
     }
 
     @When("^" + THAT + THE_USER + " (?:(?:go(?:es) )?(back|forward|refresh(?:es)?))$")
@@ -305,11 +310,18 @@ public class WebDriverSteps {
             .nTimes(10);
     }
 
+    private String valueOf(String value) {
+        if (aliasedValues.containsKey(value)) {
+            value = aliasedValues.get(value);
+        }
+        return value;
+    }
+
     private By by(String type, String id) {
         Preconditions.checkArgument(id != null);
         if (type == null) {
-            if (aliases.containsKey(id)) {
-                return aliases.get(id);
+            if (aliasedLocations.containsKey(id)) {
+                return aliasedLocations.get(id);
             } else {
                 throw new IllegalArgumentException("unknown alias: " + id);
             }
