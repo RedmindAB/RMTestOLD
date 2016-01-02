@@ -2,6 +2,7 @@ package se.redmind.rmtest.runners;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -89,7 +90,7 @@ public class ParameterizedCucumber extends Cucumber {
                         for (int i = 0; i < statement.getSteps().size(); i++) {
                             Step step = statement.getSteps().get(i);
                             if (step instanceof ParameterizedStep) {
-                                if (((ParameterizedStep) step).getType() != ParameterizedStep.Type.Parameterized) {
+                                if (((ParameterizedStep) step).getType() == ParameterizedStep.Type.Start) {
                                     continue;
                                 }
                             }
@@ -97,18 +98,29 @@ public class ParameterizedCucumber extends Cucumber {
                             for (Map.Entry<Pattern, Pair<CucumberTagStatement, ParameterizedJavaStepDefinition>> parameterizedScenario : parameterizedScenarios.entrySet()) {
                                 Matcher matcher = parameterizedScenario.getKey().matcher(step.getName());
                                 if (matcher.matches() && !Tags.isQuiet(parameterizedScenario.getValue().getLeft())) {
-                                    statement.getSteps().set(i, ParameterizedStep.startOf(step));
+                                    Function<Step, ParameterizedStep> wrapper;
                                     String[] names = parameterizedScenario.getValue().getRight().parameters();
                                     Object[] parameters = new Object[names.length];
                                     for (int k = 0; k < names.length; k++) {
                                         parameters[k] = matcher.group(k + 1);
                                     }
+                                    boolean inPlace = Tags.has(parameterizedScenario.getValue().getLeft(), "@inplace");
+                                    if (!inPlace) {
+                                        statement.getSteps().set(i, ParameterizedStep.startOf(step));
+                                        wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, parameters);
+                                    } else {
+                                        statement.getSteps().remove(i--);
+                                        wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, parameters);
+                                    }
+
                                     List<Step> newSteps = parameterizedScenario.getValue().getLeft().getSteps().stream()
-                                        .map(parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, parameters))
+                                        .map(parameterizedStep -> wrapper.apply(parameterizedStep))
                                         .collect(Collectors.toList());
                                     statement.getSteps().addAll(i + 1, newSteps);
                                     i += newSteps.size();
-                                    statement.getSteps().add(++i, ParameterizedStep.endOf(step));
+                                    if (!inPlace) {
+                                        statement.getSteps().add(++i, ParameterizedStep.endOf(step));
+                                    }
                                     modifiedSteps++;
                                 }
                             }

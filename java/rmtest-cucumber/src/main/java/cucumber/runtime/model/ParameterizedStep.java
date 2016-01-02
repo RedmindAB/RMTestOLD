@@ -25,7 +25,7 @@ public class ParameterizedStep extends Step {
 
     public static enum Type {
 
-        Start, Parameterized, End
+        Start, SubStep, Parameterized, End
     }
 
     private final Type type;
@@ -87,6 +87,11 @@ public class ParameterizedStep extends Step {
 
     public static ParameterizedStep startOf(Step step) {
         return new ParameterizedStep(step.getComments(), step.getKeyword(), step.getName(), step.getLine(), step.getRows(), step.getDocString(), Type.Start);
+    }
+
+    public static ParameterizedStep asSubStep(Step step, String[] names, Object[] parameters) {
+        return new ParameterizedStep(step.getComments(), step.getKeyword(), replacePlaceHolders(step.getName(), names, parameters), step.getLine(),
+            step.getRows(), step.getDocString(), Type.SubStep);
     }
 
     public static ParameterizedStep parameterize(Step step, String[] names, Object[] parameters) {
