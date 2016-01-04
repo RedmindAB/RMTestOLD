@@ -7,17 +7,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.Parallelize;
 import se.redmind.rmtest.runners.WebDriverRunner;
-import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
+import se.redmind.rmtest.runners.WebDriverRunnerOptions;
 import se.redmind.utils.Try;
 
 import static org.junit.Assert.assertTrue;
 
-import se.redmind.rmtest.runners.Parallelize;
-
 @RunWith(WebDriverRunner.class)
-@Parallelize
-@ReuseDriverBetweenTests
+@WebDriverRunnerOptions(reuseDriver = true, parallelize = @Parallelize)
 public class GoogleExample {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -36,27 +34,6 @@ public class GoogleExample {
             .delayRetriesBy(500)
             .nTimes(10);
 
-        logger.info("Page title is: " + pageTitle);
-
         assertTrue(pageTitle.startsWith("Goo"));
-
-        logger.info(Thread.currentThread() + " is done!");
     }
-
-    @Test
-    public void testGoogle2() throws Exception {
-        wrapper.getDriver().get("http://www.google.se");
-
-        String pageTitle = Try.toGet(() -> wrapper.getDriver().getTitle())
-            .until(value -> !Strings.isNullOrEmpty(value))
-            .delayRetriesBy(500)
-            .nTimes(10);
-
-        logger.info("Page title is: " + pageTitle);
-
-        assertTrue(pageTitle.startsWith("Goo"));
-
-        logger.info(Thread.currentThread() + " is done!");
-    }
-
 }

@@ -21,14 +21,14 @@ public class ParallelizedSuite extends Suite implements Parallelizable {
             public Runner runnerForClass(Class<?> testClass) throws Throwable {
                 List<RunnerBuilder> builders = Arrays.asList(
                     new RunnerBuilder() {
-                    @Override
-                    public Runner runnerForClass(Class<?> testClass) throws Throwable {
-                        if (testClass.isAnnotationPresent(Parallelize.class) && !testClass.isAnnotationPresent(RunWith.class)) {
-                            return new ParallelizedRunner(testClass);
+                        @Override
+                        public Runner runnerForClass(Class<?> testClass) throws Throwable {
+                            if (testClass.isAnnotationPresent(Parallelize.class) && !testClass.isAnnotationPresent(RunWith.class)) {
+                                return new ParallelizedRunner(testClass);
+                            }
+                            return null;
                         }
-                        return null;
-                    }
-                },
+                    },
                     ignoredBuilder(),
                     annotatedBuilder(),
                     suiteMethodBuilder(),

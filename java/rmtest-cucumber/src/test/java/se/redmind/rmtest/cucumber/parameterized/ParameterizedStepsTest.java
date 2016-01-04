@@ -5,12 +5,12 @@ import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Then;
-import se.redmind.rmtest.runners.ParameterizedCucumber;
+import cucumber.api.junit.Cucumber;
 
 /**
  * @author Jeremy Comte
  */
-@RunWith(ParameterizedCucumber.class)
+@RunWith(Cucumber.class)
 @CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json", "html:target/ParameterizedStepsTest-hmtl-report"})
 public class ParameterizedStepsTest {
 

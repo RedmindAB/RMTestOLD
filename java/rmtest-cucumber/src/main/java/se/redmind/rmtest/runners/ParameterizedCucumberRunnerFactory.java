@@ -1,8 +1,12 @@
 package se.redmind.rmtest.runners;
 
+import java.io.IOException;
+
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.parameterized.ParametersRunnerFactory;
 import org.junit.runners.parameterized.TestWithParameters;
+
+import cucumber.api.junit.Cucumber;
 
 /**
  * @author Jeremy Comte
@@ -10,8 +14,12 @@ import org.junit.runners.parameterized.TestWithParameters;
 public class ParameterizedCucumberRunnerFactory implements ParametersRunnerFactory {
 
     @Override
-    public ParameterizedCucumber createRunnerForTestWithParameters(TestWithParameters test) throws InitializationError {
-        return ParameterizedCucumber.create(test.getTestClass().getJavaClass(), test.getParameters().toArray());
+    public Cucumber createRunnerForTestWithParameters(TestWithParameters test) throws InitializationError {
+        try {
+            return new Cucumber(test.getTestClass().getJavaClass(), test.getName(), test.getParameters().toArray());
+        } catch (IOException ex) {
+            throw new InitializationError(ex);
+        }
     }
 
 }

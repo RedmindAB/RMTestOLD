@@ -12,6 +12,11 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Parallelize {
 
+    /**
+     * -1 for (Runtime.getRuntime().availableProcessors() / 2) + 1
+     *
+     * @return the amount of threads that will be used to parallelize the tests
+     */
     int threads() default -1;
 
     boolean drivers() default true;

@@ -10,6 +10,10 @@ import java.lang.annotation.Target;
  */
 @Target(value = ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface ReuseDriverBetweenTests {
+public @interface WebDriverRunnerOptions {
+
+    boolean reuseDriver() default false;
+
+    Parallelize parallelize() default @Parallelize(drivers = false);
 
 }

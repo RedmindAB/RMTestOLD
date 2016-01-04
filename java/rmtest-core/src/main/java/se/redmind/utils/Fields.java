@@ -46,6 +46,14 @@ public final class Fields {
         }
     }
 
+    public static void set(Object instance, String fieldName, Object value) {
+        try {
+            Fields.getField(instance.getClass(), fieldName).set(instance, value);
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+            LoggerFactory.getLogger(Fields.class).error(ex.getMessage(), ex);
+        }
+    }
+
     public static <E> E getSafeValue(Object instance, String fieldName) {
         try {
             return getValue(instance, fieldName);

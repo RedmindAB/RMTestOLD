@@ -1,4 +1,4 @@
-package se.redmind.rmtest.runners;
+package cucumber.api.junit;
 
 import java.io.IOException;
 import java.util.*;
@@ -7,36 +7,47 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.junit.runner.Description;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
 
-import cucumber.api.junit.Cucumber;
-import cucumber.runtime.Backend;
+import cucumber.api.CucumberOptions;
+import cucumber.runtime.*;
 import cucumber.runtime.Runtime;
-import cucumber.runtime.RuntimeGlue;
-import cucumber.runtime.RuntimeOptions;
+import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.io.ResourceLoaderClassFinder;
 import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.java.ParameterizedJavaStepDefinition;
 import cucumber.runtime.java.picocontainer.PicoFactory;
+import cucumber.runtime.junit.Assertions;
+import cucumber.runtime.junit.ExecutionUnitRunner;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.CucumberFeature;
 import cucumber.runtime.model.CucumberTagStatement;
 import cucumber.runtime.model.ParameterizedStep;
-import gherkin.formatter.Reporter;
-import gherkin.formatter.model.Scenario;
 import gherkin.formatter.model.Step;
-import gherkin.formatter.model.Tag;
 import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
 
 /**
- * @author Jeremy Comte
+ * <p>
+ * Classes annotated with {@code @RunWith(Cucumber.class)} will run a Cucumber Feature. The class should be empty without any fields or methods.
+ * </p>
+ * <p>
+ * Cucumber will look for a {@code .feature} file on the classpath, using the same resource path as the annotated class ({@code .class} substituted by
+ * {@code .feature}).
+ * </p>
+ * Additional hints can be given to Cucumber by annotating the class with {@link CucumberOptions}.
+ *
+ * this class has been extended in place because we needed to be able to forward the parameters in the parameterized runtime
+ *
+ * @see CucumberOptions
  */
-public class ParameterizedCucumber extends Cucumber {
+public class Cucumber extends ParentRunner<FeatureRunner> {
 
     static {
         Tags.addIgnoreToSystemProperties();
@@ -47,16 +58,91 @@ public class ParameterizedCucumber extends Cucumber {
         InPlace, Full, Quiet
     }
 
-    public ParameterizedCucumber(Class<?> clazz) throws InitializationError, IOException {
+    private final JUnitReporter jUnitReporter;
+    private final List<FeatureRunner> children = new ArrayList<>();
+    private final Runtime runtime;
+    private final String name;
+    private final Object[] parameters;
+
+    /**
+     * Constructor called by JUnit.
+     *
+     * @param clazz the class with the @RunWith annotation.
+     * @throws java.io.IOException if there is a problem
+     * @throws org.junit.runners.model.InitializationError if there is another problem
+     */
+    public Cucumber(Class clazz) throws InitializationError, IOException {
+        this(clazz, null, new Object[0]);
+    }
+
+    public Cucumber(Class clazz, String name, Object... parameters) throws InitializationError, IOException {
         super(clazz);
+        this.name = name;
+        this.parameters = parameters;
+        ClassLoader classLoader = clazz.getClassLoader();
+        Assertions.assertNoCucumberAnnotatedMethods(clazz);
+
+        RuntimeOptionsFactory runtimeOptionsFactory = new RuntimeOptionsFactory(clazz);
+        RuntimeOptions runtimeOptions = runtimeOptionsFactory.create();
+
+        ResourceLoader resourceLoader = new MultiLoader(classLoader);
+        runtime = new ParameterizedRuntime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions, parameters);
+
+        final List<CucumberFeature> cucumberFeatures = runtimeOptions.cucumberFeatures(resourceLoader);
+        jUnitReporter = new JUnitReporter(runtimeOptions.reporter(classLoader), runtimeOptions.formatter(classLoader), runtimeOptions.isStrict());
+        addChildren(cucumberFeatures);
     }
 
     @Override
     public List<FeatureRunner> getChildren() {
-        List<FeatureRunner> children = super.getChildren();
+        return children;
+    }
 
-        Runtime runtime = Fields.getSafeValue(this, "runtime");
-        JUnitReporter jUnitReporter = Fields.getSafeValue(this, "jUnitReporter");
+    @Override
+    protected Description describeChild(FeatureRunner child) {
+        return child.getDescription();
+    }
+
+    @Override
+    protected void runChild(FeatureRunner child, RunNotifier notifier) {
+        child.run(notifier);
+    }
+
+    @Override
+    public void run(RunNotifier notifier) {
+        super.run(notifier);
+        jUnitReporter.done();
+        jUnitReporter.close();
+        runtime.printSummary();
+    }
+
+    private void addChildren(List<CucumberFeature> cucumberFeatures) throws InitializationError {
+        for (CucumberFeature cucumberFeature : cucumberFeatures) {
+            FeatureRunner featureRunner = new FeatureRunner(cucumberFeature, runtime, jUnitReporter);
+            if (name != null) {
+                // if we have a name, we want to append it to the Description
+                List<ParentRunner<?>> runners = Fields.getSafeValue(featureRunner, "children");
+                for (int i = 0; i < runners.size(); i++) {
+                    ParentRunner<?> runner = runners.get(i);
+                    if (runner instanceof ExecutionUnitRunner) {
+                        runner = new ExecutionUnitRunner(runtime, Fields.getSafeValue(runner, "cucumberScenario"), jUnitReporter) {
+
+                            @Override
+                            protected Description describeChild(Step step) {
+                                Description description = super.describeChild(step);
+                                if (!description.getMethodName().contains(name)) {
+                                    Fields.set(description, "fDisplayName", description.getMethodName() + name + "(" + description.getClassName() + ")");
+                                }
+                                return description;
+                            }
+                        };
+                        runners.set(i, runner);
+                    }
+                }
+            }
+            children.add(featureRunner);
+        }
+
         RuntimeGlue glue = (RuntimeGlue) runtime.getGlue();
 
         Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = new LinkedHashMap<>();
@@ -120,17 +206,17 @@ public class ParameterizedCucumber extends Cucumber {
                                     } else {
                                         Function<Step, ParameterizedStep> wrapper;
                                         String[] names = parameterizedScenario.getValue().parameters();
-                                        Object[] parameters = new Object[names.length];
+                                        Object[] scenarioParameters = new Object[names.length];
                                         for (int k = 0; k < names.length; k++) {
-                                            parameters[k] = matcher.group(k + 1);
+                                            scenarioParameters[k] = matcher.group(k + 1);
                                         }
                                         if (compositionType == CompositionType.Full) {
                                             parameterizedScenario.getValue().addStartStepToGlue();
                                             statement.getSteps().set(i, ParameterizedStep.startOf(step));
-                                            wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, parameters);
+                                            wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, scenarioParameters);
                                         } else {
                                             statement.getSteps().remove(i--);
-                                            wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, parameters);
+                                            wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, scenarioParameters);
                                         }
 
                                         List<Step> newSteps = parameterizedScenario.getValue().statement().getSteps().stream()
@@ -151,46 +237,12 @@ public class ParameterizedCucumber extends Cucumber {
                 } while (modifiedSteps > 0);
             });
         }
-
-        return children;
     }
 
     /**
      * this method is used as a target for the end of a parameterized scenario
      */
     public void endOfParameterizedScenario() {
-    }
-
-    /**
-     * The way the Runtime is created by Cucumber prevents us to extract properly what would be a ParameterizedRuntime classes. Indeed, the Runtime is created
-     * in the constructor of the Cucumber instance, so any local member would not be initialized when we need it. For that reason, we rely here on using the
-     * effectively final parameter "optionalParameters".
-     */
-    public static ParameterizedCucumber create(Class<?> clazz, Object... optionalParameters) throws InitializationError {
-        try {
-            return new ParameterizedCucumber(clazz) {
-
-                protected final Object[] parameters = optionalParameters;
-
-                @Override
-                protected Runtime createRuntime(ResourceLoader resourceLoader, ClassLoader classLoader, RuntimeOptions runtimeOptions) throws InitializationError, IOException {
-                    return new Runtime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions) {
-
-                        @Override
-                        public void buildBackendWorlds(Reporter reporter, Set<Tag> tags, Scenario gherkinScenario) {
-                            PicoFactory picoFactory = getPicoFactory(this);
-                            for (Object parameter : optionalParameters) {
-                                picoFactory.addInstance(parameter);
-                            }
-                            super.buildBackendWorlds(reporter, tags, gherkinScenario);
-                        }
-                    };
-                }
-
-            };
-        } catch (IOException ex) {
-            throw new InitializationError(ex);
-        }
     }
 
     public static PicoFactory getPicoFactory(Runtime runtime) throws RuntimeException {
@@ -204,5 +256,4 @@ public class ParameterizedCucumber extends Cucumber {
         }
         throw new RuntimeException("can't find a javaBackend instance");
     }
-
 }

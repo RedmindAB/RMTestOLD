@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import cucumber.api.java.ObjectFactory;
+import cucumber.api.junit.Cucumber;
 import cucumber.runtime.Runtime;
 import cucumber.runtime.RuntimeGlue;
 import cucumber.runtime.java.picocontainer.PicoFactory;
@@ -14,7 +15,6 @@ import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.model.TagStatement;
 import javassist.*;
 import se.redmind.rmtest.cucumber.web.WebDriverSteps;
-import se.redmind.rmtest.runners.ParameterizedCucumber;
 import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
 
@@ -97,7 +97,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
             this.pattern = pattern;
             this.parameters = parameters;
             this.runtime = runtime;
-            this.objectFactory = ParameterizedCucumber.getPicoFactory(runtime);
+            this.objectFactory = Cucumber.getPicoFactory(runtime);
             this.glue = (RuntimeGlue) runtime.getGlue();
         }
 

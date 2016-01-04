@@ -26,6 +26,7 @@ import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.config.GridConfiguration;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
+import se.redmind.utils.Annotations;
 import se.redmind.utils.Fields;
 
 /**
@@ -37,14 +38,20 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(WebDriverRunner.class);
     private LiveStreamListener liveStreamListener;
+    private final WebDriverRunnerOptions options;
 
     public WebDriverRunner(Class<?> klass) throws Throwable {
         super(klass);
-        parallelize();
+        if (klass.isAnnotationPresent(WebDriverRunnerOptions.class)) {
+            options = klass.getAnnotation(WebDriverRunnerOptions.class);
+        } else {
+            options = Annotations.defaultOf(WebDriverRunnerOptions.class);
+        }
     }
 
     @Override
     public void run(RunNotifier notifier) {
+        parallelize(options.parallelize());
         if (Configuration.current().drivers.stream().anyMatch(driver -> driver instanceof GridConfiguration && driver.as(GridConfiguration.class).enableLiveStream)) {
             liveStreamListener = new LiveStreamListener();
             notifier.addListener(liveStreamListener);
@@ -57,7 +64,7 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
     protected void runChild(Runner runner, RunNotifier notifier) {
         Optional<WebDriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
         if (driverWrapper.isPresent()) {
-            if (getTestClass().getJavaClass().isAnnotationPresent(ReuseDriverBetweenTests.class)) {
+            if (options.reuseDriver()) {
                 driverWrapper.get().setReuseDriverBetweenTests(true);
             }
 

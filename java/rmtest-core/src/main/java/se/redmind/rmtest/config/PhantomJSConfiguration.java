@@ -24,6 +24,7 @@ public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> 
         ArrayList<String> cliArgs = new ArrayList<>();
         cliArgs.add("--ignore-ssl-errors=true");
         cliArgs.add("--ssl-protocol=any");
+        cliArgs.add("--webdriver-loglevel=ERROR");
         capabilities.setCapability("takesScreenshot", true);
         if (!TestHome.isWindows()) {
             capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.get() + "/node_modules/phantomjs/bin/phantomjs");

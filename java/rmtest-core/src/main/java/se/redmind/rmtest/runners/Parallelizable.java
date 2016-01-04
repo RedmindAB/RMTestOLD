@@ -14,17 +14,19 @@ import org.slf4j.LoggerFactory;
 public interface Parallelizable {
 
     default void parallelize() {
-        Class<?> clazz = getTestClass().getJavaClass();
+        parallelize(getTestClass().getJavaClass().getAnnotation(Parallelize.class));
+    }
+
+    default void parallelize(Parallelize parallelize) {
         int nThreads = 1;
         String threads = System.getProperty("junit.parallel.threads");
         if (threads != null && threads.matches("[0-9]+")) {
             nThreads = Integer.parseInt(threads);
-        } else if (clazz.isAnnotationPresent(Parallelize.class)) {
-            Parallelize parallelize = clazz.getAnnotation(Parallelize.class);
+        } else if (parallelize != null) {
             nThreads = parallelize.threads() > -1 ? parallelize.threads() : (Runtime.getRuntime().availableProcessors() / 2) + 1;
         }
         if (nThreads > 1) {
-            LoggerFactory.getLogger(this.getClass()).info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parallel on " + this.toString());
+            LoggerFactory.getLogger(this.getClass()).info("will run " + nThreads + " test" + (nThreads > 1 ? "s" : "") + " in parallel");
             setScheduler(new Scheduler(nThreads));
         }
     }

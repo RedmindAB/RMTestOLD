@@ -10,21 +10,23 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Given;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.ParameterizedCucumberRunnerFactory;
-import static se.redmind.rmtest.cucumber.web.WebDriverSteps.*;
-import se.redmind.rmtest.runners.ReuseDriverBetweenTests;
 import se.redmind.rmtest.runners.WebDriverRunner;
+import se.redmind.rmtest.runners.WebDriverRunnerOptions;
 import se.redmind.utils.Fields;
 import spark.Spark;
-import static spark.Spark.*;
 import spark.webserver.JettySparkServer;
+
+import static se.redmind.rmtest.cucumber.web.WebDriverSteps.THAT;
+import static se.redmind.rmtest.cucumber.web.WebDriverSteps.THE_USER;
+import static spark.Spark.get;
 
 /**
  * @author Jeremy Comte
  */
 @RunWith(WebDriverRunner.class)
+@WebDriverRunnerOptions(reuseDriver = true)
 @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
 @CucumberOptions(plugin = {"pretty", "json:target/WebDriverStepsTest-json-report.json"})
-@ReuseDriverBetweenTests
 public class WebDriverStepsTest {
 
     private static boolean isServerRunning;
