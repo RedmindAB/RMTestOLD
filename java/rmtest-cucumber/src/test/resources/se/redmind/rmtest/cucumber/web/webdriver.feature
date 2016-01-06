@@ -1,6 +1,4 @@
 Feature: WebDriver functionalities
-  The functions are grouped in big scenarios because having one Scenario per function
-  would cause the webdriver to start over and over again, making this test really slow.
 
   Background:
     Given that we know our local spark instance

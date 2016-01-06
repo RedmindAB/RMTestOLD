@@ -25,10 +25,8 @@ import cucumber.runtime.junit.Assertions;
 import cucumber.runtime.junit.ExecutionUnitRunner;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
-import cucumber.runtime.model.CucumberBackground;
-import cucumber.runtime.model.CucumberFeature;
-import cucumber.runtime.model.CucumberTagStatement;
-import cucumber.runtime.model.ParameterizedStep;
+import cucumber.runtime.model.*;
+import gherkin.formatter.model.Background;
 import gherkin.formatter.model.Step;
 import gherkin.formatter.model.TagStatement;
 import se.redmind.rmtest.cucumber.utils.Tags;
@@ -176,14 +174,20 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
             glue.addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory));
             children.forEach(child -> {
                 CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
-                List<CucumberTagStatement> statements = feature.getFeatureElements();
+                List<StepContainer> stepContainers = new ArrayList<>(feature.getFeatureElements());
+
+                CucumberBackground cucumberBackground = Fields.getSafeValue(feature, "cucumberBackground");
+                if (cucumberBackground != null) {
+                    stepContainers.add(cucumberBackground);
+                }
+
                 int modifiedSteps;
                 // we need to keep trying as long as we find new parameterizable steps in order to support composite sub scenarios
                 do {
                     modifiedSteps = 0;
-                    for (CucumberTagStatement statement : statements) {
-                        for (int i = 0; i < statement.getSteps().size(); i++) {
-                            Step step = statement.getSteps().get(i);
+                    for (StepContainer stepContainer : stepContainers) {
+                        for (int i = 0; i < stepContainer.getSteps().size(); i++) {
+                            Step step = stepContainer.getSteps().get(i);
 
                             if (step instanceof ParameterizedStep) {
                                 if (((ParameterizedStep) step).getType() == ParameterizedStep.Type.Start
@@ -206,7 +210,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                                 Matcher matcher = parameterizedScenario.getKey().matcher(stepName);
                                 if (matcher.matches()) {
                                     if (compositionType == CompositionType.Quiet) {
-                                        statement.getSteps().set(i, ParameterizedStep.asQuiet(step));
+                                        stepContainer.getSteps().set(i, ParameterizedStep.asQuiet(step));
                                         parameterizedScenario.getValue().addQuietSubStepsToGlue();
                                     } else {
                                         Function<Step, ParameterizedStep> wrapper;
@@ -217,20 +221,20 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                                         }
                                         if (compositionType == CompositionType.Full) {
                                             parameterizedScenario.getValue().addStartStepToGlue();
-                                            statement.getSteps().set(i, ParameterizedStep.startOf(step));
+                                            stepContainer.getSteps().set(i, ParameterizedStep.startOf(step));
                                             wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, scenarioParameters);
                                         } else {
-                                            statement.getSteps().remove(i--);
+                                            stepContainer.getSteps().remove(i--);
                                             wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, scenarioParameters);
                                         }
 
                                         List<Step> newSteps = parameterizedScenario.getValue().statement().getSteps().stream()
                                             .map(parameterizedStep -> wrapper.apply(parameterizedStep))
                                             .collect(Collectors.toList());
-                                        statement.getSteps().addAll(i + 1, newSteps);
+                                        stepContainer.getSteps().addAll(i + 1, newSteps);
                                         i += newSteps.size();
                                         if (compositionType == CompositionType.Full) {
-                                            statement.getSteps().add(++i, ParameterizedStep.endOf(step));
+                                            stepContainer.getSteps().add(++i, ParameterizedStep.endOf(step));
                                         }
                                         modifiedSteps++;
                                     }
