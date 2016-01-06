@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
@@ -46,6 +48,8 @@ public class WebDriverSteps {
     public static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     public static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
+    private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{(\\w+)\\})(.*)");
+
     public static final int TIMEOUT_IN_SECONDS = 5;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -59,6 +63,10 @@ public class WebDriverSteps {
     public WebDriverSteps(WebDriverWrapper<WebDriver> driverWrapper) {
         this.driverWrapper = driverWrapper;
         this.driver = driverWrapper.getDriver();
+    }
+
+    public WebDriver getDriver() {
+        return driver;
     }
 
     @After
@@ -214,7 +222,7 @@ public class WebDriverSteps {
 
     @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void that_the_element_at_id_matches(String type, String id, String assertType, String expectedValue) {
-        assertElement(assertType, find(by(type, id)), expectedValue);
+        assertElement(assertType, find(by(type, id)), valueOf(expectedValue));
     }
 
     @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " (?:is present|exists)$")
@@ -251,7 +259,7 @@ public class WebDriverSteps {
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void this_element_matches(String assertType, String expectedValue) {
         refreshElement();
-        assertElement(assertType, element, expectedValue);
+        assertElement(assertType, element, valueOf(expectedValue));
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " is selected$")
@@ -313,6 +321,10 @@ public class WebDriverSteps {
     private String valueOf(String value) {
         if (aliasedValues.containsKey(value)) {
             value = aliasedValues.get(value);
+        }
+        Matcher matcher;
+        while ((matcher = ALIAS.matcher(value)).matches()) {
+            value = matcher.group(1) + valueOf(matcher.group(2)) + matcher.group(3);
         }
         return value;
     }

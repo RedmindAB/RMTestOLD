@@ -2,8 +2,11 @@ Feature: WebDriver functionalities
   The functions are grouped in big scenarios because having one Scenario per function
   would cause the webdriver to start over and over again, making this test really slow.
 
+  Background:
+    Given that we know our local spark instance
+
   Scenario: basic functions and assertions of element
-    Given that we navigate to "http://anvoz.github.io/bootstrap-tldr/"
+    Given that we navigate to "${spark}/bootstrap-tldr/"
     And that we maximize the window
     # string predicates
     Then the title reads "Bootstrap TLDR"
@@ -15,8 +18,8 @@ Feature: WebDriver functionalities
     Then the element with xpath "//*[@id="typography"]" reads "Typography"
     Then the element with class "text-left" reads ".text-left"
     Then the element with css "body > div.container > div > div.col-md-9 > blockquote > p" reads "Bootstrap TLDR"
-    Then the element with link text "Typography" links to "http://anvoz.github.io/bootstrap-tldr/#typography"
-    Then the element with partial link text "Typo" links to "http://anvoz.github.io/bootstrap-tldr/#typography"
+    Then the element with link text "Typography" links to "${spark}/bootstrap-tldr/#typography"
+    Then the element with partial link text "Typo" links to "${spark}/bootstrap-tldr/#typography"
     And we select the element with tag "body"
     # alias
     Given that we know the element with xpath "//*[@id="sidebar"]/a" as "Back to top"
@@ -42,7 +45,7 @@ Feature: WebDriver functionalities
     When we click on the checkbox with xpath "/html/body/div[2]/div/div[1]/div[16]/form/div[4]/div/div/label/input"
     Then this element is selected
     # alias on value
-    Given that we know "http://anvoz.github.io/bootstrap-tldr/#css" as "The CSS page"
+    Given that we know "${spark}/bootstrap-tldr/#css" as "The CSS page"
     # navigation
     When we navigate to "The CSS page"
     Then the current url ends with "#css"
@@ -60,17 +63,17 @@ Feature: WebDriver functionalities
     Then this element reads "test"
 
   Scenario: cookies
-    Given that we navigate to our local spark at "/"
+    Given that we navigate to "${spark}/"
     And that we add those cookies:
       | name          | value                 |
       | Authorization | base64(user:password) |
       | base          | something cool        |
       | sessionid     | 1lknsdf912lk12eas90   |
-    When we navigate to our local spark at "/cookie/valueOf/Authorization"
+    When we navigate to "${spark}/cookie/valueOf/Authorization"
     Then the page content is "base64(user:password)"
     Given that we delete the cookie "Authorization"
-    When we navigate to our local spark at "/cookie/valueOf/Authorization"
+    When we navigate to "${spark}/cookie/valueOf/Authorization"
     Then the page content is "null"
     Given that we delete all the cookies
-    When we navigate to our local spark at "/cookie/valueOf/sessionid"
+    When we navigate to "${spark}/cookie/valueOf/sessionid"
     Then the page content is "null"

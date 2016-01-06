@@ -8,7 +8,6 @@ import org.junit.runners.Parameterized;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Given;
-import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.ParameterizedCucumberRunnerFactory;
 import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.runners.WebDriverRunnerOptions;
@@ -16,8 +15,6 @@ import se.redmind.utils.Fields;
 import spark.Spark;
 import spark.webserver.JettySparkServer;
 
-import static se.redmind.rmtest.cucumber.web.WebDriverSteps.THAT;
-import static se.redmind.rmtest.cucumber.web.WebDriverSteps.THE_USER;
 import static spark.Spark.get;
 
 /**
@@ -36,8 +33,10 @@ public class WebDriverStepsTest {
     public static synchronized void createTestServer() throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         if (!isServerRunning) {
             isServerRunning = true;
+            Spark.staticFileLocation("/html");
             Spark.port(0);
             get("/", (request, response) -> {
+
                 return "hello!";
             });
             get("/cookie/valueOf/:name", (request, response) -> {
@@ -54,15 +53,15 @@ public class WebDriverStepsTest {
 
     public static class Steps {
 
-        private final WebDriverWrapper<?> wrapper;
+        private final WebDriverSteps driverSteps;
 
-        public Steps(WebDriverWrapper<?> driverWrapper) {
-            this.wrapper = driverWrapper;
+        public Steps(WebDriverSteps driverWrapper) {
+            this.driverSteps = driverWrapper;
         }
 
-        @Given("^" + THAT + THE_USER + " navigate(?:s)? to our local spark at \"/([^\"]*)\"$")
-        public void that_we_navigate_to_our_local_spark_at(String path) {
-            wrapper.getDriver().navigate().to("http://localhost:" + localPort + "/" + path);
+        @Given("^that we know our local spark instance$")
+        public void that_we_know_our_local_spark_instance() {
+            driverSteps.that_we_know_the_element_named_as(null, "http://localhost:" + localPort, "spark");
         }
     }
 
