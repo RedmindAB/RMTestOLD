@@ -36,7 +36,6 @@ public class WebDriverStepsTest {
             Spark.staticFileLocation("/html");
             Spark.port(0);
             get("/", (request, response) -> {
-
                 return "hello!";
             });
             get("/cookie/valueOf/:name", (request, response) -> {
@@ -55,8 +54,8 @@ public class WebDriverStepsTest {
 
         private final WebDriverSteps driverSteps;
 
-        public Steps(WebDriverSteps driverWrapper) {
-            this.driverSteps = driverWrapper;
+        public Steps(WebDriverSteps driverSteps) {
+            this.driverSteps = driverSteps;
         }
 
         @Given("^that we know our local spark instance$")
