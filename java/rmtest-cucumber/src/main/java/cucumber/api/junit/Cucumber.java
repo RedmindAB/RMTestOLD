@@ -25,10 +25,12 @@ import cucumber.runtime.junit.Assertions;
 import cucumber.runtime.junit.ExecutionUnitRunner;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
+import cucumber.runtime.model.CucumberBackground;
 import cucumber.runtime.model.CucumberFeature;
 import cucumber.runtime.model.CucumberTagStatement;
 import cucumber.runtime.model.ParameterizedStep;
 import gherkin.formatter.model.Step;
+import gherkin.formatter.model.TagStatement;
 import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
@@ -160,6 +162,9 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     statements.remove(i);
                     runners.remove(i);
                     i--;
+                } else if (name != null) {
+                    TagStatement tagStatement = statement.getGherkinModel();
+                    Fields.set(tagStatement, "name", tagStatement.getName() + " " + name);
                 }
             }
         });

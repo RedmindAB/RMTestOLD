@@ -4,16 +4,27 @@ Feature: WebDriver functionalities
 
   Background:
     Given that we know our local spark instance
-
-  Scenario: basic functions and assertions of element
-    Given that we navigate to "${spark}/bootstrap-tldr/"
+    And that we navigate to "${spark}/bootstrap-tldr/"
     And that we maximize the window
-    # string predicates
+
+  Scenario: navigation
+    When we navigate to "${spark}/bootstrap-tldr/#css"
+    Then the current url ends with "#css"
+    When we go back
+    Then the current url ends with "/"
+    When we go forward
+    Then the current url ends with "#css"
+    Then we refresh
+    Then the current url ends with "#css"
+
+  Scenario: string predicates
     Then the title reads "Bootstrap TLDR"
     And the title contains "oots"
     And the title starts with "Boot"
     And the title ends with "TLDR"
-    # elements by id, xpath, class, css selector, link text, partial link text, tag
+    And the current url matches "http://.+/"
+
+  Scenario: elements by id, xpath, class, css selector, link text, partial link text, tag
     Then the element with id "typography" reads "Typography"
     Then the element with xpath "//*[@id="typography"]" reads "Typography"
     Then the element with class "text-left" reads ".text-left"
@@ -21,6 +32,8 @@ Feature: WebDriver functionalities
     Then the element with link text "Typography" links to "${spark}/bootstrap-tldr/#typography"
     Then the element with partial link text "Typo" links to "${spark}/bootstrap-tldr/#typography"
     And we select the element with tag "body"
+
+  Scenario: alias and javascript
     # alias
     Given that we know the element with xpath "//*[@id="sidebar"]/a" as "Back to top"
     # click
@@ -29,6 +42,8 @@ Feature: WebDriver functionalities
     Then the current url ends with "#top"
     # javascript
     And executing "return window.scrollY;" returns 0
+
+  Scenario: element selection and attribute/properties assertion
     # select an element
     Given this alias:
       | type  | id                                                               | value       |
@@ -44,27 +59,15 @@ Feature: WebDriver functionalities
     # selection
     When we click on the checkbox with xpath "/html/body/div[2]/div/div[1]/div[16]/form/div[4]/div/div/label/input"
     Then this element is selected
-    # alias on value
-    Given that we know "${spark}/bootstrap-tldr/#css" as "The CSS page"
-    # navigation
-    When we navigate to "The CSS page"
-    Then the current url ends with "#css"
-    When we go back
-    Then the current url ends with "#top"
-    When we go forward
-    Then the current url ends with "#css"
-    Then we refresh
-    # regex
-    Then the current url matches "http://.+#css"
-    # loading aliases from an external file
+
+  Scenario: loading aliases from an external file and inputing value in a text control
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
     When we click the element "input.form-control"
     And that we input "test"
     Then this element reads "test"
 
   Scenario: cookies
-    Given that we navigate to "${spark}/"
-    And that we add those cookies:
+    Given that we add those cookies:
       | name          | value                 |
       | Authorization | base64(user:password) |
       | base          | something cool        |

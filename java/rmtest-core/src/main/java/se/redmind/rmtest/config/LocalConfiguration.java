@@ -26,6 +26,15 @@ public abstract class LocalConfiguration<WebDriverType extends WebDriver> extend
     }
 
     @Override
+    public DesiredCapabilities generateCapabilities() {
+        DesiredCapabilities capabilities = super.generateCapabilities();
+        capabilities.setCapability("osname", System.getProperty("os.name"));
+        capabilities.setCapability("platformVersion", System.getProperty("os.arch"));
+        System.out.println(System.getProperties());
+        return capabilities;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     protected List<WebDriverWrapper<WebDriverType>> createDrivers() {
         int maxRetryAttempts = 5;

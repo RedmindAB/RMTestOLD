@@ -18,7 +18,7 @@ public class Tags {
             property = "";
         }
         if (!property.contains("~" + IGNORE)) {
-            property += " --tags ~@" + IGNORE;
+            property += " --tags ~" + IGNORE;
             System.setProperty("cucumber.options", property);
         }
     }
