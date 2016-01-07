@@ -3,7 +3,6 @@ package cucumber.runtime;
 import java.util.Set;
 
 import cucumber.api.junit.Cucumber;
-import cucumber.runtime.Runtime;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.picocontainer.PicoFactory;
 import gherkin.formatter.Reporter;

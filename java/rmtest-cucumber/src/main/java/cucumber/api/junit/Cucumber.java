@@ -26,7 +26,6 @@ import cucumber.runtime.junit.ExecutionUnitRunner;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.*;
-import gherkin.formatter.model.Background;
 import gherkin.formatter.model.Step;
 import gherkin.formatter.model.TagStatement;
 import se.redmind.rmtest.cucumber.utils.Tags;
@@ -62,6 +61,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
     private final List<FeatureRunner> children = new ArrayList<>();
     private final Runtime runtime;
     private final String name;
+    // do not remove this field, it is read through reflection
     private final Object[] parameters;
 
     /**

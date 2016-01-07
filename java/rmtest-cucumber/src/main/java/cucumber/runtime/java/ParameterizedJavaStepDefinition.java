@@ -21,11 +21,11 @@ import se.redmind.utils.Methods;
 /**
  * Cucumber java doesn't allow us to call Scenarios in a Scenario like in Ruby.
  *
- * This class is there to enable us to do that. If a Scenario is annotated with @parameterized we will create a dynamic JavaStepDefinition that will swallow the
- * call to the parameterized scenario. If the scenario is annotated with @quiet, it will internally trigger the sub steps, otherwise the real steps will be
- * added to the current feature in the ParameterizedCucumber class
+ * This class is here to enable us to do that. If a Scenario is annotated with @parameterized we will create a dynamic JavaStepDefinition that will be
+ * registered on the pattern made by the name of this scenario.
+ * Depending on how this scenario is called, the real steps will be added to the current feature in the ParameterizedCucumber class or executed silently.
  *
- * @see ParameterizedCucumber#getChildren()
+ * @see Cucumber#addChildren(java.util.List)
  * @author Jeremy Comte
  */
 public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
@@ -90,7 +90,6 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         private Class<?>[] parametersClasses;
         private ParameterizedJavaStepDefinition subSteps;
         private ParameterizedJavaStepDefinition start;
-        private ParameterizedJavaStepDefinition end;
 
         public Factory(CucumberTagStatement statement, Pattern pattern, String[] parameters, Runtime runtime) {
             this.statement = statement;
