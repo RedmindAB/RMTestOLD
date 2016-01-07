@@ -181,6 +181,8 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     stepContainers.add(cucumberBackground);
                 }
 
+                parameterizedScenarios.values().stream().forEach(scenario -> stepContainers.add(scenario.statement()));
+
                 int modifiedSteps;
                 // we need to keep trying as long as we find new parameterizable steps in order to support composite sub scenarios
                 do {
@@ -238,7 +240,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                                         }
                                         modifiedSteps++;
                                     }
-
+                                    break;
                                 }
                             }
                         }

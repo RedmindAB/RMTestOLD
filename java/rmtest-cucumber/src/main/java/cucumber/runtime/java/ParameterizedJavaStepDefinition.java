@@ -30,7 +30,7 @@ import se.redmind.utils.Methods;
  */
 public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
-    private static final String PARAMETER_PATTERN = "([0-9]+|[0-9]*\\.[0-9]+|\".*\")";
+    private static final String PARAMETER_PATTERN = "([0-9]+|[0-9]*\\.[0-9]+|\".*\"|<.*>)";
 
     public ParameterizedJavaStepDefinition(Method method, Pattern pattern, long timeoutMillis, ObjectFactory objectFactory) {
         super(method, pattern, timeoutMillis, objectFactory);
