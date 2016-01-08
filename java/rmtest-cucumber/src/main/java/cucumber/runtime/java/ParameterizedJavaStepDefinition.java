@@ -22,8 +22,8 @@ import se.redmind.utils.Methods;
  * Cucumber java doesn't allow us to call Scenarios in a Scenario like in Ruby.
  *
  * This class is here to enable us to do that. If a Scenario is annotated with @parameterized we will create a dynamic JavaStepDefinition that will be
- * registered on the pattern made by the name of this scenario.
- * Depending on how this scenario is called, the real steps will be added to the current feature in the ParameterizedCucumber class or executed silently.
+ * registered on the pattern made by the name of this scenario. Depending on how this scenario is called, the real steps will be added to the current feature in
+ * the ParameterizedCucumber class or executed silently.
  *
  * @see Cucumber#addChildren(java.util.List)
  * @author Jeremy Comte
@@ -119,30 +119,37 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
             if (clazz == null) {
                 try {
                     // make the methods' parameters
-                    StringBuilder parametersNamesBuilder = new StringBuilder("new String[]{");
-                    for (String parameter : parameters) {
-                        if (parametersNamesBuilder.length() > 13) {
-                            parametersNamesBuilder.append(", ");
-                        }
-                        parametersNamesBuilder.append("\"").append(parameter).append("\"");
-                    }
-                    parametersNamesBuilder.append("}");
-
-                    StringBuilder parametersBuilder = new StringBuilder();
-                    StringBuilder parametersListBuilder = new StringBuilder("new Object[]{");
                     parametersClasses = new Class<?>[parameters.length];
+                    StringBuilder parametersBuilder = new StringBuilder();
+                    StringBuilder parametersNamesBuilder;
+                    StringBuilder parametersListBuilder;
 
-                    for (int i = 0; i < parameters.length; i++) {
-                        if (parametersBuilder.length() > 0) {
-                            parametersBuilder.append(", ");
-                            parametersListBuilder.append(", ");
+                    if (parameters.length > 0) {
+                        parametersNamesBuilder = new StringBuilder("new String[]{");
+                        for (String parameter : parameters) {
+                            if (parametersNamesBuilder.length() > 13) {
+                                parametersNamesBuilder.append(", ");
+                            }
+                            parametersNamesBuilder.append("\"").append(parameter).append("\"");
                         }
-                        parametersBuilder.append("String arg").append(i);
-                        parametersListBuilder.append("arg").append(i);
-                        parametersClasses[i] = String.class;
-                    }
+                        parametersNamesBuilder.append("}");
 
-                    parametersListBuilder.append("}");
+                        parametersListBuilder = new StringBuilder("new Object[]{");
+                        for (int i = 0; i < parameters.length; i++) {
+                            if (parametersBuilder.length() > 0) {
+                                parametersBuilder.append(", ");
+                                parametersListBuilder.append(", ");
+                            }
+                            parametersBuilder.append("String arg").append(i);
+                            parametersListBuilder.append("arg").append(i);
+                            parametersClasses[i] = String.class;
+                        }
+
+                        parametersListBuilder.append("}");
+                    } else {
+                        parametersNamesBuilder = new StringBuilder("new String[0]");
+                        parametersListBuilder = new StringBuilder("new Object[0]");
+                    }
 
                     ClassPool pool = ClassPool.getDefault();
                     CtClass ctClass = pool.makeClass("cucumber.runtime.model.ParameterizedScenario@" + Integer.toHexString(statement.hashCode()));
@@ -152,7 +159,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
                     ctClass.addMethod(CtNewMethod.make(""
                         + "public void execute(" + parametersBuilder.toString() + ") {\n"
-                        + "     cucumber.runtime.java.QuietReporter reporter = new cucumber.runtime.java.QuietReporter();"
+                        + "     cucumber.runtime.java.QuietReporter reporter = new cucumber.runtime.java.QuietReporter();\n"
                         + "     cucumber.runtime.model.ParameterizedStepContainer parameterizedStepContainer = "
                         + "new cucumber.runtime.model.ParameterizedStepContainer(STEPCONTAINER, " + parametersNamesBuilder.toString() + ", " + parametersListBuilder.toString() + ");\n"
                         + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"format\", new Object[] { reporter });\n"
