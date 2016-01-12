@@ -12,12 +12,13 @@ import cucumber.api.java.en.Given;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.runners.Parallelize;
+import se.redmind.rmtest.runners.WebDriverRunnerOptions;
 
 /**
  * @author Jeremy Comte
  */
 @RunWith(WebDriverRunner.class)
-@Parallelize
+@WebDriverRunnerOptions(reuseDriver = true, parallelize = @Parallelize)
 @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
 @CucumberOptions(glue = "se.redmind.rmtest.cucumber", plugin = "pretty")
 public class GoogleExample {
