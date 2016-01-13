@@ -6,13 +6,15 @@
     <version>2.0.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>rmtest-core</module>
         <module>rmtest-logback</module>
-        <module>rmtest-example</module>
+        <module>rmtest-common</module>
+        <module>rmtest-cucumber</module>
+        <module>rmtest-core</module>
+        <module>rmtest-cucumber-selenium</module>
+        <module>rmtest-cucumber-standalone</module>
         <module>rmtest-appium</module>
         <module>rmtest-testdroid</module>
-        <module>rmtest-cucumber</module>
-        <module>rmtest-cucumber-standalone</module>
+        <module>rmtest-example</module>
     </modules>
     <licenses>
         <license>
@@ -166,6 +168,7 @@
         <selenium.version>2.48.2</selenium.version>
         <jackson.version>2.6.3</jackson.version>
         <cucumber.version>1.2.4</cucumber.version>
+        <junit.version>4.12</junit.version>
     </properties>
     <developers>
         <developer>

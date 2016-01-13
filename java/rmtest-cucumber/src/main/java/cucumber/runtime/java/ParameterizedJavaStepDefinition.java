@@ -14,7 +14,6 @@ import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.model.TagStatement;
 import javassist.*;
-import se.redmind.rmtest.cucumber.web.WebDriverSteps;
 import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
 
@@ -41,7 +40,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         String name = tagStatement.getName().replaceAll("(Given|When|Then|And)", "");
 
         // let's parse the regex and write down the parameters names
-        StringBuilder patternBuilder = new StringBuilder("^" + WebDriverSteps.THAT);
+        StringBuilder patternBuilder = new StringBuilder("^(?:that )?");
         StringBuilder parameterBuilder = new StringBuilder();
         List<String> parametersNames = new ArrayList<>();
         boolean inParameter = false;

@@ -54,7 +54,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
 
     private static enum CompositionType {
 
-        InPlace, Full, Quiet
+        Replace, Full, Quiet
     }
 
     private final JUnitReporter jUnitReporter;
@@ -120,34 +120,44 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         for (CucumberFeature cucumberFeature : cucumberFeatures) {
             FeatureRunner featureRunner = new FeatureRunner(cucumberFeature, runtime, jUnitReporter);
             if (name != null) {
-                // if we have a name, we want to append it to the Description
-                List<ParentRunner<?>> runners = Fields.getSafeValue(featureRunner, "children");
-                for (int i = 0; i < runners.size(); i++) {
-                    ParentRunner<?> runner = runners.get(i);
-                    if (runner instanceof ExecutionUnitRunner) {
-                        runner = new ExecutionUnitRunner(runtime, Fields.getSafeValue(runner, "cucumberScenario"), jUnitReporter) {
-
-                            @Override
-                            protected Description describeChild(Step step) {
-                                Description description = super.describeChild(step);
-                                if (!description.getMethodName().contains(name)) {
-                                    Fields.set(description, "fDisplayName", description.getMethodName() + name + "(" + description.getClassName() + ")");
-                                }
-                                return description;
-                            }
-                        };
-                        runners.set(i, runner);
-                    }
-                }
+                appendParameterizedName(featureRunner);
             }
             children.add(featureRunner);
         }
 
-        RuntimeGlue glue = (RuntimeGlue) runtime.getGlue();
-
-        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = new LinkedHashMap<>();
-
         // 1. Get the children from the parent class and intercept any parameterized scenario and instanciate their factories
+        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = getParameterizedScenarios();
+
+        // 2. Iterate over all the normal steps, and if the scenario is not quiet, rewrite and add the parameterized steps as normal steps.
+        if (!parameterizedScenarios.isEmpty()) {
+            injectParameterizedScenarios(parameterizedScenarios);
+        }
+    }
+
+    private void appendParameterizedName(FeatureRunner featureRunner) throws InitializationError {
+        // if we have a name, we want to append it to the Description
+        List<ParentRunner<?>> runners = Fields.getSafeValue(featureRunner, "children");
+        for (int i = 0; i < runners.size(); i++) {
+            ParentRunner<?> runner = runners.get(i);
+            if (runner instanceof ExecutionUnitRunner) {
+                runner = new ExecutionUnitRunner(runtime, Fields.getSafeValue(runner, "cucumberScenario"), jUnitReporter) {
+
+                    @Override
+                    protected Description describeChild(Step step) {
+                        Description description = super.describeChild(step);
+                        if (!description.getMethodName().contains(name)) {
+                            Fields.set(description, "fDisplayName", description.getMethodName() + name + "(" + description.getClassName() + ")");
+                        }
+                        return description;
+                    }
+                };
+                runners.set(i, runner);
+            }
+        }
+    }
+
+    private Map<Pattern, ParameterizedJavaStepDefinition.Factory> getParameterizedScenarios() {
+        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = new LinkedHashMap<>();
         children.forEach(child -> {
             CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
             List<ParentRunner<?>> runners = Fields.getSafeValue(child, "children");
@@ -166,88 +176,89 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                 }
             }
         });
+        return parameterizedScenarios;
+    }
 
-        // 2. Iterate over all the normal steps, and if the scenario is not quiet, rewrite and add the parameterized steps as normal steps.
-        if (!parameterizedScenarios.isEmpty()) {
-            PicoFactory picoFactory = getPicoFactory(runtime);
-            picoFactory.addInstance(this);
-            glue.addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory));
-            children.forEach(child -> {
-                CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
-                List<StepContainer> stepContainers = new ArrayList<>(feature.getFeatureElements());
+    private void injectParameterizedScenarios(Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios) throws RuntimeException {
+        PicoFactory picoFactory = getPicoFactory(runtime);
+        picoFactory.addInstance(this);
+        RuntimeGlue glue = (RuntimeGlue) runtime.getGlue();
+        glue.addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory));
+        children.forEach(child -> {
+            CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
+            List<StepContainer> stepContainers = new ArrayList<>(feature.getFeatureElements());
 
-                CucumberBackground cucumberBackground = Fields.getSafeValue(feature, "cucumberBackground");
-                if (cucumberBackground != null) {
-                    stepContainers.add(cucumberBackground);
-                }
+            CucumberBackground cucumberBackground = Fields.getSafeValue(feature, "cucumberBackground");
+            if (cucumberBackground != null) {
+                stepContainers.add(cucumberBackground);
+            }
 
-                parameterizedScenarios.values().stream().forEach(scenario -> stepContainers.add(scenario.statement()));
+            parameterizedScenarios.values().stream().forEach(scenario -> stepContainers.add(scenario.statement()));
 
-                int modifiedSteps;
-                // we need to keep trying as long as we find new parameterizable steps in order to support composite sub scenarios
-                do {
-                    modifiedSteps = 0;
-                    for (StepContainer stepContainer : stepContainers) {
-                        for (int i = 0; i < stepContainer.getSteps().size(); i++) {
-                            Step step = stepContainer.getSteps().get(i);
+            int modifiedSteps;
+            // we need to keep trying as long as we find new parameterizable steps in order to support composite sub scenarios
+            do {
+                modifiedSteps = 0;
+                for (StepContainer stepContainer : stepContainers) {
+                    for (int i = 0; i < stepContainer.getSteps().size(); i++) {
+                        Step step = stepContainer.getSteps().get(i);
 
-                            if (step instanceof ParameterizedStep) {
-                                if (((ParameterizedStep) step).getType() == ParameterizedStep.Type.Start
-                                    || ((ParameterizedStep) step).getType() == ParameterizedStep.Type.Quiet) {
-                                    continue;
-                                }
+                        if (step instanceof ParameterizedStep) {
+                            if (((ParameterizedStep) step).getType() == ParameterizedStep.Type.Start
+                                || ((ParameterizedStep) step).getType() == ParameterizedStep.Type.Quiet) {
+                                continue;
                             }
+                        }
 
-                            String stepName = step.getName();
-                            CompositionType compositionType = CompositionType.InPlace;
-                            if (stepName.contains(Tags.QUIET)) {
-                                compositionType = CompositionType.Quiet;
-                                stepName = stepName.replaceAll(Tags.QUIET, "").trim();
-                            } else if (stepName.contains(Tags.FULL)) {
-                                compositionType = CompositionType.Full;
-                                stepName = stepName.replaceAll(Tags.FULL, "").trim();
-                            }
+                        String stepName = step.getName();
+                        CompositionType compositionType = CompositionType.Replace;
+                        if (stepName.contains(Tags.QUIET)) {
+                            compositionType = CompositionType.Quiet;
+                            stepName = stepName.replaceAll(Tags.QUIET, "").trim();
+                        } else if (stepName.contains(Tags.FULL)) {
+                            compositionType = CompositionType.Full;
+                            stepName = stepName.replaceAll(Tags.FULL, "").trim();
+                        }
 
-                            for (Map.Entry<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenario : parameterizedScenarios.entrySet()) {
-                                Matcher matcher = parameterizedScenario.getKey().matcher(stepName);
-                                if (matcher.matches()) {
-                                    if (compositionType == CompositionType.Quiet) {
-                                        stepContainer.getSteps().set(i, ParameterizedStep.asQuiet(step));
-                                        parameterizedScenario.getValue().addQuietSubStepsToGlue();
-                                    } else {
-                                        Function<Step, ParameterizedStep> wrapper;
-                                        String[] names = parameterizedScenario.getValue().parameters();
-                                        Object[] scenarioParameters = new Object[names.length];
-                                        for (int k = 0; k < names.length; k++) {
-                                            scenarioParameters[k] = matcher.group(k + 1);
-                                        }
-                                        if (compositionType == CompositionType.Full) {
-                                            parameterizedScenario.getValue().addStartStepToGlue();
-                                            stepContainer.getSteps().set(i, ParameterizedStep.startOf(step));
-                                            wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, scenarioParameters);
-                                        } else {
-                                            stepContainer.getSteps().remove(i--);
-                                            wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, scenarioParameters);
-                                        }
-
-                                        List<Step> newSteps = parameterizedScenario.getValue().statement().getSteps().stream()
-                                            .map(parameterizedStep -> wrapper.apply(parameterizedStep))
-                                            .collect(Collectors.toList());
-                                        stepContainer.getSteps().addAll(i + 1, newSteps);
-                                        i += newSteps.size();
-                                        if (compositionType == CompositionType.Full) {
-                                            stepContainer.getSteps().add(++i, ParameterizedStep.endOf(step));
-                                        }
-                                        modifiedSteps++;
+                        for (Map.Entry<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenario : parameterizedScenarios.entrySet()) {
+                            Matcher matcher = parameterizedScenario.getKey().matcher(stepName);
+                            if (matcher.matches()) {
+                                if (compositionType == CompositionType.Quiet) {
+                                    stepContainer.getSteps().set(i, ParameterizedStep.asQuiet(step));
+                                    parameterizedScenario.getValue().addQuietSubStepsToGlue();
+                                } else {
+                                    Function<Step, ParameterizedStep> wrapper;
+                                    String[] names = parameterizedScenario.getValue().parameters();
+                                    Object[] scenarioParameters = new Object[names.length];
+                                    for (int k = 0; k < names.length; k++) {
+                                        scenarioParameters[k] = matcher.group(k + 1);
                                     }
-                                    break;
+                                    if (compositionType == CompositionType.Full) {
+                                        parameterizedScenario.getValue().addStartStepToGlue();
+                                        stepContainer.getSteps().set(i, ParameterizedStep.startOf(step));
+                                        wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, scenarioParameters);
+                                    } else {
+                                        stepContainer.getSteps().remove(i--);
+                                        wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, scenarioParameters);
+                                    }
+
+                                    List<Step> newSteps = parameterizedScenario.getValue().statement().getSteps().stream()
+                                        .map(parameterizedStep -> wrapper.apply(parameterizedStep))
+                                        .collect(Collectors.toList());
+                                    stepContainer.getSteps().addAll(i + 1, newSteps);
+                                    i += newSteps.size();
+                                    if (compositionType == CompositionType.Full) {
+                                        stepContainer.getSteps().add(++i, ParameterizedStep.endOf(step));
+                                    }
+                                    modifiedSteps++;
                                 }
+                                break;
                             }
                         }
                     }
-                } while (modifiedSteps > 0);
-            });
-        }
+                }
+            } while (modifiedSteps > 0);
+        });
     }
 
     /**
