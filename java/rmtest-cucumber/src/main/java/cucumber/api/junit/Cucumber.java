@@ -126,11 +126,11 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         }
 
         // 1. Get the children from the parent class and intercept any parameterized scenario and instanciate their factories
-        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = getParameterizedScenarios();
+        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = getParameterizedScenariosFromChildren();
 
         // 2. Iterate over all the normal steps, and if the scenario is not quiet, rewrite and add the parameterized steps as normal steps.
         if (!parameterizedScenarios.isEmpty()) {
-            injectParameterizedScenarios(parameterizedScenarios);
+            injectChildrenWith(parameterizedScenarios);
         }
     }
 
@@ -156,7 +156,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         }
     }
 
-    private Map<Pattern, ParameterizedJavaStepDefinition.Factory> getParameterizedScenarios() {
+    private Map<Pattern, ParameterizedJavaStepDefinition.Factory> getParameterizedScenariosFromChildren() {
         Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = new LinkedHashMap<>();
         children.forEach(child -> {
             CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
@@ -179,7 +179,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         return parameterizedScenarios;
     }
 
-    private void injectParameterizedScenarios(Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios) throws RuntimeException {
+    private void injectChildrenWith(Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios) throws RuntimeException {
         PicoFactory picoFactory = getPicoFactory(runtime);
         picoFactory.addInstance(this);
         RuntimeGlue glue = (RuntimeGlue) runtime.getGlue();
