@@ -36,6 +36,7 @@ public class LiveStreamListener extends RunListener {
     private final boolean parrentRunner;
     private final List<LiveStreamListener> listeners;
     private volatile HashMap<String, Long> testStartTimes;
+    private volatile static boolean isSaved = false;
 
     public LiveStreamListener() {
         resBuilder = new RmTestResultBuilder();
@@ -66,7 +67,6 @@ public class LiveStreamListener extends RunListener {
     @Override
     public void testStarted(Description description) throws Exception {
         resBuilder.addTest(description.getDisplayName());
-        String id = resBuilder.getTest(description.getDisplayName()).get("id").getAsString();
         if (parrentRunner) {
 //            rmrConnection.sendMessage("testStart", id);
             testStartTimes.put(description.getDisplayName(), System.currentTimeMillis());
@@ -125,26 +125,29 @@ public class LiveStreamListener extends RunListener {
         Runtime.getRuntime().addShutdownHook(new Thread(new LiveTestShutdownHook(con)));
     }
 
-    private void saveReport() {
-        String suitename = resBuilder.getSuiteName();
-        String timestamp = resBuilder.getTimestamp();
-        String savePath = Configuration.current().jsonReportSavePath;
-
-        File file = new File(savePath);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        String filename = suitename + "-" + timestamp + ".json";
-        try {
-            String concatFilename = savePath + "/" + filename;
-            try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
-                writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
-                logger.info("Saved report as Json to: " + concatFilename);
-            }
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+    private synchronized void saveReport() {
+    	if(!isSaved){
+	        String suitename = resBuilder.getSuiteName();
+	        String timestamp = resBuilder.getTimestamp();
+	        String savePath = Configuration.current().jsonReportSavePath;
+	
+	        File file = new File(savePath);
+	        if (!file.exists()) {
+	            file.mkdirs();
+	        }
+	
+	        String filename = suitename + "-" + timestamp + ".json";
+	        try {
+	            String concatFilename = savePath + "/" + filename;
+	            try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
+	                writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
+	                isSaved = true;
+	                logger.info("Saved report as Json to: " + concatFilename);
+	            }
+	        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+	            e.printStackTrace();
+	        }
+    	}
     }
 
     private void initSuite(Description desc, int level) {
@@ -169,5 +172,5 @@ public class LiveStreamListener extends RunListener {
         listeners.add(subListener);
         return subListener;
     }
-
+    
 }

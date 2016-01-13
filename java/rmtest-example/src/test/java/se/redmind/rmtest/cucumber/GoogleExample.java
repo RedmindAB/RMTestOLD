@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import cucumber.api.java.en.Given;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.WebDriverRunner;
+import se.redmind.rmtest.runners.WebDriverRunnerOptions;
 import se.redmind.rmtest.runners.Parallelize;
 
 /**
@@ -19,6 +20,7 @@ import se.redmind.rmtest.runners.Parallelize;
 @RunWith(WebDriverRunner.class)
 @Parallelize
 @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
+@WebDriverRunnerOptions(reuseDriver=true, parallelize=@Parallelize)
 @CucumberOptions(glue = "se.redmind.rmtest.cucumber", plugin = "pretty")
 public class GoogleExample {
 

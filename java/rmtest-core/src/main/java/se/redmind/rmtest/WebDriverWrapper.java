@@ -181,7 +181,7 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
     @Override
     public String toString() {
-        return DescriptionBuilder.buildDescriptionFromCapabilities(capabilities);
+        return getDescription();
     }
 
     public DesiredCapabilities getCapability() {
