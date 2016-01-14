@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface WebDriverRunnerOptions {
 
-    boolean reuseDriver() default false;
+    boolean reuseDriver() default true;
 
     Parallelize parallelize() default @Parallelize(drivers = false);
 
