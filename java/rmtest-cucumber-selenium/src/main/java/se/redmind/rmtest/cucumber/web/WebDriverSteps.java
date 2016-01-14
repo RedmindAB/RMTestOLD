@@ -167,7 +167,7 @@ public class WebDriverSteps {
     public void that_we_do_something_on_the_element_identified_by(String action) {
         switch (action) {
             case "click":
-			waitForCondition(ExpectedConditions.elementToBeClickable(element));
+                waitForCondition(ExpectedConditions.elementToBeClickable(element));
                 action().moveToElement(element).click().perform();
                 break;
             case "clear":
@@ -299,7 +299,7 @@ public class WebDriverSteps {
         element = driver.findElement(elementLocation);
         return element;
     }
-    
+
     private <T> void waitForCondition(ExpectedCondition<T> condition) {
 		new WebDriverWait(driver, TIMEOUT_IN_SECONDS).until(condition);
 	}
