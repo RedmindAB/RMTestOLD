@@ -2,6 +2,7 @@ package se.redmind.utils;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -54,7 +55,7 @@ public final class Try {
         private long sleepLength;
         private BiConsumer<Tryer<E, SelfType>, Exception> onError = (t, e) -> logger.warn(e.toString() + " on attempt " + currentAttempt + "/" + maxAttempts);
         private BiConsumer<Tryer<E, SelfType>, Exception> onLastError = (t, e) -> logger.error(e.toString(), e);
-        protected Supplier<E> defaultSupplier;
+        protected Function<E, E> defaultTo;
         protected Predicate<E> until = value -> true;
 
         protected Tryer(Supplier<E> supplier) {
@@ -165,12 +166,12 @@ public final class Try {
                     } catch (InterruptedException ex) {
                         logger.error(ex.toString(), ex);
                     }
-                } else if (defaultSupplier != null) {
-                    result = defaultSupplier.get();
+                } else if (defaultTo != null) {
+                    result = defaultTo.apply(result);
                 }
             }
 
-            if (!until.test(result) && defaultSupplier == null) {
+            if (!until.test(result) && defaultTo == null) {
                 throw new IllegalStateException("Couldn't get a valid value and no default was supplied...");
             }
             return result;
@@ -197,11 +198,11 @@ public final class Try {
         /**
          * if all the attempts have been unsuccessful, default to this value
          *
-         * @param defaultSupplier
+         * @param defaultTo
          * @return
          */
-        public SupplierTryer<E> defaultTo(Supplier<E> defaultSupplier) {
-            this.defaultSupplier = defaultSupplier;
+        public SupplierTryer<E> defaultTo(Function<E, E> defaultTo) {
+            this.defaultTo = defaultTo;
             return this;
         }
     }
