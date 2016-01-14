@@ -19,22 +19,24 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import se.redmind.rmtest.config.Configuration;
+
 /**
- * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned.
- * On the RMReport side the behavior is flaky as a noggenfogger, so for the time being the RMReportConnection class will be commented out until the RMReport side is fixed.
- *  
+ * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned. On the RMReport side the
+ * behavior is flaky as a noggenfogger, so for the time being the RMReportConnection class will be commented out until the RMReport side is fixed.
+ *
  * @author gustavholfve
  */
 
 public class LiveStreamListener extends RunListener {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private volatile RmTestResultBuilder resBuilder;
 //    private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
     private final boolean parrentRunner;
     private final List<LiveStreamListener> listeners;
     private volatile HashMap<String, Long> testStartTimes;
+    private volatile static boolean isSaved = false;
 
     public LiveStreamListener() {
         resBuilder = new RmTestResultBuilder();
@@ -65,7 +67,6 @@ public class LiveStreamListener extends RunListener {
     @Override
     public void testStarted(Description description) throws Exception {
         resBuilder.addTest(description.getDisplayName());
-        String id = resBuilder.getTest(description.getDisplayName()).get("id").getAsString();
         if (parrentRunner) {
 //            rmrConnection.sendMessage("testStart", id);
             testStartTimes.put(description.getDisplayName(), System.currentTimeMillis());
@@ -124,24 +125,29 @@ public class LiveStreamListener extends RunListener {
         Runtime.getRuntime().addShutdownHook(new Thread(new LiveTestShutdownHook(con)));
     }
 
-    private void saveReport() {
-        String suitename = resBuilder.getSuiteName();
-        String timestamp = resBuilder.getTimestamp();
-        String savePath = Configuration.current().jsonReportSavePath;
-
-        File file = new File(savePath);
-        if(!file.exists()) file.mkdirs();
-
-        String filename = suitename + "-" + timestamp + ".json";
-        try {
-            String concatFilename = savePath + "/" + filename;
-			try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
-                writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
-                logger.info("Saved report as Json to: "+concatFilename);
-            }
-        } catch (FileNotFoundException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+    private synchronized void saveReport() {
+    	if(!isSaved){
+	        String suitename = resBuilder.getSuiteName();
+	        String timestamp = resBuilder.getTimestamp();
+	        String savePath = Configuration.current().jsonReportSavePath;
+	
+	        File file = new File(savePath);
+	        if (!file.exists()) {
+	            file.mkdirs();
+	        }
+	
+	        String filename = suitename + "-" + timestamp + ".json";
+	        try {
+	            String concatFilename = savePath + "/" + filename;
+	            try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
+	                writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
+	                isSaved = true;
+	                logger.info("Saved report as Json to: " + concatFilename);
+	            }
+	        } catch (FileNotFoundException | UnsupportedEncodingException e) {
+	            e.printStackTrace();
+	        }
+    	}
     }
 
     private void initSuite(Description desc, int level) {
@@ -166,5 +172,5 @@ public class LiveStreamListener extends RunListener {
         listeners.add(subListener);
         return subListener;
     }
-
+    
 }

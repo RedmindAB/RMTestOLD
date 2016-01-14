@@ -39,7 +39,7 @@ fi
 
 echo "Running maven compile, correct any errors and rerun this script"
 cd $coreHome
-mvn package 
+mvn package -DskipTests=true
 
 if [[ $? -ne 0 ]]
 then

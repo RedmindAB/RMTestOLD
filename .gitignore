@@ -18,4 +18,5 @@ RMR-Screenshots/
 *.png
 *.DS_Store
 *.log
+*.yml
 nbproject/

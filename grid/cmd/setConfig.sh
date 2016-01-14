@@ -18,8 +18,9 @@ fi
 export seleniumVersion=`getRmConfigParam seleniumVersion`
 export ADB_PATH="$ANDROIDHOME/platform-tools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export RmJar="$testHome/lib/GridQueryServlet.jar"
-export SeleniumJar="$testHome/../java/rmtest-core/target/*"
+#export RmJar="$testHome/lib/GridQueryServlet.jar"
+export RmJar=`find $testHome/../java/rmtest-core/target/rmtest-core-*[0-9].jar`
+export SeleniumJar="$testHome/../java/rmtest-core/target/lib/*"
 export appiumBinary="$testHome/node_modules/appium/bin/appium.js"
 export RMTestHubIp=`getLocalConfigParam hubIp`
 export RMTestLocalNodeIp=`getLocalConfigParam localIp`

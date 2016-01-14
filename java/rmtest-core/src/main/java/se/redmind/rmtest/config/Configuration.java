@@ -3,16 +3,24 @@ package se.redmind.rmtest.config;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.*;
-import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,19 +30,25 @@ import com.google.common.collect.Table;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import se.redmind.rmtest.selenium.grid.TestHome;
+import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.utils.Fields;
+import se.redmind.utils.JavaTypes;
+import se.redmind.utils.ReflectionsUtils;
+import se.redmind.utils.TestHome;
 
 /**
  * @author Jeremy Comte
  */
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Configuration {
 
-    private static final String CONFIG_SYSTEM_PROPERTY = "rmtestConfig";
+    private static final String CONFIG_SYSTEM_PROPERTY = "config";
     private static final String DEFAULT_REPORTS_PATH = "/target/RMTReports";
     private static final String DEFAULT_LOCAL_CONFIG = "/etc/LocalConfig.yml";
     private static final String DEFAULT_LEGACY_CONFIG = "/etc/LocalConfig.json";
     private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
+    private static final Set<WebDriverWrapper<?>> WRAPPERS = new LinkedHashSet<>();
     private static ObjectMapper objectMapper;
     private static Validator validator;
 
@@ -46,21 +60,27 @@ public class Configuration {
     private String filePath;
 
     @JsonProperty
-    @NotNull
+    @NotEmpty
     @Valid
-    public RunnerConfiguration runner;
+    public List<DriverConfiguration<?>> drivers = new ArrayList<>();
 
     @JsonProperty
     public boolean autoCloseDrivers = true;
 
-    @JsonProperty()
+    @JsonProperty
     public String rmReportIP = "127.0.0.1";
 
-    @JsonProperty()
+    @JsonProperty
     public int rmReportLivePort = 12345;
 
     @JsonProperty
-    public String jsonReportSavePath = TestHome.main() + DEFAULT_REPORTS_PATH;
+    public String jsonReportSavePath = TestHome.get() + DEFAULT_REPORTS_PATH;
+
+    @JsonProperty
+    public AndroidConfiguration android;
+
+    @JsonProperty
+    public boolean reuseDriverBetweenTests;
 
     /**
      * @return the path of the file this configuration is based on
@@ -82,10 +102,15 @@ public class Configuration {
                 if (value.contains("\\n")) {
                     value = value.replaceAll("\\\\n", "\n");
                 }
+                Field field = cell.getValue();
                 LOGGER.info("overriding configuration key '" + cell.getRowKey() + "' with '" + value + "'");
                 try {
-                    Field field = cell.getValue();
-                    field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
+                    if (field.getType().equals(List.class)) {
+                        field.set(cell.getColumnKey(), objectMapper().readValue(value, JavaTypes.getParametizedList(field)));
+                    } else {
+                        field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
+                    }
+
                 } catch (IOException | IllegalArgumentException | IllegalAccessException ex) {
                     LOGGER.error(ex.getMessage(), ex);
                 }
@@ -117,10 +142,42 @@ public class Configuration {
         return this;
     }
 
+    public List<Object[]> createWrappersParameters() {
+        return createWrappers().stream().map(obj -> new Object[]{obj}).collect(Collectors.toList());
+    }
+
+    public List<Object[]> createWrappersParameters(FilterDrivers filterDrivers) {
+        return createWrappers().stream()
+            .filter(WebDriverWrapper.filter(filterDrivers))
+            .map(obj -> new Object[]{obj}).collect(Collectors.toList());
+    }
+
+    @SafeVarargs
+    public final List<Object[]> createWrappersParameters(Predicate<WebDriverWrapper<?>>... predicates) {
+        Stream<WebDriverWrapper<?>> wrappers = createWrappers().stream();
+        for (Predicate<WebDriverWrapper<?>> predicate : predicates) {
+            wrappers = wrappers.filter(predicate);
+        }
+        return wrappers.map(obj -> new Object[]{obj}).collect(Collectors.toList());
+    }
+
+    public List<WebDriverWrapper<?>> createWrappers() {
+        return drivers.stream()
+            .map(driverConfiguration -> driverConfiguration.wrappers())
+            .peek(wrappers -> WRAPPERS.addAll(wrappers))
+            .flatMap(wrappers -> wrappers.stream())
+            .peek(driverWrapper -> driverWrapper.setReuseDriverBetweenTests(reuseDriverBetweenTests))
+            .collect(Collectors.toList());
+    }
+
+    public void stopAllDrivers() {
+        WRAPPERS.forEach(driverWrapper -> driverWrapper.stopAllDrivers());
+    }
+
     @Override
     public String toString() {
         try {
-            return "# " + filePath + "\n" + objectMapper().writeValueAsString(this);
+            return (filePath != null ? "# " + filePath + "\n" : "") + objectMapper().writeValueAsString(this);
         } catch (JsonProcessingException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
@@ -137,20 +194,33 @@ public class Configuration {
             try {
                 configFile = System.getProperty(CONFIG_SYSTEM_PROPERTY);
                 if (configFile == null) {
-                    configFile = TestHome.main() + DEFAULT_LOCAL_CONFIG;
+                    configFile = TestHome.get() + DEFAULT_LOCAL_CONFIG;
                 }
                 configuration = read(configFile);
             } catch (IOException e) {
                 LOGGER.warn("cannot read " + configFile + ", trying legacy config " + DEFAULT_LEGACY_CONFIG);
                 try {
-                    configuration = read(TestHome.main() + DEFAULT_LEGACY_CONFIG);
+                    configuration = read(TestHome.get() + DEFAULT_LEGACY_CONFIG);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             }
             current = configuration.applySystemProperties().validate();
+            // this will close all the drivers and the jvm goes down
+            if (current.autoCloseDrivers) {
+                Runtime.getRuntime().addShutdownHook(new Thread() {
+                    @Override
+                    public void run() {
+                        current.stopAllDrivers();
+                    }
+                });
+            }
         }
         return current;
+    }
+
+    public static void setCurrent(Configuration current) {
+        Configuration.current = current;
     }
 
     /**
@@ -222,35 +292,30 @@ public class Configuration {
             Configuration configuration = new Configuration();
             if (jsonConfiguration.has("runOnGrid") && jsonConfiguration.get("runOnGrid").getAsBoolean()) {
                 GridConfiguration gridConfiguration = new GridConfiguration();
-                if (jsonConfiguration.has("localIp")) {
-                    gridConfiguration.localIp = jsonConfiguration.get("localIp").getAsString();
-                }
                 if (jsonConfiguration.has("hubIp")) {
                     gridConfiguration.hubIp = jsonConfiguration.get("hubIp").getAsString();
                 }
                 if (jsonConfiguration.has("enableLiveStream")) {
                     gridConfiguration.enableLiveStream = jsonConfiguration.get("enableLiveStream").getAsBoolean();
                 }
-                configuration.runner = gridConfiguration;
+                configuration.drivers.add(gridConfiguration);
             } else {
-                LocalConfiguration localConfiguration = new LocalConfiguration();
-                if (jsonConfiguration.has("usePhantomJS")) {
-                    localConfiguration.usePhantomJS = jsonConfiguration.get("usePhantomJS").getAsBoolean();
+                if (jsonConfiguration.has("usePhantomJS") && jsonConfiguration.get("usePhantomJS").getAsBoolean()) {
+                    configuration.drivers.add(new PhantomJSConfiguration());
                 }
-                if (jsonConfiguration.has("useFirefox")) {
-                    localConfiguration.useFirefox = jsonConfiguration.get("useFirefox").getAsBoolean();
+                if (jsonConfiguration.has("useFirefox") && jsonConfiguration.get("useFirefox").getAsBoolean()) {
+                    configuration.drivers.add(new FirefoxConfiguration());
                 }
-                if (jsonConfiguration.has("useChrome")) {
-                    localConfiguration.useChrome = jsonConfiguration.get("useChrome").getAsBoolean();
+                if (jsonConfiguration.has("useChrome") && jsonConfiguration.get("useChrome").getAsBoolean()) {
+                    configuration.drivers.add(new ChromeConfiguration());
                 }
                 if (jsonConfiguration.has("androidHome")) {
-                    localConfiguration.android = new AndroidConfiguration();
-                    localConfiguration.android.home = jsonConfiguration.get("androidHome").getAsString();
+                    configuration.android = new AndroidConfiguration();
+                    configuration.android.home = jsonConfiguration.get("androidHome").getAsString();
                     if (jsonConfiguration.has("AndroidBuildtoolsVersion")) {
-                        localConfiguration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
+                        configuration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
                     }
                 }
-                configuration.runner = localConfiguration;
             }
             if (jsonConfiguration.has("autoCloseDrivers")) {
                 configuration.autoCloseDrivers = jsonConfiguration.get("autoCloseDrivers").getAsBoolean();
@@ -277,7 +342,9 @@ public class Configuration {
     public static synchronized ObjectMapper objectMapper() {
         if (objectMapper == null) {
             objectMapper = new ObjectMapper(new YAMLFactory());
-            objectMapper.registerSubtypes(LocalConfiguration.class, GridConfiguration.class, TestDroidConfiguration.class);
+            ReflectionsUtils.current().getSubTypesOf(DriverConfiguration.class).stream()
+                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
+                .forEach(clazz -> objectMapper.registerSubtypes(clazz));
         }
         return objectMapper;
     }

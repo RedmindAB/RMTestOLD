@@ -62,18 +62,23 @@ public class RmTestResultBuilder {
     }
 
     private String getTestClass(String displayName) {
-        int start = displayName.indexOf('(');
-        int end = displayName.lastIndexOf(')');
-        String testClass = displayName.substring(start + 1, end);
-        return testClass;
+    	if(displayName.contains("(") && displayName.contains(")")){
+    		int start = displayName.indexOf('(');
+    		int end = displayName.lastIndexOf(')');
+    		String testClass = displayName.substring(start + 1, end);
+    		return testClass;
+    	}
+    	return null;
     }
 
     private JsonElement getDeviceInfo(String displayName) {
-        int start = displayName.indexOf('[');
-        int end = displayName.lastIndexOf(']');
-        String deviceInfoString = displayName.substring(start + 1, end);
-        return extractDeviceInfo(deviceInfoString);
-
+    	if(displayName.contains("[") && displayName.contains("]")){
+    		int start = displayName.indexOf('[');
+    		int end = displayName.lastIndexOf(']');
+    		String deviceInfoString = displayName.substring(start + 1, end);
+    		return extractDeviceInfo(deviceInfoString);
+    	}
+    	return JsonNull.INSTANCE;
     }
 
     private JsonElement extractDeviceInfo(String deviceInfo) {
@@ -115,16 +120,16 @@ public class RmTestResultBuilder {
     }
 
     private JsonElement getSystemProperties() {
-    	JsonObject systemProperties = new JsonObject();
-    	Properties properties = System.getProperties();
-    	Set<Object> propertiesKeySet = properties.keySet();
-    	for (Object propertyKey : propertiesKeySet) {
-    		systemProperties.addProperty((String) propertyKey, System.getProperty((String) propertyKey));
-		}
-    	return systemProperties;
-	}
+        JsonObject systemProperties = new JsonObject();
+        Properties properties = System.getProperties();
+        Set<Object> propertiesKeySet = properties.keySet();
+        for (Object propertyKey : propertiesKeySet) {
+            systemProperties.addProperty((String) propertyKey, System.getProperty((String) propertyKey));
+        }
+        return systemProperties;
+    }
 
-	public JsonObject getTest(String displayName) {
+    public JsonObject getTest(String displayName) {
         return testMap.get(displayName);
     }
 

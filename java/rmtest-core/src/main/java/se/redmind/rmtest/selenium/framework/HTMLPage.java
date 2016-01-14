@@ -3,6 +3,7 @@ package se.redmind.rmtest.selenium.framework;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -35,7 +36,7 @@ public class HTMLPage {
 
     /**
      * @param timeoutInSeconds int
-     * @return
+     * @return 
      */
     private WebDriverWait driverWait(int timeoutInSeconds) {
         return new WebDriverWait(this.driver, timeoutInSeconds);
@@ -213,10 +214,6 @@ public class HTMLPage {
                 TimeUnit.MILLISECONDS.sleep(50);
             }
         }
-    }
-
-    public void navigateStartUrl() {
-        driver.get(TestParams.getBaseUrl());
     }
 
     public String getTitle() {

@@ -10,6 +10,20 @@
         "maxInstances": 1,
         "deviceName": "VMWare fusion",
         "platform" : "WINDOWS"
+    },
+    {
+        "seleniumProtocol": "WebDriver",
+        "browserName": "chrome",
+        "maxInstances": 1,
+        "platform" : "WINDOWS",
+        "width": "1024"
+    },
+    {
+        "seleniumProtocol": "WebDriver",
+        "browserName": "internet explorer",
+        "description": "IExplorer",
+        "maxInstances": 1,
+        "platform" : "WINDOWS"
     }
       ],
   "configuration":

@@ -1,0 +1,26 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+
+namespace RMTest
+{
+    class AnApp : HTMLPage
+    {
+        private AppiumDriver<IWebElement> appDriver; //AppiumDriver appDriver;
+
+        public AnApp(AppiumDriver<IWebElement> pDriver) : base (pDriver)
+        {
+            //base(pDriver);
+            appDriver = pDriver;
+        }
+        
+        public new AppiumDriver<IWebElement> getDriver()
+        {
+            return appDriver;
+        }
+    }
+}

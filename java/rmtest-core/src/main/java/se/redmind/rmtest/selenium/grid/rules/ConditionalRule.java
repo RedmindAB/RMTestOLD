@@ -20,7 +20,7 @@ public class ConditionalRule implements MethodRule {
     }
 
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD})
+    @Target({ElementType.METHOD, ElementType.TYPE})
     public @interface ConditionalIgnore {
 
         Class<? extends IgnoreCondition> condition();
@@ -56,7 +56,9 @@ public class ConditionalRule implements MethodRule {
                 } else if (instance != null && instance.getClass().isAssignableFrom(cond.getDeclaringClass())) {
                     return (IgnoreCondition) cond.getDeclaredConstructor(new Class<?>[]{instance.getClass()}).newInstance(instance);
                 }
-                throw new IllegalArgumentException("Conditional class: " + cond.getName() + " was an inner member class however it was not declared inside the test case using it. Either make this class a static class (by adding static keyword), standalone class (by declaring it in it's own file) or move it inside the test case using it");
+                throw new IllegalArgumentException("Conditional class: " + cond.getName() + " was an inner member class however it was not declared inside the"
+                    + " test case using it. Either make this class a static class (by adding static keyword),"
+                    + " standalone class (by declaring it in it's own file) or move it inside the test case using it");
             } else {
                 return cond.newInstance();
             }

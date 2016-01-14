@@ -6,9 +6,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.RunnerBuilder;
 
-import se.redmind.rmtest.config.Configuration;
-import se.redmind.rmtest.config.GridConfiguration;
-import se.redmind.rmtest.selenium.grid.AutoCloseListener;
+import se.redmind.rmtest.config.*;
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
 
 public class RmSuite extends Suite {
@@ -21,13 +19,9 @@ public class RmSuite extends Suite {
 
     @Override
     public void run(RunNotifier notifier) {
-        Configuration config = Configuration.current();
-        if (config.runner instanceof GridConfiguration && config.runner.as(GridConfiguration.class).enableLiveStream) {
+        if (Configuration.current().drivers.stream().anyMatch(driver -> driver instanceof GridConfiguration && driver.as(GridConfiguration.class).enableLiveStream)) {
             liveStreamListener = new LiveStreamListener();
             notifier.addListener(liveStreamListener);
-        }
-        if (config.autoCloseDrivers) {
-            notifier.addListener(new AutoCloseListener());
         }
         notifier.fireTestRunStarted(getDescription());
         super.run(notifier);
