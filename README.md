@@ -69,3 +69,23 @@ Sense we have our "testclass" in the folder **src/test/java/foo/bar** cucumber w
 	  Scenario: test something
 		When we input "something" in the "name-input"
 		Then the input "name-input" reads "something"
+
+Instead of having all aliases like **`And that we know the element with id "input" as "name-input"`** in the feature file, its possible to have it in another file.
+
+example of **src/test/resources/foo/bar/aliases**:
+
+	| type  | id                      | value       |
+	| id	| id-of-the-element       | name-input 	|
+
+when we have this file it's possible to import the aliases into our feature file like this.
+
+	Feature: describe the feature we test
+
+	  Background: setup the before the test
+	    Given that we navigate to "http://OUR-WEB-APPLICATION.com"
+	    Given the aliases defined in the file "src/test/resources/foo/bar/aliases"
+	
+	  Scenario: test something
+		When we input "something" in the "name-input"
+		Then the input "name-input" reads "something"
+
