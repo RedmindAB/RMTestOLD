@@ -1,17 +1,15 @@
 package se.redmind.rmtest.cucumber.rest;
 
 import static com.jayway.restassured.RestAssured.*;
-import static com.jayway.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;
 
-import com.jayway.restassured.RestAssured;
+
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.junit.Cucumber;
 
 import static org.junit.Assert.*;
 
@@ -19,7 +17,6 @@ public class RestStep {
 	
 	private ValidatableResponse vResponse;
 	private Response response;
-	private String content;
 	private RequestSpecification requestSpecification;
 	
 	public RestStep() {
