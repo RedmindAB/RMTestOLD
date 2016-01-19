@@ -35,7 +35,7 @@ public class ScreenShotRule extends TestWatcher {
                 LOG.debug("----------> ScreenShot from: " + methodName + " taken! <----------");
             }
         } catch (Exception e) {
-            LOG.error("Error taking screenshot from method: " + methodName);
+            LOG.error("Error taking screenshot from method: " + methodName +"Caused by: "+e);
         }
     }
 
