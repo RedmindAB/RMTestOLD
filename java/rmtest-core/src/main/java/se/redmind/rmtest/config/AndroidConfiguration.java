@@ -14,6 +14,6 @@ public class AndroidConfiguration {
     public String home;
 
     @JsonProperty
-    public Float toolsVersion;
+    public String toolsVersion;
 
 }

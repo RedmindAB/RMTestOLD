@@ -313,7 +313,7 @@ public class Configuration {
                     configuration.android = new AndroidConfiguration();
                     configuration.android.home = jsonConfiguration.get("androidHome").getAsString();
                     if (jsonConfiguration.has("AndroidBuildtoolsVersion")) {
-                        configuration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsFloat();
+                        configuration.android.toolsVersion = jsonConfiguration.get("AndroidBuildtoolsVersion").getAsString();
                     }
                 }
             }
