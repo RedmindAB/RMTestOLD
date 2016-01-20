@@ -21,7 +21,6 @@ public class TestRest {
 				new SparkServer().initServices();
 			}
 		}).start();
-		Thread.sleep(1000);
 	}
 	
 	public static class Steps{}

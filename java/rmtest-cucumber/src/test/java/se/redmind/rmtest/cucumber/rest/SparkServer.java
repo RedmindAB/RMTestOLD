@@ -15,10 +15,26 @@ public class SparkServer {
 	Gson gson =  new Gson();
 	
 	public void initServices(){
-		after("/json", (req,res) -> res.header("Content-Type", "application/json"));
 		//root
 		get("/",(req,res) -> "hello");
+		//status
+		get("/status/:status", (req,res) -> {
+			int code = Integer.valueOf(req.params("status"));
+			res.status(code);
+			return "";
+		});
+		
 		//json
 		get("/json",(req, res) -> gson.fromJson(req.body(), JsonElement.class));
+		get("/param", (req,res) -> {
+			JsonObject json = new JsonObject();
+			req.queryParams().forEach(key -> json.addProperty(key, req.queryParams(key)));
+			return json;
+			
+		});
+		
+		//Filters
+		after("/json", (req,res) -> res.header("Content-Type", "application/json"));
+		after("/param", (req,res) -> res.header("Content-Type", "application/json"));
 	}
 }

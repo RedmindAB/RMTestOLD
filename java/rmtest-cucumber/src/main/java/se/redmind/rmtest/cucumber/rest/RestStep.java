@@ -13,6 +13,10 @@ import cucumber.api.java.en.Then;
 
 import static org.junit.Assert.*;
 
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.lang3.math.NumberUtils;
+
 public class RestStep {
 	
 	private ValidatableResponse vResponse;
@@ -37,6 +41,11 @@ public class RestStep {
 	public void we_get(String path) throws Throwable {
 		response = requestSpecification.get(path);
 		this.vResponse = response.then();
+	}
+	
+	@Given("^we send param \"([^\"]*)\" with ?(?:value)? \"([^\"]*)\"$")
+	public void we_send_param_with_value(String key, String value) throws Throwable {
+		requestSpecification.param(key, value);
 	}
 	
 	@Given("^we send:$")
@@ -70,9 +79,34 @@ public class RestStep {
 		vResponse.body("["+index+"]."+key, is(value));
 	}
 
-	@Then("^parameter \"([^\"]*)\" has the value \"([^\"]*)\"$")
-	public void object_has_the_value(String query, String value) throws Throwable {
-		vResponse.body(query, is(value));
+	@Then("^parameter \"([^\"]*)\" (?:is?( not)?) \"?([^\"]*|\\d+.\\d+|\\d+)?\"?$")
+	public void object_has_the_value(String query, Boolean not, String value) throws Throwable {
+		not = not == null ? false : not;
+		if(NumberUtils.isNumber(value)){
+			if(value.contains(".")){
+				vResponse.body(query, equalTo(Float.valueOf((String)value)));
+			}
+			else{
+				vResponse.body(query, equalTo(Integer.valueOf((String)value)));
+			}
+		}
+		else {
+			vResponse.body(query, equalTo(value));
+		}
+	}
+	
+	@Then("^size of \"([^\"]*)\" is (\\d+)$")
+	public void array_of_size_is(String key, int size) throws Throwable {
+		vResponse.body(key, hasSize(size));
+	}
+	
+	@Then("^time is below (\\d+) ?(milliseconds|seconds)?$")
+	public void time_is_below_milliseconds(int maxTime, TimeUnit timeUnit) throws Throwable {
+		if(timeUnit == null){
+			timeUnit = TimeUnit.MILLISECONDS;
+		}
+		long time = response.timeIn(timeUnit);
+		assertTrue("the request took "+time+" "+timeUnit+" and the timeout was "+maxTime, time <= maxTime);
 	}
 	
 }
