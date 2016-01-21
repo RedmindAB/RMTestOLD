@@ -40,10 +40,8 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
             chromePath = chromedriver;
         } else {
             String osName = System.getProperty("os.name");
-            if (osName.startsWith("Mac")) {
+            if (osName.startsWith("Mac") || osName.startsWith("Linux")) {
                 chromePath = TestHome.get() + "/node_modules/chromedriver/bin/chromedriver";
-            } else if (osName.startsWith("Linux")) {
-                chromePath = TestHome.get() + "/lib/linux/chromedriver";
             } else if (osName.startsWith("Windows")) {
                 chromePath = TestHome.get() + "/windows/chromedriver.exe";
             } else {
