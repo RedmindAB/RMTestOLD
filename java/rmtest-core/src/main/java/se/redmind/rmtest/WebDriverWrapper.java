@@ -1,5 +1,6 @@
 package se.redmind.rmtest;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -196,8 +197,8 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(Platform... values) {
+        Set<Platform> platforms = Sets.newHashSet(values);
         return driverWrapper -> {
-            Set<Platform> platforms = Sets.newHashSet(values);
             return platforms.isEmpty() || platforms.contains(driverWrapper.getCapability().getPlatform());
         };
     }
@@ -205,22 +206,22 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     @SafeVarargs
     @SuppressWarnings("unchecked")
     public static Predicate<WebDriverWrapper<?>> filter(Class<? extends WebDriverWrapper<?>>... values) {
+        Set<Class<? extends WebDriverWrapper<?>>> types = Sets.newHashSet(values);
         return driverWrapper -> {
-            Set<Class<? extends WebDriverWrapper<?>>> types = Sets.newHashSet(values);
             return types.isEmpty() || types.contains((Class<? extends WebDriverWrapper<?>>) driverWrapper.getClass());
         };
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(Browser... values) {
+        Set<String> browsers = Sets.newHashSet(values).stream().map(value -> value.toString().toLowerCase()).collect(Collectors.toSet());
         return driverWrapper -> {
-            Set<String> browsers = Sets.newHashSet(values).stream().map(value -> value.toString().toLowerCase()).collect(Collectors.toSet());
             return browsers.isEmpty() || browsers.contains(driverWrapper.getCapability().getBrowserName());
         };
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(Capability... values) {
+        Set<Capability> capabilities = Sets.newHashSet(values);
         return driverWrapper -> {
-            Set<Capability> capabilities = Sets.newHashSet(values);
             return capabilities.isEmpty() || capabilities.stream().allMatch(capability -> {
                 String currCap = (String) driverWrapper.getCapability().getCapability(capability.name());
                 if (currCap == null) {
@@ -234,8 +235,8 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     public static Predicate<WebDriverWrapper<?>> filterFromSystemProperties() {
         Predicate<WebDriverWrapper<?>> filter = driverWrapper -> true;
         if (System.getProperty("browsers") != null) {
-            filter = filter.and(driverWrapper
-                -> Splitter.on(',').trimResults().splitToList(System.getProperty("browsers")).contains(driverWrapper.getCapability().getBrowserName()));
+            Set<String> browsers = new HashSet<>(Splitter.on(',').trimResults().splitToList(System.getProperty("browsers")));
+            filter = filter.and(driverWrapper -> browsers.contains(driverWrapper.getCapability().getBrowserName()));
         }
         return filter;
     }
