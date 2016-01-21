@@ -19,11 +19,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
 import se.redmind.rmtest.runners.Capability;
 import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.selenium.framework.Browser;
-import se.redmind.rmtest.selenium.grid.DescriptionBuilder;
 import se.redmind.rmtest.selenium.grid.DriverConfig;
 import se.redmind.utils.ThrowingRunnable;
 
@@ -229,6 +229,15 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
                 return currCap.equalsIgnoreCase(capability.value());
             });
         };
+    }
+
+    public static Predicate<WebDriverWrapper<?>> filterFromSystemProperties() {
+        Predicate<WebDriverWrapper<?>> filter = driverWrapper -> true;
+        if (System.getProperty("browsers") != null) {
+            filter = filter.and(driverWrapper
+                -> Splitter.on(',').trimResults().splitToList(System.getProperty("browsers")).contains(driverWrapper.getCapability().getBrowserName()));
+        }
+        return filter;
     }
 
 }

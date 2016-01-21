@@ -166,6 +166,7 @@ public class Configuration {
             .map(driverConfiguration -> driverConfiguration.wrappers())
             .peek(wrappers -> WRAPPERS.addAll(wrappers))
             .flatMap(wrappers -> wrappers.stream())
+            .filter(WebDriverWrapper.filterFromSystemProperties())
             .peek(driverWrapper -> driverWrapper.setReuseDriverBetweenTests(reuseDriverBetweenTests))
             .collect(Collectors.toList());
     }
