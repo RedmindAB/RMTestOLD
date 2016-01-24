@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>se.redmind</groupId>
-            <artifactId>rmtest-core</artifactId>
+            <artifactId>rmtest-selenium</artifactId>
             <type>test-jar</type>
             <version>2.0.1</version>
             <scope>test</scope>

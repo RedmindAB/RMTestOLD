@@ -2,10 +2,6 @@ package cucumber.api.junit;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
@@ -14,23 +10,16 @@ import org.junit.runners.model.InitializationError;
 
 import cucumber.api.CucumberOptions;
 import cucumber.runtime.*;
-import cucumber.runtime.Runtime;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.io.ResourceLoaderClassFinder;
-import cucumber.runtime.java.JavaBackend;
-import cucumber.runtime.java.ParameterizedJavaStepDefinition;
-import cucumber.runtime.java.picocontainer.PicoFactory;
 import cucumber.runtime.junit.Assertions;
 import cucumber.runtime.junit.ExecutionUnitRunner;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.*;
 import gherkin.formatter.model.Step;
-import gherkin.formatter.model.TagStatement;
-import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
-import se.redmind.utils.Methods;
 
 /**
  * <p>
@@ -48,18 +37,9 @@ import se.redmind.utils.Methods;
  */
 public class Cucumber extends ParentRunner<FeatureRunner> {
 
-    static {
-        Tags.addIgnoreToSystemProperties();
-    }
-
-    private static enum CompositionType {
-
-        Replace, Full, Quiet
-    }
-
     private final JUnitReporter jUnitReporter;
     private final List<FeatureRunner> children = new ArrayList<>();
-    private final Runtime runtime;
+    private final ParameterizableRuntime runtime;
     private final String name;
     // do not remove this field, it is read through reflection
     private final Object[] parameters;
@@ -86,9 +66,9 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         RuntimeOptions runtimeOptions = runtimeOptionsFactory.create();
 
         ResourceLoader resourceLoader = new MultiLoader(classLoader);
-        runtime = new ParameterizedRuntime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions, parameters);
+        runtime = new ParameterizableRuntime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions, name, parameters);
 
-        final List<CucumberFeature> cucumberFeatures = runtimeOptions.cucumberFeatures(resourceLoader);
+        final List<CucumberFeature> cucumberFeatures = runtime.cucumberFeatures();
         jUnitReporter = new JUnitReporter(runtimeOptions.reporter(classLoader), runtimeOptions.formatter(classLoader), runtimeOptions.isStrict());
         addChildren(cucumberFeatures);
     }
@@ -124,14 +104,6 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
             }
             children.add(featureRunner);
         }
-
-        // 1. Get the children from the parent class and intercept any parameterized scenario and instanciate their factories
-        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = getParameterizedScenariosFromChildren();
-
-        // 2. Iterate over all the normal steps, and if the scenario is not quiet, rewrite and add the parameterized steps as normal steps.
-        if (!parameterizedScenarios.isEmpty()) {
-            injectChildrenWith(parameterizedScenarios);
-        }
     }
 
     private void appendParameterizedName(FeatureRunner featureRunner) throws InitializationError {
@@ -154,128 +126,5 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                 runners.set(i, runner);
             }
         }
-    }
-
-    private Map<Pattern, ParameterizedJavaStepDefinition.Factory> getParameterizedScenariosFromChildren() {
-        Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = new LinkedHashMap<>();
-        children.forEach(child -> {
-            CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
-            List<ParentRunner<?>> runners = Fields.getSafeValue(child, "children");
-            List<CucumberTagStatement> statements = feature.getFeatureElements();
-            for (int i = 0; i < statements.size(); i++) {
-                CucumberTagStatement statement = statements.get(i);
-                if (Tags.isParameterized(statement)) {
-                    ParameterizedJavaStepDefinition.Factory stepFactory = ParameterizedJavaStepDefinition.from(statement, jUnitReporter, runtime);
-                    parameterizedScenarios.put(stepFactory.pattern(), stepFactory);
-                    statements.remove(i);
-                    runners.remove(i);
-                    i--;
-                } else if (name != null) {
-                    TagStatement tagStatement = statement.getGherkinModel();
-                    Fields.set(tagStatement, "name", tagStatement.getName() + " " + name);
-                }
-            }
-        });
-        return parameterizedScenarios;
-    }
-
-    private void injectChildrenWith(Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios) throws RuntimeException {
-        PicoFactory picoFactory = getPicoFactory(runtime);
-        picoFactory.addInstance(this);
-        RuntimeGlue glue = (RuntimeGlue) runtime.getGlue();
-        glue.addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory));
-        children.forEach(child -> {
-            CucumberFeature feature = Fields.getSafeValue(child, "cucumberFeature");
-            List<StepContainer> stepContainers = new ArrayList<>(feature.getFeatureElements());
-
-            CucumberBackground cucumberBackground = Fields.getSafeValue(feature, "cucumberBackground");
-            if (cucumberBackground != null) {
-                stepContainers.add(cucumberBackground);
-            }
-
-            parameterizedScenarios.values().stream().forEach(scenario -> stepContainers.add(scenario.statement()));
-
-            int modifiedSteps;
-            // we need to keep trying as long as we find new parameterizable steps in order to support composite sub scenarios
-            do {
-                modifiedSteps = 0;
-                for (StepContainer stepContainer : stepContainers) {
-                    for (int i = 0; i < stepContainer.getSteps().size(); i++) {
-                        Step step = stepContainer.getSteps().get(i);
-
-                        if (step instanceof ParameterizedStep) {
-                            if (((ParameterizedStep) step).getType() == ParameterizedStep.Type.Start
-                                || ((ParameterizedStep) step).getType() == ParameterizedStep.Type.Quiet) {
-                                continue;
-                            }
-                        }
-
-                        String stepName = step.getName();
-                        CompositionType compositionType = CompositionType.Replace;
-                        if (stepName.contains(Tags.QUIET)) {
-                            compositionType = CompositionType.Quiet;
-                            stepName = stepName.replaceAll(Tags.QUIET, "").trim();
-                        } else if (stepName.contains(Tags.FULL)) {
-                            compositionType = CompositionType.Full;
-                            stepName = stepName.replaceAll(Tags.FULL, "").trim();
-                        }
-
-                        for (Map.Entry<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenario : parameterizedScenarios.entrySet()) {
-                            Matcher matcher = parameterizedScenario.getKey().matcher(stepName);
-                            if (matcher.matches()) {
-                                if (compositionType == CompositionType.Quiet) {
-                                    stepContainer.getSteps().set(i, ParameterizedStep.asQuiet(step));
-                                    parameterizedScenario.getValue().addQuietSubStepsToGlue();
-                                } else {
-                                    Function<Step, ParameterizedStep> wrapper;
-                                    String[] names = parameterizedScenario.getValue().parameters();
-                                    Object[] scenarioParameters = new Object[names.length];
-                                    for (int k = 0; k < names.length; k++) {
-                                        scenarioParameters[k] = matcher.group(k + 1);
-                                    }
-                                    if (compositionType == CompositionType.Full) {
-                                        parameterizedScenario.getValue().addStartStepToGlue();
-                                        stepContainer.getSteps().set(i, ParameterizedStep.startOf(step));
-                                        wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, scenarioParameters);
-                                    } else {
-                                        stepContainer.getSteps().remove(i--);
-                                        wrapper = parameterizedStep -> ParameterizedStep.parameterize(parameterizedStep, names, scenarioParameters);
-                                    }
-
-                                    List<Step> newSteps = parameterizedScenario.getValue().statement().getSteps().stream()
-                                        .map(parameterizedStep -> wrapper.apply(parameterizedStep))
-                                        .collect(Collectors.toList());
-                                    stepContainer.getSteps().addAll(i + 1, newSteps);
-                                    i += newSteps.size();
-                                    if (compositionType == CompositionType.Full) {
-                                        stepContainer.getSteps().add(++i, ParameterizedStep.endOf(step));
-                                    }
-                                    modifiedSteps++;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            } while (modifiedSteps > 0);
-        });
-    }
-
-    /**
-     * this method is used as a target for the end of a parameterized scenario
-     */
-    public void endOfParameterizedScenario() {
-    }
-
-    public static PicoFactory getPicoFactory(Runtime runtime) throws RuntimeException {
-        Collection<? extends Backend> backends = Fields.getSafeValue(runtime, "backends");
-        Optional<JavaBackend> first = backends.stream()
-            .filter(backend -> backend instanceof JavaBackend)
-            .map(backend -> (JavaBackend) backend)
-            .findFirst();
-        if (first.isPresent()) {
-            return Fields.getSafeValue(first.get(), "objectFactory");
-        }
-        throw new RuntimeException("can't find a javaBackend instance");
     }
 }

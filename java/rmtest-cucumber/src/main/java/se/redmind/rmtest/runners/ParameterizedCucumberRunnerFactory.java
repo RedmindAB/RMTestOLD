@@ -9,6 +9,8 @@ import org.junit.runners.parameterized.TestWithParameters;
 import cucumber.api.junit.Cucumber;
 
 /**
+ * This class is used to create the parameterized cucumber sub runner.
+ *
  * @author Jeremy Comte
  */
 public class ParameterizedCucumberRunnerFactory implements ParametersRunnerFactory {

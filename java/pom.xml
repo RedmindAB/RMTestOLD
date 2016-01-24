@@ -9,7 +9,8 @@
         <module>rmtest-logback</module>
         <module>rmtest-common</module>
         <module>rmtest-cucumber</module>
-        <module>rmtest-core</module>
+        <module>rmtest-selenium</module>
+        <module>rmtest-cucumber-restassured</module>
         <module>rmtest-cucumber-selenium</module>
         <module>rmtest-cucumber-standalone</module>
         <module>rmtest-appium</module>
@@ -28,7 +29,7 @@
     <scm>
         <url>https://github.com/RedmindAB/RMTest.git</url>
     </scm>
-    <description>Redmind Auto tests</description>
+    <description>Redmind Automation test toolbox</description>
     <profiles>
         <profile>
             <id>sonatype</id>

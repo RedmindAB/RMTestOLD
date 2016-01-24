@@ -7,10 +7,8 @@ import java.util.regex.Pattern;
 
 import cucumber.api.java.ObjectFactory;
 import cucumber.api.junit.Cucumber;
-import cucumber.runtime.Runtime;
+import cucumber.runtime.ParameterizableRuntime;
 import cucumber.runtime.RuntimeGlue;
-import cucumber.runtime.java.picocontainer.PicoFactory;
-import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.model.TagStatement;
 import javassist.*;
@@ -18,7 +16,7 @@ import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
 
 /**
- * Cucumber java doesn't allow us to call Scenarios in a Scenario like in Ruby.
+ * Cucumber java doesn't allow us to call Scenarios in a Scenario.
  *
  * This class is here to enable us to do that. If a Scenario is annotated with @parameterized we will create a dynamic JavaStepDefinition that will be
  * registered on the pattern made by the name of this scenario. Depending on how this scenario is called, the real steps will be added to the current feature in
@@ -35,7 +33,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         super(method, pattern, timeoutMillis, objectFactory);
     }
 
-    public static ParameterizedJavaStepDefinition.Factory from(CucumberTagStatement statement, JUnitReporter jUnitReporter, Runtime runtime) {
+    public static ParameterizedJavaStepDefinition.Factory from(CucumberTagStatement statement, ParameterizableRuntime runtime) {
         TagStatement tagStatement = Fields.getSafeValue(statement, "statement");
         String name = tagStatement.getName().replaceAll("(Given|When|Then|And)", "");
 
@@ -81,21 +79,19 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         private final CucumberTagStatement statement;
         private final Pattern pattern;
         private final String[] parameters;
-        private final Runtime runtime;
+        private final ParameterizableRuntime runtime;
         private final RuntimeGlue glue;
-        private final PicoFactory objectFactory;
 
         private Class<?> clazz;
         private Class<?>[] parametersClasses;
         private ParameterizedJavaStepDefinition subSteps;
         private ParameterizedJavaStepDefinition start;
 
-        public Factory(CucumberTagStatement statement, Pattern pattern, String[] parameters, Runtime runtime) {
+        public Factory(CucumberTagStatement statement, Pattern pattern, String[] parameters, ParameterizableRuntime runtime) {
             this.statement = statement;
             this.pattern = pattern;
             this.parameters = parameters;
             this.runtime = runtime;
-            this.objectFactory = Cucumber.getPicoFactory(runtime);
             this.glue = (RuntimeGlue) runtime.getGlue();
         }
 
@@ -171,7 +167,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
                     clazz.getDeclaredField("STEPCONTAINER").set(null, statement);
                     clazz.getDeclaredField("RUNTIME").set(null, runtime);
-                    objectFactory.addClass(clazz);
+                    runtime.picoFactory().addClass(clazz);
                 } catch (CannotCompileException | SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -181,7 +177,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
         public synchronized ParameterizedJavaStepDefinition addQuietSubStepsToGlue() {
             if (subSteps == null) {
-                subSteps = new ParameterizedJavaStepDefinition(Methods.findMethod(clazz(), "execute", parametersClasses), pattern, 0, objectFactory);
+                subSteps = new ParameterizedJavaStepDefinition(Methods.findMethod(clazz(), "execute", parametersClasses), pattern, 0, runtime.picoFactory());
                 glue.addStepDefinition(subSteps);
             }
             return subSteps;
@@ -190,7 +186,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         public synchronized ParameterizedJavaStepDefinition addStartStepToGlue() {
             if (start == null) {
                 start = new ParameterizedJavaStepDefinition(Methods.findMethod(clazz(), "start", parametersClasses),
-                    Pattern.compile(pattern.pattern().substring(0, pattern.pattern().length() - 1) + "(?: \\{)$"), 0, objectFactory);
+                    Pattern.compile(pattern.pattern().substring(0, pattern.pattern().length() - 1) + "(?: \\{)$"), 0, runtime.picoFactory());
                 glue.addStepDefinition(start);
             }
             return start;

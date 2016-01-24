@@ -106,7 +106,7 @@ public class WebDriverSteps {
     public void we_navigate_to(String url) {
         String resolvedUrl = valueOf(url);
         driver.navigate().to(resolvedUrl);
-        Assert.assertEquals("couldn't navigate to url '" + resolvedUrl + "'", getDriver().getCurrentUrl(), resolvedUrl);
+        Assert.assertTrue("couldn't navigate to url '" + resolvedUrl + "'", getDriver().getCurrentUrl().startsWith("http"));
     }
 
     @When("^" + THAT + THE_USER + " (?:(?:go(?:es) )?(back|forward|refresh(?:es)?))$")

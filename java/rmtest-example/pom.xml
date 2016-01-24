@@ -20,11 +20,6 @@
     <dependencies>
         <dependency>
             <groupId>se.redmind</groupId>
-            <artifactId>rmtest-core</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>se.redmind</groupId>
             <artifactId>rmtest-testdroid</artifactId>
             <version>2.0.1</version>
         </dependency>
@@ -36,6 +31,11 @@
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-cucumber-selenium</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>se.redmind</groupId>
+            <artifactId>rmtest-cucumber-restassured</artifactId>
             <version>2.0.1</version>
         </dependency>
     </dependencies>

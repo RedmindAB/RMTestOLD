@@ -11,13 +11,9 @@ import org.openqa.selenium.WebElement;
 
 import io.appium.java_client.AppiumDriver;
 import se.redmind.rmtest.AppiumDriverWrapper;
-
 import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.runners.WebDriverRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -49,17 +45,17 @@ public class AppiumTest {
             swipeRight();
             swipeRight();
             swipeRight();
-            androidDriver.findElementById("se.systembolaget.android:id/taskbarGuideClose").click();
+            androidDriver.findElementById("com.app.android:id/taskbarGuideClose").click();
         }
     }
 
     private String getTaskBarTitle() throws InterruptedException {
-        return androidDriver.findElementById("se.systembolaget.android:id/taskbarTitle").getText();
+        return androidDriver.findElementById("com.app.android:id/taskbarTitle").getText();
     }
 
     @After
     public void after() {
-        androidDriver.findElementById("se.systembolaget.android:id/taskbarLogo").click();
+        androidDriver.findElementById("com.app.android:id/taskbarLogo").click();
     }
 
     private WebElement findButtonByText(String text) {
