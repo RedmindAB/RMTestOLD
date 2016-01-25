@@ -110,6 +110,15 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
             ParentRunner<?> runner = runners.get(i);
             if (runner instanceof ExecutionUnitRunner) {
                 runner = new ExecutionUnitRunner(runtime, Fields.getSafeValue(runner, "cucumberScenario"), jUnitReporter) {
+                    @Override
+                    public Description getDescription() {
+                        Description description = super.getDescription();
+                        if (!description.getClassName().equals(Cucumber.this.getTestClass().getJavaClass().getCanonicalName())) {
+                            Fields.set(description, "fDisplayName", description.getDisplayName()
+                                + (name != null ? name : "") + "(" + Cucumber.this.getTestClass().getJavaClass().getCanonicalName() + ")");
+                        }
+                        return description;
+                    }
 
                     @Override
                     protected Description describeChild(Step step) {
