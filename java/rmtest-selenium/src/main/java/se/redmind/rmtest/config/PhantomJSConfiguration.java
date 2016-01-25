@@ -29,10 +29,12 @@ public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> 
         cliArgs.add("--webdriver-loglevel=ERROR");
         capabilities.setCapability("takesScreenshot", true);
         capabilities.setCapability("browserName", "PhantomJS");
+        if (System.getProperty(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY) == null) {
         if (!TestHome.isWindows()) {
             capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/bin/phantomjs");
         } else {
             capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/phantomjs.exe");
+        }
         }
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "loadImages", true);
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "javascriptEnabled", true);
