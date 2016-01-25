@@ -99,15 +99,12 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
     private void addChildren(List<CucumberFeature> cucumberFeatures) throws InitializationError {
         for (CucumberFeature cucumberFeature : cucumberFeatures) {
             FeatureRunner featureRunner = new FeatureRunner(cucumberFeature, runtime, jUnitReporter);
-            if (name != null) {
-                appendParameterizedName(featureRunner);
-            }
+            appendParameterizedName(featureRunner);
             children.add(featureRunner);
         }
     }
 
     private void appendParameterizedName(FeatureRunner featureRunner) throws InitializationError {
-        // if we have a name, we want to append it to the Description
         List<ParentRunner<?>> runners = Fields.getSafeValue(featureRunner, "children");
         for (int i = 0; i < runners.size(); i++) {
             ParentRunner<?> runner = runners.get(i);
@@ -117,8 +114,8 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     @Override
                     protected Description describeChild(Step step) {
                         Description description = super.describeChild(step);
-                        if (!description.getMethodName().contains(name)) {
-                            Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + name + "(" + description.getClassName() + ")");
+                        if (!description.getMethodName().contains("#" + step.getLine())) {
+                            Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + (name != null ? name : "") + "(" + description.getClassName() + ")");
                         }
                         return description;
                     }
