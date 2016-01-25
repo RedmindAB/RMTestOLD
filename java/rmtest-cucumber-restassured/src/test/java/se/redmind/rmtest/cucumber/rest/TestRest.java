@@ -12,18 +12,26 @@ import cucumber.api.junit.Cucumber;
 public class TestRest {
 
     private static volatile boolean isServerStarted = false;
+    private static SparkServer sparkServer;
+	private static int localPort;
 
     @BeforeClass
     public static void beforeClass() throws InterruptedException {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new SparkServer().initServices();
-            }
-        }).start();
+        try {
+			sparkServer = new SparkServer().initServices();
+		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+        localPort = sparkServer.getLocalPort();
     }
 
     public static class Steps {
+    	
+    	@Given("^custom port is the same as webserver;$")
+    	public void custom_port_is_the_same_as_webserver() throws Throwable {
+    		RestStep.PORT = localPort;
+    	}
+    	
     }
 
 }

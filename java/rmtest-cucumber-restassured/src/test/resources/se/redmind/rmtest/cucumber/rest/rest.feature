@@ -2,7 +2,7 @@ Feature: Test REST applications
 
   Background: init the URL and port
     Given that url is "http://localhost"
-    And port is 4567
+    And custom port is the same as webserver;
 
   Scenario: basic call works
     When we get "/"
