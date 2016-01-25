@@ -118,7 +118,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     protected Description describeChild(Step step) {
                         Description description = super.describeChild(step);
                         if (!description.getMethodName().contains(name)) {
-                            Fields.set(description, "fDisplayName", description.getMethodName() + name + "(" + description.getClassName() + ")");
+                            Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + name + "(" + description.getClassName() + ")");
                         }
                         return description;
                     }

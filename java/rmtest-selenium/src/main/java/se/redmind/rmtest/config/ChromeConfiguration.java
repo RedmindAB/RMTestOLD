@@ -9,6 +9,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.utils.NodeModules;
 import se.redmind.utils.TestHome;
 
 /**
@@ -41,7 +42,7 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
         } else {
             String osName = System.getProperty("os.name");
             if (osName.startsWith("Mac") || osName.startsWith("Linux")) {
-                chromePath = TestHome.get() + "/node_modules/chromedriver/bin/chromedriver";
+                chromePath = NodeModules.path() + "/chromedriver/lib/chromedriver/chromedriver";
             } else if (osName.startsWith("Windows")) {
                 chromePath = TestHome.get() + "/windows/chromedriver.exe";
             } else {
