@@ -71,7 +71,7 @@ public class Configuration {
     public int rmReportLivePort = 12345;
 
     @JsonProperty
-    public String jsonReportSavePath = TestHome.get() + DEFAULT_REPORTS_PATH;
+    public String jsonReportSavePath = System.getProperty("user.dir") + DEFAULT_REPORTS_PATH;
 
     @JsonProperty
     public AndroidConfiguration android;
