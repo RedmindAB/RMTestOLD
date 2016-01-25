@@ -9,7 +9,5 @@ if [ -z "$NodeConfig" ]; then
     echo "usage: Full or relative path to a nodeconfig json file"
     exit 1
 fi
-
-java -jar $testHome/lib/selenium-server-standalone-$seleniumVersion.jar -role node -nodeConfig $NodeConfig &> $logName.log &
-
-
+npm_root=`npm root`;
+java -Dwebdriver.chrome.driver=$npm_root/chromedriver/lib/chromedriver/chromedriver -jar $testHome/lib/selenium-server-standalone-$seleniumVersion.jar -role node -nodeConfig $NodeConfig &> $logName.log &

@@ -19,4 +19,5 @@ import se.redmind.rmtest.testdroid.ScreenShotExample;
     AppiumTest.class,
     ScreenShotExample.class
 })
-public class SuiteTest {}
+public class SuiteTest {
+}

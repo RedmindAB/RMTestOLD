@@ -39,7 +39,7 @@ public class ScreenShotExample {
                 wrapper.getCapability().setCapability("testdroid_testrun", "Android Run 1");
                 wrapper.getCapability().setCapability("testdroid_device", device.getDisplayName()); // Freemium device
                 wrapper.getCapability().setCapability("testdroid_app", fileUUID); //to use existing app using "latest" as fileUUID
-                
+
                 LOGGER.info(wrapper.getCapability().toString());
                 LOGGER.info("Creating Appium session, this may take couple minutes..");
             } else {

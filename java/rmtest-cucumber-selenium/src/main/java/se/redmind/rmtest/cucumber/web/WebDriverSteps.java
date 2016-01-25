@@ -104,7 +104,9 @@ public class WebDriverSteps {
     // Navigates
     @When("^" + THAT + THE_USER + " navigate(?:s)? to " + QUOTED_CONTENT + "$")
     public void we_navigate_to(String url) {
-        driver.navigate().to(valueOf(url));
+        String resolvedUrl = valueOf(url);
+        driver.navigate().to(resolvedUrl);
+        Assert.assertTrue("couldn't navigate to url '" + resolvedUrl + "'", getDriver().getCurrentUrl().startsWith("http"));
     }
 
     @When("^" + THAT + THE_USER + " (?:(?:go(?:es) )?(back|forward|refresh(?:es)?))$")
@@ -301,8 +303,8 @@ public class WebDriverSteps {
     }
 
     private <T> void waitForCondition(ExpectedCondition<T> condition) {
-		new WebDriverWait(driver, TIMEOUT_IN_SECONDS).until(condition);
-	}
+        new WebDriverWait(driver, TIMEOUT_IN_SECONDS).until(condition);
+    }
 
     private void refreshElement() {
         find(elementLocation);

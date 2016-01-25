@@ -1,6 +1,5 @@
 package se.redmind.rmtest.selenium.example;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;

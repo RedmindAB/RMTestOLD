@@ -6,5 +6,5 @@ package se.redmind.utils;
 public interface ThrowingRunnable {
 
     void run() throws Exception;
-    
+
 }

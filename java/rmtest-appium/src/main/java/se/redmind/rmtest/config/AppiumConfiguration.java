@@ -42,6 +42,7 @@ public class AppiumConfiguration extends DriverConfiguration<AppiumDriver<WebEle
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected List<WebDriverWrapper<AppiumDriver<WebElement>>> createDrivers() {
         try {
             return Lists.newArrayList(createDriver(new URL(serverUrl + "/wd/hub")));

@@ -1,7 +1,7 @@
 RMTest
 ======
 
-Prerequisites
+####Prerequisites
 
 Verify that you have the following software installed: Java, to check installed version: java -version
 
@@ -9,7 +9,8 @@ Maven, to check installed version: mvn -version
 
 Install Android SDK: http://developer.android.com/sdk/index.html
 
-Initial installation
+
+####Initial installation
 
 Go to folder where you want the installation and clone repo:
 
