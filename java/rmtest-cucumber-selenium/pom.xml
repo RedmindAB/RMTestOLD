@@ -84,7 +84,7 @@
                         <version>0.7</version>
                         <executions>
                             <execution>
-                                <phase>generate-test-resources</phase>
+                            	<phase>generate-test-resources</phase>
                                 <goals>
                                     <goal>install</goal>
                                 </goals>

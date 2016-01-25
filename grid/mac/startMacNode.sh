@@ -10,4 +10,4 @@ if [ -z "$NodeConfig" ]; then
     exit 1
 fi
 npm_root=`npm root`;
-java -Dwebdriver.chrome.driver=$npm_root/chromedriver/bin/chromedriver -jar $testHome/lib/selenium-server-standalone-$seleniumVersion.jar -role node -nodeConfig $NodeConfig &> $logName.log &
+java -Dwebdriver.chrome.driver=$npm_root/chromedriver/lib/chromedriver/chromedriver -jar $testHome/lib/selenium-server-standalone-$seleniumVersion.jar -role node -nodeConfig $NodeConfig &> $logName.log &
