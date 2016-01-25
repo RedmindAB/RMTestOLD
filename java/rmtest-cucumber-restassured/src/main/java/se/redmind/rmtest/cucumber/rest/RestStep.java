@@ -19,6 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 public class RestStep {
 
+	public static int PORT = 0;
     private ValidatableResponse vResponse;
     private Response response;
     private RequestSpecification requestSpecification;
@@ -34,11 +35,12 @@ public class RestStep {
 
     @Given("^port is (\\d+)$")
     public void port_is(int port) throws Throwable {
-        requestSpecification.port(port);
+    	PORT = port;
     }
 
     @Given("^we get \"([^\"]*)\"$")
     public void we_get(String path) throws Throwable {
+    	requestSpecification.port(PORT);
         response = requestSpecification.get(path);
         this.vResponse = response.then();
     }
