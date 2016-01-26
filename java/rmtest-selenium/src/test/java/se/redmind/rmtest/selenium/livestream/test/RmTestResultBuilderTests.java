@@ -81,6 +81,19 @@ public class RmTestResultBuilderTests {
         String result = test.get(RmTestResultBuilder.RESULT).getAsString();
         assertEquals("skipped", result);
     }
+    
+    @Test
+    public void testIsGherkin(){
+    	RmTestResultBuilder resultBuilder = getResultBuilder();
+    	boolean gherkin = resultBuilder.isGherkin("Given that we navigate to \"http://sl.se\"#4[OSX_UNKNOWN_AnApple_firefox_UNKNOWN](Scenario: Verify the title of the page)");
+    	assertTrue(gherkin);
+    }
+    
+    @Test
+    public void testIsNotGherkin(){
+    	boolean gherkin = getResultBuilder().isGherkin("testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)");
+    	assertFalse(gherkin);
+    }
 
     private RmTestResultBuilder getResultBuilder() {
         RmTestResultBuilder rmTestResultBuilder = new RmTestResultBuilder();

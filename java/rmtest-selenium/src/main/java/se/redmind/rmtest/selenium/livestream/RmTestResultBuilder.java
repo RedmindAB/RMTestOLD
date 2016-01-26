@@ -1,6 +1,8 @@
 package se.redmind.rmtest.selenium.livestream;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
@@ -28,6 +30,7 @@ public class RmTestResultBuilder {
     private int totalIgnored;
     private double runTime;
     private boolean success;
+    private String currentFeature;
 
     public RmTestResultBuilder() {
         this.testMap = new TreeMap<>();
@@ -47,23 +50,29 @@ public class RmTestResultBuilder {
     public void addTest(String displayName) {
         if (!testMap.containsKey(displayName)) {
             JsonElement deviceInfo = getDeviceInfo(displayName);
-            if (deviceInfo != JsonNull.INSTANCE) {
+            String methodName = getMethodName(displayName);
+            if (deviceInfo != JsonNull.INSTANCE && !methodName.startsWith("Scenario: ")) {
                 totalTests++;
                 JsonObject test = new JsonObject();
                 test.addProperty("id", totalTests);
-                test.addProperty("method", getMethodName(displayName));
+                test.addProperty("method", methodName);
                 test.addProperty("testclass", getTestClass(displayName));
                 test.addProperty("status", "idle");
                 test.add(RESULT, JsonNull.INSTANCE);
                 test.add("deviceInfo", deviceInfo);
+                boolean gherkin = isGherkin(displayName);
+                test.addProperty("isGherkin", gherkin);
+                if(gherkin){
+                	test.addProperty("feature", currentFeature);
+                }
                 testMap.put(displayName, test);
             }
         }
     }
 
-    private String getTestClass(String displayName) {
+	private String getTestClass(String displayName) {
         if (displayName.contains("(") && displayName.contains(")")) {
-            int start = displayName.indexOf('(');
+            int start = displayName.lastIndexOf('(');
             int end = displayName.lastIndexOf(')');
             String testClass = displayName.substring(start + 1, end);
             return testClass;
@@ -73,7 +82,7 @@ public class RmTestResultBuilder {
 
     private JsonElement getDeviceInfo(String displayName) {
         if (displayName.contains("[") && displayName.contains("]")) {
-            int start = displayName.indexOf('[');
+            int start = displayName.lastIndexOf('[');
             int end = displayName.lastIndexOf(']');
             String deviceInfoString = displayName.substring(start + 1, end);
             return extractDeviceInfo(deviceInfoString);
@@ -91,7 +100,6 @@ public class RmTestResultBuilder {
             deviceInfoObject.addProperty("browser", info[3]);
             deviceInfoObject.addProperty("browserVer", info[4]);
         } else {
-
             return JsonNull.INSTANCE;
         }
         return deviceInfoObject;
@@ -186,6 +194,10 @@ public class RmTestResultBuilder {
             return form.format(new Date());
         }
     }
+    
+    public boolean isGherkin(String displayName) {
+    	return displayName.contains("Scenario: ");
+	}
 
     public void setResult(Result result) {
         this.totalFail = result.getFailureCount();
@@ -196,5 +208,9 @@ public class RmTestResultBuilder {
 
     public String getTimestamp() {
         return timestamp;
+    }
+    
+    public void setCurrentFeature(String feature){
+    	this.currentFeature = feature;
     }
 }
