@@ -1,6 +1,7 @@
 package se.redmind.rmtest.config;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -29,18 +30,18 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
 
     @Override
     protected List<WebDriverWrapper<ChromeDriver>> createDrivers() {
-        if (System.getProperty(CHROMEDRIVER_SYSTEM_PROPERTY) == null) {
-            System.setProperty(CHROMEDRIVER_SYSTEM_PROPERTY, getChromePath());
+        if (System.getProperty(CHROMEDRIVER_SYSTEM_PROPERTY) == null && !setChromePath()) {
+            return new ArrayList<>();
         }
         return super.createDrivers();
     }
 
-    private String getChromePath() {
-        String chromePath;
+    private boolean setChromePath() {
+        String chromePath = null;
+        String osName = System.getProperty("os.name");
         if (chromedriver != null) {
             chromePath = chromedriver;
         } else {
-            String osName = System.getProperty("os.name");
             if (osName.startsWith("Mac") || osName.startsWith("Linux")) {
                 chromePath = NodeModules.path() + "/chromedriver/lib/chromedriver/chromedriver";
             } else if (osName.startsWith("Windows")) {
@@ -51,10 +52,16 @@ public class ChromeConfiguration extends LocalConfiguration<ChromeDriver> {
         }
 
         if (!new File(chromePath).exists()) {
-            throw new RuntimeException("chromedriver is not properly installed!");
+            logger.error("you need to specify the location of the chromedriver, either by:\n"
+                + "\t- setting the chromedriver property on the current driver in your configuration file\n"
+                + "\t- setting the webdriver.chrome.driver system property (with -Dwebdriver.chrome.driver=/path/to/your/chromedriver)\n"
+                + "\t- running npm install chromedriver in the current folder (" + System.getProperty("user.dir") + "), one of its parent folder"
+                + (TestHome.get() != null ? " or the TestHome folder (" + TestHome.get() + ")" : ""));
+            return false;
         } else {
             logger.info("Setting chromedriver to be: " + chromePath);
+            System.setProperty(CHROMEDRIVER_SYSTEM_PROPERTY, chromePath);
+            return true;
         }
-        return chromePath;
     }
 }

@@ -193,18 +193,27 @@ public class Configuration {
             try {
                 configFile = System.getProperty(CONFIG_SYSTEM_PROPERTY);
                 if (configFile == null) {
-                    configFile = TestHome.get() + DEFAULT_LOCAL_CONFIG;
+                    LOGGER.warn("no config provided as a system property");
+                    if (TestHome.get() != null) {
+                        configFile = TestHome.get() + DEFAULT_LOCAL_CONFIG;
+                    }
                 }
                 configuration = read(configFile);
             } catch (IOException e) {
-                LOGGER.warn("cannot read " + configFile);
+                LOGGER.error("couldn't read " + e.getMessage());
                 try {
                     if (TestHome.get() != null) {
-                        configuration = read(TestHome.get() + DEFAULT_LEGACY_CONFIG);
+                        configFile = TestHome.get() + DEFAULT_LEGACY_CONFIG;
+                        configuration = read(configFile);
                     }
                 } catch (IOException ex) {
-                    UncheckedThrow.throwUnchecked(ex);
+                    LOGGER.error(ex.getMessage());
                 }
+            }
+            if (configuration == null) {
+                throw new RuntimeException("no driver config provided and all the fallbacks failed ...");
+            } else {
+                LOGGER.info("using " + configFile);
             }
             current = configuration.applySystemProperties().validate();
             // this will close all the drivers as the jvm goes down
@@ -232,6 +241,9 @@ public class Configuration {
      * @throws IOException
      */
     public static Configuration read(String filepath) throws IOException {
+        if (filepath == null) {
+            return null;
+        }
         return read(new File(filepath));
     }
 
