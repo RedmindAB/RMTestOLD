@@ -47,9 +47,9 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
                     try {
                         String driverDescription = DescriptionBuilder.buildDescriptionFromCapabilities(capabilities);
                         URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
-                        instances.add(new WebDriverWrapper<>(generateCapabilities(), driverDescription, (otherCapabilities) -> {
-                            otherCapabilities.asMap().forEach((key, value) -> capabilities.setCapability(key, value));
-                            return new RemoteWebDriver(driverUrl, capabilities);
+                        generateCapabilities().asMap().forEach((key, value) -> capabilities.setCapability(key, value));
+                        instances.add(new WebDriverWrapper<>(capabilities, driverDescription, (otherCapabilities) -> {
+                            return new RemoteWebDriver(driverUrl, otherCapabilities);
                         }));
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);
