@@ -40,6 +40,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
 
     static {
         Tags.addIgnoreToSystemProperties();
+        Tags.addParameterizedToSystemProperties();
     }
 
     private final JUnitReporter jUnitReporter;
