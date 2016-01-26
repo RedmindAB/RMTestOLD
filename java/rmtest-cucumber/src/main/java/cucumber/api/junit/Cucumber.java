@@ -19,6 +19,7 @@ import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.*;
 import gherkin.formatter.model.Step;
+import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
 
 /**
@@ -36,6 +37,11 @@ import se.redmind.utils.Fields;
  * @see CucumberOptions
  */
 public class Cucumber extends ParentRunner<FeatureRunner> {
+
+    static {
+        Tags.addIgnoreToSystemProperties();
+        Tags.addParameterizedToSystemProperties();
+    }
 
     private final JUnitReporter jUnitReporter;
     private final List<FeatureRunner> children = new ArrayList<>();

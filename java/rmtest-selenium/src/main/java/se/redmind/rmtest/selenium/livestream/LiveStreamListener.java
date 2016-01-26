@@ -57,7 +57,7 @@ public class LiveStreamListener extends RunListener {
 
     @Override
     public void testRunStarted(Description description) throws Exception {
-        initSuite(description, 0);
+        initSuite(description, 1);
 //        rmrConnection.connect();
 //        rmrConnection.sendMessage("suite", resBuilder.build());
         super.testRunStarted(description);
@@ -135,11 +135,13 @@ public class LiveStreamListener extends RunListener {
                 file.mkdirs();
             }
 
+            JsonObject build = resBuilder.build();
+            JsonReportOrganizer jsonReportOrganizer = new JsonReportOrganizer(build);
             String filename = suitename + "-" + timestamp + ".json";
             try {
                 String concatFilename = savePath + "/" + filename;
                 try (PrintWriter writer = new PrintWriter(concatFilename, "UTF-8")) {
-                    writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(resBuilder.build()));
+                    writer.print(new GsonBuilder().setPrettyPrinting().create().toJson(jsonReportOrganizer.build()));
                     isSaved = true;
                     logger.info("Saved report as Json to: " + concatFilename);
                 }
@@ -157,8 +159,11 @@ public class LiveStreamListener extends RunListener {
         } else if (level == 1 && desc.isSuite()) {
             resBuilder.setSuiteName(desc.getClassName());
         }
+        if(desc.getClassName().startsWith("Feature: ")){
+        	resBuilder.setCurrentFeature(desc.getClassName());
+        }
         if (desc.isTest()) {
-            resBuilder.addTest(desc.getDisplayName());
+    		resBuilder.addTest(desc.getDisplayName());
         }
         ArrayList<Description> children = desc.getChildren();
         for (Description description : children) {

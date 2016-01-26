@@ -14,11 +14,16 @@ public class Tags {
 
     public static void addIgnoreToSystemProperties() {
         String property = System.getProperty("cucumber.options");
-        if (property == null) {
-            property = "";
-        }
-        if (!property.contains("~" + IGNORE)) {
+        if (property != null && !property.contains("~" + IGNORE)) {
             property += " --tags ~" + IGNORE;
+            System.setProperty("cucumber.options", property);
+        }
+    }
+
+    public static void addParameterizedToSystemProperties() {
+        String property = System.getProperty("cucumber.options");
+        if (property != null && !property.contains(PARAMETERIZED)) {
+            property += " --tags " + PARAMETERIZED;
             System.setProperty("cucumber.options", property);
         }
     }
