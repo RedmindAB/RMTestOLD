@@ -3,6 +3,8 @@ package se.redmind.rmtest.cucumber.rest;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
+import com.jayway.restassured.RestAssured;
+
 import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Given;
 import cucumber.api.junit.Cucumber;
