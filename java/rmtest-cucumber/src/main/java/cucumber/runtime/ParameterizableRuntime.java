@@ -28,10 +28,6 @@ import se.redmind.utils.Methods;
  */
 public class ParameterizableRuntime extends Runtime {
 
-    static {
-        Tags.addIgnoreToSystemProperties();
-    }
-
     private static enum CompositionType {
 
         Replace, Full, Quiet
