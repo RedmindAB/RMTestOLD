@@ -1,7 +1,9 @@
 package cucumber.api.junit;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
@@ -18,6 +20,7 @@ import cucumber.runtime.junit.ExecutionUnitRunner;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.*;
+import gherkin.formatter.model.Scenario;
 import gherkin.formatter.model.Step;
 import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
@@ -104,24 +107,30 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
 
     private void addChildren(List<CucumberFeature> cucumberFeatures) throws InitializationError {
         for (CucumberFeature cucumberFeature : cucumberFeatures) {
-            FeatureRunner featureRunner = new FeatureRunner(cucumberFeature, runtime, jUnitReporter);
-            appendParameterizedName(featureRunner);
-            children.add(featureRunner);
+            if (!cucumberFeature.getFeatureElements().isEmpty()) {
+                FeatureRunner featureRunner = new FeatureRunner(cucumberFeature, runtime, jUnitReporter);
+                appendParameterizedName(featureRunner);
+                children.add(featureRunner);
+            }
         }
     }
 
     private void appendParameterizedName(FeatureRunner featureRunner) throws InitializationError {
         List<ParentRunner<?>> runners = Fields.getSafeValue(featureRunner, "children");
+        CucumberFeature cucumberFeature = Fields.getSafeValue(featureRunner, "cucumberFeature");
+        String featureName = ((String) Fields.getSafeValue(cucumberFeature, "path")).replaceFirst(".feature$", "").replaceAll("/", ".");
+        Map<String, StepDefinition> stepDefinitionsByPattern = Fields.getSafeValue(runtime.getGlue(), "stepDefinitionsByPattern");
         for (int i = 0; i < runners.size(); i++) {
             ParentRunner<?> runner = runners.get(i);
             if (runner instanceof ExecutionUnitRunner) {
-                runner = new ExecutionUnitRunner(runtime, Fields.getSafeValue(runner, "cucumberScenario"), jUnitReporter) {
+                CucumberScenario cucumberScenario = Fields.getSafeValue(runner, "cucumberScenario");
+                Scenario scenario = Fields.getSafeValue(cucumberScenario, "scenario");
+                runner = new ExecutionUnitRunner(runtime, cucumberScenario, jUnitReporter) {
                     @Override
                     public Description getDescription() {
                         Description description = super.getDescription();
-                        if (!description.getClassName().equals(Cucumber.this.getTestClass().getJavaClass().getCanonicalName())) {
-                            Fields.set(description, "fDisplayName", description.getDisplayName()
-                                + (name != null ? name : "") + "(" + Cucumber.this.getTestClass().getJavaClass().getCanonicalName() + ")");
+                        if (!description.getClassName().equals(featureName)) {
+                            Fields.set(description, "fDisplayName", featureName + ":" + scenario.getLine() + (name != null ? name : "") + "(" + featureName + ")");
                         }
                         return description;
                     }
@@ -130,7 +139,16 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     protected Description describeChild(Step step) {
                         Description description = super.describeChild(step);
                         if (!description.getMethodName().contains("#" + step.getLine())) {
-                            Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + (name != null ? name : "") + "(" + description.getClassName() + ")");
+                            Method method = null;
+                            for (Map.Entry<String, StepDefinition> entry : stepDefinitionsByPattern.entrySet()) {
+                                if (step.getName().matches(entry.getKey())) {
+                                    method = Fields.getSafeValue(entry.getValue(), "method");
+                                    break;
+                                }
+                            }
+                            if (method != null) {
+                                Fields.set(description, "fDisplayName", method.getName() + "@" + featureName + ":" + step.getLine() + (name != null ? name : "") + "(" + method.getDeclaringClass().getName() + ")");
+                            }
                         }
                         return description;
                     }

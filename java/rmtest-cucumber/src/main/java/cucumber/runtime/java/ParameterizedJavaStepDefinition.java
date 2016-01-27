@@ -80,7 +80,6 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         private final Pattern pattern;
         private final String[] parameters;
         private final ParameterizableRuntime runtime;
-        private final RuntimeGlue glue;
 
         private Class<?> clazz;
         private Class<?>[] parametersClasses;
@@ -92,7 +91,6 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
             this.pattern = pattern;
             this.parameters = parameters;
             this.runtime = runtime;
-            this.glue = (RuntimeGlue) runtime.getGlue();
         }
 
         public CucumberTagStatement statement() {
@@ -147,7 +145,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                     }
 
                     ClassPool pool = ClassPool.getDefault();
-                    CtClass ctClass = pool.makeClass("cucumber.runtime.model.ParameterizedScenario@" + Integer.toHexString(statement.hashCode()));
+                    CtClass ctClass = pool.makeClass("cucumber.runtime.model.ParameterizedScenario$" + Integer.toHexString(statement.getVisualName().hashCode()));
 
                     ctClass.addField(CtField.make("public static cucumber.runtime.model.StepContainer STEPCONTAINER;", ctClass));
                     ctClass.addField(CtField.make("public static cucumber.runtime.Runtime RUNTIME;", ctClass));
@@ -178,7 +176,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         public synchronized ParameterizedJavaStepDefinition addQuietSubStepsToGlue() {
             if (subSteps == null) {
                 subSteps = new ParameterizedJavaStepDefinition(Methods.findMethod(clazz(), "execute", parametersClasses), pattern, 0, runtime.picoFactory());
-                glue.addStepDefinition(subSteps);
+                runtime.getGlue().addStepDefinition(subSteps);
             }
             return subSteps;
         }
@@ -187,7 +185,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
             if (start == null) {
                 start = new ParameterizedJavaStepDefinition(Methods.findMethod(clazz(), "start", parametersClasses),
                     Pattern.compile(pattern.pattern().substring(0, pattern.pattern().length() - 1) + "(?: \\{)$"), 0, runtime.picoFactory());
-                glue.addStepDefinition(start);
+                runtime.getGlue().addStepDefinition(start);
             }
             return start;
 
