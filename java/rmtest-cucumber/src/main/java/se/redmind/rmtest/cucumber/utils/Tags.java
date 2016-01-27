@@ -25,7 +25,7 @@ public class Tags {
 
     public static void addParameterizedToSystemProperties() {
         String property = System.getProperty("cucumber.options");
-        if (property != null && !property.contains(PARAMETERIZED)) {
+        if (property != null && property.contains("@") && !property.contains(PARAMETERIZED)) {
             property += " --tags " + PARAMETERIZED;
             System.setProperty("cucumber.options", property);
         }
