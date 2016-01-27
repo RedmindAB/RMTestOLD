@@ -16,9 +16,7 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +49,6 @@ public class WebDriverSteps {
     public static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
     private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{(\\w+)\\})(.*)");
-
-    public static final int TIMEOUT_IN_SECONDS = 5;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
@@ -169,7 +165,7 @@ public class WebDriverSteps {
     public void that_we_do_something_on_the_element_identified_by(String action) {
         switch (action) {
             case "click":
-                waitForCondition(ExpectedConditions.elementToBeClickable(element));
+                driverWrapper.waitForCondition(ExpectedConditions.elementToBeClickable(element));
                 action().moveToElement(element).click().perform();
                 break;
             case "clear":
@@ -297,13 +293,9 @@ public class WebDriverSteps {
     // private helpers
     private WebElement find(By elementLocation) {
         this.elementLocation = elementLocation;
-        driverWrapper.driverFluentWait(TIMEOUT_IN_SECONDS).until(ExpectedConditions.presenceOfElementLocated(elementLocation));
+        driverWrapper.driverFluentWait().until(ExpectedConditions.presenceOfElementLocated(elementLocation));
         element = driver.findElement(elementLocation);
         return element;
-    }
-
-    private <T> void waitForCondition(ExpectedCondition<T> condition) {
-        new WebDriverWait(driver, TIMEOUT_IN_SECONDS).until(condition);
     }
 
     private void refreshElement() {

@@ -17,10 +17,14 @@ Feature: RMTest Configuration file
       """
       drivers:
         - type: phantomjs
+          description: headless
+        - type: firefox
         - type: chrome
+          chromedriver: /some/path/chromedriver
       android:
         home: /some/path
         toolsVersion: 4.4
+      defaultTimeOut: 10
       autoCloseDrivers: true
       jsonReportSavePath: /some/path/target/RMTReports
       rmReportIP: 127.0.0.1

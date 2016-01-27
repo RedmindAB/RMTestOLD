@@ -14,6 +14,7 @@ import org.junit.Assume;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.UnreachableBrowserException;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
+import se.redmind.rmtest.config.Configuration;
 import se.redmind.rmtest.runners.Capability;
 import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.selenium.framework.Browser;
@@ -160,8 +162,24 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
         }
     }
 
+    public <T> void waitForCondition(ExpectedCondition<T> condition) {
+        waitForCondition(condition, Configuration.current().defaultTimeOut);
+    }
+
+    public <T> void waitForCondition(ExpectedCondition<T> condition, int timeoutInSeconds) {
+        new WebDriverWait(getDriver(), timeoutInSeconds).until(condition);
+    }
+
+    public void driverWaitElementPresent(By pBy) {
+        driverWaitElementPresent(pBy, Configuration.current().defaultTimeOut);
+    }
+
     public void driverWaitElementPresent(By pBy, int timeoutInSeconds) {
         new WebDriverWait(getDriver(), timeoutInSeconds).until(ExpectedConditions.presenceOfElementLocated(pBy));
+    }
+
+    public FluentWait<WebDriverType> driverFluentWait() {
+        return driverFluentWait(Configuration.current().defaultTimeOut);
     }
 
     public FluentWait<WebDriverType> driverFluentWait(int timeoutInSeconds) {
