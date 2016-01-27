@@ -39,8 +39,8 @@ import se.redmind.utils.Fields;
 public class Cucumber extends ParentRunner<FeatureRunner> {
 
     static {
-        Tags.addIgnoreToSystemProperties();
         Tags.addParameterizedToSystemProperties();
+        Tags.addIgnoreToSystemProperties();
     }
 
     private final JUnitReporter jUnitReporter;
