@@ -107,7 +107,6 @@ public class Configuration {
                     } else {
                         field.set(cell.getColumnKey(), objectMapper().readValue(value, field.getType()));
                     }
-
                 } catch (IOException | IllegalArgumentException | IllegalAccessException ex) {
                     LOGGER.error(ex.getMessage(), ex);
                 }
