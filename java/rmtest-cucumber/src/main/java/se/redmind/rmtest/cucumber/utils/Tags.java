@@ -14,7 +14,10 @@ public class Tags {
 
     public static void addIgnoreToSystemProperties() {
         String property = System.getProperty("cucumber.options");
-        if (property != null && !property.contains("~" + IGNORE)) {
+        if (property == null) {
+            property = "";
+        }
+        if (!property.contains("~" + IGNORE)) {
             property += " --tags ~" + IGNORE;
             System.setProperty("cucumber.options", property);
         }
