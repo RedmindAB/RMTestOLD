@@ -1,8 +1,10 @@
 package se.redmind.utils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,24 +25,32 @@ public final class Fields {
     }
 
     public static Table<String, Object, Field> listByPathAndDeclaringInstance(Object instance) {
+        return listByPathAndDeclaringInstance(instance, field -> true);
+    }
+
+    public static Table<String, Object, Field> listByPathAndDeclaringInstance(Object instance, Predicate<Field> filter) {
+        filter = filter.and(field -> !Modifier.isStatic(field.getModifiers()));
         Table<String, Object, Field> fieldsByPathAndDeclaringInstance = HashBasedTable.create();
         try {
-            listByPathAndInstance(instance, fieldsByPathAndDeclaringInstance, "");
+            listByPathAndInstance(instance, filter, fieldsByPathAndDeclaringInstance, "");
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             LoggerFactory.getLogger(Fields.class).error(ex.getMessage(), ex);
         }
         return fieldsByPathAndDeclaringInstance;
     }
 
-    private static void listByPathAndInstance(Object instance, Table<String, Object, Field> fieldsByPathAndDeclaringInstance, String currentPath)
+    private static void listByPathAndInstance(Object instance, Predicate<Field> filter, Table<String, Object, Field> fieldsByPathAndDeclaringInstance, String currentPath)
         throws IllegalArgumentException, IllegalAccessException {
-        for (Field field : instance.getClass().getFields()) {
-            fieldsByPathAndDeclaringInstance.put(currentPath + field.getName(), instance, field);
-            Object value = field.get(instance);
-            if (value != null) {
-                Class<?> wrappedType = ClassUtils.primitiveToWrapper(field.getType());
-                if (!wrappedType.getCanonicalName().startsWith("java.lang")) {
-                    listByPathAndInstance(field.get(instance), fieldsByPathAndDeclaringInstance, currentPath + field.getName() + ".");
+        for (Field field : getFieldsByNameOf(instance.getClass()).values()) {
+            if (filter.test(field)) {
+                fieldsByPathAndDeclaringInstance.put(currentPath + field.getName(), instance, field);
+                Object value = field.get(instance);
+                if (value != null) {
+                    Class<?> wrappedType = ClassUtils.primitiveToWrapper(field.getType());
+                    if (!wrappedType.getCanonicalName().startsWith("java")) {
+                        System.out.println(currentPath + " " + field);
+                        listByPathAndInstance(field.get(instance), filter, fieldsByPathAndDeclaringInstance, currentPath + field.getName() + ".");
+                    }
                 }
             }
         }
