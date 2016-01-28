@@ -290,6 +290,14 @@ public class WebDriverSteps {
         this_element_property_matches(property, assertType, expectedValue);
     }
 
+    public WebElement currentElement() {
+        return element;
+    }
+
+    public By currentElementLocation() {
+        return elementLocation;
+    }
+
     // private helpers
     private WebElement find(By elementLocation) {
         this.elementLocation = elementLocation;
