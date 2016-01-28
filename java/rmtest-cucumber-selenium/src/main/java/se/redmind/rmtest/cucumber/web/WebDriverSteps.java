@@ -30,6 +30,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.config.Configuration;
 import se.redmind.utils.Try;
 
 /**
@@ -45,7 +46,7 @@ public class WebDriverSteps {
     public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     public static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
     public static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
-    public static final String MATCHES = "(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
+    public static final String MATCHES = "(!)?(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     public static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
     private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{(\\w+)\\})(.*)");
@@ -211,83 +212,97 @@ public class WebDriverSteps {
     }
 
     // Assertions
-    @Then("^the title " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void the_title_matches(String assertType, String expectedValue) {
-        assertString(assertType, getNotNullOrEmpty(() -> driver.getTitle()), expectedValue);
+    @Then("^" + THAT + "the title " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_title_matches(String not, String assertType, String expectedValue) {
+        assertString(assertType, getNotNullOrEmpty(() -> driver.getTitle()), not == null, expectedValue);
     }
 
-    @Then("^the page content " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void the_page_content_is(String assertType, String expectedValue) {
-        assertString(assertType, find(By.tagName("body")).findElement(By.tagName("pre")).getText(), expectedValue);
+    @Then("^" + THAT + "the page content " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_page_content_is(String not, String assertType, String expectedValue) {
+        assertString(assertType, find(By.tagName("body")).findElement(By.tagName("pre")).getText(), not == null, expectedValue);
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void that_the_element_at_id_matches(String type, String id, String assertType, String expectedValue) {
-        assertElement(assertType, find(by(type, id)), valueOf(expectedValue));
+    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void that_the_element_at_id_matches(String type, String id, String not, String assertType, String expectedValue) {
+        assertElement(assertType, find(by(type, id)), not == null, valueOf(expectedValue));
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " (?:is present|exists)$")
-    public void the_element_with_id_is_present(String type, String id) {
-        find(by(type, id));
+    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is present$")
+    public void the_element_with_id_is_present(String type, String id, String not) {
+        if (not == null) {
+            find(by(type, id));
+        } else {
+            Assert.assertTrue(doesNotFind(by(type, id)));
+        }
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is displayed")
-    public void the_element_with_id_is_displayed(String type, String id) {
-        Assert.assertTrue(find(by(type, id)).isDisplayed());
+    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is displayed$")
+    public void the_element_with_id_is_displayed(String type, String id, String not) {
+        Assert.assertEquals(not == null, find(by(type, id)).isDisplayed());
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is enabled")
-    public void the_element_with_id_is_enabled(String type, String id) {
-        Assert.assertTrue(find(by(type, id)).isEnabled());
+    @Then("^" + THAT + THIS_ELEMENT + " (!)?is displayed$")
+    public void the_element_is_displayed(String not) {
+        Assert.assertEquals(not == null, element.isDisplayed());
     }
 
-    @Then("^" + THE_ELEMENT_IDENTIFIED_BY + " is selected")
-    public void the_element_with_id_is_selected(String type, String id) {
-        Assert.assertTrue(find(by(type, id)).isSelected());
+    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is enabled$")
+    public void the_element_with_id_is_enabled(String type, String id, String not) {
+        Assert.assertEquals(not == null, find(by(type, id)).isEnabled());
     }
 
-    @Then("^the current url " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void the_current_url_ends_with(String assertType, String expectedValue) {
-        assertString(assertType, driver.getCurrentUrl(), expectedValue);
+    @Then("^" + THAT + THIS_ELEMENT + " (!)?is enabled$")
+    public void the_element_is_enabled(String not) {
+        Assert.assertEquals(not == null, element.isEnabled());
     }
 
-    @Then("^executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
-    public void executing_returns(String javascript, String assertType, String expectedValue) {
+    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is selected$")
+    public void the_element_with_id_is_selected(String type, String id, String not) {
+        Assert.assertEquals(not == null, find(by(type, id)).isSelected());
+    }
+
+    @Then("^" + THAT + THIS_ELEMENT + " (!)?is selected$")
+    public void this_element_is_selected(String not) {
+        Assert.assertEquals(not == null, element.isSelected());
+    }
+
+    @Then("^" + THAT + "the current url " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_current_url_ends_with(String not, String assertType, String expectedValue) {
+        assertString(assertType, driver.getCurrentUrl(), not == null, expectedValue);
+    }
+
+    @Then("^" + THAT + "executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
+    public void executing_returns(String javascript, String not, String assertType, String expectedValue) {
         String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return window.scrollY;"));
-        assertString(assertType, value, expectedValue);
+        assertString(assertType, value, not == null, expectedValue);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void this_element_matches(String assertType, String expectedValue) {
+    public void this_element_matches(String not, String assertType, String expectedValue) {
         refreshElement();
-        assertElement(assertType, element, valueOf(expectedValue));
-    }
-
-    @Then("^" + THAT + THIS_ELEMENT + " is selected$")
-    public void this_element_is_selected() {
-        Assert.assertTrue(element.isSelected());
+        assertElement(assertType, element, not == null, valueOf(expectedValue));
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " attribute \"([^\"]*)\" " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void this_element_attribute_matches(String attribute, String assertType, String expectedValue) {
-        assertString(assertType, element.getAttribute(attribute), expectedValue);
+    public void this_element_attribute_matches(String attribute, String not, String assertType, String expectedValue) {
+        assertString(assertType, element.getAttribute(attribute), not == null, expectedValue);
     }
 
-    @Then("^the attribute " + QUOTED_CONTENT + " of " + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void the_attribute_of_the_element_identified_by_matches(String attribute, String type, String id, String assertType, String expectedValue) {
+    @Then("^" + THAT + "the attribute " + QUOTED_CONTENT + " of " + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_attribute_of_the_element_identified_by_matches(String attribute, String type, String id, String not, String assertType, String expectedValue) {
         find(by(type, id));
-        this_element_attribute_matches(attribute, assertType, expectedValue);
+        this_element_attribute_matches(attribute, not, assertType, expectedValue);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " property \"([^\"]*)\" " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void this_element_property_matches(String property, String assertType, String expectedValue) {
-        assertString(assertType, element.getCssValue(property), expectedValue);
+    public void this_element_property_matches(String property, String not, String assertType, String expectedValue) {
+        assertString(assertType, element.getCssValue(property), not == null, expectedValue);
     }
 
-    @Then("^the property " + QUOTED_CONTENT + " of " + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
-    public void the_property_of_the_element_identified_by_matches(String property, String type, String id, String assertType, String expectedValue) {
+    @Then("^" + THAT + "the property " + QUOTED_CONTENT + " of " + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
+    public void the_property_of_the_element_identified_by_matches(String property, String type, String id, String not, String assertType, String expectedValue) {
         find(by(type, id));
-        this_element_property_matches(property, assertType, expectedValue);
+        this_element_property_matches(property, not, assertType, expectedValue);
     }
 
     public WebElement currentElement() {
@@ -304,6 +319,13 @@ public class WebDriverSteps {
         driverWrapper.driverFluentWait().until(ExpectedConditions.presenceOfElementLocated(elementLocation));
         element = driver.findElement(elementLocation);
         return element;
+    }
+
+    private boolean doesNotFind(By elementLocation) {
+        return Try.toGet(() -> driver.findElements(elementLocation))
+            .until(result -> result.isEmpty())
+            .delayRetriesBy(Configuration.current().defaultTimeOut * 100)
+            .nTimes(10).isEmpty();
     }
 
     private void refreshElement() {
@@ -370,10 +392,10 @@ public class WebDriverSteps {
         }
     }
 
-    private void assertElement(String assertType, WebElement element, String expected) {
+    private void assertElement(String assertType, WebElement element, boolean shouldBeTrue, String expected) {
         switch (assertType) {
             case "links to":
-                Assert.assertEquals(expected, element.getAttribute("href"));
+                assertString("is", element.getAttribute("href"), shouldBeTrue, expected);
                 break;
             default:
                 String value;
@@ -382,31 +404,35 @@ public class WebDriverSteps {
                 } else {
                     value = getNotNullOrEmpty(() -> element.getText());
                 }
-                assertString(assertType, value, expected);
+                assertString(assertType, value, shouldBeTrue, expected);
                 break;
         }
 
     }
 
-    private void assertString(String assertType, String value, String expected) {
+    private void assertString(String assertType, String value, boolean shouldBeTrue, String expected) {
         switch (assertType) {
             case "reads":
             case "returns":
             case "is":
             case "equals":
-                Assert.assertEquals(expected, value);
+                if (shouldBeTrue) {
+                    Assert.assertEquals(expected, value);
+                } else {
+                    Assert.assertNotEquals(expected, value);
+                }
                 break;
             case "matches":
-                Assert.assertTrue("'" + value + "' doesn't match '" + expected + "'", value.matches(expected));
+                Assert.assertEquals("'" + value + "' doesn't match '" + expected + "'", shouldBeTrue, value.matches(expected));
                 break;
             case "contains":
-                Assert.assertTrue("'" + value + "' doesn't contain '" + expected + "'", value.contains(expected));
+                Assert.assertEquals("'" + value + "' doesn't contain '" + expected + "'", shouldBeTrue, value.contains(expected));
                 break;
             case "starts with":
-                Assert.assertTrue("'" + value + "' doesn't start with '" + expected + "'", value.startsWith(expected));
+                Assert.assertEquals("'" + value + "' doesn't start with '" + expected + "'", shouldBeTrue, value.startsWith(expected));
                 break;
             case "ends with":
-                Assert.assertTrue("'" + value + "' doesn't end with '" + expected + "'", value.endsWith(expected));
+                Assert.assertEquals("'" + value + "' doesn't end with '" + expected + "'", shouldBeTrue, value.endsWith(expected));
                 break;
             default:
                 throw new IllegalArgumentException("unknown assert type " + assertType);
