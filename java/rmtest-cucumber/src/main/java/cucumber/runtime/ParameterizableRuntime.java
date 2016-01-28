@@ -42,7 +42,7 @@ public class ParameterizableRuntime extends Runtime {
     private final ResourceLoader resourceLoader;
     private PicoFactory picoFactory;
     private String name;
-    private Object[] parameters;
+    private Object[] parameters = new Object[]{};
 
     public ParameterizableRuntime(ResourceLoader resourceLoader, ClassFinder classFinder, ClassLoader classLoader, RuntimeOptions runtimeOptions) {
         super(resourceLoader, classFinder, classLoader, runtimeOptions);
