@@ -7,6 +7,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.google.common.base.Strings;
 
 import se.redmind.utils.NodeModules;
 import se.redmind.utils.TestHome;
@@ -29,12 +30,12 @@ public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> 
         cliArgs.add("--webdriver-loglevel=ERROR");
         capabilities.setCapability("takesScreenshot", true);
         capabilities.setCapability("browserName", "PhantomJS");
-        if (System.getProperty(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY) == null) {
-        if (!TestHome.isWindows()) {
-            capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/bin/phantomjs");
-        } else {
-            capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/phantomjs.exe");
-        }
+        if (Strings.isNullOrEmpty(System.getProperty(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY))) {
+            if (!TestHome.isWindows()) {
+                capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/bin/phantomjs");
+            } else {
+                capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/phantomjs.exe");
+            }
         }
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "loadImages", true);
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "javascriptEnabled", true);
