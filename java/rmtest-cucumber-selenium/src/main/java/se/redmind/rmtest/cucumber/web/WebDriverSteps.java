@@ -227,7 +227,7 @@ public class WebDriverSteps {
         assertElement(assertType, find(by(type, id)), not == null, valueOf(expectedValue));
     }
 
-    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is present$")
+    @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?(?:is present|exists)$")
     public void the_element_with_id_is_present(String type, String id, String not) {
         if (not == null) {
             find(by(type, id));

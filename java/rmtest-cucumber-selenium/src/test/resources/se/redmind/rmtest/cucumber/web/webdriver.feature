@@ -46,6 +46,7 @@ Feature: WebDriver functionalities
 
   Scenario: element visibility or existence
     Given that the element with id "css" is present
+    And the element with id "typography" exists
     And the element with id "css" is displayed
     And the element with id "superman" !is present
 
