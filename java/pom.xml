@@ -10,6 +10,7 @@
         <module>rmtest-common</module>
         <module>rmtest-cucumber</module>
         <module>rmtest-selenium</module>
+        <module>rmtest-selenium-server</module>
         <module>rmtest-cucumber-restassured</module>
         <module>rmtest-cucumber-selenium</module>
         <module>rmtest-cucumber-standalone</module>
