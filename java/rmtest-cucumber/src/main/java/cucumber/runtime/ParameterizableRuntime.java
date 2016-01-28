@@ -7,6 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cucumber.api.StepDefinitionReporter;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.JavaBackend;
@@ -33,24 +36,29 @@ public class ParameterizableRuntime extends Runtime {
         Replace, Full, Quiet
     }
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final RuntimeOptions runtimeOptions;
+    private final ClassLoader classLoader;
+    private final ResourceLoader resourceLoader;
     private PicoFactory picoFactory;
     private String name;
     private Object[] parameters;
 
     public ParameterizableRuntime(ResourceLoader resourceLoader, ClassFinder classFinder, ClassLoader classLoader, RuntimeOptions runtimeOptions) {
         super(resourceLoader, classFinder, classLoader, runtimeOptions);
+        this.runtimeOptions = runtimeOptions;
+        this.classLoader = classLoader;
+        this.resourceLoader = resourceLoader;
     }
 
     public ParameterizableRuntime(ResourceLoader resourceLoader, ClassFinder classFinder, ClassLoader classLoader, RuntimeOptions runtimeOptions, String name, Object[] parameters) {
-        super(resourceLoader, classFinder, classLoader, runtimeOptions);
+        this(resourceLoader, classFinder, classLoader, runtimeOptions);
         this.name = name;
         this.parameters = parameters;
     }
 
     @Override
     public void run() throws IOException {
-        RuntimeOptions runtimeOptions = Fields.getSafeValue(this, "runtimeOptions");
-        ClassLoader classLoader = Fields.getSafeValue(this, "classLoader");
         // Make sure all features parse before initialising any reporters/formatters
         List<CucumberFeature> features = cucumberFeatures();
 
@@ -65,8 +73,6 @@ public class ParameterizableRuntime extends Runtime {
     }
 
     public List<CucumberFeature> cucumberFeatures() {
-        RuntimeOptions runtimeOptions = Fields.getSafeValue(this, "runtimeOptions");
-        ResourceLoader resourceLoader = Fields.getSafeValue(this, "resourceLoader");
         List<CucumberFeature> cucumberFeatures = runtimeOptions.cucumberFeatures(resourceLoader);
 
         // 1. Get the children from the parent class, intercept any parameterized scenario and instantiate their factories
@@ -104,13 +110,27 @@ public class ParameterizableRuntime extends Runtime {
                 }
             }
         });
+        if (!parameterizedScenarios.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            int maxLength = parameterizedScenarios.values().stream().map(f -> f.statement().getVisualName()).max(String::compareTo).get().length();
+            parameterizedScenarios.forEach((pattern, factory) -> {
+                CucumberFeature cucumberFeature = Fields.getSafeValue(factory.statement(), "cucumberFeature");
+                String path = Fields.getSafeValue(cucumberFeature, "path");
+                String visualName = factory.statement().getVisualName().replaceAll("Scenario:", "");
+                stringBuilder.append("\n  ").append(visualName);
+                for (int i = 0; i < maxLength - visualName.length() - 5; i++) {
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append("# ").append(path).append(":").append(factory.statement().getGherkinModel().getLine());
+            });
+            logger.info("\nregistering parameterized scenarios:" + stringBuilder.toString() + "\n");
+        }
         return parameterizedScenarios;
     }
 
     public void inject(Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios, List<CucumberFeature> features) throws RuntimeException {
         picoFactory().addInstance(this);
-        RuntimeGlue glue = (RuntimeGlue) this.getGlue();
-        glue.addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory()));
+        getGlue().addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory()));
         features.forEach(feature -> {
             List<StepContainer> stepContainers = new ArrayList<>(feature.getFeatureElements());
 

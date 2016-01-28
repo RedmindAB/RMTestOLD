@@ -79,6 +79,9 @@ public class Configuration {
     @JsonProperty
     public boolean reuseDriverBetweenTests;
 
+    @JsonProperty
+    public int defaultTimeOut = 5;
+
     /**
      * @return the path of the file this configuration is based on
      */
