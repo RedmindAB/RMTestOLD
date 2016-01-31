@@ -19,9 +19,9 @@ to start a node:
     java -jar rmtest-selenium-server -role node -nodeConfig your-configuration.json
 
 with for example:
-```
-{
-    "capabilities": [{
+```json
+    {
+        "capabilities": [{
 		"seleniumProtocol": "WebDriver",
 		"browserName": "chrome",
 		"osname":"OSX",
@@ -30,17 +30,18 @@ with for example:
 		"deviceName": "AnApple",
 		"platform" : "MAC"
 	}],
-    "configuration": {
-        "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
-        "maxSession": 5,
-        "port": 6650,
-        "host": "localhost",
-        "register": true,
-        "registerCycle": 5000,
-        "hubPort": 4444,
-        "hubHost": "localhost"
-    }
-}```
+        "configuration": {
+	        "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+	        "maxSession": 5,
+	        "port": 6650,
+	        "host": "localhost",
+	        "register": true,
+	        "registerCycle": 5000,
+	        "hubPort": 4444,
+	        "hubHost": "localhost"
+	}
+     }
+```
 
 see http://www.seleniumhq.org/docs/ for more information about the selenium server.
 
