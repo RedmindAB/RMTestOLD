@@ -20,27 +20,27 @@ to start a node:
 
 with for example:
 ```json
-    {
-        "capabilities": [{
-		"seleniumProtocol": "WebDriver",
-		"browserName": "chrome",
-		"osname":"OSX",
-		"description": "OSX chrome",
-		"maxInstances": 1,
-		"deviceName": "AnApple",
-		"platform" : "MAC"
-	}],
-        "configuration": {
-	        "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
-	        "maxSession": 5,
-	        "port": 6650,
-	        "host": "localhost",
-	        "register": true,
-	        "registerCycle": 5000,
-	        "hubPort": 4444,
-	        "hubHost": "localhost"
-	}
-     }
+{
+    "capabilities": [{
+	"seleniumProtocol": "WebDriver",
+	"browserName": "chrome",
+	"osname":"OSX",
+	"description": "OSX chrome",
+	"maxInstances": 1,
+	"deviceName": "AnApple",
+	"platform" : "MAC"
+    }],
+    "configuration": {
+        "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
+        "maxSession": 5,
+        "port": 6650,
+        "host": "localhost",
+        "register": true,
+        "registerCycle": 5000,
+        "hubPort": 4444,
+        "hubHost": "localhost"
+    }
+}
 ```
 
 see http://www.seleniumhq.org/docs/ for more information about the selenium server.
