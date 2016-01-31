@@ -40,19 +40,20 @@ public class ParameterizableRuntime extends Runtime {
     private final RuntimeOptions runtimeOptions;
     private final ClassLoader classLoader;
     private final ResourceLoader resourceLoader;
+    private final String name;
+    private final Object[] parameters;
+
     private PicoFactory picoFactory;
-    private String name;
-    private Object[] parameters = new Object[]{};
 
     public ParameterizableRuntime(ResourceLoader resourceLoader, ClassFinder classFinder, ClassLoader classLoader, RuntimeOptions runtimeOptions) {
+        this(resourceLoader, classFinder, classLoader, runtimeOptions, null, new Object[0]);
+    }
+
+    public ParameterizableRuntime(ResourceLoader resourceLoader, ClassFinder classFinder, ClassLoader classLoader, RuntimeOptions runtimeOptions, String name, Object[] parameters) {
         super(resourceLoader, classFinder, classLoader, runtimeOptions);
         this.runtimeOptions = runtimeOptions;
         this.classLoader = classLoader;
         this.resourceLoader = resourceLoader;
-    }
-
-    public ParameterizableRuntime(ResourceLoader resourceLoader, ClassFinder classFinder, ClassLoader classLoader, RuntimeOptions runtimeOptions, String name, Object[] parameters) {
-        this(resourceLoader, classFinder, classLoader, runtimeOptions);
         this.name = name;
         this.parameters = parameters;
     }

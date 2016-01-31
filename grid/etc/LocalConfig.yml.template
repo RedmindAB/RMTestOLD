@@ -1,11 +1,6 @@
-runner:
-  type: local
-  usePhantomJS: false
-  useChrome: true
-  useFirefox: true
-  android:
-    home: PATH/TO/ANDROIDHOME
-    toolsVersion: 4.4
+drivers:
+  - type: chrome
+  - type: firefox
 autoCloseDrivers: true
 jsonReportSavePath: /some/path/target/RMTReports
 rmReportIP: 127.0.0.1

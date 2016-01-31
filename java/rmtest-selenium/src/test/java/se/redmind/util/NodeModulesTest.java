@@ -10,6 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import se.redmind.utils.NodeModules;
+import se.redmind.utils.TestHome;
 
 public class NodeModulesTest {
 
@@ -27,15 +28,19 @@ public class NodeModulesTest {
     @Test
     public void test_modulePath() {
         Assume.assumeTrue(file.exists());
-        String path = NodeModules.path(file.getAbsolutePath());
-        assertEquals(file.getAbsolutePath(), path);
+        if (!TestHome.isWindows()) {
+            String path = NodeModules.path(file.getAbsolutePath());
+            assertEquals(file.getAbsolutePath(), path);
+        }
     }
 
     @Test
     public void no_modulesPath() {
         Assume.assumeTrue(noNodeModules.exists());
-        String noModule = NodeModules.path(noNodeModules.getAbsolutePath());
-        assertNull(noModule);
+        if (!TestHome.isWindows()) {
+            String noModule = NodeModules.path(noNodeModules.getAbsolutePath());
+            assertNull(noModule);
+        }
     }
 
 }

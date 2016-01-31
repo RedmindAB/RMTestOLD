@@ -1,6 +1,8 @@
 Feature: WebDriver functionalities
+  This file contains a lot of examples and try to cover most of the functions and syntaxes supported by the WebDriverSteps
 
   Background:
+    # this is the only local step and will start the local web server
     Given that we know our local spark instance
     And that we navigate to "${spark}/bootstrap-tldr/"
     And that we maximize the window
@@ -8,6 +10,7 @@ Feature: WebDriver functionalities
   Scenario: navigation
     When we navigate to "${spark}/bootstrap-tldr/#css"
     Then the current url ends with "#css"
+    And the current url !ends with "#admin"
     When we go back
     Then the current url ends with "/"
     When we go forward
@@ -23,10 +26,10 @@ Feature: WebDriver functionalities
     And the current url matches "http://.+/"
 
   Scenario: elements by id, xpath, class, css selector, link text, partial link text, tag
-    Then the element with id "typography" reads "Typography"
-    Then the element with xpath "//*[@id="typography"]" reads "Typography"
+    Given that the element with id "typography" reads "Typography"
+    And that the element with xpath "//*[@id="typography"]" reads "Typography"
     Then the element with class "text-left" reads ".text-left"
-    Then the element with css "body > div.container > div > div.col-md-9 > blockquote > p" reads "Bootstrap TLDR"
+    And the element with css "body > div.container > div > div.col-md-9 > blockquote > p" reads "Bootstrap TLDR"
     Then the element with link text "Typography" links to "${spark}/bootstrap-tldr/#typography"
     Then the element with partial link text "Typo" links to "${spark}/bootstrap-tldr/#typography"
     And we select the element with tag "body"
@@ -40,6 +43,12 @@ Feature: WebDriver functionalities
     Then the current url ends with "#top"
     # javascript
     And executing "return window.scrollY;" returns 0
+
+  Scenario: element visibility or existence
+    Given that the element with id "css" is present
+    And the element with id "typography" exists
+    And the element with id "css" is displayed
+    And the element with id "superman" !is present
 
   Scenario: element selection and attribute/properties assertion
     # select an element

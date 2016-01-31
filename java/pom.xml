@@ -3,13 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>se.redmind</groupId>
     <artifactId>rmtest</artifactId>
-    <version>2.0.6</version>
+    <version>2.0.7</version>
     <packaging>pom</packaging>
     <modules>
         <module>rmtest-logback</module>
         <module>rmtest-common</module>
         <module>rmtest-cucumber</module>
         <module>rmtest-selenium</module>
+        <module>rmtest-selenium-server</module>
         <module>rmtest-cucumber-restassured</module>
         <module>rmtest-cucumber-selenium</module>
         <module>rmtest-cucumber-standalone</module>
