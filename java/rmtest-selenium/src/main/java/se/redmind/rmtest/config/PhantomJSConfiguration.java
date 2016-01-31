@@ -34,7 +34,7 @@ public class PhantomJSConfiguration extends LocalConfiguration<PhantomJSDriver> 
             if (!TestHome.isWindows()) {
                 capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/bin/phantomjs");
             } else {
-                capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, NodeModules.path() + "/phantomjs/lib/phantom/phantomjs.exe");
+                capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, TestHome.get() + "/node_modules/phantomjs/lib/phantom/phantomjs.exe");
             }
         }
         capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX + "loadImages", true);
