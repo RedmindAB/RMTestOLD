@@ -21,64 +21,6 @@
             <version>2.0.7</version>
         </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.4.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <mainClass>org.openqa.grid.selenium.GridLauncher</mainClass>
-                            <arguments>
-                                <argument>-role</argument>
-                                <argument>hub</argument>
-                                <argument>-servlets</argument>
-                                <argument>se.redmind.rmtest.selenium.grid.servlets.GridQueryServlet</argument>
-                            </arguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>node</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.4.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <mainClass>org.openqa.grid.selenium.GridLauncher</mainClass>
-                            <arguments>
-                                <argument>-role</argument>
-                                <argument>node</argument>
-                            </arguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
     <build>
         <finalName>rmtest-selenium-server</finalName>
         <plugins>
@@ -109,7 +51,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.openqa.grid.selenium.GridLauncher</mainClass>
+                                    <mainClass>se.redmind.rmtest.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

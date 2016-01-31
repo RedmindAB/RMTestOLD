@@ -5,5 +5,5 @@ logName=`getLogPrefix`
 $testHome/cmd/killHub.sh
 
 
-java -cp $RmJar:$SeleniumJar org.openqa.grid.selenium.GridLauncher -role hub -servlets se.redmind.rmtest.selenium.grid.servlets.GridQueryServlet &> $logName.log &
+java -jar $RmJar -role hub &> $logName.log &
 exit 0;

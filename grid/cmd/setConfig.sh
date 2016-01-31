@@ -12,20 +12,18 @@ getRmConfigParam() {
 export androidHome=`getLocalConfigParam androidHome`
 export ANDROIDHOME=$androidHome
 if [[ -z "$ANDROID_HOME" ]]
-then 
+then
 	export ANDROID_HOME=$androidHome
 fi
 export seleniumVersion=`getRmConfigParam seleniumVersion`
 export ADB_PATH="$ANDROIDHOME/platform-tools"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-#export RmJar="$testHome/lib/GridQueryServlet.jar"
-export RmJar=`find $testHome/../java/rmtest-selenium/target/rmtest-selenium-*[0-9].jar`
-export SeleniumJar="$testHome/../java/rmtest-selenium/target/lib/*"
+export RmJar=`find $testHome/../java/rmtest-selenium-server/target/rmtest-selenium-server*.jar`
 export appiumBinary="$testHome/node_modules/appium/bin/appium.js"
 export RMTestHubIp=`getLocalConfigParam hubIp`
 export RMTestLocalNodeIp=`getLocalConfigParam localIp`
 #export AndroidBuildToolVersion=`getLocalConfigParam AndroidBuildtoolsVersion`
-if [[ -e $androidHome ]] 
+if [[ -e $androidHome ]]
 then
 	export AAPTCmd=`find $androidHome -name aapt | head -1`
 fi
@@ -43,5 +41,3 @@ getLogPrefix() {
 
 PATH=$PATH:$testHome/lib
 export MAVEN_OPTS="-Xms1024m -Xmx2048m -Xss2048k"
-
-
