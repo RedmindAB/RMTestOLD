@@ -6,14 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import gherkin.formatter.model.*;
-import sun.misc.MetaIndex;
 
 /**
  * @author Jeremy Comte
  */
 public class Log4Cucumber implements Formatter {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void syntaxError(String state, String event, List<String> legalEvents, String uri, Integer line) {
