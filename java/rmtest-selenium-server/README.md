@@ -1,11 +1,11 @@
 rmtest-selenium-server
 ======
 
-**IMPORTANT:**
- :exclamation: *If you are using Internet Explorer, make sure you download the 32-bit IEServerDriver.exe file.*
+:exclamation: **IMPORTANT:** :exclamation: <br>
+*If you are using Internet Explorer, make sure you download the 32-bit IEServerDriver.exe file.*
 *Otherwise "webelement.sendkeys(...)" takes about 4 seconds for each character.*
 
-this module contains a standalone version of the selenium server together with:
+This module contains a standalone version of the selenium server together with:
 
 + a custom servlet required by rmtest-selenium in order to query the hub.
 + rmtest-logback for proper logging.
