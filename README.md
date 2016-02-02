@@ -18,7 +18,7 @@ git clone https://github.com/RedmindAB/RMTest.git
 
 Go to the newly created "RMTest" folder and execute the installation script.
 
-cd RMTest
+cd RMTest/grid
 
 ./install.sh The test will fail if the Hub-server and the Node-server aren't running. (See below). Ignore the test results.
 
