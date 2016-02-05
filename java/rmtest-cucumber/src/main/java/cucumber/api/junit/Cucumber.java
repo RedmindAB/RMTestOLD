@@ -3,7 +3,6 @@ package cucumber.api.junit;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
@@ -50,6 +49,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
     private final List<FeatureRunner> children = new ArrayList<>();
     private final ParameterizableRuntime runtime;
     private final String name;
+    private final boolean useRealClassnamesForSurefire;
     // do not remove this field, it is read through reflection
     private final Object[] parameters;
 
@@ -68,6 +68,9 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         super(clazz);
         this.name = name;
         this.parameters = parameters;
+
+        useRealClassnamesForSurefire = "true".equals(System.getProperty("useRealClassnamesForSurefire"));
+
         ClassLoader classLoader = clazz.getClassLoader();
         Assertions.assertNoCucumberAnnotatedMethods(clazz);
 
@@ -129,7 +132,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     @Override
                     public Description getDescription() {
                         Description description = super.getDescription();
-                        if (!description.getClassName().equals(featureName)) {
+                        if (useRealClassnamesForSurefire && !description.getClassName().equals(featureName)) {
                             Fields.set(description, "fDisplayName", featureName + ":" + scenario.getLine() + (name != null ? name : "") + "(" + featureName + ")");
                         }
                         return description;
@@ -139,18 +142,25 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     protected Description describeChild(Step step) {
                         Description description = super.describeChild(step);
                         if (!description.getMethodName().contains("#" + step.getLine())) {
-                            Method method = null;
-                            for (Map.Entry<String, StepDefinition> entry : stepDefinitionsByPattern.entrySet()) {
-                                if (step.getName().matches(entry.getKey())) {
-                                    method = Fields.getSafeValue(entry.getValue(), "method");
-                                    break;
-                                }
-                            }
-                            if (method != null) {
-                                Fields.set(description, "fDisplayName", method.getName() + "@" + featureName + ":" + step.getLine() + (name != null ? name : "") + "(" + method.getDeclaringClass().getName() + ")");
+                            Method method = findMatchingMethod(step);
+                            if (useRealClassnamesForSurefire && method != null) {
+                                Fields.set(description, "fDisplayName", method.getName() + "@" + featureName + "#" + step.getLine() + (name != null ? name : "") + "(" + method.getDeclaringClass().getName() + ")");
+                            } else {
+                                Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + (name != null ? name : "") + "(" + description.getClassName() + ")");
                             }
                         }
                         return description;
+                    }
+
+                    private Method findMatchingMethod(Step step) {
+                        Method method = null;
+                        for (Map.Entry<String, StepDefinition> entry : stepDefinitionsByPattern.entrySet()) {
+                            if (step.getName().matches(entry.getKey())) {
+                                method = Fields.getSafeValue(entry.getValue(), "method");
+                                break;
+                            }
+                        }
+                        return method;
                     }
                 };
                 runners.set(i, runner);
