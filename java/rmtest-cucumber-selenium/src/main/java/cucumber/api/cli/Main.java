@@ -14,7 +14,14 @@ import se.redmind.rmtest.config.Configuration;
 
 import static java.util.Arrays.asList;
 
+import se.redmind.rmtest.cucumber.utils.Tags;
+
 public class Main {
+
+    static {
+        Tags.addParameterizedToSystemProperties();
+        Tags.addIgnoreToSystemProperties();
+    }
 
     public static void main(String[] argv) throws Throwable {
         byte exitstatus = run(argv, Thread.currentThread().getContextClassLoader());
