@@ -4,7 +4,7 @@
     <parent>
         <groupId>se.redmind</groupId>
         <artifactId>rmtest</artifactId>
-        <version>2.0.9</version>
+        <version>2.0.10</version>
     </parent>
     <artifactId>rmtest-testdroid</artifactId>
     <name>rmtest -> testdroid</name>
@@ -13,7 +13,7 @@
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-appium</artifactId>
-            <version>2.0.9</version>
+            <version>2.0.10</version>
         </dependency>
         <dependency>
             <groupId>com.testdroid</groupId>
@@ -58,14 +58,14 @@
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-logback</artifactId>
-            <version>2.0.9</version>
+            <version>2.0.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>se.redmind</groupId>
             <artifactId>rmtest-selenium</artifactId>
             <type>test-jar</type>
-            <version>2.0.9</version>
+            <version>2.0.10</version>
             <scope>test</scope>
         </dependency>
         <dependency>
