@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import gherkin.formatter.model.Scenario;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import se.redmind.rmtest.config.Configuration;
+import se.redmind.utils.Fields;
 
 /**
  * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned. On the RMReport side the
@@ -30,7 +32,7 @@ public class LiveStreamListener extends RunListener {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private volatile RmTestResultBuilder resBuilder;
-//    private final RmReportConnection rmrConnection;
+    //    private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
     private final boolean parrentRunner;
     private final List<LiveStreamListener> listeners;
@@ -57,7 +59,7 @@ public class LiveStreamListener extends RunListener {
 
     @Override
     public void testRunStarted(Description description) throws Exception {
-        initSuite(description, 1);
+        initSuite(description, 0);
 //        rmrConnection.connect();
 //        rmrConnection.sendMessage("suite", resBuilder.build());
         super.testRunStarted(description);
@@ -65,7 +67,7 @@ public class LiveStreamListener extends RunListener {
 
     @Override
     public void testStarted(Description description) throws Exception {
-        resBuilder.addTest(description.getDisplayName());
+        resBuilder.addTest(description.getDisplayName(), description);
         if (parrentRunner) {
 //            rmrConnection.sendMessage("testStart", id);
             testStartTimes.put(description.getDisplayName(), System.currentTimeMillis());
@@ -159,11 +161,15 @@ public class LiveStreamListener extends RunListener {
         } else if (level == 1 && desc.isSuite()) {
             resBuilder.setSuiteName(desc.getClassName());
         }
-        if(desc.getClassName().startsWith("Feature: ")){
-        	resBuilder.setCurrentFeature(desc.getClassName());
+        if (desc.getClassName().startsWith("Feature: ")) {
+            resBuilder.setCurrentFeature(desc.getClassName());
+        }
+        if (resBuilder.isScenario(desc)) {
+            String scenarioName = resBuilder.getScenarioName(desc);
+            resBuilder.setCurrentScenario(scenarioName.substring(0, scenarioName.lastIndexOf("[")).trim());
         }
         if (desc.isTest()) {
-    		resBuilder.addTest(desc.getDisplayName());
+            resBuilder.addTest(desc.getDisplayName(), desc);
         }
         ArrayList<Description> children = desc.getChildren();
         for (Description description : children) {

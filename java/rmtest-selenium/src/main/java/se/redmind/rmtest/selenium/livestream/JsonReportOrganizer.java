@@ -10,7 +10,7 @@ import java.util.List;
 public class JsonReportOrganizer {
 
     private JsonObject build;
-    private int testCnt = 0;
+    private int regularTestCnt = 0;
     private List<JsonElement> gherkinScenarios;
     private List<JsonElement> regularTests;
     private HashMap<String, ArrayList<JsonObject>> gherkinMap;
@@ -30,12 +30,13 @@ public class JsonReportOrganizer {
                 gherkinScenarios.add(test);
             } else {
                 regularTests.add(test);
-                testCnt++;
+                regularTestCnt++;
             }
         }
         populateGherkinMap();
         /*Temporary print out of the gherkin and regular tests*/
 //        printTests();
+        build.addProperty("totalTests", getTestCount());
         build.add("tests", parseToGherkinFormat());
         return build;
     }
@@ -58,6 +59,7 @@ public class JsonReportOrganizer {
     private JsonArray parseToGherkinFormat() {
         JsonArray gherkin = new JsonArray();
         double runTime;
+
         for (ArrayList<JsonObject> jsonMapObjects : gherkinMap.values()) {
             runTime = 0.0;
             JsonObject testScenario = new JsonObject();
@@ -70,7 +72,9 @@ public class JsonReportOrganizer {
                 }
                 if (testNotPassed(jsonMapObjects, i)) {
                     testScenario.addProperty("result", "failure");
-                    testScenario.addProperty("failureMessage", jsonMapObjects.get(i).get("failureMessage").getAsString());
+                    if (jsonMapObjects.get(i).get("failureMessage") != null)
+                    testScenario.addProperty("failureMessage", jsonMapObjects.get(i).get("failureMessage")
+                            .getAsString());
                 }
                 step.addProperty(String.valueOf(i + 1), jsonMapObjects.get(i).get("method").getAsString());
                 runTime += jsonMapObjects.get(i).get("runTime").getAsDouble();
@@ -93,7 +97,7 @@ public class JsonReportOrganizer {
 
     public int getTestCount() {
         int gherkinScenarios = getGherkinCount();
-        return testCnt + gherkinScenarios;
+        return regularTestCnt + gherkinScenarios;
     }
 
     private int populateGherkinMap() {

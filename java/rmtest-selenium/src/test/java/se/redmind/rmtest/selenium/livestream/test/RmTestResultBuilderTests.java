@@ -36,9 +36,9 @@ public class RmTestResultBuilderTests {
         String test1 = "testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
         String test2 = "testGoogle2[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
         String test3 = "testGoogle3[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
-        resultBuilder.addTest(test1);
-        resultBuilder.addTest(test2);
-        resultBuilder.addTest(test3);
+        resultBuilder.addTest(test1, DescriptionMocker.mockDescription());
+        resultBuilder.addTest(test2, DescriptionMocker.mockDescription());
+        resultBuilder.addTest(test3, DescriptionMocker.mockDescription());
         resultBuilder.addFinishedTest(test1);
         resultBuilder.addTestFailure(test2, new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
         resultBuilder.addIgnoredTest(test3);
@@ -75,7 +75,7 @@ public class RmTestResultBuilderTests {
     public void testAssumptionFail() {
         RmTestResultBuilder resultBuilder = getResultBuilder();
         String test1 = "testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
-        resultBuilder.addTest(test1);
+        resultBuilder.addTest(test1, DescriptionMocker.mockDescription());
         resultBuilder.addAssumptionFailure(test1, new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
         JsonObject test = resultBuilder.getTest(test1);
         String result = test.get(RmTestResultBuilder.RESULT).getAsString();
@@ -85,19 +85,20 @@ public class RmTestResultBuilderTests {
     @Test
     public void testIsGherkin(){
     	RmTestResultBuilder resultBuilder = getResultBuilder();
-    	boolean gherkin = resultBuilder.isGherkin("Given that we navigate to \"http://sl.se\"#4[OSX_UNKNOWN_AnApple_firefox_UNKNOWN](Scenario: Verify the title of the page)");
-    	assertTrue(gherkin);
+        Description description = DescriptionMocker.mockDescription();
+        DescriptionMocker.addFieldUniqueId(description);
+        boolean gherkin = resultBuilder.isGherkin(description);
+        assertTrue(gherkin);
     }
     
     @Test
     public void testIsNotGherkin(){
-    	boolean gherkin = getResultBuilder().isGherkin("testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)");
+    	boolean gherkin = getResultBuilder().isGherkin(DescriptionMocker.mockDescription());
     	assertFalse(gherkin);
     }
 
     private RmTestResultBuilder getResultBuilder() {
-        RmTestResultBuilder rmTestResultBuilder = new RmTestResultBuilder();
-        return rmTestResultBuilder;
+        return new RmTestResultBuilder();
     }
 
 }
