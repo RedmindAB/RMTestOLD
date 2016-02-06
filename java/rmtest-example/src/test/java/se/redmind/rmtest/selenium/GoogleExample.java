@@ -36,4 +36,5 @@ public class GoogleExample {
 
         assertTrue(pageTitle.startsWith("Goo"));
     }
+
 }
