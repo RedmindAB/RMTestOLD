@@ -5,13 +5,14 @@ import org.junit.runner.RunWith;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import cucumber.api.junit.Cucumber;
 
 /**
  * @author Jeremy Comte
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json", "html:target/ParameterizedStepsTest-hmtl-report"})
+@CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json", "html:target/ParameterizedStepsTest-hmtl-report"}, tags = {"@tag1,@tag2,@tag3"})
 public class ParameterizedStepsTest {
 
     public static class Steps {
@@ -31,6 +32,11 @@ public class ParameterizedStepsTest {
         @Then("^that we multiply it by (\\d+)$")
         public void i_multiply_it_by(int factor) {
             count *= factor;
+        }
+
+        @When("^I run, I fail$")
+        public void i_run_I_fail()  {
+            Assert.fail();
         }
 
     }

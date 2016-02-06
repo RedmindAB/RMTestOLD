@@ -74,6 +74,14 @@ public class ParameterizableRuntime extends Runtime {
     }
 
     public List<CucumberFeature> cucumberFeatures() {
+        for (int i = 0; i < runtimeOptions.getFilters().size(); i++) {
+            Object filter = runtimeOptions.getFilters().get(i);
+            if (filter instanceof String) {
+                runtimeOptions.getFilters().set(i, ((String) filter) + "," + Tags.PARAMETERIZED);
+            }
+        }
+        runtimeOptions.getFilters().add("~" + Tags.IGNORE);
+
         List<CucumberFeature> cucumberFeatures = runtimeOptions.cucumberFeatures(resourceLoader);
 
         // 1. Get the children from the parent class, intercept any parameterized scenario and instantiate their factories
