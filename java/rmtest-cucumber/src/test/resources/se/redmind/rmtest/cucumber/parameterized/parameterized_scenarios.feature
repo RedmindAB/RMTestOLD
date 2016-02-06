@@ -1,3 +1,4 @@
+@tag1
 Feature: we want to be able to use a parameterized scenario in another scenario
 
   Scenario: we call a parameterized scenario that will replace the current step
@@ -23,3 +24,4 @@ Feature: we want to be able to use a parameterized scenario in another scenario
   Scenario: we call a parameterized scenario that is a composite of another parameterized scenario and a step (quiet)
     When we count the letters in "saturday" and multiply it by 2 twice @quiet
     Then this number is 32
+

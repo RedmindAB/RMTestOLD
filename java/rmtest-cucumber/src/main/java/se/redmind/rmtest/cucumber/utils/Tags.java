@@ -12,31 +12,6 @@ public class Tags {
     public static final String FULL = "@full";
     public static final String IGNORE = "@ignore";
 
-    public static void addIgnoreToSystemProperties() {
-        String property = System.getProperty("cucumber.options");
-        if (property == null) {
-            property = "";
-        }
-        if (!property.contains("~" + IGNORE)) {
-            property += " --tags ~" + IGNORE;
-            System.setProperty("cucumber.options", property);
-        }
-    }
-
-    public static void addParameterizedToSystemProperties() {
-        String property = System.getProperty("cucumber.options");
-        if (property != null && property.contains("@")) {
-            String newProperty = null;
-            do {
-                if (newProperty != null) {
-                    property = newProperty;
-                }
-                newProperty = property.replaceFirst("(.*)(?:--tags ([@\\w,]+))((?: |$).*)", "$1--tags $2,@parameterized,~@ignore$3");
-            } while (!property.equals(newProperty));
-            System.setProperty("cucumber.options", property);
-        }
-    }
-
     public static boolean isParameterized(CucumberTagStatement statement) {
         return has(statement, PARAMETERIZED);
     }
