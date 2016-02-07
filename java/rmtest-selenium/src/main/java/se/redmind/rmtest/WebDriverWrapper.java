@@ -216,9 +216,6 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(Class<? extends Predicate<WebDriverWrapper<?>>> filterClass) {
-        if (filterClass.equals(FilterDrivers.AlwaysTrue.class)) {
-            return driverwrapper -> true;
-        }
         try {
             return filterClass.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
