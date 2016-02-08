@@ -24,21 +24,34 @@ public class JsonReportOrganizerTest {
     }
 
     @Test
-    public void test(){
-//        organizer.build();
-    }
-
-    @Test
     public void getTrueTestCount(){
         newJsonObject = organizer.build();
         assertEquals(10, organizer.getTestCount());
     }
 
     @Test
-    public void printBuiltJsonObject(){
+    public void checkJsonStringLength(){
         newJsonObject = organizer.build();
         String json = gson.toJson(newJsonObject);
-        System.out.println(json);
+        assertEquals(44838, json.length());
+    }
+
+    @Test
+    public void checkNumberOfGherkinElements(){
+        organizer.build();
+        assertEquals(26, organizer.getGherkinScenarios().size());
+    }
+
+    @Test
+    public void checkNumberOfRegularTests(){
+        organizer.build();
+        assertEquals(4, organizer.getRegularTests().size());
+    }
+
+    @Test
+    public void checkNumberOfGherkinScenarios(){
+        organizer.build();
+        assertEquals(6, organizer.getGherkinMap().size());
     }
 
 

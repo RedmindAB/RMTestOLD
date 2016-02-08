@@ -112,7 +112,11 @@ public class RmTestResultBuilder {
     }
 
     private String getMethodName(String displayName) {
-        return displayName.substring(0, displayName.lastIndexOf('['));
+        if (displayName.contains("[") && displayName.contains("]")){
+            return displayName.substring(0, displayName.lastIndexOf('['));
+        } else {
+            return displayName;
+        }
     }
 
     public JsonObject build() {

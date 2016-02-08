@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import gherkin.formatter.model.Scenario;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -20,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import se.redmind.rmtest.config.Configuration;
-import se.redmind.utils.Fields;
 
 /**
  * This class had the goal to me communication between RMTest and RMReport able. However, this implementation did not go as planned. On the RMReport side the
@@ -34,7 +32,7 @@ public class LiveStreamListener extends RunListener {
     private volatile RmTestResultBuilder resBuilder;
     //    private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
-    private final boolean parrentRunner;
+    private final boolean parentRunner;
     private final List<LiveStreamListener> listeners;
     private volatile HashMap<String, Long> testStartTimes;
     private volatile static boolean isSaved = false;
@@ -42,7 +40,7 @@ public class LiveStreamListener extends RunListener {
     public LiveStreamListener() {
         resBuilder = new RmTestResultBuilder();
         finishedTests = new HashSet<>();
-        parrentRunner = true;
+        parentRunner = true;
         listeners = new ArrayList<>();
 //        rmrConnection = new RmReportConnection();
         this.testStartTimes = new HashMap<>();
@@ -52,7 +50,7 @@ public class LiveStreamListener extends RunListener {
     private LiveStreamListener(RmTestResultBuilder resBuilder, RmReportConnection connection) {
         this.resBuilder = resBuilder;
         this.finishedTests = new HashSet<>();
-        this.parrentRunner = false;
+        this.parentRunner = false;
         this.listeners = new ArrayList<>();
 //        this.rmrConnection = connection;
     }
@@ -68,7 +66,7 @@ public class LiveStreamListener extends RunListener {
     @Override
     public void testStarted(Description description) throws Exception {
         resBuilder.addTest(description.getDisplayName(), description);
-        if (parrentRunner) {
+        if (parentRunner) {
 //            rmrConnection.sendMessage("testStart", id);
             testStartTimes.put(description.getDisplayName(), System.currentTimeMillis());
         }
@@ -80,7 +78,7 @@ public class LiveStreamListener extends RunListener {
         String displayName = description.getDisplayName();
         resBuilder.addFinishedTest(description.getDisplayName());
         finishedTests.add(displayName);
-        if (parrentRunner) {
+        if (parentRunner) {
             double runTime = (double) (System.currentTimeMillis() - testStartTimes.get(displayName)) / 1000;
             resBuilder.addRunTime(displayName, runTime);
 //            rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
@@ -111,7 +109,7 @@ public class LiveStreamListener extends RunListener {
 
     @Override
     public void testRunFinished(Result result) throws Exception {
-        if (parrentRunner) {
+        if (parentRunner) {
             resBuilder.setResult(result);
             JsonObject results = resBuilder.build();
 //            rmrConnection.sendSuiteFinished();

@@ -34,27 +34,11 @@ public class JsonReportOrganizer {
             }
         }
         populateGherkinMap();
-        /*Temporary print out of the gherkin and regular tests*/
-//        printTests();
         build.addProperty("totalTests", getTestCount());
         build.add("tests", parseToGherkinFormat());
         return build;
     }
 
-    private void printTests() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println("------ GHERKIN TESTS ------");
-        for (ArrayList<JsonObject> jsonObjects : gherkinMap.values()) {
-            System.out.println("\n--- NEW JSON OBJECT ---\n");
-            String json = gson.toJson(jsonObjects);
-            System.out.println(json);
-        }
-        System.out.println("------ REGULAR TESTS ------");
-        for (JsonElement test : regularTests) {
-            String json = gson.toJson(test);
-            System.out.println(json);
-        }
-    }
 
     private JsonArray parseToGherkinFormat() {
         JsonArray gherkin = new JsonArray();
@@ -95,11 +79,6 @@ public class JsonReportOrganizer {
         return !objects.get(i).get("result").getAsString().equals("passed");
     }
 
-    public int getTestCount() {
-        int gherkinScenarios = getGherkinCount();
-        return regularTestCnt + gherkinScenarios;
-    }
-
     private int populateGherkinMap() {
         for (JsonElement element : gherkinScenarios) {
             String key = getKey(element);
@@ -113,10 +92,6 @@ public class JsonReportOrganizer {
                 gherkinMap.put(key, steps);
             }
         }
-        return gherkinMap.size();
-    }
-
-    private int getGherkinCount() {
         return gherkinMap.size();
     }
 
@@ -134,11 +109,47 @@ public class JsonReportOrganizer {
             jsonElements.add(element);
         }
         Collections.sort(jsonElements, (o1, o2) -> {
-            Integer first = o1.getAsJsonObject().get("id").getAsInt();
-            Integer second = o2.getAsJsonObject().get("id").getAsInt();
-            return first.compareTo(second);
+            Integer firstId = o1.getAsJsonObject().get("id").getAsInt();
+            Integer secondId = o2.getAsJsonObject().get("id").getAsInt();
+            return firstId.compareTo(secondId);
         });
         jsonElements.forEach(sortedArray::add);
         return sortedArray;
+    }
+
+    private void printTests() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println("------ GHERKIN TESTS ------");
+        for (ArrayList<JsonObject> jsonObjects : gherkinMap.values()) {
+            System.out.println("\n--- NEW JSON OBJECT ---\n");
+            String json = gson.toJson(jsonObjects);
+            System.out.println(json);
+        }
+        System.out.println("------ REGULAR TESTS ------");
+        for (JsonElement test : regularTests) {
+            String json = gson.toJson(test);
+            System.out.println(json);
+        }
+    }
+
+    public int getTestCount() {
+        int gherkinScenarios = getGherkinCount();
+        return regularTestCnt + gherkinScenarios;
+    }
+
+    private int getGherkinCount() {
+        return gherkinMap.size();
+    }
+
+    public List<JsonElement> getGherkinScenarios() {
+        return gherkinScenarios;
+    }
+
+    public List<JsonElement> getRegularTests() {
+        return regularTests;
+    }
+
+    public HashMap<String, ArrayList<JsonObject>> getGherkinMap() {
+        return gherkinMap;
     }
 }
