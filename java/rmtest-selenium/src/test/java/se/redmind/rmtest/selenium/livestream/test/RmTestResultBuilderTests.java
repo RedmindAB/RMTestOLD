@@ -1,9 +1,11 @@
 package se.redmind.rmtest.selenium.livestream.test;
 
+import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -11,6 +13,7 @@ import org.junit.runner.notification.Failure;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import gherkin.formatter.model.Scenario;
 import se.redmind.rmtest.selenium.livestream.RmTestResultBuilder;
 
 public class RmTestResultBuilderTests {
@@ -36,9 +39,9 @@ public class RmTestResultBuilderTests {
         String test1 = "testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
         String test2 = "testGoogle2[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
         String test3 = "testGoogle3[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
-        resultBuilder.addTest(test1, DescriptionMocker.mockDescription());
-        resultBuilder.addTest(test2, DescriptionMocker.mockDescription());
-        resultBuilder.addTest(test3, DescriptionMocker.mockDescription());
+        resultBuilder.addTest(test1, Description.createSuiteDescription("testMethod1(se.redmind.rmtest.LiveStream)"));
+        resultBuilder.addTest(test2, Description.createSuiteDescription("testMethod2(se.redmind.rmtest.LiveStream)"));
+        resultBuilder.addTest(test3, Description.createSuiteDescription("testMethod3(se.redmind.rmtest.LiveStream)"));
         resultBuilder.addFinishedTest(test1);
         resultBuilder.addTestFailure(test2, new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
         resultBuilder.addIgnoredTest(test3);
@@ -75,26 +78,29 @@ public class RmTestResultBuilderTests {
     public void testAssumptionFail() {
         RmTestResultBuilder resultBuilder = getResultBuilder();
         String test1 = "testGoogle1[OSX_UNKNOWN_AnApple_chrome_UNKNOWN](se.redmind.rmtest.selenium.example.GoogleExample)";
-        resultBuilder.addTest(test1, DescriptionMocker.mockDescription());
+        resultBuilder.addTest(test1, Description.createTestDescription(LiveStreamListenerTest.class, "testAssumptionFail"));
         resultBuilder.addAssumptionFailure(test1, new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
         JsonObject test = resultBuilder.getTest(test1);
         String result = test.get(RmTestResultBuilder.RESULT).getAsString();
         assertEquals("skipped", result);
     }
-    
+
     @Test
-    public void testIsGherkin(){
-    	RmTestResultBuilder resultBuilder = getResultBuilder();
-        Description description = DescriptionMocker.mockDescription();
-        DescriptionMocker.addFieldUniqueId(description);
-        boolean gherkin = resultBuilder.isGherkin(description);
-        assertTrue(gherkin);
+    public void testIsGherkin() {
+        RmTestResultBuilder resultBuilder = getResultBuilder();
+        Description description = Description.createTestDescription(
+            "se.redmind.rmtest.LiveStream",
+            "testMethod",
+            new Scenario(new ArrayList<>(), new ArrayList<>(), "Scenario: ", "This is a scenario", "", 1, "1")
+        );
+
+        assertTrue(resultBuilder.isGherkin(description));
     }
-    
+
     @Test
-    public void testIsNotGherkin(){
-    	boolean gherkin = getResultBuilder().isGherkin(DescriptionMocker.mockDescription());
-    	assertFalse(gherkin);
+    public void testIsNotGherkin() {
+        boolean gherkin = getResultBuilder().isGherkin(Description.createTestDescription(LiveStreamListenerTest.class, "testIsNotGherkin"));
+        assertFalse(gherkin);
     }
 
     private RmTestResultBuilder getResultBuilder() {

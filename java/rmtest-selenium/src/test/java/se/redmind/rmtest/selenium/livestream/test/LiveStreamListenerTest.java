@@ -1,6 +1,8 @@
 package se.redmind.rmtest.selenium.livestream.test;
 
 import org.junit.Test;
+import org.junit.runner.Description;
+
 import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
 
 /**
@@ -8,12 +10,11 @@ import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
  */
 public class LiveStreamListenerTest {
 
-
     LiveStreamListener listener = new LiveStreamListener();
 
     @Test
     public void test() throws Exception {
-        listener.testRunStarted(DescriptionMocker.mockDescription());
+        listener.testRunStarted(Description.createTestDescription(LiveStreamListenerTest.class, "test"));
     }
 
 }
