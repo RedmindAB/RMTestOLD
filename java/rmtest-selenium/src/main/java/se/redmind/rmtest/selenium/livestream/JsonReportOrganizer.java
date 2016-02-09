@@ -20,9 +20,6 @@ public class JsonReportOrganizer {
         gherkinScenarios = new ArrayList<>();
         regularTests = new ArrayList<>();
         gherkinMap = new HashMap<>();
-    }
-
-    public JsonObject build() {
         JsonArray tests = sortArrayById(build.get("tests").getAsJsonArray());
         for (JsonElement entry : tests) {
             JsonObject test = entry.getAsJsonObject();
@@ -36,9 +33,11 @@ public class JsonReportOrganizer {
         populateGherkinMap();
         build.addProperty("totalTests", getTestCount());
         build.add("tests", parseToGherkinFormat());
-        return build;
     }
 
+    public JsonObject build() {
+        return build;
+    }
 
     private JsonArray parseToGherkinFormat() {
         JsonArray gherkin = new JsonArray();
@@ -56,9 +55,10 @@ public class JsonReportOrganizer {
                 }
                 if (testNotPassed(jsonMapObjects, i)) {
                     testScenario.addProperty("result", "failure");
-                    if (jsonMapObjects.get(i).get("failureMessage") != null)
-                    testScenario.addProperty("failureMessage", jsonMapObjects.get(i).get("failureMessage")
+                    if (jsonMapObjects.get(i).get("failureMessage") != null) {
+                        testScenario.addProperty("failureMessage", jsonMapObjects.get(i).get("failureMessage")
                             .getAsString());
+                    }
                 }
                 step.addProperty(String.valueOf(i + 1), jsonMapObjects.get(i).get("method").getAsString());
                 runTime += jsonMapObjects.get(i).get("runTime").getAsDouble();
@@ -133,8 +133,7 @@ public class JsonReportOrganizer {
     }
 
     public int getTestCount() {
-        int gherkinScenarios = getGherkinCount();
-        return regularTestCnt + gherkinScenarios;
+        return regularTestCnt + getGherkinCount();
     }
 
     private int getGherkinCount() {

@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.livestream.test;
+package se.redmind.rmtest.selenium.livestream;
 
 import org.junit.Test;
 import org.junit.runner.Description;

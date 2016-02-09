@@ -1,4 +1,4 @@
-package se.redmind.rmtest.selenium.livestream.test;
+package se.redmind.rmtest.selenium.livestream;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;

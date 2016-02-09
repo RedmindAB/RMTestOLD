@@ -1,12 +1,12 @@
-package se.redmind.rmtest.selenium.livestream.test;
-
-import com.google.gson.*;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import se.redmind.rmtest.selenium.livestream.JsonReportOrganizer;
-
+package se.redmind.rmtest.selenium.livestream;
 
 import java.io.*;
+
+import org.junit.Test;
+
+import com.google.gson.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by victormattsson on 2016-01-26.
@@ -18,42 +18,41 @@ public class JsonReportOrganizerTest {
     JsonReportOrganizer organizer;
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public JsonReportOrganizerTest(){
+    public JsonReportOrganizerTest() {
         jsonReport = readJsonReport();
         organizer = new JsonReportOrganizer(jsonReport);
     }
 
     @Test
-    public void getTrueTestCount(){
+    public void getTrueTestCount() {
         newJsonObject = organizer.build();
         assertEquals(10, organizer.getTestCount());
     }
 
     @Test
-    public void checkJsonStringLength(){
+    public void checkJsonStringLength() {
         newJsonObject = organizer.build();
         String json = gson.toJson(newJsonObject);
         assertEquals(44838, json.length());
     }
 
     @Test
-    public void checkNumberOfGherkinElements(){
+    public void checkNumberOfGherkinElements() {
         organizer.build();
         assertEquals(26, organizer.getGherkinScenarios().size());
     }
 
     @Test
-    public void checkNumberOfRegularTests(){
+    public void checkNumberOfRegularTests() {
         organizer.build();
         assertEquals(4, organizer.getRegularTests().size());
     }
 
     @Test
-    public void checkNumberOfGherkinScenarios(){
+    public void checkNumberOfGherkinScenarios() {
         organizer.build();
         assertEquals(6, organizer.getGherkinMap().size());
     }
-
 
     private JsonObject readJsonReport() {
         JsonParser parser = new JsonParser();
