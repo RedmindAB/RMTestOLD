@@ -8,10 +8,12 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.junit.Assume;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -206,10 +208,19 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(FilterDrivers filterDrivers) {
-        return filter(filterDrivers.platforms())
+        return filter(filterDrivers.filter())
+            .and(filter(filterDrivers.platforms()))
             .and(filter(filterDrivers.types()))
             .and(filter(filterDrivers.browsers()))
             .and(filter(filterDrivers.capabilities()));
+    }
+
+    public static Predicate<WebDriverWrapper<?>> filter(Class<? extends Predicate<WebDriverWrapper<?>>> filterClass) {
+        try {
+            return filterClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(Platform... values) {
@@ -245,10 +256,18 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     }
 
     public static Predicate<WebDriverWrapper<?>> filterFromSystemProperties() {
-        Predicate<WebDriverWrapper<?>> filter = driverWrapper -> true;
-        if (System.getProperty("browsers") != null) {
-            Set<String> browsers = new HashSet<>(Splitter.on(',').trimResults().splitToList(System.getProperty("browsers")));
+        Predicate<WebDriverWrapper<?>> filter = driverWrapper -> {
+            LoggerFactory.getLogger(WebDriverWrapper.class).error(driverWrapper.getCapability().toString());
+            return true;
+        };
+        if (System.getProperty(CapabilityType.BROWSER_NAME) != null) {
+            Set<String> browsers = new HashSet<>(Splitter.on(',').trimResults().splitToList(System.getProperty(CapabilityType.BROWSER_NAME)));
             filter = filter.and(driverWrapper -> browsers.contains(driverWrapper.getCapability().getBrowserName()));
+        }
+        if (System.getProperty(CapabilityType.PLATFORM) != null) {
+            Set<Platform> platforms = Splitter.on(',').trimResults().splitToList(System.getProperty(CapabilityType.PLATFORM))
+                .stream().map(platform -> Platform.valueOf(platform)).collect(Collectors.toSet());
+            filter = filter.and(driverWrapper -> platforms.contains(driverWrapper.getCapability().getPlatform()));
         }
         return filter;
     }

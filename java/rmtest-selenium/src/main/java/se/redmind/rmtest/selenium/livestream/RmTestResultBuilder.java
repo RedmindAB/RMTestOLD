@@ -1,14 +1,15 @@
 package se.redmind.rmtest.selenium.livestream;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import gherkin.formatter.model.Scenario;
+import gherkin.formatter.model.Step;
+import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
@@ -16,6 +17,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import se.redmind.utils.Fields;
 
 public class RmTestResultBuilder {
 
@@ -31,6 +33,7 @@ public class RmTestResultBuilder {
     private double runTime;
     private boolean success;
     private String currentFeature;
+    private String currentScenario;
 
     public RmTestResultBuilder() {
         this.testMap = new TreeMap<>();
@@ -47,35 +50,38 @@ public class RmTestResultBuilder {
         this.suiteName = suiteName;
     }
 
-    public void addTest(String displayName) {
+    public void addTest(String displayName, Description description) {
+        String method = "";
+        if (isStep(description)) {
+            method = getGherkinStep(description);
+        }
         if (!testMap.containsKey(displayName)) {
             JsonElement deviceInfo = getDeviceInfo(displayName);
             String methodName = getMethodName(displayName);
-            if (deviceInfo != JsonNull.INSTANCE && !methodName.startsWith("Scenario: ")) {
+            if (deviceInfo != JsonNull.INSTANCE && !isScenario(description)) {
                 totalTests++;
                 JsonObject test = new JsonObject();
                 test.addProperty("id", totalTests);
-                test.addProperty("method", methodName);
-                test.addProperty("testclass", getTestClass(displayName));
+                test.addProperty("method", (method.equals("")) ? methodName : method);
+                test.addProperty("testclass", isGherkin(description) ? currentScenario : getTestClass(displayName));
                 test.addProperty("status", "idle");
                 test.add(RESULT, JsonNull.INSTANCE);
                 test.add("deviceInfo", deviceInfo);
-                boolean gherkin = isGherkin(displayName);
+                boolean gherkin = isGherkin(description);
                 test.addProperty("isGherkin", gherkin);
-                if(gherkin){
-                	test.addProperty("feature", currentFeature);
+                if (gherkin) {
+                    test.addProperty("feature", currentFeature);
                 }
                 testMap.put(displayName, test);
             }
         }
     }
 
-	private String getTestClass(String displayName) {
+    private String getTestClass(String displayName) {
         if (displayName.contains("(") && displayName.contains(")")) {
             int start = displayName.lastIndexOf('(');
             int end = displayName.lastIndexOf(')');
-            String testClass = displayName.substring(start + 1, end);
-            return testClass;
+            return displayName.substring(start + 1, end);
         }
         return null;
     }
@@ -106,7 +112,11 @@ public class RmTestResultBuilder {
     }
 
     private String getMethodName(String displayName) {
-        return displayName.substring(0, displayName.lastIndexOf('['));
+        if (displayName.contains("[") && displayName.contains("]")){
+            return displayName.substring(0, displayName.lastIndexOf('['));
+        } else {
+            return displayName;
+        }
     }
 
     public JsonObject build() {
@@ -177,8 +187,8 @@ public class RmTestResultBuilder {
         }
     }
 
-    public void addRunTime(String dispName, double time) {
-        JsonObject test = testMap.get(dispName);
+    public void addRunTime(String displayName, double time) {
+        JsonObject test = testMap.get(displayName);
         if (test != null) {
             test.addProperty("runTime", time);
         }
@@ -194,10 +204,15 @@ public class RmTestResultBuilder {
             return form.format(new Date());
         }
     }
-    
-    public boolean isGherkin(String displayName) {
-    	return displayName.contains("Scenario: ");
-	}
+
+    public boolean isGherkin(Description description) {
+        if (isScenario(description)) {
+            return true;
+        } else if (isStep(description)) {
+            return true;
+        }
+        return false;
+    }
 
     public void setResult(Result result) {
         this.totalFail = result.getFailureCount();
@@ -209,8 +224,31 @@ public class RmTestResultBuilder {
     public String getTimestamp() {
         return timestamp;
     }
-    
-    public void setCurrentFeature(String feature){
-    	this.currentFeature = feature;
+
+    public void setCurrentFeature(String feature) {
+        this.currentFeature = feature;
+    }
+
+    public boolean isScenario(Description description) {
+        return Fields.getSafeValue(description, "fUniqueId") instanceof Scenario;
+    }
+
+    private boolean isStep(Description description) {
+        return Fields.getSafeValue(description, "fUniqueId") instanceof Step;
+    }
+
+
+    public void setCurrentScenario(String currentScenario) {
+        this.currentScenario = currentScenario;
+    }
+
+    public String getScenarioName(Description desc) {
+        return String.format("%s: %s", ((Scenario) Fields.getSafeValue(desc, "fUniqueId")).getKeyword(),
+                ((Scenario) Fields.getSafeValue(desc, "fUniqueId")).getName());
+    }
+
+    private String getGherkinStep(Description description) {
+        return ((Step) Fields.getSafeValue(description, "fUniqueId")).getKeyword() +
+                ((Step) Fields.getSafeValue(description, "fUniqueId")).getName();
     }
 }

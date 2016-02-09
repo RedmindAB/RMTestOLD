@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.function.Predicate;
 
 import org.openqa.selenium.Platform;
 
@@ -26,5 +27,16 @@ public @interface FilterDrivers {
     Browser[] browsers() default {};
 
     Class<? extends WebDriverWrapper<?>>[] types() default {};
+
+    Class<? extends Predicate<WebDriverWrapper<?>>> filter() default AlwaysTrue.class;
+
+    public static class AlwaysTrue implements Predicate<WebDriverWrapper<?>> {
+
+        @Override
+        public boolean test(WebDriverWrapper<?> t) {
+            return true;
+        }
+
+    }
 
 }

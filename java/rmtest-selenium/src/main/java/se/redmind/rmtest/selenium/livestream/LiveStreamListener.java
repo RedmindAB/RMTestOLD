@@ -30,9 +30,9 @@ public class LiveStreamListener extends RunListener {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private volatile RmTestResultBuilder resBuilder;
-//    private final RmReportConnection rmrConnection;
+    //    private final RmReportConnection rmrConnection;
     private volatile HashSet<String> finishedTests;
-    private final boolean parrentRunner;
+    private final boolean parentRunner;
     private final List<LiveStreamListener> listeners;
     private volatile HashMap<String, Long> testStartTimes;
     private volatile static boolean isSaved = false;
@@ -40,7 +40,7 @@ public class LiveStreamListener extends RunListener {
     public LiveStreamListener() {
         resBuilder = new RmTestResultBuilder();
         finishedTests = new HashSet<>();
-        parrentRunner = true;
+        parentRunner = true;
         listeners = new ArrayList<>();
 //        rmrConnection = new RmReportConnection();
         this.testStartTimes = new HashMap<>();
@@ -50,14 +50,14 @@ public class LiveStreamListener extends RunListener {
     private LiveStreamListener(RmTestResultBuilder resBuilder, RmReportConnection connection) {
         this.resBuilder = resBuilder;
         this.finishedTests = new HashSet<>();
-        this.parrentRunner = false;
+        this.parentRunner = false;
         this.listeners = new ArrayList<>();
 //        this.rmrConnection = connection;
     }
 
     @Override
     public void testRunStarted(Description description) throws Exception {
-        initSuite(description, 1);
+        initSuite(description, 0);
 //        rmrConnection.connect();
 //        rmrConnection.sendMessage("suite", resBuilder.build());
         super.testRunStarted(description);
@@ -65,8 +65,8 @@ public class LiveStreamListener extends RunListener {
 
     @Override
     public void testStarted(Description description) throws Exception {
-        resBuilder.addTest(description.getDisplayName());
-        if (parrentRunner) {
+        resBuilder.addTest(description.getDisplayName(), description);
+        if (parentRunner) {
 //            rmrConnection.sendMessage("testStart", id);
             testStartTimes.put(description.getDisplayName(), System.currentTimeMillis());
         }
@@ -78,7 +78,7 @@ public class LiveStreamListener extends RunListener {
         String displayName = description.getDisplayName();
         resBuilder.addFinishedTest(description.getDisplayName());
         finishedTests.add(displayName);
-        if (parrentRunner) {
+        if (parentRunner) {
             double runTime = (double) (System.currentTimeMillis() - testStartTimes.get(displayName)) / 1000;
             resBuilder.addRunTime(displayName, runTime);
 //            rmrConnection.sendMessage("test", resBuilder.getTest(description.getDisplayName()));
@@ -109,7 +109,7 @@ public class LiveStreamListener extends RunListener {
 
     @Override
     public void testRunFinished(Result result) throws Exception {
-        if (parrentRunner) {
+        if (parentRunner) {
             resBuilder.setResult(result);
             JsonObject results = resBuilder.build();
 //            rmrConnection.sendSuiteFinished();
@@ -159,11 +159,15 @@ public class LiveStreamListener extends RunListener {
         } else if (level == 1 && desc.isSuite()) {
             resBuilder.setSuiteName(desc.getClassName());
         }
-        if(desc.getClassName().startsWith("Feature: ")){
-        	resBuilder.setCurrentFeature(desc.getClassName());
+        if (desc.getClassName().startsWith("Feature: ")) {
+            resBuilder.setCurrentFeature(desc.getClassName());
+        }
+        if (resBuilder.isScenario(desc)) {
+            String scenarioName = resBuilder.getScenarioName(desc);
+            resBuilder.setCurrentScenario(scenarioName.substring(0, scenarioName.lastIndexOf("[")).trim());
         }
         if (desc.isTest()) {
-    		resBuilder.addTest(desc.getDisplayName());
+            resBuilder.addTest(desc.getDisplayName(), desc);
         }
         ArrayList<Description> children = desc.getChildren();
         for (Description description : children) {

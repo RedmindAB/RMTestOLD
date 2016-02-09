@@ -238,32 +238,35 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is displayed$")
     public void the_element_with_id_is_displayed(String type, String id, String not) {
-        Assert.assertEquals(not == null, find(by(type, id)).isDisplayed());
+        find(by(type, id));
+        this_element_is_displayed(not);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " (!)?is displayed$")
-    public void the_element_is_displayed(String not) {
-        Assert.assertEquals(not == null, element.isDisplayed());
+    public void this_element_is_displayed(String not) {
+        assertCondition(() -> element.isDisplayed(), not == null);
     }
 
     @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is enabled$")
     public void the_element_with_id_is_enabled(String type, String id, String not) {
-        Assert.assertEquals(not == null, find(by(type, id)).isEnabled());
+        find(by(type, id));
+        this_element_is_enabled(not);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " (!)?is enabled$")
-    public void the_element_is_enabled(String not) {
-        Assert.assertEquals(not == null, element.isEnabled());
+    public void this_element_is_enabled(String not) {
+        assertCondition(() -> element.isEnabled(), not == null);
     }
 
     @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?is selected$")
     public void the_element_with_id_is_selected(String type, String id, String not) {
-        Assert.assertEquals(not == null, find(by(type, id)).isSelected());
+        find(by(type, id));
+        this_element_is_selected(not);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " (!)?is selected$")
     public void this_element_is_selected(String not) {
-        Assert.assertEquals(not == null, element.isSelected());
+        assertCondition(() -> element.isSelected(), not == null);
     }
 
     @Then("^" + THAT + "the current url " + MATCHES + " " + QUOTED_CONTENT + "$")
@@ -338,14 +341,14 @@ public class WebDriverSteps {
 
     private String get(Supplier<String> supplier) {
         return Try.toGet(supplier)
-            .delayRetriesBy(500)
+            .delayRetriesBy(Configuration.current().defaultTimeOut * 100)
             .nTimes(10);
     }
 
     private String getNotNullOrEmpty(Supplier<String> supplier) {
         return Try.toGet(supplier)
             .until(value -> !Strings.isNullOrEmpty(value))
-            .delayRetriesBy(500)
+            .delayRetriesBy(Configuration.current().defaultTimeOut * 100)
             .nTimes(10);
     }
 
@@ -390,6 +393,15 @@ public class WebDriverSteps {
                     throw new IllegalArgumentException("unknown parameter type: " + type + " value: " + id);
             }
         }
+    }
+
+    private void assertCondition(Supplier<Boolean> condition, boolean shouldBeTrue) {
+        boolean state = Try.toGet(() -> condition.get())
+            .until(value -> value == shouldBeTrue)
+            .delayRetriesBy(Configuration.current().defaultTimeOut * 100)
+            .defaultTo(value -> !shouldBeTrue)
+            .nTimes(10);
+        Assert.assertEquals(shouldBeTrue, state);
     }
 
     private void assertElement(String assertType, WebElement element, boolean shouldBeTrue, String expected) {
