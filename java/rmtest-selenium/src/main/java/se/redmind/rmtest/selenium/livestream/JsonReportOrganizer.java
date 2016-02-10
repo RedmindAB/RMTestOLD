@@ -62,7 +62,6 @@ public class JsonReportOrganizer {
                 }
                 step.addProperty(String.valueOf(i + 1), jsonMapObjects.get(i).get("method").getAsString());
                 runTime += jsonMapObjects.get(i).get("runTime").getAsDouble();
-
             }
             testScenario.addProperty("runTime", runTime);
             testScenario.addProperty("method", testScenario.get("testclass").getAsString());
@@ -115,21 +114,6 @@ public class JsonReportOrganizer {
         });
         jsonElements.forEach(sortedArray::add);
         return sortedArray;
-    }
-
-    private void printTests() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println("------ GHERKIN TESTS ------");
-        for (ArrayList<JsonObject> jsonObjects : gherkinMap.values()) {
-            System.out.println("\n--- NEW JSON OBJECT ---\n");
-            String json = gson.toJson(jsonObjects);
-            System.out.println(json);
-        }
-        System.out.println("------ REGULAR TESTS ------");
-        for (JsonElement test : regularTests) {
-            String json = gson.toJson(test);
-            System.out.println(json);
-        }
     }
 
     public int getTestCount() {
