@@ -70,3 +70,33 @@ Feature: Test REST applications
     When we get "/param"
     Then parameter "user" is "me"
     Then parameter "user2" is "me2"
+
+  Scenario: CRUD
+    Given we send:
+      """
+      { "type":"postrequest" }
+      """
+    When we post "/db/crud"
+    Then status is 200
+    When we get "/db/crud"
+    Then status is 200
+    Then parameter "type" is "postrequest"
+    Given we send:
+      """
+      { "type":"patched" }
+      """
+    When we patch "/db/crud"
+    Then status is 200
+    When we get "/db/crud"
+    Then status is 200
+    Then parameter "type" is "patched"
+    Given we send:
+      """
+      { "newtype":"put" }
+      """
+    When we put "/db/crud"
+    Then status is 200
+    When we get "/db/crud"
+    Then parameter "newtype" is "put"
+    When we delete "/db/crud"
+    Then status is 200
