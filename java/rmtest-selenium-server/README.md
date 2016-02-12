@@ -20,7 +20,7 @@ to start a hub:
 
 to start a node:
 
-    java -jar rmtest-selenium-server -role node -nodeConfig your-configuration.json
+    java -jar rmtest-selenium-server.jar -role node -nodeConfig your-configuration.json
 
 with for example:
 ```json
