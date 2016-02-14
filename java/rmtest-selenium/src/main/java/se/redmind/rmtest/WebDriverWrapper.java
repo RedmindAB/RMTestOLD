@@ -54,7 +54,8 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
         @Override
         protected WebDriverType initialValue() {
-            if(isInitializing.get()) {
+            long start = System.currentTimeMillis();
+            if (isInitializing.get()) {
                 throw new IllegalStateException("this driver is already being initialized, is getDriver() being called in a pre/postConfiguration hook?");
             }
             isInitializing.set(true);
@@ -69,7 +70,7 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
             openDrivers.add(driver);
             postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
             isStarted.set(true);
-            logger.info("Started driver [" + description + "]");
+            logger.info("Started driver [" + description + "] (took " + (System.currentTimeMillis() - start) + "ms)");
             isInitializing.set(false);
             return driver;
         }

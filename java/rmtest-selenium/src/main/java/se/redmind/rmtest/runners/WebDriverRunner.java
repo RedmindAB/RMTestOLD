@@ -42,11 +42,7 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
 
     public WebDriverRunner(Class<?> klass) throws Throwable {
         super(klass);
-        if (klass.isAnnotationPresent(WebDriverRunnerOptions.class)) {
-            options = klass.getAnnotation(WebDriverRunnerOptions.class);
-        } else {
-            options = Annotations.defaultOf(WebDriverRunnerOptions.class);
-        }
+        options = Annotations.collectAndCombine(WebDriverRunnerOptions.class, klass);
     }
 
     @Override
@@ -73,9 +69,9 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
                     ((ParentRunner<?>) runner).filter(new Filter() {
                         @Override
                         public boolean shouldRun(Description description) {
-                            FilterDrivers filterDrivers = description.getAnnotation(FilterDrivers.class);
-                            if (filterDrivers != null) {
-                                if (!WebDriverWrapper.filter(filterDrivers).test(driverWrapper.get())) {
+                            List<FilterDrivers> filterDrivers = Annotations.collect(FilterDrivers.class, description.getClass());
+                            if (!filterDrivers.isEmpty()) {
+                                if (!WebDriverWrapper.filter(Annotations.combine(filterDrivers)).test(driverWrapper.get())) {
                                     notifier.fireTestIgnored(description);
                                     return false;
                                 }
@@ -177,11 +173,12 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
     @Parameterized.Parameters(name = "{0}")
     public Collection<Object[]> getDriversAsParameters() {
         Collection<Object[]> drivers;
-        if (getTestClass().getJavaClass().isAnnotationPresent(FilterDrivers.class)) {
-            FilterDrivers filterDrivers = getTestClass().getJavaClass().getAnnotation(FilterDrivers.class);
-            drivers = Configuration.current().createWrappersParameters(filterDrivers);
+        List<FilterDrivers> filterDrivers = Annotations.collect(FilterDrivers.class, getTestClass().getJavaClass());
+        if (!filterDrivers.isEmpty()) {
+            FilterDrivers combined = Annotations.combine(filterDrivers);
+            drivers = Configuration.current().createWrappersParameters(combined);
             if (drivers.isEmpty()) {
-                LOGGER.warn("we didn't find any driver matching our filter " + filterDrivers);
+                LOGGER.warn("we didn't find any driver matching our filter " + combined);
             }
         } else {
             drivers = Configuration.current().createWrappersParameters();
