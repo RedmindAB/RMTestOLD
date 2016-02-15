@@ -54,9 +54,6 @@ public class RmMobileNav extends HTMLPage {
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.linkText(pText))).perform();
-
-        // logger.info("Hovering over " + pText);
-//		Thread.sleep(500L);
         logger.info("Pressing " + pSubText);
         driver.findElement(By.linkText(pSubText)).click();
     }
@@ -65,9 +62,6 @@ public class RmMobileNav extends HTMLPage {
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.linkText(Text))).perform();
-
-        // logger.info("Hovering over " + Text);
-//		Thread.sleep(500L);
         logger.info("Pressing " + SubText);
         driver.findElement(By.linkText(SubText)).click();
     }
@@ -77,7 +71,6 @@ public class RmMobileNav extends HTMLPage {
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         builder = new Actions(driver);
         builder.moveToElement(driver.findElement(By.linkText(menu))).perform();
-//		Thread.sleep(500L);
         builder.moveToElement(driver.findElement(By.linkText(subMenu1)))
             .perform();
         Thread.sleep(500L);
@@ -110,12 +103,10 @@ public class RmMobileNav extends HTMLPage {
         driverWaitClickable(By.linkText(SubText), 20);
 
         builder.moveToElement(driver.findElement(By.linkText(SubText))).perform();
-        //driver.findElement(By.linkText(SubText)).click();
         logger.info("Hovering over " + SubText);
 
         driverWaitClickable(By.linkText(SubText), 20);
 
-        //builder.moveToElement(driver.findElement(By.linkText(SubText))).perform();
         driver.findElement(By.linkText(SubSubText)).click();
         logger.info("Pressing " + SubSubText);
 

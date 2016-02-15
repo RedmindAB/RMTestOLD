@@ -23,7 +23,7 @@ public class Annotations {
     }
 
     public static <A extends Annotation> A combine(List<A> annotations) {
-        Preconditions.checkArgument(!annotations.isEmpty(), "annotations cannot be an empty array");
+        Preconditions.checkArgument(!annotations.isEmpty(), "annotations cannot be an empty");
         Class<A> clazz = (Class<A>) annotations.get(0).annotationType();
         return (A) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, (proxy, method, args) -> {
             if (method.getName().equals("toString")) {

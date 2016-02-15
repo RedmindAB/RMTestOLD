@@ -2,8 +2,6 @@ package se.redmind.rmtest.selenium;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 import se.redmind.rmtest.WebDriverWrapper;
@@ -18,7 +16,6 @@ import static org.junit.Assert.assertTrue;
 @WebDriverRunnerOptions(reuseDriver = true, parallelize = @Parallelize)
 public class GoogleExample {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     protected final WebDriverWrapper<?> wrapper;
 
     public GoogleExample(WebDriverWrapper<?> driverWrapper) {
