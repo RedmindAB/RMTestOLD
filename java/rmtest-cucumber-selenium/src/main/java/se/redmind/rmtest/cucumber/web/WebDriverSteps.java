@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -41,7 +42,7 @@ public class WebDriverSteps {
     public static final String THAT = "(?:that )?";
     public static final String THE_USER = "(?:.*)?";
     public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?)?";
-    public static final String DO_SOMETHING = "(click|clear|submit|select)(?:s? (?:on|in))?";
+    public static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
     public static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
     public static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
@@ -78,11 +79,22 @@ public class WebDriverSteps {
     // Helpers
     @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
     public void that_we_know_the_element_named_as(String type, String id, String alias) {
+        alias = valueOf(alias);
         if (type != null && !type.equals("value")) {
             aliasedLocations.put(alias, by(type, id));
         } else {
-            aliasedValues.put(alias, id);
+            aliasedValues.put(alias, valueOf(id));
         }
+    }
+
+    @Then("^" + THAT + THE_USER + " know(?:s)? " + THIS_ELEMENT + " attribute " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    public void we_know_its_attribute_as(String attribute, String alias) {
+        aliasedValues.put(alias, element.getAttribute(attribute));
+    }
+
+    @Then("^" + THAT + THE_USER + " know(?:s)? " + THIS_ELEMENT + " property " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    public void we_know_its_property_as(String property, String alias) {
+        aliasedValues.put(alias, element.getCssValue(property));
     }
 
     @Given("^th(?:is|ose|ese) alias(?:es)?:$")
@@ -174,6 +186,8 @@ public class WebDriverSteps {
                 break;
             case "submit":
                 element.submit();
+            case "hover":
+                new Actions(driver).moveToElement(element).perform();
                 break;
         }
     }
@@ -224,7 +238,11 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void that_the_element_at_id_matches(String type, String id, String not, String assertType, String expectedValue) {
-        assertElement(assertType, find(by(type, id)), not == null, valueOf(expectedValue));
+        if (type == null) {
+            assertString(assertType, id, not == null, expectedValue);
+        } else {
+            assertElement(assertType, find(by(type, id)), not == null, expectedValue);
+        }
     }
 
     @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " (!)?(?:is present|exists)$")
@@ -353,6 +371,9 @@ public class WebDriverSteps {
     }
 
     private String valueOf(String value) {
+        if (value.equals("UUID()")) {
+            return UUID.randomUUID().toString();
+        }
         if (aliasedValues.containsKey(value)) {
             value = aliasedValues.get(value);
         }
@@ -364,6 +385,7 @@ public class WebDriverSteps {
     }
 
     private By by(String type, String id) {
+        id = valueOf(id);
         Preconditions.checkArgument(id != null);
         if (type == null) {
             if (aliasedLocations.containsKey(id)) {
@@ -405,6 +427,7 @@ public class WebDriverSteps {
     }
 
     private void assertElement(String assertType, WebElement element, boolean shouldBeTrue, String expected) {
+        expected = valueOf(expected);
         switch (assertType) {
             case "links to":
                 assertString("is", element.getAttribute("href"), shouldBeTrue, expected);
@@ -423,6 +446,8 @@ public class WebDriverSteps {
     }
 
     private void assertString(String assertType, String value, boolean shouldBeTrue, String expected) {
+        value = valueOf(value);
+        expected = valueOf(expected);
         switch (assertType) {
             case "reads":
             case "returns":

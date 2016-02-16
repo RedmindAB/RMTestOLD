@@ -23,7 +23,7 @@ import static spark.Spark.get;
 @RunWith(WebDriverRunner.class)
 @WebDriverRunnerOptions(reuseDriver = true)
 @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
-@CucumberOptions(plugin = {"pretty", "json:target/WebDriverStepsTest-json-report.json"})
+@CucumberOptions(plugin = {"pretty", "json:target/WebDriverStepsTest-json-report.json"}, strict = true)
 public class WebDriverStepsTest {
 
     private static boolean isServerRunning;
