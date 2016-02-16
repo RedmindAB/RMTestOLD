@@ -2,6 +2,8 @@ package se.redmind.rmtest.cucumber.rest;
 
 import static spark.Spark.*;
 
+import java.util.HashMap;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 
@@ -18,6 +20,8 @@ public class SparkServer {
     public void init() {
         init();
     }
+    
+    private HashMap<String, JsonElement> db = new HashMap<String, JsonElement>();
 
     Gson gson = new Gson();
 	public int localPort;
@@ -41,9 +45,28 @@ public class SparkServer {
             return json;
 
         });
+        //db
+        get("/db/:id", (req,res) -> db.get(req.params("id")));
+        delete("/db/:id", (req, res) -> {
+        	db.remove(req.params("id"));
+        	return true;
+        });
+        patch("/db/:id", (req,res) -> {
+        	db.put(req.params("id"), gson.fromJson(req.body(), JsonElement.class));
+        	return true; 
+        });
+        post("/db/:id", (req,res) -> {
+        	db.put(req.params("id"), gson.fromJson(req.body(), JsonElement.class));
+        	return true;
+        });
+        put("/db/:id", (req,res) -> {
+        	db.put(req.params("id"), gson.fromJson(req.body(), JsonElement.class));
+        	return true;
+        });
 
         //Filters
         after("/json", (req, res) -> res.header("Content-Type", "application/json"));
+        after("/db/*", (req, res) -> res.header("Content-Type", "application/json"));
         after("/param", (req, res) -> res.header("Content-Type", "application/json"));
         awaitInitialization();
         Spark.awaitInitialization();

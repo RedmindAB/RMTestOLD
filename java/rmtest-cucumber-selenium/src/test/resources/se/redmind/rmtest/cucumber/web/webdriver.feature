@@ -44,6 +44,13 @@ Feature: WebDriver functionalities
     # javascript
     And executing "return window.scrollY;" returns 0
 
+  Scenario: alias composition
+    Given that we know "typo" as "first"
+    And that we know "graphy" as "second"
+    Then the element with id "${first}${second}" reads "Typography"
+    Given that we know "${first}${second}" as "firstAndSecond"
+    Then the element with id "${firstAndSecond}" reads "Typography"
+
   Scenario: element visibility or existence
     Given that the element with id "css" is present
     And the element with id "typography" exists
@@ -66,6 +73,9 @@ Feature: WebDriver functionalities
     # selection
     When we click on the checkbox with xpath "/html/body/div[2]/div/div[1]/div[16]/form/div[4]/div/div/label/input"
     Then this element is selected
+    When we hover on the element with xpath "/html/body/div[2]/div/div[1]/div[69]/button[1]"
+    Then we know its attribute "aria-describedby" as "tooltip"
+    And the element with id "${tooltip}" is displayed
 
   Scenario: loading aliases from an external file and inputing value in a text control
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
@@ -87,3 +97,7 @@ Feature: WebDriver functionalities
     Given that we delete all the cookies
     When we navigate to "${spark}/cookie/valueOf/sessionid"
     Then the page content is "null"
+
+  Scenario: helper functions
+    Given that we know "UUID()" as "myRandomId"
+    Then "${myRandomId}" matches "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"

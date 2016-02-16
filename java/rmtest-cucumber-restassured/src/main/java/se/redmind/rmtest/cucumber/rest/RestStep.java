@@ -38,10 +38,28 @@ public class RestStep {
     	PORT = port;
     }
 
-    @Given("^we get \"([^\"]*)\"$")
-    public void we_get(String path) throws Throwable {
+    @Given("^we (get|post|put|update|patch|delete) \"([^\"]*)\"$")
+    public void we_get(String action, String path) throws Throwable {
     	requestSpecification.port(PORT);
-        response = requestSpecification.get(path);
+    	switch (action) {
+		case "get":
+			response = requestSpecification.get(path);
+			break;
+		case "post":
+			response = requestSpecification.post(path);
+			break;
+		case "put":
+			response = requestSpecification.put(path);
+		case "update":
+		case "patch":
+			response = requestSpecification.patch(path);
+			break;
+		case "delete":
+			response = requestSpecification.delete(path);
+			break;
+		default:
+			break;
+		}
         this.vResponse = response.then();
     }
 

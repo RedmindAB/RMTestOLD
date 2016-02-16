@@ -3,12 +3,13 @@ package se.redmind.rmtest;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.junit.Assume;
@@ -50,10 +51,16 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
     private final Set<WebDriverType> openDrivers = new LinkedHashSet<>();
     private final ThreadLocal<Boolean> isStarted = ThreadLocal.withInitial(() -> false);
+    private final ThreadLocal<Boolean> isInitializing = ThreadLocal.withInitial(() -> false);
     private final ThreadLocal<WebDriverType> driverInstance = new ThreadLocal<WebDriverType>() {
 
         @Override
         protected WebDriverType initialValue() {
+            long start = System.currentTimeMillis();
+            if (isInitializing.get()) {
+                throw new IllegalStateException("this driver is already being initialized, is getDriver() being called in a pre/postConfiguration hook?");
+            }
+            isInitializing.set(true);
             preConfigurations.forEach(preConfiguration -> {
                 try {
                     preConfiguration.run();
@@ -62,10 +69,11 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
                 }
             });
             WebDriverType driver = function.apply(capabilities);
+            openDrivers.add(driver);
             postConfigurations.forEach(postConfiguration -> postConfiguration.accept(driver));
             isStarted.set(true);
-            logger.info("Started driver [" + description + "]");
-            openDrivers.add(driver);
+            logger.info("Started driver [" + description + "] (took " + (System.currentTimeMillis() - start) + "ms)");
+            isInitializing.set(false);
             return driver;
         }
 
@@ -104,15 +112,11 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     }
 
     public boolean isStarted() {
-        synchronized (driverInstance) {
-            return isStarted.get();
-        }
+        return isStarted.get();
     }
 
     public WebDriverType getDriver() {
-        synchronized (driverInstance) {
-            return driverInstance.get();
-        }
+        return driverInstance.get();
     }
 
     public boolean reuseDriverBetweenTests() {
@@ -129,8 +133,9 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
                 openDrivers.remove(driverInstance.get());
                 logger.info("Closing driver [" + description + "]");
                 try {
-                    driverInstance.get().quit();
-                } catch (UnreachableBrowserException e) {
+                    WebDriverType driver = driverInstance.get();
+                    CompletableFuture.runAsync(() -> driver.quit()).get(10, TimeUnit.SECONDS);
+                } catch (UnreachableBrowserException | InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
                     logger.error(e.getMessage());
                 }
                 driverInstance.remove();
@@ -257,7 +262,6 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
     public static Predicate<WebDriverWrapper<?>> filterFromSystemProperties() {
         Predicate<WebDriverWrapper<?>> filter = driverWrapper -> {
-            LoggerFactory.getLogger(WebDriverWrapper.class).error(driverWrapper.getCapability().toString());
             return true;
         };
         if (System.getProperty(CapabilityType.BROWSER_NAME) != null) {

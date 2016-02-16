@@ -19,7 +19,7 @@ import se.redmind.rmtest.runners.WebDriverRunner;
 @FilterDrivers(types = TestDroidDriverWrapper.class)
 public class ScreenShotExample {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScreenShotExample.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final TestDroidDriverWrapper wrapper;
 
     public ScreenShotExample(TestDroidDriverWrapper wrapper) {
@@ -28,7 +28,7 @@ public class ScreenShotExample {
             Optional<APIDevice> potentialDevice = wrapper.getFirstNonLockedDevice(APIDevice.OsType.ANDROID, 21);
             if (potentialDevice.isPresent()) {
                 APIDevice device = potentialDevice.get();
-                LOGGER.info("found testdroid device: " + device.getDisplayName());
+                logger.info("found testdroid device: " + device.getDisplayName());
                 TestDroidConfiguration configuration = wrapper.getConfiguration();
                 String fileUUID = TestDroidDriverWrapper.uploadFile(configuration.appPath, configuration.serverUrl + "/upload", configuration.username, configuration.password);
 
@@ -40,10 +40,10 @@ public class ScreenShotExample {
                 wrapper.getCapability().setCapability("testdroid_device", device.getDisplayName()); // Freemium device
                 wrapper.getCapability().setCapability("testdroid_app", fileUUID); //to use existing app using "latest" as fileUUID
 
-                LOGGER.info(wrapper.getCapability().toString());
-                LOGGER.info("Creating Appium session, this may take couple minutes..");
+                logger.info(wrapper.getCapability().toString());
+                logger.info("Creating Appium session, this may take couple minutes..");
             } else {
-                LOGGER.error("didn't find any device matching our criterias ...");
+                logger.error("didn't find any device matching our criterias ...");
             }
         });
     }
