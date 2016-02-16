@@ -1,4 +1,4 @@
-@tag2
+@unit @tag2
 Feature: we want to be able to use a parameterized scenario in another feature's background
 
   Background:

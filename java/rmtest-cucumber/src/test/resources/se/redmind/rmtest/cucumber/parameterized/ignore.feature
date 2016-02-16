@@ -1,6 +1,10 @@
 @tag3
-Feature: this feature should be ignore
+Feature: those scenarios shouldn't run
 
-  @ignore
-  Scenario: Failure
+  @unit @ignore
+  Scenario: Failure because of ignore
+    When I run, I fail
+
+  @integration
+  Scenario: Failure because of wrong tag
     When I run, I fail

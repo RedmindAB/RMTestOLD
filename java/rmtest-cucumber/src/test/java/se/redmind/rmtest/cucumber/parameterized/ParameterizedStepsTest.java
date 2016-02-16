@@ -35,7 +35,7 @@ public class ParameterizedStepsTest {
         }
 
         @When("^I run, I fail$")
-        public void i_run_I_fail()  {
+        public void i_run_I_fail() {
             Assert.fail();
         }
 

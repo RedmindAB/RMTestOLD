@@ -74,7 +74,21 @@ public class ParameterizableRuntime extends Runtime {
     }
 
     public List<CucumberFeature> cucumberFeatures() {
+        List<String> extraFilters = Shellwords.parse(System.getProperty("cucumber.filters", ""));
+        
+        for (int i = 0; i < extraFilters.size(); i += 2) {
+            String type = extraFilters.get(i).trim();
+            switch (type) {
+                case "--tags":
+                    runtimeOptions.getFilters().add(extraFilters.get(i + 1).trim());
+                    break;
+                case "--name":
+                    runtimeOptions.getFilters().add(Pattern.compile(extraFilters.get(i + 1).trim()));
+                    break;
+            }
+        }
         boolean hasTags = false;
+
         for (int i = 0; i < runtimeOptions.getFilters().size(); i++) {
             Object filter = runtimeOptions.getFilters().get(i);
             if (filter instanceof String && ((String) filter).contains("@")) {

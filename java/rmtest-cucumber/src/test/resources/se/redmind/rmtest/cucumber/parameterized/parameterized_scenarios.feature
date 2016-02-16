@@ -1,4 +1,4 @@
-@tag1
+@unit @tag1
 Feature: we want to be able to use a parameterized scenario in another scenario
 
   Scenario: we call a parameterized scenario that will replace the current step
