@@ -3,6 +3,8 @@ package se.redmind.rmtest;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -131,8 +133,9 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
                 openDrivers.remove(driverInstance.get());
                 logger.info("Closing driver [" + description + "]");
                 try {
-                    driverInstance.get().quit();
-                } catch (UnreachableBrowserException e) {
+                    WebDriverType driver = driverInstance.get();
+                    CompletableFuture.runAsync(() -> driver.quit()).get(10, TimeUnit.SECONDS);
+                } catch (UnreachableBrowserException | InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
                     logger.error(e.getMessage());
                 }
                 driverInstance.remove();
