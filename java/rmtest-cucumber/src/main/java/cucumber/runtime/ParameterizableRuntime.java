@@ -164,7 +164,7 @@ public class ParameterizableRuntime extends Runtime {
 
                         if (step instanceof ParameterizedStep) {
                             if (((ParameterizedStep) step).getType() == ParameterizedStep.Type.Start
-                                    || ((ParameterizedStep) step).getType() == ParameterizedStep.Type.Quiet) {
+                                || ((ParameterizedStep) step).getType() == ParameterizedStep.Type.Quiet) {
                                 continue;
                             }
                         }
@@ -202,8 +202,8 @@ public class ParameterizableRuntime extends Runtime {
                                     }
 
                                     List<Step> newSteps = parameterizedScenario.getValue().statement().getSteps().stream()
-                                            .map(parameterizedStep -> wrapper.apply(parameterizedStep))
-                                            .collect(Collectors.toList());
+                                        .map(parameterizedStep -> wrapper.apply(parameterizedStep))
+                                        .collect(Collectors.toList());
                                     stepContainer.getSteps().addAll(i + 1, newSteps);
                                     i += newSteps.size();
                                     if (compositionType == CompositionType.Full) {
@@ -230,9 +230,9 @@ public class ParameterizableRuntime extends Runtime {
         if (picoFactory == null) {
             Collection<? extends Backend> backends = Fields.getSafeValue(this, "backends");
             Optional<JavaBackend> first = backends.stream()
-                    .filter(backend -> backend instanceof JavaBackend)
-                    .map(backend -> (JavaBackend) backend)
-                    .findFirst();
+                .filter(backend -> backend instanceof JavaBackend)
+                .map(backend -> (JavaBackend) backend)
+                .findFirst();
             if (first.isPresent()) {
                 picoFactory = Fields.getSafeValue(first.get(), "objectFactory");
             } else {
