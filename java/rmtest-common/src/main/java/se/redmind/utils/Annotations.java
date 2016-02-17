@@ -59,7 +59,11 @@ public class Annotations {
     }
 
     public static <A extends Annotation> A collectAndCombine(Class<A> annotationClass, Class<?> clazz) {
-        return combine(collect(annotationClass, clazz));
+        List<A> annotations = collect(annotationClass, clazz);
+        if (annotations.isEmpty()) {
+            return defaultOf(annotationClass);
+        }
+        return combine(annotations);
     }
 
     public static <A extends Annotation> List<A> collect(Class<A> annotationClass, Class<?> clazz) {

@@ -135,7 +135,9 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
                 try {
                     WebDriverType driver = driverInstance.get();
                     CompletableFuture.runAsync(() -> driver.quit()).get(10, TimeUnit.SECONDS);
-                } catch (UnreachableBrowserException | InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
+                } catch (java.util.concurrent.TimeoutException e) {
+                    logger.error("couldn't close driver [" + description + "] within 10 seconds...");
+                } catch (UnreachableBrowserException | InterruptedException | ExecutionException e) {
                     logger.error(e.getMessage());
                 }
                 driverInstance.remove();

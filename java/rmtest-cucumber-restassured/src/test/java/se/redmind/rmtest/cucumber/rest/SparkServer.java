@@ -45,6 +45,17 @@ public class SparkServer {
             return json;
 
         });
+        get("/cookie/:cookie", (req, res) -> {
+        	JsonObject json = new JsonObject();
+        	json.addProperty(req.params("cookie"), req.cookie(req.params("cookie")));
+        	return json;
+        });
+        get("/header/:header", (req,res) -> {
+        	String headerToValidate = req.params("header");
+			String headerValue = req.headers(headerToValidate);
+        	res.header(headerToValidate, headerValue);
+        	return new JsonObject();
+        });
         //db
         get("/db/:id", (req,res) -> db.get(req.params("id")));
         delete("/db/:id", (req, res) -> {
@@ -65,9 +76,8 @@ public class SparkServer {
         });
 
         //Filters
-        after("/json", (req, res) -> res.header("Content-Type", "application/json"));
-        after("/db/*", (req, res) -> res.header("Content-Type", "application/json"));
-        after("/param", (req, res) -> res.header("Content-Type", "application/json"));
+        after("/*", (req, res) -> res.header("Content-Type", "application/json"));
+        
         awaitInitialization();
         Spark.awaitInitialization();
         JettySparkServer sparkServer = Fields.getValue(Spark.getInstance(), "server");
