@@ -38,8 +38,10 @@ import se.redmind.utils.Try;
  * @author Jeremy Comte
  */
 public class WebDriverSteps {
+	
+	private static final String VALUE = "value";
 
-    public static final String THAT = "(?:that )?";
+	public static final String THAT = "(?:that )?";
     public static final String THE_USER = "(?:.*)?";
     public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?)?";
     public static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
@@ -80,7 +82,7 @@ public class WebDriverSteps {
     @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
     public void that_we_know_the_element_named_as(String type, String id, String alias) {
         alias = valueOf(alias);
-        if (type != null && !type.equals("value")) {
+        if (type != null && !VALUE.equals(type)) {
             aliasedLocations.put(alias, by(type, id));
         } else {
             aliasedValues.put(alias, valueOf(id));
@@ -99,7 +101,7 @@ public class WebDriverSteps {
 
     @Given("^th(?:is|ose|ese) alias(?:es)?:$")
     public void these_aliases(List<Map<String, String>> newAliases) {
-        newAliases.forEach(alias -> aliasedLocations.put(alias.get("value"), by(alias.get("type"), alias.get("id"))));
+        newAliases.forEach(alias -> aliasedLocations.put(alias.get(VALUE), by(alias.get("type"), alias.get("id"))));
     }
 
     @Given("^the aliases defined in the file \"([^\"]*)\"$")
@@ -137,7 +139,7 @@ public class WebDriverSteps {
     @Given("^" + THAT + THE_USER + " add(?:s)? th(?:is|ose) cookie(?:s)?:$")
     public void that_we_add_those_cookies(List<Map<String, String>> data) {
         data.forEach(cookieAsMap -> {
-            Cookie.Builder builder = new Cookie.Builder(cookieAsMap.get("name"), cookieAsMap.get("value"));
+            Cookie.Builder builder = new Cookie.Builder(cookieAsMap.get("name"), cookieAsMap.get(VALUE));
             if (cookieAsMap.containsKey("domain")) {
                 builder.domain(cookieAsMap.get("domain"));
             }
@@ -186,6 +188,7 @@ public class WebDriverSteps {
                 break;
             case "submit":
                 element.submit();
+                break;
             case "hover":
                 new Actions(driver).moveToElement(element).perform();
                 break;
@@ -435,7 +438,7 @@ public class WebDriverSteps {
             default:
                 String value;
                 if (element.getTagName().equals("input")) {
-                    value = element.getAttribute("value");
+                    value = element.getAttribute(VALUE);
                 } else {
                     value = getNotNullOrEmpty(() -> element.getText());
                 }
