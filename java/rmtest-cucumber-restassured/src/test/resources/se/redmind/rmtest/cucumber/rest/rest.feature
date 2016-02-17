@@ -54,6 +54,11 @@ Feature: Test REST applications
     When we get "/json"
     Then header "Content-Type" is "application/json"
 
+  Scenario: set header
+    Given we set header "customHeader" to "custom"
+    When we get "/header/customHeader"
+    Then header "customHeader" is "custom"
+
   Scenario: get custom status
     When we get "/status/500"
     Then status is 500
@@ -100,3 +105,32 @@ Feature: Test REST applications
     Then parameter "newtype" is "put"
     When we delete "/db/crud"
     Then status is 200
+
+  Scenario: set cookies
+    Given we set cookie "cookie1" to "cookie1value"
+    When we get "/cookie/cookie1"
+    Then parameter "cookie1" is "cookie1value"
+
+  Scenario: use custom steps
+    Given i set my custom json to:
+    """
+    {"custom":"step"}
+    """
+    When we get "/json"
+    Then parameter "custom" is "step"
+
+  Scenario: use custom response
+    Given i set my custom json to:
+    """
+    {"custom":"step"}
+    """
+    When we get "/json"
+    Then custom response "custom" is "step"
+
+  Scenario: use custom validatable response
+    Given i set my custom json to:
+    """
+    {"custom":"step"}
+    """
+    When we get "/json"
+    Then custom validatable response "custom" is "step"

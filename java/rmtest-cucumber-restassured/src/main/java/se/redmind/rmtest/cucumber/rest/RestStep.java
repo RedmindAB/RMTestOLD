@@ -9,6 +9,7 @@ import com.jayway.restassured.response.ValidatableResponse;
 import com.jayway.restassured.specification.RequestSpecification;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 
 public class RestStep {
 
-	public static int PORT = 0;
+	private int PORT = 0;
     private ValidatableResponse vResponse;
     private Response response;
     private RequestSpecification requestSpecification;
@@ -35,12 +36,12 @@ public class RestStep {
 
     @Given("^port is (\\d+)$")
     public void port_is(int port) throws Throwable {
-    	PORT = port;
+    	setPORT(port);
     }
 
-    @Given("^we (get|post|put|update|patch|delete) \"([^\"]*)\"$")
+    @When("^we (get|post|put|update|patch|delete) \"([^\"]*)\"$")
     public void we_get(String action, String path) throws Throwable {
-    	requestSpecification.port(PORT);
+    	requestSpecification.port(getPORT());
     	switch (action) {
 		case "get":
 			response = requestSpecification.get(path);
@@ -93,7 +94,12 @@ public class RestStep {
     public void header_is(String headerKey, String headerValue) throws Throwable {
         vResponse.header(headerKey, headerValue);
     }
-
+    
+    @Given("^we set header \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void we_set_header_to(String headerName, String headerValue) throws Throwable {
+    	requestSpecification.header(headerName, headerValue);
+    }
+    
     @Then("^index (\\d+) has the key \"([^\"]*)\" and value \"([^\"]*)\"$")
     public void index_has_the_key_and_value(int index, String key, String value) throws Throwable {
         vResponse.body("[" + index + "]." + key, is(value));
@@ -126,5 +132,30 @@ public class RestStep {
         long time = response.timeIn(timeUnit);
         assertTrue("the request took " + time + " " + timeUnit + " and the timeout was " + maxTime, time <= maxTime);
     }
+    
+    @Given("^we set cookie \"([^\"]*)\" to \"([^\"]*)\"$")
+    public void we_set_cookie_to(String cookieKey, String cookieValue) throws Throwable {
+    	this.requestSpecification.cookie(cookieKey, cookieValue);
+    }
+
+	public RequestSpecification currentRequest() {
+		return this.requestSpecification;
+	}
+	
+	public Response currentReponse(){
+		return this.response;
+	}
+	
+	public ValidatableResponse currentValidatableReponse(){
+		return this.vResponse;
+	}
+
+	public int getPORT() {
+		return PORT;
+	}
+
+	public void setPORT(int pORT) {
+		PORT = pORT;
+	}
 
 }
