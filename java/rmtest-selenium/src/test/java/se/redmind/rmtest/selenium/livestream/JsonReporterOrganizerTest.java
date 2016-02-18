@@ -5,7 +5,6 @@ import java.io.FileReader;
 
 import org.junit.runner.RunWith;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import cucumber.api.CucumberOptions;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  * @author Jeremy Comte
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "json:target/JsonReporterOrganizerTest-json-report.json"})
+@CucumberOptions(plugin = {"pretty", "json:target/JsonReporterOrganizerTest-json-report.json"}, features = "classpath:se/redmind/rmtest/selenium/livestream/organizer.feature")
 public class JsonReporterOrganizerTest {
 
     public static class Steps {
@@ -50,11 +49,6 @@ public class JsonReporterOrganizerTest {
         @Then("^(\\d+) gherkin maps$")
         public void gherkin_maps(int count) {
             assertEquals(count, organizer.getGherkinMap().size());
-        }
-
-        @Then("^serializing this report again creates a (\\d+) bytes long json$")
-        public void serializing_this_report_again_creates_a_bytes_long_json(int length) {
-            assertEquals(length, new GsonBuilder().setPrettyPrinting().create().toJson(organizer.build()).length());
         }
 
     }

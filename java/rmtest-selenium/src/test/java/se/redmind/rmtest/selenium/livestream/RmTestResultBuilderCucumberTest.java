@@ -1,23 +1,22 @@
 package se.redmind.rmtest.selenium.livestream;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import cucumber.api.CucumberOptions;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.junit.Cucumber;
-import gherkin.formatter.model.Scenario;
-import javassist.runtime.Desc;
-import org.junit.runner.Description;
-import org.junit.runner.RunWith;
-import org.junit.runner.notification.Failure;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.junit.runner.Description;
+import org.junit.runner.RunWith;
+import org.junit.runner.notification.Failure;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import cucumber.api.CucumberOptions;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.junit.Cucumber;
+import gherkin.formatter.model.Scenario;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,9 +25,8 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Victor Mattsson on 2016-02-10.
  */
-
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "json:target/RmTestResultBuilderCucumberTest-json-report.json"})
+@CucumberOptions(plugin = {"pretty", "json:target/RmTestResultBuilderCucumberTest-json-report.json"}, features = "classpath:se/redmind/rmtest/selenium/livestream/builder.feature")
 public class RmTestResultBuilderCucumberTest {
 
     public static class Steps {
@@ -86,7 +84,7 @@ public class RmTestResultBuilderCucumberTest {
         public void we_add_tests_to_result_builder() {
             for (int i = 0; i < displayNames.length; i++) {
                 resultBuilder.addTest(displayNames[i], Description.createSuiteDescription("testMethod" + i + 1
-                        + "(se.redmind.rmtest.LiveStream)"));
+                    + "(se.redmind.rmtest.LiveStream)"));
             }
         }
 
@@ -104,14 +102,14 @@ public class RmTestResultBuilderCucumberTest {
                     break;
                 case "failure":
                     resultBuilder.addTestFailure(displayNames[test - 1],
-                            new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
+                        new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
                     break;
                 case "ignored":
                     resultBuilder.addIgnoredTest(displayNames[test - 1]);
                     break;
                 case "assumptionfailure":
                     resultBuilder.addAssumptionFailure(displayNames[test - 1],
-                            new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
+                        new Failure(Description.createSuiteDescription(this.getClass()), new NullPointerException()));
                     break;
                 default:
                     System.out.println("Result typ invalid. valid types: finished, failure, assumptionfailure and ignored");
@@ -135,9 +133,9 @@ public class RmTestResultBuilderCucumberTest {
         @Given("^we create a Description that is a Scenario$")
         public void we_create_a_Description_that_is_a_Scenario() {
             descriptionScenario = Description.createTestDescription(
-                    "se.redmind.rmtest.LiveStream",
-                    "testMethod",
-                    new Scenario(new ArrayList<>(), new ArrayList<>(), "Scenario: ", "This is a scenario", "", 1, "1")
+                "se.redmind.rmtest.LiveStream",
+                "testMethod",
+                new Scenario(new ArrayList<>(), new ArrayList<>(), "Scenario: ", "This is a scenario", "", 1, "1")
             );
         }
 
