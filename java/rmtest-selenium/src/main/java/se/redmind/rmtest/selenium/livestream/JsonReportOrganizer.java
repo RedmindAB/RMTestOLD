@@ -62,7 +62,7 @@ public class JsonReportOrganizer {
                     }
                 }
                 step.addProperty(String.valueOf(i + 1), object.get("method").getAsString() +
-                        (stepFailed ? " @ThisStepFailed@" : ""));
+                        (stepFailed ? getResultString(object) : ""));
                 runTime += object.get("runTime").getAsDouble();
             }
             testScenario.addProperty("runTime", runTime);
@@ -74,6 +74,14 @@ public class JsonReportOrganizer {
         /* Also add the regular tests */
         regularTests.forEach(gherkin::add);
         return gherkin;
+    }
+
+    private String getResultString(JsonObject object) {
+        if (object.get("result").getAsString().equals("failure")) {
+            return "@ThisStepFailed@";
+        } else {
+            return "@ThisStepSkipped@";
+        }
     }
 
     private boolean testNotPassed(JsonObject object) {
