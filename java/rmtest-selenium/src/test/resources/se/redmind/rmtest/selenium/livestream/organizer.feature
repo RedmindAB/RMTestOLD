@@ -6,4 +6,3 @@ Feature: A JsonReportOrganizer
     And 26 gherkin scenarios
     And 4 regular tests
     And 6 gherkin maps
-    And serializing this report again creates a 44838 bytes long json
