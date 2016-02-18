@@ -63,6 +63,7 @@ Feature: WebDriver functionalities
       | type  | id                                                               | value       |
       | xpath | /html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2] | Success box |
     When we select the "Success box"
+    And the element "Success box" reads "Indicates a successful or positive action"
     # assert the current element
     Then it reads "Indicates a successful or positive action"
     # css check
