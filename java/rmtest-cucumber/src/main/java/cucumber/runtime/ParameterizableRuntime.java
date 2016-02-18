@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cucumber.api.StepDefinitionReporter;
+import cucumber.runtime.Runtime;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.java.ParameterizedJavaStepDefinition;
@@ -74,8 +75,9 @@ public class ParameterizableRuntime extends Runtime {
     }
 
     public List<CucumberFeature> cucumberFeatures() {
+        // default cucumber overrides the filters given in the @CucumberOptions annotation
+        // using the cucumber.filters System.property, one can extend the filters instead of overriding it.
         List<String> extraFilters = Shellwords.parse(System.getProperty("cucumber.filters", ""));
-        
         for (int i = 0; i < extraFilters.size(); i += 2) {
             String type = extraFilters.get(i).trim();
             switch (type) {
@@ -87,26 +89,37 @@ public class ParameterizableRuntime extends Runtime {
                     break;
             }
         }
-        boolean hasTags = false;
 
+        // if we work with tags we want to add the @parameterized and ~@ignore filters
+        boolean hasTags = false;
+        Object filter = null;
         for (int i = 0; i < runtimeOptions.getFilters().size(); i++) {
-            Object filter = runtimeOptions.getFilters().get(i);
+            filter = runtimeOptions.getFilters().get(i);
             if (filter instanceof String && ((String) filter).contains("@")) {
                 hasTags = true;
                 runtimeOptions.getFilters().set(i, ((String) filter) + "," + Tags.PARAMETERIZED);
             }
         }
-        if (hasTags) {
+
+        List<CucumberFeature> cucumberFeatures = new ArrayList<>();
+        if (filter == null || hasTags) {
             runtimeOptions.getFilters().add("~" + Tags.IGNORE);
+        } else {
+            // otherwise we will look for the @parameterized scenarios and add them
+            RuntimeOptions parameterizedScenarioRuntimeOptions = new RuntimeOptions("");
+            parameterizedScenarioRuntimeOptions.getFilters().add(Tags.PARAMETERIZED);
+            parameterizedScenarioRuntimeOptions.getFilters().add("~" + Tags.IGNORE);
+            parameterizedScenarioRuntimeOptions.getFeaturePaths().add("classpath:");
+            cucumberFeatures.addAll(parameterizedScenarioRuntimeOptions.cucumberFeatures(resourceLoader));
         }
 
-        List<CucumberFeature> cucumberFeatures = runtimeOptions.cucumberFeatures(resourceLoader);
+        cucumberFeatures.addAll(runtimeOptions.cucumberFeatures(resourceLoader));
 
         // 1. Get the children from the parent class, intercept any parameterized scenario and instantiate their factories
         Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = getParameterizedScenarios(cucumberFeatures);
 
         // 2. Iterate over all the normal steps, and if the scenario is not quiet, rewrite and add the parameterized steps as normal steps.
-        if (!parameterizedScenarios.isEmpty()) {
+        if (!cucumberFeatures.isEmpty() && !parameterizedScenarios.isEmpty()) {
             inject(parameterizedScenarios, cucumberFeatures);
         }
         return cucumberFeatures;
@@ -122,24 +135,28 @@ public class ParameterizableRuntime extends Runtime {
 
     public Map<Pattern, ParameterizedJavaStepDefinition.Factory> getParameterizedScenarios(List<CucumberFeature> features) {
         Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios = new LinkedHashMap<>();
-        features.forEach(feature -> {
+        for (int i = 0; i < features.size(); i++) {
+            CucumberFeature feature = features.get(i);
             List<CucumberTagStatement> statements = feature.getFeatureElements();
-            for (int i = 0; i < statements.size(); i++) {
-                CucumberTagStatement statement = statements.get(i);
+            for (int j = 0; j < statements.size(); j++) {
+                CucumberTagStatement statement = statements.get(j);
                 if (Tags.isParameterized(statement)) {
                     ParameterizedJavaStepDefinition.Factory stepFactory = ParameterizedJavaStepDefinition.from(statement, this);
                     parameterizedScenarios.put(stepFactory.pattern(), stepFactory);
-                    statements.remove(i);
-                    i--;
+                    statements.remove(j--);
                 } else if (name != null) {
                     TagStatement tagStatement = statement.getGherkinModel();
                     Fields.set(tagStatement, "name", tagStatement.getName() + " " + name);
                 }
             }
-        });
-        if (!parameterizedScenarios.isEmpty()) {
+            if (statements.isEmpty()) {
+                features.remove(i--);
+            }
+        }
+
+        if (!features.isEmpty() && !parameterizedScenarios.isEmpty()) {
             StringBuilder stringBuilder = new StringBuilder();
-            int maxLength = parameterizedScenarios.values().stream().map(f -> f.statement().getVisualName()).max(String::compareTo).get().length();
+            int maxLength = parameterizedScenarios.values().stream().map(f -> f.statement().getVisualName().length()).max(Integer::compareTo).get();
             parameterizedScenarios.forEach((pattern, factory) -> {
                 CucumberFeature cucumberFeature = Fields.getSafeValue(factory.statement(), "cucumberFeature");
                 String path = Fields.getSafeValue(cucumberFeature, "path");
