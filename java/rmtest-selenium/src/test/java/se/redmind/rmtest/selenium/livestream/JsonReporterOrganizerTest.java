@@ -19,8 +19,8 @@ import static org.junit.Assert.assertEquals;
  * @author Jeremy Comte
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "json:target/JsonReporterOrganizerCucumberTest-json-report.json"})
-public class JsonReporterOrganizerCucumberTest {
+@CucumberOptions(plugin = {"pretty", "json:target/JsonReporterOrganizerTest-json-report.json"})
+public class JsonReporterOrganizerTest {
 
     public static class Steps {
 

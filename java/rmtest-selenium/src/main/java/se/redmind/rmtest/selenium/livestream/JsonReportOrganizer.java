@@ -50,18 +50,20 @@ public class JsonReportOrganizer {
             JsonObject step = new JsonObject();
             stepObjects.add(step);
             for (int i = 0; i < jsonMapObjects.size(); i++) {
+                JsonObject object = jsonMapObjects.get(i);
+                boolean stepFailed = testNotPassed(object);
                 if (i == 0) {
-                    testScenario = jsonMapObjects.get(i);
+                    testScenario = object;
                 }
-                if (testNotPassed(jsonMapObjects, i)) {
+                if (stepFailed) {
                     testScenario.addProperty("result", "failure");
-                    if (jsonMapObjects.get(i).get("failureMessage") != null) {
-                        testScenario.addProperty("failureMessage", jsonMapObjects.get(i).get("failureMessage")
-                            .getAsString());
+                    if (object.get("failureMessage") != null) {
+                        testScenario.addProperty("failureMessage", object.get("failureMessage").getAsString());
                     }
                 }
-                step.addProperty(String.valueOf(i + 1), jsonMapObjects.get(i).get("method").getAsString());
-                runTime += jsonMapObjects.get(i).get("runTime").getAsDouble();
+                step.addProperty(String.valueOf(i + 1), object.get("method").getAsString() +
+                        (stepFailed ? " @ThisStepFailed@" : ""));
+                runTime += object.get("runTime").getAsDouble();
             }
             testScenario.addProperty("runTime", runTime);
             testScenario.addProperty("method", testScenario.get("testclass").getAsString());
@@ -74,8 +76,8 @@ public class JsonReportOrganizer {
         return gherkin;
     }
 
-    private boolean testNotPassed(ArrayList<JsonObject> objects, int i) {
-        return !objects.get(i).get("result").getAsString().equals("passed");
+    private boolean testNotPassed(JsonObject object) {
+        return !object.get("result").getAsString().equals("passed");
     }
 
     private int populateGherkinMap() {
