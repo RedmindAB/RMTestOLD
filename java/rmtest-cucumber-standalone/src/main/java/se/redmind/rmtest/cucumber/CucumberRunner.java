@@ -83,7 +83,7 @@ public class CucumberRunner {
 
     @RunWith(WebDriverRunner.class)
     @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
-    @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "pretty")
+    @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "pretty", tags={"~@ignore"})
     public static class Test {
 
     }

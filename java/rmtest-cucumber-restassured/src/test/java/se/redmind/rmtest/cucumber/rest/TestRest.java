@@ -51,14 +51,14 @@ public class TestRest {
     	
     	@Then("^custom response \"([^\"]*)\" is \"([^\"]*)\"$")
     	public void custom_response_is(String key, String value) throws Throwable {
-    		Response res = step.currentReponse();
+    		Response res = step.currentResponse();
     		String string = res.body().jsonPath().getString(key);
     		Assert.assertEquals(value, string);
     	}
 
     	@Then("^custom validatable response \"([^\"]*)\" is \"([^\"]*)\"$")
     	public void custom_validatable_response_is(String query, String value) throws Throwable {
-    		step.currentValidatableReponse().body(query, equalTo(value));
+    		step.currentValidatableResponse().body(query, equalTo(value));
     	}
     }
 

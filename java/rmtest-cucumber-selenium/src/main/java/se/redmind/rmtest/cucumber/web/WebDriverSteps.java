@@ -38,10 +38,10 @@ import se.redmind.utils.Try;
  * @author Jeremy Comte
  */
 public class WebDriverSteps {
-	
-	private static final String VALUE = "value";
 
-	public static final String THAT = "(?:that )?";
+    private static final String VALUE = "value";
+
+    public static final String THAT = "(?:that )?";
     public static final String THE_USER = "(?:.*)?";
     public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?)?";
     public static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
@@ -241,7 +241,7 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + THE_ELEMENT_IDENTIFIED_BY + " " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void that_the_element_at_id_matches(String type, String id, String not, String assertType, String expectedValue) {
-        if (type == null) {
+        if (type == null && !aliasedLocations.containsKey(id)) {
             assertString(assertType, id, not == null, expectedValue);
         } else {
             assertElement(assertType, find(by(type, id)), not == null, expectedValue);

@@ -142,11 +142,11 @@ public class RestStep {
 		return this.requestSpecification;
 	}
 	
-	public Response currentReponse(){
+	public Response currentResponse(){
 		return this.response;
 	}
 	
-	public ValidatableResponse currentValidatableReponse(){
+	public ValidatableResponse currentValidatableResponse(){
 		return this.vResponse;
 	}
 

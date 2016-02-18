@@ -3,8 +3,6 @@ package se.redmind.rmtest.selenium.livestream;
 import org.junit.Test;
 import org.junit.runner.Description;
 
-import se.redmind.rmtest.selenium.livestream.LiveStreamListener;
-
 /**
  * Created by victormattsson on 2016-02-02.
  */
