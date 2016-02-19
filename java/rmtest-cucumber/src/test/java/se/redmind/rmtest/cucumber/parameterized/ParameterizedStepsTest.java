@@ -12,7 +12,7 @@ import cucumber.api.junit.Cucumber;
  * @author Jeremy Comte
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json", "html:target/ParameterizedStepsTest-hmtl-report"}, tags = {"@tag1,@tag2,@tag3"})
+@CucumberOptions(plugin = {"pretty", "json:target/ParameterizedStepsTest-json-report.json", "html:target/ParameterizedStepsTest-hmtl-report"}, tags = {"@tag1,@tag2,@tag3,@ignore"})
 public class ParameterizedStepsTest {
 
     public static class Steps {
