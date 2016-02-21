@@ -134,3 +134,19 @@ Feature: Test REST applications
     """
     When we get "/json"
     Then custom validatable response "custom" is "step"
+
+  Scenario: send null value
+    Given we send:
+    """
+    { "value" : null }
+    """
+    When we get "/json"
+    Then parameter "value" has no value
+
+  Scenario: send empty value
+    Given we send:
+    """
+    { "value" : "" }
+    """
+    When we get "/json"
+    Then parameter "value" has no value

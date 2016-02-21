@@ -1,5 +1,6 @@
 @tag3
 Feature: those scenarios shouldn't run
+  # Only tests that have the tag @unit should run
 
   @unit @ignore
   Scenario: Failure because of ignore
@@ -14,4 +15,8 @@ Feature: those scenarios shouldn't run
     When I run, I fail
 
   Scenario: should not run because of no tag
+    When I run, I fail
+
+  @unit @integration @ignore
+  Scenario: Failure because of all tags
     When I run, I fail
