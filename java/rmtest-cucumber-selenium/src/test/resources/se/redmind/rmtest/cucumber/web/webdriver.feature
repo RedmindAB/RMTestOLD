@@ -50,6 +50,8 @@ Feature: WebDriver functionalities
     Then the element with id "${first}${second}" reads "Typography"
     Given that we know "${first}${second}" as "firstAndSecond"
     Then the element with id "${firstAndSecond}" reads "Typography"
+    Given that we know the value of the element with id "${firstAndSecond}" as "typographyContent"
+    Then "${typographyContent}" equals "Typography"
 
   Scenario: element visibility or existence
     Given that the element with id "css" is present

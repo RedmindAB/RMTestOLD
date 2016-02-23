@@ -79,11 +79,15 @@ public class WebDriverSteps {
     }
 
     // Helpers
-    @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
-    public void that_we_know_the_element_named_as(String type, String id, String alias) {
+    @When("^" + THAT + THE_USER + " know(?:s)?( the value of)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
+    public void that_we_know_the_element_named_as(String asValue, String type, String id, String alias) {
         alias = valueOf(alias);
         if (type != null && !VALUE.equals(type)) {
-            aliasedLocations.put(alias, by(type, id));
+            if (asValue == null) {
+                aliasedLocations.put(alias, by(type, id));
+            } else {
+                aliasedValues.put(alias, getValueOf(find(by(type, id))));
+            }
         } else {
             aliasedValues.put(alias, valueOf(id));
         }
@@ -431,21 +435,23 @@ public class WebDriverSteps {
 
     private void assertElement(String assertType, WebElement element, boolean shouldBeTrue, String expected) {
         expected = valueOf(expected);
-        switch (assertType) {
-            case "links to":
-                assertString("is", element.getAttribute("href"), shouldBeTrue, expected);
-                break;
-            default:
-                String value;
-                if (element.getTagName().equals("input")) {
-                    value = element.getAttribute(VALUE);
-                } else {
-                    value = getNotNullOrEmpty(() -> element.getText());
-                }
-                assertString(assertType, value, shouldBeTrue, expected);
-                break;
+        String value = getValueOf(element);
+        if (assertType.equals("links to")) {
+            assertType = "is";
         }
+        assertString(assertType, value, shouldBeTrue, expected);
 
+    }
+
+    private String getValueOf(WebElement element) {
+        switch (element.getTagName()) {
+            case "input":
+                return element.getAttribute("value");
+            case "a":
+                return element.getAttribute("href");
+            default:
+                return getNotNullOrEmpty(() -> element.getText());
+        }
     }
 
     private void assertString(String assertType, String value, boolean shouldBeTrue, String expected) {
