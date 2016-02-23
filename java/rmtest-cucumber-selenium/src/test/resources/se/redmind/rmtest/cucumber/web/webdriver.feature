@@ -43,6 +43,8 @@ Feature: WebDriver functionalities
     Then the current url ends with "#top"
     # javascript
     And executing "return window.scrollY;" returns 0
+    When we execute "return document.evaluate('count(//p)', document, null, XPathResult.ANY_TYPE, null).numberValue;" as "paragraphs"
+    Then "${paragraphs}" equals "138"
 
   Scenario: alias composition
     Given that we know "typo" as "first"

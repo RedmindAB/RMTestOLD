@@ -301,8 +301,14 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + "executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
     public void executing_returns(String javascript, String not, String assertType, String expectedValue) {
-        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return window.scrollY;"));
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(javascript));
         assertString(assertType, value, not == null, expectedValue);
+    }
+
+    @Then("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    public void we_execute_as(String javascript, String alias) {
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(javascript));
+        aliasedValues.put(alias, value);
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
