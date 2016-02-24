@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.apache.commons.cli.*;
 import org.junit.experimental.results.PrintableResult;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Request;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -32,7 +33,7 @@ public class CucumberRunner {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CucumberRunner.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
         LogBackUtil.install();
         Options options = new Options();
         options.addOption(Option.builder("p").longOpt("print-step-definitions").required(false).desc("print all the known step definitions").build());
@@ -72,8 +73,8 @@ public class CucumberRunner {
         new HelpFormatter().printHelp(100, "java -jar rmtest-cucumber-standalone.jar", "", options, "", true);
     }
 
-    public void run() {
-        Result result = new JUnitCore().run(Test.class);
+    public void run() throws Throwable {
+        Result result = new JUnitCore().run(Request.runner(new WebDriverRunner(Test.class)));
         if (result.getFailureCount() > 0) {
             LOGGER.error(new PrintableResult(result.getFailures()).toString());
         }
@@ -83,7 +84,7 @@ public class CucumberRunner {
 
     @RunWith(WebDriverRunner.class)
     @Parameterized.UseParametersRunnerFactory(ParameterizedCucumberRunnerFactory.class)
-    @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "pretty", tags={"~@ignore"})
+    @CucumberOptions(glue = "se.redmind.rmtest.cucumber.web", features = ".", plugin = "pretty")
     public static class Test {
 
     }

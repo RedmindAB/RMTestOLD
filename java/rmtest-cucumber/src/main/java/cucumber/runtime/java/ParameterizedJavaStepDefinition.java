@@ -3,6 +3,8 @@ package cucumber.runtime.java;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import cucumber.api.java.ObjectFactory;
@@ -145,28 +147,33 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                     }
 
                     ClassPool pool = ClassPool.getDefault();
-                    CtClass ctClass = pool.makeClass("cucumber.runtime.model.ParameterizedScenario$" + Integer.toHexString(statement.getVisualName().hashCode()));
+                    String className = "cucumber.runtime.model.ParameterizedScenario$" + Integer.toHexString(statement.getVisualName().hashCode());
+                    CtClass ctClass = pool.getOrNull(className);
+                    if (ctClass == null) {
+                        ctClass = pool.makeClass(className);
+                        
+                        ctClass.addField(CtField.make("public static cucumber.runtime.model.StepContainer STEPCONTAINER;", ctClass));
+                        ctClass.addField(CtField.make("public static cucumber.runtime.Runtime RUNTIME;", ctClass));
 
-                    ctClass.addField(CtField.make("public static cucumber.runtime.model.StepContainer STEPCONTAINER;", ctClass));
-                    ctClass.addField(CtField.make("public static cucumber.runtime.Runtime RUNTIME;", ctClass));
+                        ctClass.addMethod(CtNewMethod.make(""
+                            + "public void execute(" + parametersBuilder.toString() + ") {\n"
+                            + "     cucumber.runtime.java.QuietReporter reporter = new cucumber.runtime.java.QuietReporter();\n"
+                            + "     cucumber.runtime.model.ParameterizedStepContainer parameterizedStepContainer = "
+                            + "new cucumber.runtime.model.ParameterizedStepContainer(STEPCONTAINER, " + parametersNamesBuilder.toString() + ", " + parametersListBuilder.toString() + ");\n"
+                            + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"format\", new Object[] { reporter });\n"
+                            + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"runSteps\", new Object[] { reporter, RUNTIME });\n"
+                            + "}", ctClass));
 
-                    ctClass.addMethod(CtNewMethod.make(""
-                        + "public void execute(" + parametersBuilder.toString() + ") {\n"
-                        + "     cucumber.runtime.java.QuietReporter reporter = new cucumber.runtime.java.QuietReporter();\n"
-                        + "     cucumber.runtime.model.ParameterizedStepContainer parameterizedStepContainer = "
-                        + "new cucumber.runtime.model.ParameterizedStepContainer(STEPCONTAINER, " + parametersNamesBuilder.toString() + ", " + parametersListBuilder.toString() + ");\n"
-                        + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"format\", new Object[] { reporter });\n"
-                        + "     se.redmind.utils.Methods.invoke(parameterizedStepContainer, \"runSteps\", new Object[] { reporter, RUNTIME });\n"
-                        + "}", ctClass));
+                        ctClass.addMethod(CtNewMethod.make("public void start(" + parametersBuilder.toString() + ") {}", ctClass));
+                        clazz = ctClass.toClass();
+                        clazz.getDeclaredField("STEPCONTAINER").set(null, statement);
+                        clazz.getDeclaredField("RUNTIME").set(null, runtime);
+                    } else {
+                        clazz = Class.forName(className);
+                    }
 
-                    ctClass.addMethod(CtNewMethod.make("public void start(" + parametersBuilder.toString() + ") {}", ctClass));
-
-                    clazz = ctClass.toClass();
-
-                    clazz.getDeclaredField("STEPCONTAINER").set(null, statement);
-                    clazz.getDeclaredField("RUNTIME").set(null, runtime);
                     runtime.picoFactory().addClass(clazz);
-                } catch (CannotCompileException | SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
+                } catch (CannotCompileException | SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
             }
