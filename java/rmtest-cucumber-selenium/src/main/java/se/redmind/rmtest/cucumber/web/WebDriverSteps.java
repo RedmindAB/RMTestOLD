@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,8 +19,6 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -54,7 +53,7 @@ public class WebDriverSteps {
 
     private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{(\\w+)\\})(.*)");
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final ThreadLocal<AtomicInteger> localCounter = ThreadLocal.withInitial(() -> new AtomicInteger());
     private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
     private final Map<String, String> aliasedValues = new LinkedHashMap<>();
     private final WebDriverWrapper<WebDriver> driverWrapper;
@@ -386,6 +385,9 @@ public class WebDriverSteps {
     private String valueOf(String value) {
         if (value.equals("UUID()")) {
             return UUID.randomUUID().toString();
+        }
+        if (value.equals("ID()")) {
+            return String.valueOf(localCounter.get().incrementAndGet());
         }
         if (aliasedValues.containsKey(value)) {
             value = aliasedValues.get(value);
