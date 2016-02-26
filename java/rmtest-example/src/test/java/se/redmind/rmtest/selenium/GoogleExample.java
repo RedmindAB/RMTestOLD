@@ -5,15 +5,18 @@ import org.junit.runner.RunWith;
 
 import com.google.common.base.Strings;
 import se.redmind.rmtest.WebDriverWrapper;
+import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.runners.Parallelize;
 import se.redmind.rmtest.runners.WebDriverRunner;
 import se.redmind.rmtest.runners.WebDriverRunnerOptions;
+import se.redmind.rmtest.selenium.grid.GridWebDriver;
 import se.redmind.utils.Try;
 
 import static org.junit.Assert.assertTrue;
 
 @RunWith(WebDriverRunner.class)
 @WebDriverRunnerOptions(reuseDriver = true, parallelize = @Parallelize)
+@FilterDrivers(types = GridWebDriver.class)
 public class GoogleExample {
 
     protected final WebDriverWrapper<?> wrapper;

@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.testdroid.api.model.APIDevice;
+import io.appium.java_client.AppiumDriver;
 import se.redmind.rmtest.TestDroidDriverWrapper;
 import se.redmind.rmtest.config.TestDroidConfiguration;
 import se.redmind.rmtest.runners.FilterDrivers;
 import se.redmind.rmtest.runners.WebDriverRunner;
 
 @RunWith(WebDriverRunner.class)
-@FilterDrivers(types = TestDroidDriverWrapper.class)
+@FilterDrivers(types = AppiumDriver.class)
 public class ScreenShotExample {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

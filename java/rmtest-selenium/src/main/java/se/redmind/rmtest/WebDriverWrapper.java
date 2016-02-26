@@ -6,12 +6,10 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.junit.Assume;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.CapabilityType;
@@ -23,6 +21,8 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.jodah.typetools.TypeResolver;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
@@ -239,9 +239,12 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
 
     @SafeVarargs
     @SuppressWarnings("unchecked")
-    public static Predicate<WebDriverWrapper<?>> filter(Class<? extends WebDriverWrapper<?>>... values) {
-        Set<Class<? extends WebDriverWrapper<?>>> types = Sets.newHashSet(values);
-        return driverWrapper -> types.isEmpty() || types.contains((Class<? extends WebDriverWrapper<?>>) driverWrapper.getClass());
+    public static Predicate<WebDriverWrapper<?>> filter(Class<? extends WebDriver>... values) {
+        Set<Class<? extends WebDriver>> types = Sets.newHashSet(values);
+        return driverWrapper -> {
+            Class<?> expectedType = TypeResolver.resolveRawArguments(Function.class, driverWrapper.function.getClass())[1];
+            return types.isEmpty() || types.stream().map(type -> ClassUtils.isAssignable(expectedType, type)).findFirst().orElse(false);
+        };
     }
 
     public static Predicate<WebDriverWrapper<?>> filter(Browser... values) {
