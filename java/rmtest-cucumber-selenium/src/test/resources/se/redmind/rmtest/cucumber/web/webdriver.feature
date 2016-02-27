@@ -45,6 +45,9 @@ Feature: WebDriver functionalities
     And executing "return window.scrollY;" returns 0
     When we execute "return document.evaluate('count(//p)', document, null, XPathResult.ANY_TYPE, null).numberValue;" as "paragraphs"
     Then "${paragraphs}" equals "138"
+    And evaluating "${paragraphs} + 1" returns 139
+    When we evaluate "${paragraphs} + 1" as "paragraphs"
+    Then "${paragraphs}" equals "139"
 
   Scenario: alias composition
     Given that we know "typo" as "first"

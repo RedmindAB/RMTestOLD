@@ -300,13 +300,25 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + "executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
     public void executing_returns(String javascript, String not, String assertType, String expectedValue) {
-        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(javascript));
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(valueOf(javascript)));
         assertString(assertType, value, not == null, expectedValue);
     }
 
     @Then("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
     public void we_execute_as(String javascript, String alias) {
-        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(javascript));
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(valueOf(javascript)));
+        aliasedValues.put(alias, value);
+    }
+
+    @Then("^" + THAT + "evaluating " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
+    public void evaluating(String javascript, String not, String assertType, String expectedValue) {
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return " + valueOf(javascript) + ";"));
+        assertString(assertType, value, not == null, expectedValue);
+    }
+
+    @Then("^" + THAT + THE_USER + " evaluate(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    public void we_evaluate_as(String javascript, String alias) {
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return " + valueOf(javascript) + ";"));
         aliasedValues.put(alias, value);
     }
 
