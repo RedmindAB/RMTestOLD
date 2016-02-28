@@ -42,7 +42,7 @@ public class WebDriverSteps {
 
     public static final String THAT = "(?:that )?";
     public static final String THE_USER = "(?:.*)?";
-    public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?)?";
+    public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?(?:s)?)?";
     public static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
     public static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
@@ -320,6 +320,16 @@ public class WebDriverSteps {
     public void we_evaluate_as(String javascript, String alias) {
         String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return " + valueOf(javascript) + ";"));
         aliasedValues.put(alias, value);
+    }
+
+    @Then("^the amount of " + THE_ELEMENT_IDENTIFIED_BY + " equals (\\d+)$")
+    public void the_amount_of_elements_with_xpath_equals(String type, String id, int amount) {
+        Assert.assertEquals(amount, driver.findElements(by(type, id)).size());
+    }
+
+    @Given("^" + THAT + THE_USER + " count(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
+    public void that_we_count_the_elements_with_xpath_as(String type, String id, String alias) {
+        aliasedValues.put(alias, String.valueOf(driver.findElements(by(type, id)).size()));
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")

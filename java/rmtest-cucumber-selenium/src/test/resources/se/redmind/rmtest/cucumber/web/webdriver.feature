@@ -85,6 +85,13 @@ Feature: WebDriver functionalities
     Then we know its attribute "aria-describedby" as "tooltip"
     And the element with id "${tooltip}" is displayed
 
+  Scenario: count of elements
+    Then the amount of elements with xpath "//p" equals 138
+    Given that we count the elements with xpath "//p" as "paragraphs"
+    Then "${paragraphs}" equals "138"
+    And the amount of elements with class "row" equals 15
+    And the amount of elements with tag "body" equals 1
+
   Scenario: loading aliases from an external file and inputing value in a text control
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
     When we click the element "input.form-control"
