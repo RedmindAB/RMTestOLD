@@ -43,6 +43,11 @@ Feature: WebDriver functionalities
     Then the current url ends with "#top"
     # javascript
     And executing "return window.scrollY;" returns 0
+    When we execute "return document.evaluate('count(//p)', document, null, XPathResult.ANY_TYPE, null).numberValue;" as "paragraphs"
+    Then "${paragraphs}" equals "138"
+    And evaluating "${paragraphs} + 1" returns 139
+    When we evaluate "${paragraphs} + 1" as "paragraphs"
+    Then "${paragraphs}" equals "139"
 
   Scenario: alias composition
     Given that we know "typo" as "first"
@@ -50,6 +55,8 @@ Feature: WebDriver functionalities
     Then the element with id "${first}${second}" reads "Typography"
     Given that we know "${first}${second}" as "firstAndSecond"
     Then the element with id "${firstAndSecond}" reads "Typography"
+    Given that we know the value of the element with id "${firstAndSecond}" as "typographyContent"
+    Then "${typographyContent}" equals "Typography"
 
   Scenario: element visibility or existence
     Given that the element with id "css" is present
@@ -78,6 +85,13 @@ Feature: WebDriver functionalities
     Then we know its attribute "aria-describedby" as "tooltip"
     And the element with id "${tooltip}" is displayed
 
+  Scenario: count of elements
+    Then the amount of elements with xpath "//p" equals 138
+    Given that we count the elements with xpath "//p" as "paragraphs"
+    Then "${paragraphs}" equals "138"
+    And the amount of elements with class "row" equals 15
+    And the amount of elements with tag "body" equals 1
+
   Scenario: loading aliases from an external file and inputing value in a text control
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
     When we click the element "input.form-control"
@@ -102,3 +116,6 @@ Feature: WebDriver functionalities
   Scenario: helper functions
     Given that we know "UUID()" as "myRandomId"
     Then "${myRandomId}" matches "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    And "ID()" equals "1"
+    And "ID()" equals "2"
+    And "ID()" equals "3"

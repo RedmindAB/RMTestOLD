@@ -121,4 +121,12 @@ public class StackTraceInfo {
 
         return invokingMethodNameFqn + "(" + invokingFileName + ")";
     }
+
+    public static void printStackTrace() {
+        try {
+            throw new Exception("on " + Thread.currentThread().getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

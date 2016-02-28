@@ -60,7 +60,7 @@ public class WebDriverStepsTest {
 
         @Given("^that we know our local spark instance$")
         public void that_we_know_our_local_spark_instance() {
-            driverSteps.that_we_know_the_element_named_as(null, "http://localhost:" + localPort, "spark");
+            driverSteps.that_we_know_the_element_named_as(null, null, "http://localhost:" + localPort, "spark");
         }
     }
 

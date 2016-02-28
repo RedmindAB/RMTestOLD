@@ -15,8 +15,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class RestStep {
 
@@ -115,8 +114,22 @@ public class RestStep {
                 vResponse.body(query, equalTo(Integer.valueOf(value)));
             }
         } else {
-            vResponse.body(query, equalTo(value));
+        	vResponse.body(query, equalTo(value));
         }
+    }
+    
+    @Then("^parameter \"([^\"]*)\" has no value$")
+    public void parameter_has_no_value(String query) throws Throwable {
+    	String pathParameter = response.path(query);
+    	if(pathParameter == null){
+    		assertNull(pathParameter);
+    	}
+    	else if(pathParameter.isEmpty()){
+    		assertTrue(pathParameter.isEmpty());
+    	}
+    	else{
+    		fail("The object has a value: '"+pathParameter+"'");
+    	}
     }
 
     @Then("^size of \"([^\"]*)\" is (\\d+)$")

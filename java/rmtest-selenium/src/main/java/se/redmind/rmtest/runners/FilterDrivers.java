@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 import java.util.function.Predicate;
 
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriver;
 
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.selenium.framework.Browser;
@@ -26,7 +27,7 @@ public @interface FilterDrivers {
 
     Browser[] browsers() default {};
 
-    Class<? extends WebDriverWrapper<?>>[] types() default {};
+    Class<? extends WebDriver>[] types() default {};
 
     Class<? extends Predicate<WebDriverWrapper<?>>> filter() default AlwaysTrue.class;
 

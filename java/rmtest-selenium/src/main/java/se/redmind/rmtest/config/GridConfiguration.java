@@ -8,19 +8,19 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.selenium.grid.DescriptionBuilder;
+import se.redmind.rmtest.selenium.grid.GridWebDriver;
 import se.redmind.rmtest.selenium.grid.HubNodesStatus;
 
 /**
  * @author Jeremy Comte
  */
 @JsonTypeName("grid")
-public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
+public class GridConfiguration extends DriverConfiguration<GridWebDriver> {
 
     @JsonProperty
     @NotNull
@@ -37,8 +37,8 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
     }
 
     @Override
-    protected List<WebDriverWrapper<RemoteWebDriver>> createDrivers() {
-        List<WebDriverWrapper<RemoteWebDriver>> instances = new ArrayList<>();
+    protected List<WebDriverWrapper<GridWebDriver>> createDrivers() {
+        List<WebDriverWrapper<GridWebDriver>> instances = new ArrayList<>();
         HubNodesStatus nodeInfo = new HubNodesStatus(hubIp, hubPort);
         nodeInfo.getNodesAsRegReqs().forEach(nodeReq -> {
             nodeReq.getCapabilities().stream()
@@ -49,7 +49,7 @@ public class GridConfiguration extends DriverConfiguration<RemoteWebDriver> {
                         URL driverUrl = new URL("http://" + nodeReq.getConfigAsString("host") + ":" + nodeReq.getConfigAsString("port") + "/wd/hub");
                         generateCapabilities().asMap().forEach((key, value) -> capabilities.setCapability(key, value));
                         instances.add(new WebDriverWrapper<>(capabilities, driverDescription, (otherCapabilities) -> {
-                            return new RemoteWebDriver(driverUrl, otherCapabilities);
+                            return new GridWebDriver(driverUrl, otherCapabilities);
                         }));
                     } catch (MalformedURLException e) {
                         throw new RuntimeException(e);

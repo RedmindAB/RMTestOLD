@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,8 +19,6 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
@@ -43,7 +42,7 @@ public class WebDriverSteps {
 
     public static final String THAT = "(?:that )?";
     public static final String THE_USER = "(?:.*)?";
-    public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?)?";
+    public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?(?:s)?)?";
     public static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
     public static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
@@ -54,7 +53,7 @@ public class WebDriverSteps {
 
     private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{(\\w+)\\})(.*)");
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final ThreadLocal<AtomicInteger> localCounter = ThreadLocal.withInitial(() -> new AtomicInteger());
     private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
     private final Map<String, String> aliasedValues = new LinkedHashMap<>();
     private final WebDriverWrapper<WebDriver> driverWrapper;
@@ -79,11 +78,15 @@ public class WebDriverSteps {
     }
 
     // Helpers
-    @When("^" + THAT + THE_USER + " know(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
-    public void that_we_know_the_element_named_as(String type, String id, String alias) {
+    @When("^" + THAT + THE_USER + " know(?:s)?( the value of)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
+    public void that_we_know_the_element_named_as(String asValue, String type, String id, String alias) {
         alias = valueOf(alias);
         if (type != null && !VALUE.equals(type)) {
-            aliasedLocations.put(alias, by(type, id));
+            if (asValue == null) {
+                aliasedLocations.put(alias, by(type, id));
+            } else {
+                aliasedValues.put(alias, getValueOf(find(by(type, id))));
+            }
         } else {
             aliasedValues.put(alias, valueOf(id));
         }
@@ -297,8 +300,36 @@ public class WebDriverSteps {
 
     @Then("^" + THAT + "executing " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
     public void executing_returns(String javascript, String not, String assertType, String expectedValue) {
-        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return window.scrollY;"));
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(valueOf(javascript)));
         assertString(assertType, value, not == null, expectedValue);
+    }
+
+    @Then("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    public void we_execute_as(String javascript, String alias) {
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript(valueOf(javascript)));
+        aliasedValues.put(alias, value);
+    }
+
+    @Then("^" + THAT + "evaluating " + QUOTED_CONTENT + " " + MATCHES + " \"?(.+)\"?$")
+    public void evaluating(String javascript, String not, String assertType, String expectedValue) {
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return " + valueOf(javascript) + ";"));
+        assertString(assertType, value, not == null, expectedValue);
+    }
+
+    @Then("^" + THAT + THE_USER + " evaluate(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    public void we_evaluate_as(String javascript, String alias) {
+        String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return " + valueOf(javascript) + ";"));
+        aliasedValues.put(alias, value);
+    }
+
+    @Then("^the amount of " + THE_ELEMENT_IDENTIFIED_BY + " equals (\\d+)$")
+    public void the_amount_of_elements_with_xpath_equals(String type, String id, int amount) {
+        Assert.assertEquals(amount, driver.findElements(by(type, id)).size());
+    }
+
+    @Given("^" + THAT + THE_USER + " count(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
+    public void that_we_count_the_elements_with_xpath_as(String type, String id, String alias) {
+        aliasedValues.put(alias, String.valueOf(driver.findElements(by(type, id)).size()));
     }
 
     @Then("^" + THAT + THIS_ELEMENT + " " + MATCHES + " " + QUOTED_CONTENT + "$")
@@ -377,6 +408,9 @@ public class WebDriverSteps {
         if (value.equals("UUID()")) {
             return UUID.randomUUID().toString();
         }
+        if (value.equals("ID()")) {
+            return String.valueOf(localCounter.get().incrementAndGet());
+        }
         if (aliasedValues.containsKey(value)) {
             value = aliasedValues.get(value);
         }
@@ -431,21 +465,23 @@ public class WebDriverSteps {
 
     private void assertElement(String assertType, WebElement element, boolean shouldBeTrue, String expected) {
         expected = valueOf(expected);
-        switch (assertType) {
-            case "links to":
-                assertString("is", element.getAttribute("href"), shouldBeTrue, expected);
-                break;
-            default:
-                String value;
-                if (element.getTagName().equals("input")) {
-                    value = element.getAttribute(VALUE);
-                } else {
-                    value = getNotNullOrEmpty(() -> element.getText());
-                }
-                assertString(assertType, value, shouldBeTrue, expected);
-                break;
+        String value = getValueOf(element);
+        if (assertType.equals("links to")) {
+            assertType = "is";
         }
+        assertString(assertType, value, shouldBeTrue, expected);
 
+    }
+
+    private String getValueOf(WebElement element) {
+        switch (element.getTagName()) {
+            case "input":
+                return element.getAttribute("value");
+            case "a":
+                return element.getAttribute("href");
+            default:
+                return getNotNullOrEmpty(() -> element.getText());
+        }
     }
 
     private void assertString(String assertType, String value, boolean shouldBeTrue, String expected) {
