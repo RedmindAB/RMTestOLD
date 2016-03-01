@@ -97,6 +97,8 @@ Feature: WebDriver functionalities
     When we click the element "input.form-control"
     And that we input "test"
     Then this element reads "test"
+    When that we input "_${UUID()}"
+    Then this element matches "test_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
 
   Scenario: cookies
     Given that we add those cookies:
