@@ -51,7 +51,7 @@ public class WebDriverSteps {
     public static final String MATCHES = "(!)?(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     public static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
-    private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{(\\w+)\\})(.*)");
+    private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{([\\w\\(\\)]+)\\})(.*)");
 
     private final ThreadLocal<AtomicInteger> localCounter = ThreadLocal.withInitial(() -> new AtomicInteger());
     private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
@@ -218,12 +218,12 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + "$")
     public void that_we_input(String content) {
-        element.sendKeys(content);
+        element.sendKeys(valueOf(content));
     }
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + " in " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void that_we_input_in_the_element_identified_by(String content, String type, String id) {
-        find(by(type, id)).sendKeys(content);
+        find(by(type, id)).sendKeys(valueOf(content));
     }
 
     @When("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
