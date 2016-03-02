@@ -3,14 +3,11 @@ package cucumber.runtime.java;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import cucumber.api.java.ObjectFactory;
 import cucumber.api.junit.Cucumber;
 import cucumber.runtime.ParameterizableRuntime;
-import cucumber.runtime.RuntimeGlue;
 import cucumber.runtime.model.CucumberTagStatement;
 import gherkin.formatter.model.TagStatement;
 import javassist.*;
@@ -147,11 +144,11 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                     }
 
                     ClassPool pool = ClassPool.getDefault();
-                    String className = "cucumber.runtime.model.ParameterizedScenario$" + Integer.toHexString(statement.getVisualName().hashCode());
+                    String className = "cucumber.runtime.model.ParameterizedScenario$" + Integer.toHexString(statement.hashCode());
                     CtClass ctClass = pool.getOrNull(className);
                     if (ctClass == null) {
                         ctClass = pool.makeClass(className);
-                        
+
                         ctClass.addField(CtField.make("public static cucumber.runtime.model.StepContainer STEPCONTAINER;", ctClass));
                         ctClass.addField(CtField.make("public static cucumber.runtime.Runtime RUNTIME;", ctClass));
 

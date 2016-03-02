@@ -266,9 +266,8 @@ public class WebDriverWrapper<WebDriverType extends WebDriver> {
     }
 
     public static Predicate<WebDriverWrapper<?>> filterFromSystemProperties() {
-        Predicate<WebDriverWrapper<?>> filter = driverWrapper -> {
-            return true;
-        };
+        Predicate<WebDriverWrapper<?>> filter = any -> true;
+
         if (System.getProperty(CapabilityType.BROWSER_NAME) != null) {
             Set<String> browsers = new HashSet<>(Splitter.on(',').trimResults().splitToList(System.getProperty(CapabilityType.BROWSER_NAME)));
             filter = filter.and(driverWrapper -> browsers.contains(driverWrapper.getCapability().getBrowserName()));
