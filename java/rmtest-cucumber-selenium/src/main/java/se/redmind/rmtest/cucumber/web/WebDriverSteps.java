@@ -38,22 +38,20 @@ import se.redmind.utils.Try;
  */
 public class WebDriverSteps {
 
+    private static final AtomicInteger LOCAL_COUNTER = new AtomicInteger();
     private static final String VALUE = "value";
-
-    public static final String THAT = "(?:that )?";
-    public static final String THE_USER = "(?:.*)?";
-    public static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?(?:s)?)?";
-    public static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
-    public static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
-    public static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
-    public static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
-    public static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
-    public static final String MATCHES = "(!)?(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
-    public static final String QUOTED_CONTENT = "\"([^\"]*)\"";
-
     private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{([\\w\\(\\)]+)\\})(.*)");
+    private static final String THAT = "(?:that )?";
+    private static final String THE_USER = "(?:.*)?";
+    private static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?(?:s)?)?";
+    private static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
+    private static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
+    private static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
+    private static final String THE_ELEMENT_IDENTIFIED_BY = THE_ELEMENT + " ?" + IDENTIFIED_BY;
+    private static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
+    private static final String MATCHES = "(!)?(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
+    private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
 
-    private final ThreadLocal<AtomicInteger> localCounter = ThreadLocal.withInitial(() -> new AtomicInteger());
     private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
     private final Map<String, String> aliasedValues = new LinkedHashMap<>();
     private final WebDriverWrapper<WebDriver> driverWrapper;
@@ -409,7 +407,7 @@ public class WebDriverSteps {
             return UUID.randomUUID().toString();
         }
         if (value.equals("ID()")) {
-            return String.valueOf(localCounter.get().incrementAndGet());
+            return String.valueOf(LOCAL_COUNTER.incrementAndGet());
         }
         if (aliasedValues.containsKey(value)) {
             value = aliasedValues.get(value);

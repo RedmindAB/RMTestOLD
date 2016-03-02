@@ -120,4 +120,6 @@ Feature: WebDriver functionalities
     Then "${myRandomId}" matches "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
     And "ID()" equals "1"
     And "ID()" equals "2"
+
+  Scenario: the static counter is not reset between scenarios
     And "ID()" equals "3"

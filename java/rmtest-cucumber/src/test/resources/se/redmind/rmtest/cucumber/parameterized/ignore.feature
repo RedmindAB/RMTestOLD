@@ -1,4 +1,4 @@
-@tag3
+@tag1
 Feature: those scenarios shouldn't run
   # Only tests that have the tag @unit should run
 

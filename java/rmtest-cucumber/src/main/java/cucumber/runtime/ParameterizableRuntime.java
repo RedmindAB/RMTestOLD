@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cucumber.api.StepDefinitionReporter;
-import cucumber.runtime.Runtime;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.java.ParameterizedJavaStepDefinition;
@@ -26,15 +25,16 @@ import gherkin.formatter.model.TagStatement;
 import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
+import se.redmind.utils.StackTraceInfo;
 
 /**
  * @author Jeremy Comte
  */
 public class ParameterizableRuntime extends Runtime {
 
-    private static enum CompositionType {
+    public static enum CompositionType {
 
-        Replace, Full, Quiet
+        replace, full, quiet
     }
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -157,7 +157,7 @@ public class ParameterizableRuntime extends Runtime {
         if (!features.isEmpty() && !parameterizedScenarios.isEmpty()) {
             StringBuilder stringBuilder = new StringBuilder();
             int maxLength = parameterizedScenarios.values().stream().map(f -> f.statement().getVisualName().length()).max(Integer::compareTo).get();
-            parameterizedScenarios.forEach((pattern, factory) -> {
+            parameterizedScenarios.values().forEach(factory -> {
                 CucumberFeature cucumberFeature = Fields.getSafeValue(factory.statement(), "cucumberFeature");
                 String path = Fields.getSafeValue(cucumberFeature, "path");
                 String visualName = factory.statement().getVisualName().replaceAll("Scenario:", "");
@@ -173,8 +173,11 @@ public class ParameterizableRuntime extends Runtime {
     }
 
     public void inject(Map<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenarios, List<CucumberFeature> features) throws RuntimeException {
-        picoFactory().addInstance(this);
-        getGlue().addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory()));
+        CompositionType compositionType = CompositionType.valueOf(System.getProperty("cucumber.compositionType", CompositionType.replace.name()));
+        if (compositionType == CompositionType.full) {
+            picoFactory().addInstance(this);
+            getGlue().addStepDefinition(new ParameterizedJavaStepDefinition(Methods.findMethod(this.getClass(), "endOfParameterizedScenario"), Pattern.compile("}"), 0, picoFactory()));
+        }
         features.forEach(feature -> {
             List<StepContainer> stepContainers = new ArrayList<>(feature.getFeatureElements());
 
@@ -199,21 +202,12 @@ public class ParameterizableRuntime extends Runtime {
                                 continue;
                             }
                         }
-
                         String stepName = step.getName();
-                        CompositionType compositionType = CompositionType.Replace;
-                        if (stepName.contains(Tags.QUIET)) {
-                            compositionType = CompositionType.Quiet;
-                            stepName = stepName.replaceAll(Tags.QUIET, "").trim();
-                        } else if (stepName.contains(Tags.FULL)) {
-                            compositionType = CompositionType.Full;
-                            stepName = stepName.replaceAll(Tags.FULL, "").trim();
-                        }
 
                         for (Map.Entry<Pattern, ParameterizedJavaStepDefinition.Factory> parameterizedScenario : parameterizedScenarios.entrySet()) {
                             Matcher matcher = parameterizedScenario.getKey().matcher(stepName);
                             if (matcher.matches()) {
-                                if (compositionType == CompositionType.Quiet) {
+                                if (compositionType == CompositionType.quiet) {
                                     stepContainer.getSteps().set(i, ParameterizedStep.asQuiet(step));
                                     parameterizedScenario.getValue().addQuietSubStepsToGlue();
                                 } else {
@@ -223,7 +217,7 @@ public class ParameterizableRuntime extends Runtime {
                                     for (int k = 0; k < names.length; k++) {
                                         scenarioParameters[k] = matcher.group(k + 1);
                                     }
-                                    if (compositionType == CompositionType.Full) {
+                                    if (compositionType == CompositionType.full) {
                                         parameterizedScenario.getValue().addStartStepToGlue();
                                         stepContainer.getSteps().set(i, ParameterizedStep.startOf(step));
                                         wrapper = parameterizedStep -> ParameterizedStep.asSubStep(parameterizedStep, names, scenarioParameters);
@@ -237,7 +231,7 @@ public class ParameterizableRuntime extends Runtime {
                                         .collect(Collectors.toList());
                                     stepContainer.getSteps().addAll(i + 1, newSteps);
                                     i += newSteps.size();
-                                    if (compositionType == CompositionType.Full) {
+                                    if (compositionType == CompositionType.full) {
                                         stepContainer.getSteps().add(++i, ParameterizedStep.endOf(step));
                                     }
                                     modifiedSteps++;
