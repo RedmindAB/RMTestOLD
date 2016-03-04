@@ -94,8 +94,11 @@ Feature: WebDriver functionalities
 
   Scenario: loading aliases from an external file and inputing value in a text control
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
+    And that we know "te" as "first"
+    When we input "${first}" in the element "input.form-control"
+    Then this element reads "te"
     When we click the element "input.form-control"
-    And that we input "test"
+    And that we input "st"
     Then this element reads "test"
     When that we input "_${UUID()}"
     Then this element matches "test_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
