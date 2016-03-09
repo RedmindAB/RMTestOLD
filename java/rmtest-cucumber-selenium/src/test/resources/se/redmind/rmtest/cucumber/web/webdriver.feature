@@ -36,9 +36,9 @@ Feature: WebDriver functionalities
 
   Scenario: alias and javascript
     # alias
-    Given that we know the element with xpath "//*[@id="sidebar"]/a" as "Back to top"
+    Given that we know the element with xpath "//*[@id="sidebar"]/a" as "backToTop"
     # click
-    When we click on "Back to top"
+    When we click on "backToTop"
     # current url
     Then the current url ends with "#top"
     # javascript
@@ -48,6 +48,8 @@ Feature: WebDriver functionalities
     And evaluating "${paragraphs} + 1" returns 139
     When we evaluate "${paragraphs} + 1" as "paragraphs"
     Then "${paragraphs}" equals "139"
+    Given that we know the element with id "typography" as "typographyElement"
+    And "${typographyElement}_${paragraphs}" equals "Typography_139"
 
   Scenario: alias composition
     Given that we know "typo" as "first"
@@ -67,17 +69,17 @@ Feature: WebDriver functionalities
   Scenario: element selection and attribute/properties assertion
     # select an element
     Given this alias:
-      | type  | id                                                               | value       |
-      | xpath | /html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2] | Success box |
-    When we select the "Success box"
-    And the element "Success box" reads "Indicates a successful or positive action"
+      | type  | id                                                               | value      |
+      | xpath | /html/body/div[2]/div/div[1]/div[13]/div/table/tbody/tr[3]/td[2] | successBox |
+    Then the element "successBox" reads "Indicates a successful or positive action"
+    When we select the "successBox"
     # assert the current element
     Then it reads "Indicates a successful or positive action"
     # css check
     And its property "background-color" equals "rgba(223, 240, 216, 1)"
     # one liners on properties and attributes
-    Then the property "background-color" of the "Success box" equals "rgba(223, 240, 216, 1)"
-    Then the attribute "colspan" of the "Success box" is "4"
+    Then the property "background-color" of the "successBox" equals "rgba(223, 240, 216, 1)"
+    Then the attribute "colspan" of the "successBox" is "4"
     # selection
     When we click on the checkbox with xpath "/html/body/div[2]/div/div[1]/div[16]/form/div[4]/div/div/label/input"
     Then this element is selected
@@ -122,7 +124,7 @@ Feature: WebDriver functionalities
     Given that we know "UUID()" as "myRandomId"
     Then "${myRandomId}" matches "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
     And "ID()" equals "1"
-    And "ID()" equals "2"
+    And "${ID()}" equals "2"
 
   Scenario: the static counter is not reset between scenarios
     And "ID()" equals "3"

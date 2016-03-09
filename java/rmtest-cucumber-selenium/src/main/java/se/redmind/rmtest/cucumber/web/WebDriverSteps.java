@@ -39,8 +39,7 @@ import se.redmind.utils.Try;
 public class WebDriverSteps {
 
     private static final AtomicInteger LOCAL_COUNTER = new AtomicInteger();
-    private static final String VALUE = "value";
-    private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{([\\w\\(\\)]+)\\})(.*)");
+
     private static final String THAT = "(?:that )?";
     private static final String THE_USER = "(?:.*)?";
     private static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?(?:s)?)?";
@@ -51,6 +50,10 @@ public class WebDriverSteps {
     private static final String THIS_ELEMENT = "(?:(?:this|the|an) element(?:s)?|it(?:s)?)";
     private static final String MATCHES = "(!)?(reads|returns|is|equals|contains|starts with|ends with|links to|matches)";
     private static final String QUOTED_CONTENT = "\"([^\"]*)\"";
+    private static final String VARIABLE = "[_a-zA-Z][_\\-\\.\\w]*";
+    private static final String NAMED = "\"(" + VARIABLE + ")\"";
+
+    private static final Pattern ALIAS = Pattern.compile("(.*)(?:\\$\\{([\\w\\(\\)]+)\\})(.*)");
 
     private final Map<String, By> aliasedLocations = new LinkedHashMap<>();
     private final Map<String, String> aliasedValues = new LinkedHashMap<>();
@@ -76,10 +79,10 @@ public class WebDriverSteps {
     }
 
     // Helpers
-    @When("^" + THAT + THE_USER + " know(?:s)?( the value of)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
+    @When("^" + THAT + THE_USER + " know(?:s)?( the value of)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + NAMED + "$")
     public void that_we_know_the_element_named_as(String asValue, String type, String id, String alias) {
         alias = valueOf(alias);
-        if (type != null && !VALUE.equals(type)) {
+        if (type != null && !"value".equals(type)) {
             if (asValue == null) {
                 aliasedLocations.put(alias, by(type, id));
             } else {
@@ -90,22 +93,29 @@ public class WebDriverSteps {
         }
     }
 
-    @Then("^" + THAT + THE_USER + " know(?:s)? " + THIS_ELEMENT + " attribute " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    @Then("^" + THAT + THE_USER + " know(?:s)? " + THIS_ELEMENT + " attribute " + QUOTED_CONTENT + " as " + NAMED + "$")
     public void we_know_its_attribute_as(String attribute, String alias) {
         aliasedValues.put(alias, element.getAttribute(attribute));
     }
 
-    @Then("^" + THAT + THE_USER + " know(?:s)? " + THIS_ELEMENT + " property " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    @Then("^" + THAT + THE_USER + " know(?:s)? " + THIS_ELEMENT + " property " + QUOTED_CONTENT + " as " + NAMED + "$")
     public void we_know_its_property_as(String property, String alias) {
         aliasedValues.put(alias, element.getCssValue(property));
     }
 
     @Given("^th(?:is|ose|ese) alias(?:es)?:$")
     public void these_aliases(List<Map<String, String>> newAliases) {
-        newAliases.forEach(alias -> aliasedLocations.put(alias.get(VALUE), by(alias.get("type"), alias.get("id"))));
+        newAliases.forEach(alias -> {
+            String value = alias.get("value");
+            if (value.matches(VARIABLE)) {
+                aliasedLocations.put(value, by(alias.get("type"), alias.get("id")));
+            } else {
+                throw new IllegalArgumentException("alias " + value + " must match " + NAMED);
+            }
+        });
     }
 
-    @Given("^the aliases defined in the file \"([^\"]*)\"$")
+    @Given("^the aliases defined in the file " + QUOTED_CONTENT + "$")
     public void the_aliases_defined_in_the_file(String fileName) throws IOException {
         Splitter splitter = Splitter.on("|").trimResults().omitEmptyStrings();
         List<String> lines = Files.readLines(new File(fileName), Charset.defaultCharset());
@@ -140,7 +150,7 @@ public class WebDriverSteps {
     @Given("^" + THAT + THE_USER + " add(?:s)? th(?:is|ose) cookie(?:s)?:$")
     public void that_we_add_those_cookies(List<Map<String, String>> data) {
         data.forEach(cookieAsMap -> {
-            Cookie.Builder builder = new Cookie.Builder(cookieAsMap.get("name"), cookieAsMap.get(VALUE));
+            Cookie.Builder builder = new Cookie.Builder(cookieAsMap.get("name"), cookieAsMap.get("value"));
             if (cookieAsMap.containsKey("domain")) {
                 builder.domain(cookieAsMap.get("domain"));
             }
@@ -302,7 +312,7 @@ public class WebDriverSteps {
         assertString(assertType, value, not == null, expectedValue);
     }
 
-    @Then("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    @Then("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " as " + NAMED + "$")
     public void we_execute_as(String javascript, String alias) {
         String value = String.valueOf(((JavascriptExecutor) driver).executeScript(valueOf(javascript)));
         aliasedValues.put(alias, value);
@@ -314,7 +324,7 @@ public class WebDriverSteps {
         assertString(assertType, value, not == null, expectedValue);
     }
 
-    @Then("^" + THAT + THE_USER + " evaluate(?:s)? " + QUOTED_CONTENT + " as " + QUOTED_CONTENT + "$")
+    @Then("^" + THAT + THE_USER + " evaluate(?:s)? " + QUOTED_CONTENT + " as " + NAMED + "$")
     public void we_evaluate_as(String javascript, String alias) {
         String value = String.valueOf(((JavascriptExecutor) driver).executeScript("return " + valueOf(javascript) + ";"));
         aliasedValues.put(alias, value);
@@ -325,7 +335,7 @@ public class WebDriverSteps {
         Assert.assertEquals(amount, driver.findElements(by(type, id)).size());
     }
 
-    @Given("^" + THAT + THE_USER + " count(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + QUOTED_CONTENT + "$")
+    @Given("^" + THAT + THE_USER + " count(?:s)? " + THE_ELEMENT_IDENTIFIED_BY + " as " + NAMED + "$")
     public void that_we_count_the_elements_with_xpath_as(String type, String id, String alias) {
         aliasedValues.put(alias, String.valueOf(driver.findElements(by(type, id)).size()));
     }
@@ -403,18 +413,27 @@ public class WebDriverSteps {
     }
 
     private String valueOf(String value) {
+        return valueOf(value, false);
+    }
+
+    private String valueOf(String value, boolean readElementValue) {
         if (value.equals("UUID()")) {
             return UUID.randomUUID().toString();
         }
         if (value.equals("ID()")) {
             return String.valueOf(LOCAL_COUNTER.incrementAndGet());
         }
-        if (aliasedValues.containsKey(value)) {
-            value = aliasedValues.get(value);
+        if (readElementValue) {
+            if (aliasedValues.containsKey(value)) {
+                value = aliasedValues.get(value);
+            }
+            if (aliasedLocations.containsKey(value)) {
+                value = getValueOf(find(aliasedLocations.get(value)));
+            }
         }
         Matcher matcher;
         while ((matcher = ALIAS.matcher(value)).matches()) {
-            value = matcher.group(1) + valueOf(matcher.group(2)) + matcher.group(3);
+            value = matcher.group(1) + valueOf(matcher.group(2), true) + matcher.group(3);
         }
         return value;
     }
@@ -423,11 +442,7 @@ public class WebDriverSteps {
         id = valueOf(id);
         Preconditions.checkArgument(id != null);
         if (type == null) {
-            if (aliasedLocations.containsKey(id)) {
-                return aliasedLocations.get(id);
-            } else {
-                throw new IllegalArgumentException("unknown alias: " + id);
-            }
+            return getAliasedLocation(id);
         } else {
             switch (type) {
                 case "named":
@@ -449,6 +464,14 @@ public class WebDriverSteps {
                 default:
                     throw new IllegalArgumentException("unknown parameter type: " + type + " value: " + id);
             }
+        }
+    }
+
+    private By getAliasedLocation(String id) {
+        if (aliasedLocations.containsKey(id)) {
+            return aliasedLocations.get(id);
+        } else {
+            throw new IllegalArgumentException("unknown alias: " + id);
         }
     }
 
