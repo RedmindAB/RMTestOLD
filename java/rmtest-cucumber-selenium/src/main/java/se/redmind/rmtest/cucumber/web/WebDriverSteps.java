@@ -15,9 +15,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import cucumber.api.PendingException;
+import cucumber.api.java.en.And;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.google.common.base.Preconditions;
@@ -42,7 +45,7 @@ public class WebDriverSteps {
 
     private static final String THAT = "(?:that )?";
     private static final String THE_USER = "(?:.*)?";
-    private static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:button|element|field|checkbox|radio|value)?(?:s)?)?";
+    private static final String THE_ELEMENT = "(?:(?:the |an |a )?(?:frame|button|element|field|checkbox|radio|value)?(?:s)?)?";
     private static final String DO_SOMETHING = "(click|clear|submit|select|hover)(?:s? (?:on|in))?";
     private static final String INPUT = "(?:input|type)(?:s? (?:on|in))?";
     private static final String IDENTIFIED_BY = "(?:with (?:the )?)?(name(?:d)?|id|xpath|class|css|(?:partial )?link text|tag)? ?\"(.*)\"";
@@ -144,6 +147,34 @@ public class WebDriverSteps {
                 driver.navigate().refresh();
                 break;
         }
+    }
+
+    @Given("^" + THAT + THE_USER + " switch(?:es)? to the frame with (?:name|id) " + QUOTED_CONTENT + "$")
+    public void that_we_switch_to_the_frame_with(String nameOrId) {
+        driver.switchTo().frame(nameOrId);
+    }
+
+    @Given("^" + THAT + THE_USER + " switch(?:es)? to the default content$")
+    public void that_we_switch_to_the_default_content() {
+        driver.switchTo().defaultContent();
+    }
+
+    @Given("^" + THAT + THE_USER + " switch(?:es)? to the parent frame$")
+    public void that_we_switch_to_the_parent_frame() {
+        if (driver instanceof PhantomJSDriver) {
+            throw new IllegalStateException("PhantomJSDriver doesn't support the parent frame location, see https://github.com/SeleniumHQ/selenium/issues/1737");
+        }
+        driver.switchTo().parentFrame();
+    }
+
+    @When("^" + THAT + THE_USER + " switch(?:es)? to the frame " + NAMED + "$")
+    public void that_we_switch_to_the_frame(String alias) {
+        driver.switchTo().frame(find(by(null, alias)));
+    }
+
+    @And("^" + THAT + THE_USER + " switch(?:es)? to the frame with index (\\d+)$")
+    public void that_we_switch_to_the_frame_with_index(int index) {
+        driver.switchTo().frame(index);
     }
 
     // Cookie Options
@@ -535,5 +566,4 @@ public class WebDriverSteps {
                 throw new IllegalArgumentException("unknown assert type " + assertType);
         }
     }
-
 }

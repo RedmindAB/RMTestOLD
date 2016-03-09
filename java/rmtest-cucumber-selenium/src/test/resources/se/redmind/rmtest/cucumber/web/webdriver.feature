@@ -128,3 +128,19 @@ Feature: WebDriver functionalities
 
   Scenario: the static counter is not reset between scenarios
     And "ID()" equals "3"
+
+  Scenario: frame support
+    Given that we switch to the frame with name "bottom"
+    Then the element with id "content" reads "something"
+    Given that we switch to the default content
+    And that we switch to the frame with id "bottom"
+    Then the element with id "content" reads "something"
+    Given that we switch to the default content
+    And that we know the frame with id "bottom" as "bottomFrame"
+    When we switch to the frame "bottomFrame"
+    Then the element with id "content" reads "something"
+    Given that we switch to the default content
+    And that we switch to the frame with index 0
+    Then the element with id "content" reads "something"
+
+
