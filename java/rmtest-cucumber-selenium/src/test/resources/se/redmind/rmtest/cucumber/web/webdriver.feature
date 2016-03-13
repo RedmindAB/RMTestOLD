@@ -102,8 +102,10 @@ Feature: WebDriver functionalities
     When we click the element "input.form-control"
     And that we input "st"
     Then this element reads "test"
-    When that we input "_${UUID()}"
+    When we input "_${UUID()}"
     Then this element matches "test_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    When we clear this element
+    Then it reads ""
 
   Scenario: cookies
     Given that we add those cookies:
@@ -142,5 +144,3 @@ Feature: WebDriver functionalities
     Given that we switch to the default content
     And that we switch to the frame with index 0
     Then the element with id "content" reads "something"
-
-
