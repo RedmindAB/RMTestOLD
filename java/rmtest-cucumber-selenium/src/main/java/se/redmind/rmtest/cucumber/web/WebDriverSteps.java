@@ -260,7 +260,8 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + " in " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void that_we_input_in_the_element_identified_by(String content, String type, String id) {
-        find(by(type, id)).sendKeys(valueOf(content));
+        find(by(type, id));
+        that_we_input(content);
     }
 
     @When("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
