@@ -77,7 +77,7 @@ public class Configuration {
     public AndroidConfiguration android;
 
     @JsonProperty
-    public boolean reuseDriverBetweenTests;
+    public boolean reuseDriverBetweenTests = true;
 
     @JsonProperty
     public int defaultTimeOut = 5;

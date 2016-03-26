@@ -60,7 +60,7 @@ public class WebDriverRunner extends Parameterized implements Parallelizable {
     protected void runChild(Runner runner, RunNotifier notifier) {
         Optional<WebDriverWrapper<?>> driverWrapper = getCurrentDriverWrapper(runner);
         if (driverWrapper.isPresent()) {
-            if (options.reuseDriver()) {
+            if (Configuration.current().reuseDriverBetweenTests && options.reuseDriver()) {
                 driverWrapper.get().setReuseDriverBetweenTests(true);
             }
 
