@@ -20,7 +20,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -255,7 +254,7 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + "$")
     public void that_we_input(String content) {
-        Arrays.asList(valueOf(content).split("")).forEach(c -> element.sendKeys(c));
+        new Actions(driver).moveToElement(element).click().sendKeys(content).build().perform();
     }
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + " in " + THE_ELEMENT_IDENTIFIED_BY + "$")
