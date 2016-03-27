@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import static java.util.Arrays.asList;
 
 import cucumber.runtime.ParameterizableRuntime;
-import se.redmind.rmtest.cucumber.utils.Tags;
 
 public class Main {
 

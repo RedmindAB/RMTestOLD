@@ -4,7 +4,7 @@ Feature: this file contains the parameterized scenarios
   Scenario: we count the letters in <value> and multiply it by <factor>
     this is a simple scenario made of 2 steps
 
-    Given that we write down the amount of letters in <value>
+    Given that we count the letters in <value>
     And that we multiply it by <factor>
 
   @parameterized
@@ -13,3 +13,7 @@ Feature: this file contains the parameterized scenarios
 
     Given that we count the letters in <value> and multiply it by <factor>
     And that we multiply it by <factor>
+
+  @parameterized
+  Scenario: that we count the letters in "saturday"
+    Given that we write down the amount of letters in "saturday"
