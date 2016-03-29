@@ -268,6 +268,17 @@ public class WebDriverSteps {
         timeUnit.sleep(amount);
     }
 
+    @When("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " on " + THE_ELEMENT_IDENTIFIED_BY + "$")
+    public void that_we_execute_on_the_element_identified_by(String javascript, String type, String id) {
+        find(by(type, id));
+        that_we_execute_on_this_element(javascript);
+    }
+
+    @When("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " on " + THIS_ELEMENT + "$")
+    public void that_we_execute_on_this_element(String javascript) {
+        ((JavascriptExecutor) driver).executeScript(valueOf(javascript) + ";", element);
+    }
+
     // Assertions
     @Then("^" + THAT + "the title " + MATCHES + " " + QUOTED_CONTENT + "$")
     public void the_title_matches(String not, String assertType, String expectedValue) {

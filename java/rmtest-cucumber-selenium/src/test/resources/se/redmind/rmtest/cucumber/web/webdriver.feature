@@ -106,6 +106,8 @@ Feature: WebDriver functionalities
     Then this element matches "test_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
     When we clear this element
     Then it reads ""
+    When we execute "arguments[0].value='some test'" on this element
+    Then it reads "some test"
 
   Scenario: cookies
     Given that we add those cookies:
