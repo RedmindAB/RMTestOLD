@@ -12,7 +12,6 @@ import org.openqa.selenium.interactions.Mouse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.steadystate.css.parser.Locatable;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.runners.WebDriverRunner;
 
@@ -83,7 +82,6 @@ public class RMExample {
             //safari-code
             //Assume getDriver initialized properly.
             WebElement element = driver.findElement(By.id("Element id"));
-            Locatable hoverItem = (Locatable) element;
             Mouse mouse = ((HasInputDevices) driver).getMouse();
             //mouse.mouseMove(hoverItem.getLocator());
         } else {

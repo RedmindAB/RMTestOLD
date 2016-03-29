@@ -34,7 +34,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
 
     public static ParameterizedJavaStepDefinition.Factory from(CucumberTagStatement statement, ParameterizableRuntime runtime) {
         TagStatement tagStatement = Fields.getSafeValue(statement, "statement");
-        String name = tagStatement.getName().replaceAll("(Given|When|Then|And)", "");
+        String name = tagStatement.getName().replaceAll("(Given|When|Then|And|\\*)", "");
 
         // let's parse the regex and write down the parameters names
         StringBuilder patternBuilder = new StringBuilder("^(?:that )?");

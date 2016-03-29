@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -15,8 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
+
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -257,17 +254,29 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + "$")
     public void that_we_input(String content) {
-        element.sendKeys(valueOf(content));
+        new Actions(driver).moveToElement(element).click().sendKeys(content).build().perform();
     }
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + " in " + THE_ELEMENT_IDENTIFIED_BY + "$")
     public void that_we_input_in_the_element_identified_by(String content, String type, String id) {
-        find(by(type, id)).sendKeys(valueOf(content));
+        find(by(type, id));
+        that_we_input(content);
     }
 
     @When("^" + THAT + THE_USER + " wait(?:s)? (\\d+) (\\w+)")
     public void we_wait(int amount, TimeUnit timeUnit) throws InterruptedException {
         timeUnit.sleep(amount);
+    }
+
+    @When("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " on " + THE_ELEMENT_IDENTIFIED_BY + "$")
+    public void that_we_execute_on_the_element_identified_by(String javascript, String type, String id) {
+        find(by(type, id));
+        that_we_execute_on_this_element(javascript);
+    }
+
+    @When("^" + THAT + THE_USER + " execute(?:s)? " + QUOTED_CONTENT + " on " + THIS_ELEMENT + "$")
+    public void that_we_execute_on_this_element(String javascript) {
+        ((JavascriptExecutor) driver).executeScript(valueOf(javascript) + ";", element);
     }
 
     // Assertions

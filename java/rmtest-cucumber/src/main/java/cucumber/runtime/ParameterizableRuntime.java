@@ -25,7 +25,6 @@ import gherkin.formatter.model.TagStatement;
 import se.redmind.rmtest.cucumber.utils.Tags;
 import se.redmind.utils.Fields;
 import se.redmind.utils.Methods;
-import se.redmind.utils.StackTraceInfo;
 
 /**
  * @author Jeremy Comte
@@ -143,6 +142,9 @@ public class ParameterizableRuntime extends Runtime {
                 if (Tags.isParameterized(statement)) {
                     ParameterizedJavaStepDefinition.Factory stepFactory = ParameterizedJavaStepDefinition.from(statement, this);
                     parameterizedScenarios.put(stepFactory.pattern(), stepFactory);
+                    if (stepFactory.parameters().length == 0) {
+                        stepFactory.addQuietSubStepsToGlue();
+                    }
                     statements.remove(j--);
                 } else if (name != null) {
                     TagStatement tagStatement = statement.getGherkinModel();
@@ -209,7 +211,9 @@ public class ParameterizableRuntime extends Runtime {
                             if (matcher.matches()) {
                                 if (compositionType == CompositionType.quiet) {
                                     stepContainer.getSteps().set(i, ParameterizedStep.asQuiet(step));
-                                    parameterizedScenario.getValue().addQuietSubStepsToGlue();
+                                    if (parameterizedScenario.getValue().parameters().length > 0) {
+                                        parameterizedScenario.getValue().addQuietSubStepsToGlue();
+                                    }
                                 } else {
                                     Function<Step, ParameterizedStep> wrapper;
                                     String[] names = parameterizedScenario.getValue().parameters();
