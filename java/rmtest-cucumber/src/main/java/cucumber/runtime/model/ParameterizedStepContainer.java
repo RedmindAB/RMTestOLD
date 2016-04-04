@@ -18,7 +18,11 @@ public class ParameterizedStepContainer extends StepContainer {
 
     public static String replacePlaceHolders(String name, String[] names, Object[] parameters) {
         for (int i = 0; i < names.length; i++) {
-            name = name.replaceAll("<" + names[i] + ">", String.valueOf(parameters[i]));
+            String value = String.valueOf(parameters[i]);
+            if (value.startsWith("\"") && value.endsWith("\"")) {
+                value = value.substring(1, value.length() - 1);
+            }
+            name = name.replaceAll("<" + names[i] + ">", value);
         }
         return name;
     }
