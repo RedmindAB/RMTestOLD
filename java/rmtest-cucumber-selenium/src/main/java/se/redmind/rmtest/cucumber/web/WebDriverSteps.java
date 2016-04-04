@@ -457,6 +457,9 @@ public class WebDriverSteps {
     }
 
     private String valueOf(String value, boolean readElementValue) {
+        if (value == null) {
+            return value;
+        }
         if (value.equals("UUID()")) {
             return UUID.randomUUID().toString();
         }
@@ -526,23 +529,20 @@ public class WebDriverSteps {
 
     private void assertElement(String assertType, WebElement element, boolean shouldBeTrue, String expected) {
         expected = valueOf(expected);
-        String value = getValueOf(element);
+        String value;
         if (assertType.equals("links to")) {
             assertType = "is";
+            value = element.getAttribute("href");
+        } else if (element.getTagName().equals("input")) {
+            value = element.getAttribute("value");
+        } else {
+            value = getValueOf(element);
         }
         assertString(assertType, value, shouldBeTrue, expected);
-
     }
 
     private String getValueOf(WebElement element) {
-        switch (element.getTagName()) {
-            case "input":
-                return element.getAttribute("value");
-            case "a":
-                return element.getAttribute("href");
-            default:
-                return getNotNullOrEmpty(() -> element.getText());
-        }
+        return getNotNullOrEmpty(() -> element.getText());
     }
 
     private void assertString(String assertType, String value, boolean shouldBeTrue, String expected) {
