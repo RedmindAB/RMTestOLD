@@ -110,6 +110,12 @@ Feature: WebDriver functionalities
     When we execute "arguments[0].value='some test'" on this element
     Then this element reads "some test"
 
+  Scenario: selecting a file to upload
+    Given that we know the current path as "path"
+    When that we select the element with id "example-file-input"
+    And we input "${path}/pom.xml"
+    Then it ends with "pom.xml"
+
   Scenario: cookies
     Given that we add those cookies:
       | name          | value                 |

@@ -18,6 +18,8 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.remote.LocalFileDetector;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.google.common.base.Preconditions;
@@ -31,6 +33,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import se.redmind.rmtest.WebDriverWrapper;
 import se.redmind.rmtest.config.Configuration;
+import se.redmind.rmtest.selenium.grid.GridWebDriver;
 import se.redmind.utils.Try;
 
 /**
@@ -254,7 +257,15 @@ public class WebDriverSteps {
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + "$")
     public void that_we_input(String content) {
-        new Actions(driver).moveToElement(element).click().sendKeys(content).build().perform();
+        content = valueOf(content);
+        if (element.getTagName().equals("input") && "file".equals(element.getAttribute("type"))) {
+            if (driverWrapper.getDriver() instanceof GridWebDriver) {
+                ((RemoteWebElement) element).setFileDetector(new LocalFileDetector());
+            }
+            element.sendKeys(content);
+        } else {
+            new Actions(driver).moveToElement(element).click().sendKeys(content).build().perform();
+        }
     }
 
     @When("^" + THAT + THE_USER + " " + INPUT + " " + QUOTED_CONTENT + " in " + THE_ELEMENT_IDENTIFIED_BY + "$")
