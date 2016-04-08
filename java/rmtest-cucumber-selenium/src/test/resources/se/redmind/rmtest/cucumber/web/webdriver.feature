@@ -112,7 +112,7 @@ Feature: WebDriver functionalities
 
   Scenario: selecting a file to upload
     Given that we know the current path as "path"
-    When that we select the element with id "example-file-input"
+    When we select the element with id "example-file-input"
     And we input "${path}/pom.xml"
     Then it ends with "pom.xml"
 
