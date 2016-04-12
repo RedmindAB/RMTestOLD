@@ -35,6 +35,15 @@ Feature: WebDriver functionalities
     Then the element with partial link text "Typo" links to "${spark}/bootstrap-tldr/#typography"
     And we select the element with tag "body"
 
+  Scenario: passing a variable to a parameterized scenario works
+    Given that we know "typography" as "someVariable"
+    When we select the well known element containing "${someVariable}"
+    Then it reads "Typography"
+
+  @parameterized
+  Scenario: we select the well known element containing <something>
+    * we select the element with xpath "//*[@id="<something>"]"
+
   Scenario: alias and javascript
     # alias
     Given that we know the element with xpath "//*[@id="sidebar"]/a" as "backToTop"

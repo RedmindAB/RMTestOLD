@@ -3,6 +3,9 @@ package cucumber.runtime.model;
 import gherkin.formatter.model.Step;
 import se.redmind.utils.Fields;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Jeremy Comte
  */
@@ -22,7 +25,7 @@ public class ParameterizedStepContainer extends StepContainer {
             if (value.startsWith("\"") && value.endsWith("\"")) {
                 value = value.substring(1, value.length() - 1);
             }
-            name = name.replaceAll("<" + names[i] + ">", value);
+            name = name.replaceAll("<" + Pattern.quote(names[i]) + ">", Matcher.quoteReplacement(value));
         }
         return name;
     }
