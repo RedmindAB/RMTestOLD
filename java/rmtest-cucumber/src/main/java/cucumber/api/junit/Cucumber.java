@@ -150,7 +150,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                     public Description getDescription() {
                         Description description = super.getDescription();
                         if (useRealClassnamesForSurefire && !description.getClassName().equals(featureName)) {
-                            Fields.set(description, "fDisplayName", featureName + ":" + scenario.getLine() + (name != null ? name : "") + "(" + featureName + ")");
+                            Fields.set(description, "fDisplayName", featureName + ":" + scenario.getLine() + (name != null ? name : "") + "(" + Cucumber.this.getTestClass().getJavaClass().getName() + ")");
                         }
                         return description;
                     }
