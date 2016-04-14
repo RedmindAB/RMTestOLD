@@ -22,10 +22,11 @@ public class ParameterizedStepContainer extends StepContainer {
     public static String replacePlaceHolders(String name, String[] names, Object[] parameters) {
         for (int i = 0; i < names.length; i++) {
             String value = String.valueOf(parameters[i]);
+            String opt = "";
             if (value.startsWith("\"") && value.endsWith("\"")) {
-                value = value.substring(1, value.length() - 1);
+                opt = "\"?";
             }
-            name = name.replaceAll("<" + Pattern.quote(names[i]) + ">", Matcher.quoteReplacement(value));
+            name = name.replaceAll(opt + "<" + Pattern.quote(names[i]) + ">" + opt, Matcher.quoteReplacement(value));
         }
         return name;
     }
