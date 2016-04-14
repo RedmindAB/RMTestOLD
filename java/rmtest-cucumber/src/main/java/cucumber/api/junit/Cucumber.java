@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import gherkin.formatter.Reporter;
+import gherkin.formatter.model.Result;
+import org.junit.internal.runners.model.EachTestNotifier;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
@@ -32,7 +35,7 @@ import se.redmind.utils.Fields;
  * {@code .feature}).
  * </p>
  * Additional hints can be given to Cucumber by annotating the class with {@link CucumberOptions}.
- *
+ * <p>
  * this class has been extended in place because we needed to be able to forward the parameters in the parameterized runtime
  *
  * @see CucumberOptions
@@ -44,6 +47,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
     private final ParameterizableRuntime runtime;
     private final String name;
     private final boolean useRealClassnamesForSurefire;
+    private final boolean reportScenariosOnlyInSurefire;
     // do not remove this field, it is read through reflection
     private final Object[] parameters;
 
@@ -51,7 +55,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
      * Constructor called by JUnit.
      *
      * @param clazz the class with the @RunWith annotation.
-     * @throws java.io.IOException if there is a problem
+     * @throws java.io.IOException                         if there is a problem
      * @throws org.junit.runners.model.InitializationError if there is another problem
      */
     public Cucumber(Class clazz) throws InitializationError, IOException {
@@ -64,6 +68,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         this.parameters = parameters;
 
         useRealClassnamesForSurefire = "true".equals(System.getProperty("useRealClassnamesForSurefire"));
+        reportScenariosOnlyInSurefire = "true".equals(System.getProperty("reportScenariosOnlyInSurefire"));
 
         ClassLoader classLoader = clazz.getClassLoader();
         Assertions.assertNoCucumberAnnotatedMethods(clazz);
@@ -75,7 +80,25 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         runtime = new ParameterizableRuntime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions, name, parameters);
 
         final List<CucumberFeature> cucumberFeatures = runtime.cucumberFeatures();
-        jUnitReporter = new JUnitReporter(runtimeOptions.reporter(classLoader), runtimeOptions.formatter(classLoader), runtimeOptions.isStrict());
+        Reporter reporter = runtimeOptions.reporter(classLoader);
+        jUnitReporter = new JUnitReporter(reporter, runtimeOptions.formatter(classLoader), runtimeOptions.isStrict()) {
+
+            public void result(Result result) {
+                if (reportScenariosOnlyInSurefire) {
+                    Throwable error = result.getError();
+                    if (error != null) {
+                        EachTestNotifier executionUnitNotifier = Fields.getSafeValue(this, "executionUnitNotifier");
+                        if (executionUnitNotifier != null) {
+                            executionUnitNotifier.addFailure(error);
+                        }
+                    }
+                    reporter.result(result);
+                } else {
+                    super.result(result);
+                }
+            }
+
+        };
         addChildren(cucumberFeatures);
     }
 
@@ -156,6 +179,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
                         }
                         return method;
                     }
+
                 };
                 runners.set(i, runner);
             }
