@@ -15,5 +15,5 @@ Feature: this file contains the parameterized scenarios
     And that we multiply it by <factor>
 
   @parameterized
-  Scenario: that we count the letters in "saturday"
-    Given that we write down the amount of letters in "saturday"
+  Scenario: that we count the letters in <word>
+    Given that we write down the amount of letters in "<word>"
