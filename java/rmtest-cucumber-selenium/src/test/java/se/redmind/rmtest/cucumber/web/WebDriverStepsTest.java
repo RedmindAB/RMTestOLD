@@ -1,5 +1,6 @@
 package se.redmind.rmtest.cucumber.web;
 
+import cucumber.api.PendingException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.junit.BeforeClass;
@@ -50,6 +51,7 @@ public class WebDriverStepsTest {
         }
     }
 
+
     public static class Steps {
 
         private final WebDriverSteps driverSteps;
@@ -61,6 +63,11 @@ public class WebDriverStepsTest {
         @Given("^that we know our local spark instance$")
         public void that_we_know_our_local_spark_instance() {
             driverSteps.that_we_know_the_element_named_as(null, null, "http://localhost:" + localPort, "spark");
+        }
+
+        @Given("^that we know the current path as \"([^\"]*)\"$")
+        public void thatWeKnowTheCurrentPathAs(String name) {
+            driverSteps.that_we_know_the_element_named_as(null, null, System.getProperty("user.dir"), name);
         }
     }
 

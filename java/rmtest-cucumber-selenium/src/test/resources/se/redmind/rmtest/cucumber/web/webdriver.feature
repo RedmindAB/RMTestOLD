@@ -30,9 +30,19 @@ Feature: WebDriver functionalities
     And that the element with xpath "//*[@id="typography"]" reads "Typography"
     Then the element with class "text-left" reads ".text-left"
     And the element with css "body > div.container > div > div.col-md-9 > blockquote > p" reads "Bootstrap TLDR"
-    Then the element with link text "Typography" links to "${spark}/bootstrap-tldr/#typography"
+    Then the attribute "href" of the element with link text "Typography" equals "${spark}/bootstrap-tldr/#typography"
+    And it reads "Typography"
     Then the element with partial link text "Typo" links to "${spark}/bootstrap-tldr/#typography"
     And we select the element with tag "body"
+
+  Scenario: passing a variable to a parameterized scenario works
+    Given that we know "typography" as "someVariable"
+    When we select the well known element containing "${someVariable}"
+    Then it reads "Typography"
+
+  @parameterized
+  Scenario: we select the well known element containing <something>
+    * we select the element with xpath "//*[@id="<something>"]"
 
   Scenario: alias and javascript
     # alias
@@ -98,16 +108,22 @@ Feature: WebDriver functionalities
     Given the aliases defined in the file "src/test/resources/se/redmind/rmtest/cucumber/web/aliases"
     And that we know "te" as "first"
     When we input "${first}" in the element "input.form-control"
-    Then this element reads "te"
+    Then its attribute "value" reads "te"
     When we click the element "input.form-control"
     And that we input "st"
     Then this element reads "test"
     When we input "_${UUID()}"
-    Then this element matches "test_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    Then its attribute "value" matches "test_[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
     When we clear this element
-    Then it reads ""
+    Then this element reads ""
     When we execute "arguments[0].value='some test'" on this element
-    Then it reads "some test"
+    Then this element reads "some test"
+
+  Scenario: selecting a file to upload
+    Given that we know the current path as "path"
+    When we select the element with id "example-file-input"
+    And we input "${path}/pom.xml"
+    Then it ends with "pom.xml"
 
   Scenario: cookies
     Given that we add those cookies:

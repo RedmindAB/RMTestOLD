@@ -4,7 +4,13 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import cucumber.runtime.junit.*;
+import gherkin.formatter.Reporter;
+import gherkin.formatter.model.ExamplesTableRow;
+import gherkin.formatter.model.Result;
+import org.junit.internal.runners.model.EachTestNotifier;
 import org.junit.runner.Description;
+import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
@@ -14,10 +20,6 @@ import cucumber.runtime.*;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.io.ResourceLoaderClassFinder;
-import cucumber.runtime.junit.Assertions;
-import cucumber.runtime.junit.ExecutionUnitRunner;
-import cucumber.runtime.junit.FeatureRunner;
-import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.*;
 import gherkin.formatter.model.Scenario;
 import gherkin.formatter.model.Step;
@@ -32,8 +34,8 @@ import se.redmind.utils.Fields;
  * {@code .feature}).
  * </p>
  * Additional hints can be given to Cucumber by annotating the class with {@link CucumberOptions}.
- *
- * this class has been extended in place because we needed to be able to forward the parameters in the parameterized runtime
+ * <p>
+ * this class has been extended in place because we needed to be able to forward the parameters in the parameterized runtime.
  *
  * @see CucumberOptions
  */
@@ -43,7 +45,8 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
     private final List<FeatureRunner> children = new ArrayList<>();
     private final ParameterizableRuntime runtime;
     private final String name;
-    private final boolean useRealClassnamesForSurefire;
+    private final boolean reportRealClassNames;
+    private final boolean hideStepsInReports;
     // do not remove this field, it is read through reflection
     private final Object[] parameters;
 
@@ -51,7 +54,7 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
      * Constructor called by JUnit.
      *
      * @param clazz the class with the @RunWith annotation.
-     * @throws java.io.IOException if there is a problem
+     * @throws java.io.IOException                         if there is a problem
      * @throws org.junit.runners.model.InitializationError if there is another problem
      */
     public Cucumber(Class clazz) throws InitializationError, IOException {
@@ -63,7 +66,8 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         this.name = name;
         this.parameters = parameters;
 
-        useRealClassnamesForSurefire = "true".equals(System.getProperty("useRealClassnamesForSurefire"));
+        reportRealClassNames = "true".equals(System.getProperty("reportRealClassNames"));
+        hideStepsInReports = "true".equals(System.getProperty("hideStepsInReports"));
 
         ClassLoader classLoader = clazz.getClassLoader();
         Assertions.assertNoCucumberAnnotatedMethods(clazz);
@@ -75,7 +79,25 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         runtime = new ParameterizableRuntime(resourceLoader, new ResourceLoaderClassFinder(resourceLoader, classLoader), classLoader, runtimeOptions, name, parameters);
 
         final List<CucumberFeature> cucumberFeatures = runtime.cucumberFeatures();
-        jUnitReporter = new JUnitReporter(runtimeOptions.reporter(classLoader), runtimeOptions.formatter(classLoader), runtimeOptions.isStrict());
+        Reporter reporter = runtimeOptions.reporter(classLoader);
+        jUnitReporter = new JUnitReporter(reporter, runtimeOptions.formatter(classLoader), runtimeOptions.isStrict()) {
+
+            public void result(Result result) {
+                if (hideStepsInReports) {
+                    Throwable error = result.getError();
+                    if (error != null) {
+                        EachTestNotifier executionUnitNotifier = Fields.getSafeValue(this, "executionUnitNotifier");
+                        if (executionUnitNotifier != null) {
+                            executionUnitNotifier.addFailure(error);
+                        }
+                    }
+                    reporter.result(result);
+                } else {
+                    super.result(result);
+                }
+            }
+
+        };
         addChildren(cucumberFeatures);
     }
 
@@ -120,45 +142,99 @@ public class Cucumber extends ParentRunner<FeatureRunner> {
         for (int i = 0; i < runners.size(); i++) {
             ParentRunner<?> runner = runners.get(i);
             if (runner instanceof ExecutionUnitRunner) {
-                CucumberScenario cucumberScenario = Fields.getSafeValue(runner, "cucumberScenario");
-                Scenario scenario = Fields.getSafeValue(cucumberScenario, "scenario");
-                runner = new ExecutionUnitRunner(runtime, cucumberScenario, jUnitReporter) {
-                    @Override
-                    public Description getDescription() {
-                        Description description = super.getDescription();
-                        if (useRealClassnamesForSurefire && !description.getClassName().equals(featureName)) {
-                            Fields.set(description, "fDisplayName", featureName + ":" + scenario.getLine() + (name != null ? name : "") + "(" + featureName + ")");
-                        }
-                        return description;
-                    }
-
-                    @Override
-                    protected Description describeChild(Step step) {
-                        Description description = super.describeChild(step);
-                        if (!description.getMethodName().contains("#" + step.getLine())) {
-                            Method method = findMatchingMethod(step);
-                            if (useRealClassnamesForSurefire && method != null) {
-                                Fields.set(description, "fDisplayName", method.getName() + "@" + featureName + "#" + step.getLine() + (name != null ? name : "") + "(" + method.getDeclaringClass().getName() + ")");
-                            } else {
-                                Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + (name != null ? name : "") + "(" + description.getClassName() + ")");
-                            }
-                        }
-                        return description;
-                    }
-
-                    private Method findMatchingMethod(Step step) {
-                        Method method = null;
-                        for (Map.Entry<String, StepDefinition> entry : stepDefinitionsByPattern.entrySet()) {
-                            if (step.getName().matches(entry.getKey())) {
-                                method = Fields.getSafeValue(entry.getValue(), "method");
-                                break;
-                            }
-                        }
-                        return method;
-                    }
-                };
-                runners.set(i, runner);
+                runner = replaceExecutionRunner(featureName, stepDefinitionsByPattern, (ExecutionUnitRunner) runner);
+            } else if (runner instanceof ScenarioOutlineRunner) {
+                runner = replaceScenarioOutlineRunner(featureName, stepDefinitionsByPattern, (ScenarioOutlineRunner) runner);
             }
+            runners.set(i, runner);
         }
     }
+
+
+    private ExecutionUnitRunner replaceExecutionRunner(String featureName, Map<String, StepDefinition> stepDefinitionsByPattern, ExecutionUnitRunner runner) throws InitializationError {
+        CucumberScenario cucumberScenario = Fields.getSafeValue(runner, "cucumberScenario");
+        Scenario scenario = Fields.getSafeValue(cucumberScenario, "scenario");
+        return new ExecutionUnitRunner(runtime, cucumberScenario, jUnitReporter) {
+            @Override
+            public Description getDescription() {
+                Description description = super.getDescription();
+                if (reportRealClassNames && !description.getClassName().equals(featureName)) {
+                    Fields.set(description, "fDisplayName", featureName + ":" + scenario.getLine() + (name != null ? name : "")
+                        + "(" + Cucumber.this.getTestClass().getJavaClass().getName() + ")");
+                }
+                return description;
+            }
+
+            @Override
+            protected Description describeChild(Step step) {
+                Description description = super.describeChild(step);
+                if (!description.getMethodName().contains("#" + step.getLine())) {
+                    Method method = findMatchingMethod(step);
+                    if (reportRealClassNames && method != null) {
+                        Fields.set(description, "fDisplayName", method.getName() + "@" + featureName + "#" + step.getLine() + (name != null ? name : "")
+                            + "(" + method.getDeclaringClass().getName() + ")");
+                    } else {
+                        Fields.set(description, "fDisplayName", description.getMethodName() + "#" + step.getLine() + (name != null ? name : "")
+                            + "(" + description.getClassName() + ")");
+                    }
+                }
+                return description;
+            }
+
+            private Method findMatchingMethod(Step step) {
+                Method method = null;
+                for (Map.Entry<String, StepDefinition> entry : stepDefinitionsByPattern.entrySet()) {
+                    if (step.getName().matches(entry.getKey())) {
+                        method = Fields.getSafeValue(entry.getValue(), "method");
+                        break;
+                    }
+                }
+                return method;
+            }
+        };
+    }
+
+    private ScenarioOutlineRunner replaceScenarioOutlineRunner(String featureName, Map<String, StepDefinition> stepDefinitionsByPattern, ScenarioOutlineRunner runner) throws InitializationError {
+        CucumberScenarioOutline cucumberScenarioOutline = Fields.getSafeValue(runner, "cucumberScenarioOutline");
+        ScenarioOutlineRunner scenarioOutlineRunner = new ScenarioOutlineRunner(runtime, cucumberScenarioOutline, jUnitReporter) {
+
+            @Override
+            public Description getDescription() {
+                if (reportRealClassNames) {
+                    Description description = Fields.getSafeValue(this, "description");
+                    if (description == null) {
+                        description = Description.createSuiteDescription(getName(), cucumberScenarioOutline.getGherkinModel());
+                        List<Runner> children = getChildren();
+                        for (int i = 0; i < children.size(); i++) {
+                            Runner child = children.get(i);
+                            Description childDescription = describeChild(child);
+                            CucumberExamples cucumberExamples = cucumberScenarioOutline.getCucumberExamplesList().get(i);
+                            for (int j = 0; j < childDescription.getChildren().size(); j++) {
+                                Description exampleDescription = childDescription.getChildren().get(j);
+                                ExamplesTableRow examplesTableRow = cucumberExamples.getExamples().getRows().get(j);
+                                Fields.set(exampleDescription, "fDisplayName", featureName + ":" + examplesTableRow.getLine() + (name != null ? name : "")
+                                    + "(" + Cucumber.this.getTestClass().getJavaClass().getName() + ")");
+                            }
+                            description.addChild(childDescription);
+                        }
+                        Fields.set(this, "description", description);
+                    }
+                }
+                return super.getDescription();
+            }
+        };
+
+        List<ExamplesRunner> children = Fields.getSafeValue(scenarioOutlineRunner, "runners");
+        for (ExamplesRunner child : children) {
+            List<ExecutionUnitRunner> currentRunners = Fields.getSafeValue(child, "runners");
+            List<ExecutionUnitRunner> runners = new ArrayList<>();
+            for (ExecutionUnitRunner currentRunner : currentRunners) {
+                runners.add(replaceExecutionRunner(featureName, stepDefinitionsByPattern, currentRunner));
+            }
+            Fields.set(child, "runners", runners);
+        }
+
+        return scenarioOutlineRunner;
+    }
+
 }

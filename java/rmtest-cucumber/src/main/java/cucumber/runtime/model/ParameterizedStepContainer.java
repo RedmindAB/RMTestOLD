@@ -3,6 +3,9 @@ package cucumber.runtime.model;
 import gherkin.formatter.model.Step;
 import se.redmind.utils.Fields;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Jeremy Comte
  */
@@ -18,7 +21,12 @@ public class ParameterizedStepContainer extends StepContainer {
 
     public static String replacePlaceHolders(String name, String[] names, Object[] parameters) {
         for (int i = 0; i < names.length; i++) {
-            name = name.replaceAll("<" + names[i] + ">", String.valueOf(parameters[i]));
+            String value = String.valueOf(parameters[i]);
+            String opt = "";
+            if (value.startsWith("\"") && value.endsWith("\"")) {
+                opt = "\"?";
+            }
+            name = name.replaceAll(opt + "<" + Pattern.quote(names[i]) + ">" + opt, Matcher.quoteReplacement(value));
         }
         return name;
     }
