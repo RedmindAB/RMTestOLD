@@ -119,6 +119,7 @@ Feature: WebDriver functionalities
     When we execute "arguments[0].value='some test'" on this element
     Then this element reads "some test"
 
+  @ignore
   Scenario: selecting a file to upload
     Given that we know the current path as "path"
     When we select the element with id "example-file-input"
