@@ -16,17 +16,15 @@ import se.redmind.utils.Methods;
 
 /**
  * Cucumber java doesn't allow us to call Scenarios in a Scenario.
- *
+ * <p>
  * This class is here to enable us to do that. If a Scenario is annotated with @parameterized we will create a dynamic JavaStepDefinition that will be
  * registered on the pattern made by the name of this scenario. Depending on how this scenario is called, the real steps will be added to the current feature in
  * the ParameterizedCucumber class or executed silently.
  *
- * @see Cucumber#addChildren(java.util.List)
  * @author Jeremy Comte
+ * @see Cucumber#addChildren(java.util.List)
  */
 public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
-
-    private static final String PARAMETER_PATTERN = "([0-9]+|[0-9]*\\.[0-9]+|\".*\"|<.*>)";
 
     public ParameterizedJavaStepDefinition(Method method, Pattern pattern, long timeoutMillis, ObjectFactory objectFactory) {
         super(method, pattern, timeoutMillis, objectFactory);
@@ -41,6 +39,7 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
         StringBuilder parameterBuilder = new StringBuilder();
         List<String> parametersNames = new ArrayList<>();
         boolean inParameter = false;
+        boolean inQuotes = false;
         for (int i = 0; i < name.length(); i++) {
             char c = name.charAt(i);
             switch (c) {
@@ -49,7 +48,13 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                         throw new IllegalArgumentException("error while parsing " + name);
                     }
                     inParameter = true;
-                    patternBuilder.append(PARAMETER_PATTERN);
+                    patternBuilder.append("(");
+                    if (inQuotes) {
+                        patternBuilder.append(".*");
+                    } else {
+                        patternBuilder.append("[0-9]+|[0-9]*\\.[0-9]+|\\S+");
+                    }
+                    patternBuilder.append(")");
                     break;
                 case '>':
                     if (!inParameter) {
@@ -59,6 +64,10 @@ public class ParameterizedJavaStepDefinition extends JavaStepDefinition {
                     parametersNames.add(parameterBuilder.toString());
                     parameterBuilder = new StringBuilder();
                     break;
+                case '"':
+                    if ((i > 1 && name.charAt(i - 1) == '>') || (i < name.length() - 1 && name.charAt(i + 1) == '<')) {
+                        inQuotes ^= true;
+                    }
                 default:
                     if (!inParameter) {
                         patternBuilder.append(c);

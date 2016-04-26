@@ -219,7 +219,11 @@ public class ParameterizableRuntime extends Runtime {
                                     String[] names = parameterizedScenario.getValue().parameters();
                                     Object[] scenarioParameters = new Object[names.length];
                                     for (int k = 0; k < names.length; k++) {
-                                        scenarioParameters[k] = matcher.group(k + 1);
+                                        String value = matcher.group(k + 1);
+                                        if (value.startsWith("\"") && value.endsWith("\"")) {
+                                            value = value.substring(1, value.length() - 1);
+                                        }
+                                        scenarioParameters[k] = value;
                                     }
                                     if (compositionType == CompositionType.full) {
                                         parameterizedScenario.getValue().addStartStepToGlue();
